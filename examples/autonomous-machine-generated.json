@@ -1,0 +1,7 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {"id": "example-autonomous", "type": "experiment-output", "repository": "example/project", "paths": ["artifacts/solution.rs"]},
+  "provenance": {"origin_classification": "autonomous-machine-generated", "participants": [{"type": "agent", "role": "orchestrator", "name": "example-agent"}, {"type": "model", "role": "implementation", "model": "example-model-a"}, {"type": "model", "role": "review", "model": "example-model-b"}], "process_evidence": [{"kind": "fabric-receipt", "reference": "receipt:experiment-042"}, {"kind": "validation-receipt", "reference": "receipt:validation-042"}], "notes": "Classification describes origin only and is not a copyright conclusion."},
+  "rights": {"distribution_license": "Apache-2.0", "copyright_status": "machine-originated-unresolved", "rights_basis": "no-exclusive-right-asserted", "third_party_material": "unknown", "sources": [], "notes": "Escalate if source similarity or upstream lineage becomes known."},
+  "review": {"technical_validation": "passed", "provenance_validation": "incomplete", "human_acceptance": "accepted"}
+}
