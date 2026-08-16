@@ -1,0 +1,7 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {"id": "example-human", "type": "source-code", "repository": "example/project", "commit": "deadbeef", "paths": ["src/lib.rs"]},
+  "provenance": {"origin_classification": "human-authored", "participants": [{"type": "human", "role": "author", "name": "Example Contributor"}], "process_evidence": [{"kind": "commit", "reference": "deadbeef"}]},
+  "rights": {"distribution_license": "Apache-2.0", "copyright_status": "human-authorship-confirmed", "rights_basis": "contributor-attested", "third_party_material": "none-known", "sources": []},
+  "review": {"technical_validation": "passed", "provenance_validation": "passed", "human_acceptance": "accepted", "reviewer": "maintainer"}
+}

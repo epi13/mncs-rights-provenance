@@ -1,0 +1,7 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {"id": "example-third-party", "type": "source-code", "repository": "example/project", "paths": ["vendor/adapter.py"]},
+  "provenance": {"origin_classification": "third-party-derived", "participants": [{"type": "human", "role": "integrator", "name": "Example Contributor"}], "process_evidence": [{"kind": "external-record", "reference": "upstream:example/repo@v1.2.3"}]},
+  "rights": {"distribution_license": "Apache-2.0", "copyright_status": "third-party-licensed", "rights_basis": "third-party-license", "third_party_material": "present", "sources": [{"kind": "repository", "reference": "https://example.invalid/upstream", "license_status": "compatible", "license": "Apache-2.0"}]},
+  "review": {"technical_validation": "passed", "provenance_validation": "passed", "human_acceptance": "accepted"}
+}

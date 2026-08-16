@@ -1,0 +1,7 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {"id": "example-ai-assisted", "type": "source-code", "repository": "example/project", "commit": "cafebabe", "paths": ["src/scheduler.rs"]},
+  "provenance": {"origin_classification": "human-ai-assisted", "participants": [{"type": "human", "role": "developer", "name": "Example Contributor"}, {"type": "model", "role": "assistant", "model": "example-model", "runtime": "local"}], "process_evidence": [{"kind": "prompt", "reference": "sha256:prompt-record"}, {"kind": "validation-receipt", "reference": "receipt:validation-001"}]},
+  "rights": {"distribution_license": "Apache-2.0", "copyright_status": "mixed-or-undetermined", "rights_basis": "contributor-attested", "third_party_material": "none-known", "sources": []},
+  "review": {"technical_validation": "passed", "provenance_validation": "passed", "human_acceptance": "accepted"}
+}
