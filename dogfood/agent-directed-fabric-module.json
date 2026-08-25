@@ -15,13 +15,12 @@
     ],
     "repository": "github.com/epi13/mncs-fabric"
   },
-  "manifest_identity": "86a1a85ade0e61e6b36e719c996ea6889ca0985f2bd30b2b35b2289e8fd6955e",
+  "manifest_identity": "572e162b85439cc014edbdafdfb937172329d7a3563dcc6438a817b2b301d822",
   "provenance": {
     "notes": "Classification describes process only. Machine participation does not determine copyright status; rights fields remain evidence states.",
     "origin_classification": "human-directed-machine-generated",
     "participants": [
       {
-        "digest": null,
         "name": "project operator",
         "role": "director",
         "type": "human"

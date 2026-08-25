@@ -3,7 +3,10 @@
 
 Every manifest here references a real file at a real commit in a real MNCS
 repository, with its true sha256. These are the subsystem's own fixtures:
-MNCS documenting MNCS. Regenerate after upstream changes:
+MNCS documenting MNCS. Sections whose upstream material is unavailable in the
+current checkout are skipped explicitly rather than fabricated.
+
+Regenerate after upstream changes:
 
     python3 scripts/dogfood_generate.py
 """
@@ -21,9 +24,16 @@ PROJECTS = ROOT.parent
 OUT = ROOT / "dogfood"
 
 
+class MissingRepo(Exception):
+    pass
+
+
 def git(repo: str, *args: str) -> str:
+    repo_path = PROJECTS / repo
+    if not (repo_path / ".git").exists():
+        raise MissingRepo(repo)
     result = subprocess.run(
-        ["git", "-C", str(PROJECTS / repo), *args],
+        ["git", "-C", str(repo_path), *args],
         capture_output=True,
         text=True,
         check=True,
@@ -49,7 +59,6 @@ def base_manifest() -> dict:
 
 
 def finish(manifest: dict) -> dict:
-    # Fill conservative defaults only where the caller did not decide.
     provenance = manifest["provenance"]
     provenance.setdefault("origin_classification", "origin-uncertain")
     rights = manifest["rights"]
@@ -74,226 +83,224 @@ def write(name: str, manifest: dict) -> None:
     print(f"wrote {path.relative_to(ROOT)}")
 
 
-def main() -> int:
-    rp_head = git("mncs-rights-provenance", "rev-parse", "--short", "HEAD")
-    fabric_head = git("mncs-fabric", "rev-parse", "--short", "HEAD")
+def skip_guard(label: str):
+    class _Guard:
+        def __enter__(self):
+            return self
 
-    # 1. Human-authored specification (this repository, early design doc).
+        def __exit__(self, exc_type, exc, tb):
+            if exc_type is None:
+                return False
+            if issubclass(exc_type, (MissingRepo, FileNotFoundError)):
+                print(f"skipped {label}: upstream material unavailable")
+                return True
+            return False
+
+    return _Guard()
+
+
+def section_human_specification(rp_head: str) -> None:
     spec_rel = Path("docs/problem-statement.md")
     spec_abs = PROJECTS / "mncs-rights-provenance" / spec_rel
-    if spec_abs.exists():
-        manifest = base_manifest()
-        manifest["artifact"] = {
-            "id": f"mncs-rights-provenance:{rp_head}:docs/problem-statement.md",
-            "class": "documentation",
-            "repository": "github.com/epi13/mncs-rights-provenance",
-            "commit": rp_head,
-            "paths": [str(spec_rel)],
-            "hashes": [{"algorithm": "sha256", "value": sha256_file(spec_abs), "scope": "file"}],
-        }
-        manifest["provenance"]["origin_classification"] = "human-authored"
-        manifest["provenance"]["participants"] = [
-            {"type": "human", "role": "author", "name": "project maintainer"}
-        ]
-        manifest["provenance"]["process_evidence"] = [
-            {
-                "kind": "commit",
-                "reference": f"github.com/epi13/mncs-rights-provenance@{rp_head}",
-            }
-        ]
-        manifest["rights"]["copyright_status"] = "human-authorship-confirmed"
-        manifest["rights"]["rights_basis"] = "contributor-attested"
-        manifest["rights"]["third_party_material"] = "none-known"
-        write("human-specification.json", finish(manifest))
+    manifest = base_manifest()
+    manifest["artifact"] = {
+        "id": f"mncs-rights-provenance:{rp_head}:docs/problem-statement.md",
+        "class": "documentation",
+        "repository": "github.com/epi13/mncs-rights-provenance",
+        "commit": rp_head,
+        "paths": [str(spec_rel)],
+        "hashes": [{"algorithm": "sha256", "value": sha256_file(spec_abs), "scope": "file"}],
+    }
+    manifest["provenance"]["origin_classification"] = "human-authored"
+    manifest["provenance"]["participants"] = [
+        {"type": "human", "role": "author", "name": "project maintainer"}
+    ]
+    manifest["provenance"]["process_evidence"] = [
+        {"kind": "commit", "reference": f"github.com/epi13/mncs-rights-provenance@{rp_head}"}
+    ]
+    manifest["rights"]["copyright_status"] = "human-authorship-confirmed"
+    manifest["rights"]["rights_basis"] = "contributor-attested"
+    manifest["rights"]["third_party_material"] = "none-known"
+    write("human-specification.json", finish(manifest))
 
-    # 2. Agent-generated code directed by a human operator (Fabric emitter).
+
+def section_agent_directed_fabric(fabric_head: str) -> None:
     code_rel = Path("src/mncs_fabric/provenance.py")
     code_abs = PROJECTS / "mncs-fabric" / code_rel
-    if code_abs.exists():
-        manifest = base_manifest()
-        manifest["artifact"] = {
-            "id": f"mncs-fabric:{fabric_head}:{code_rel}",
-            "class": "source-code",
-            "repository": "github.com/epi13/mncs-fabric",
-            "commit": fabric_head,
-            "paths": [str(code_rel)],
-            "hashes": [{"algorithm": "sha256", "value": sha256_file(code_abs), "scope": "file"}],
-        }
-        manifest["provenance"]["origin_classification"] = "human-directed-machine-generated"
-        manifest["provenance"]["participants"] = [
-            {
-                "type": "human",
-                "role": "director",
-                "name": "project operator",
-                "digest": None,
-            },
-            {
-                "type": "model",
-                "role": "implementation",
-                "model": "ox-alpha (opencode agent)",
-                "provider": "undisclosed",
-            },
-            {"type": "agent", "role": "orchestrator", "name": "opencode"},
-        ]
-        manifest["provenance"]["notes"] = (
-            "Classification describes process only. Machine participation does "
-            "not determine copyright status; rights fields remain evidence states."
-        )
-        manifest["rights"]["copyright_status"] = "machine-originated-unresolved"
-        manifest["rights"]["rights_basis"] = "no-exclusive-right-asserted"
-        manifest["rights"]["third_party_material"] = "none-known"
-        write("agent-directed-fabric-module.json", finish(manifest))
+    manifest = base_manifest()
+    manifest["artifact"] = {
+        "id": f"mncs-fabric:{fabric_head}:{code_rel}",
+        "class": "source-code",
+        "repository": "github.com/epi13/mncs-fabric",
+        "commit": fabric_head,
+        "paths": [str(code_rel)],
+        "hashes": [{"algorithm": "sha256", "value": sha256_file(code_abs), "scope": "file"}],
+    }
+    manifest["provenance"]["origin_classification"] = "human-directed-machine-generated"
+    manifest["provenance"]["participants"] = [
+        {"type": "human", "role": "director", "name": "project operator"},
+        {
+            "type": "model",
+            "role": "implementation",
+            "model": "ox-alpha (opencode agent)",
+            "provider": "undisclosed",
+        },
+        {"type": "agent", "role": "orchestrator", "name": "opencode"},
+    ]
+    manifest["provenance"]["notes"] = (
+        "Classification describes process only. Machine participation does "
+        "not determine copyright status; rights fields remain evidence states."
+    )
+    manifest["rights"]["copyright_status"] = "machine-originated-unresolved"
+    manifest["rights"]["rights_basis"] = "no-exclusive-right-asserted"
+    manifest["rights"]["third_party_material"] = "none-known"
+    write("agent-directed-fabric-module.json", finish(manifest))
 
-    # 3. MNCS-language compiled policy core: generated artifact derived from a
-    #    source artifact, with an explicit DAG edge.
+
+def section_mncs_language_core(rp_head: str) -> None:
     lang_src_rel = Path("language/rights_policy.mncs")
     lang_src_abs = ROOT / lang_src_rel
     corpus_abs = ROOT / "language/corpora/policy-evaluation-corpus.json"
-    if lang_src_abs.exists():
-        manifest = base_manifest()
-        src_hash = sha256_file(lang_src_abs)
-        manifest["artifact"] = {
-            "id": f"mncs-rights-provenance:{rp_head}:language/rights_policy.mncs",
-            "class": "source-code",
-            "repository": "github.com/epi13/mncs-rights-provenance",
-            "commit": rp_head,
-            "paths": [str(lang_src_rel)],
-            "hashes": [{"algorithm": "sha256", "value": src_hash, "scope": "file"}],
-        }
-        manifest["provenance"]["origin_classification"] = "autonomous-machine-generated"
-        manifest["provenance"]["participants"] = [
+    manifest = base_manifest()
+    src_hash = sha256_file(lang_src_abs)
+    evidence_entry = {
+        "kind": "validation-receipt",
+        "reference": "mncs://experiment-run/language/corpora/policy-evaluation-corpus.json",
+    }
+    if corpus_abs.exists():
+        evidence_entry["sha256"] = sha256_file(corpus_abs)
+    manifest["artifact"] = {
+        "id": f"mncs-rights-provenance:{rp_head}:language/rights_policy.mncs",
+        "class": "source-code",
+        "repository": "github.com/epi13/mncs-rights-provenance",
+        "commit": rp_head,
+        "paths": [str(lang_src_rel)],
+        "hashes": [{"algorithm": "sha256", "value": src_hash, "scope": "file"}],
+    }
+    manifest["provenance"]["origin_classification"] = "autonomous-machine-generated"
+    manifest["provenance"]["participants"] = [
+        {
+            "type": "model",
+            "role": "implementation",
+            "model": "ox-alpha (opencode agent)",
+            "provider": "undisclosed",
+        },
+        {"type": "tool", "role": "compiler", "name": "mncs-cli (research-bytecode/portable-wasm)"},
+    ]
+    manifest["provenance"]["process_evidence"] = [evidence_entry]
+    manifest["provenance"]["graph"] = {
+        "nodes": [
             {
-                "type": "model",
-                "role": "implementation",
-                "model": "ox-alpha (opencode agent)",
-                "provider": "undisclosed",
+                "id": "policy-source",
+                "kind": "artifact",
+                "artifact_class": "source-code",
+                "hashes": [{"algorithm": "sha256", "value": src_hash}],
             },
             {
-                "type": "tool",
-                "role": "compiler",
-                "name": "mncs-cli (research-bytecode/portable-wasm)",
+                "id": "compile-action",
+                "kind": "transformation",
+                "label": "mncs compile --target research-bytecode|portable-wasm",
             },
-        ]
-        manifest["provenance"]["process_evidence"] = [
             {
-                "kind": "validation-receipt",
-                "reference": "mncs://experiment-run/language/corpora/policy-evaluation-corpus.json",
-                "sha256": sha256_file(corpus_abs) if corpus_abs.exists() else None,
-            }
-        ]
-        if manifest["provenance"]["process_evidence"][0]["sha256"] is None:
-            del manifest["provenance"]["process_evidence"][0]["sha256"]
-        manifest["provenance"]["graph"] = {
-            "nodes": [
-                {
-                    "id": "policy-source",
-                    "kind": "artifact",
-                    "artifact_class": "source-code",
-                    "hashes": [{"algorithm": "sha256", "value": src_hash}],
-                },
-                {
-                    "id": "compile-action",
-                    "kind": "transformation",
-                    "label": "mncs compile --target research-bytecode|portable-wasm",
-                },
-                {
-                    "id": "corpus-validation",
-                    "kind": "validation",
-                    "label": "experiment run across backends",
-                },
-                {
-                    "id": "golden-vectors",
-                    "kind": "artifact",
-                    "artifact_class": "dataset",
-                },
-            ],
-            "edges": [
-                {
-                    "from": "policy-source",
-                    "to": "compile-action",
-                    "relation": "transformed-by",
-                },
-                {
-                    "from": "compile-action",
-                    "to": "corpus-validation",
-                    "relation": "validated-by",
-                },
-                {
-                    "from": "corpus-validation",
-                    "to": "golden-vectors",
-                    "relation": "derived-from",
-                },
-            ],
-        }
-        manifest["rights"]["copyright_status"] = "machine-originated-unresolved"
-        manifest["rights"]["rights_basis"] = "no-exclusive-right-asserted"
-        manifest["rights"]["third_party_material"] = "none-known"
-        manifest["review"]["technical_validation"] = "passed"
-        write("mncs-language-policy-core.json", finish(manifest))
+                "id": "corpus-validation",
+                "kind": "validation",
+                "label": "experiment run across backends",
+            },
+            {"id": "golden-vectors", "kind": "artifact", "artifact_class": "dataset"},
+        ],
+        "edges": [
+            {"from": "policy-source", "to": "compile-action", "relation": "transformed-by"},
+            {"from": "compile-action", "to": "corpus-validation", "relation": "validated-by"},
+            {"from": "corpus-validation", "to": "golden-vectors", "relation": "derived-from"},
+        ],
+    }
+    manifest["rights"]["copyright_status"] = "machine-originated-unresolved"
+    manifest["rights"]["rights_basis"] = "no-exclusive-right-asserted"
+    manifest["rights"]["third_party_material"] = "none-known"
+    manifest["review"]["technical_validation"] = "passed"
+    write("mncs-language-policy-core.json", finish(manifest))
 
-    # 4. Third-party dependency (declared by MNCS-Commons).
+
+def section_third_party_dependency(commons_head: str) -> None:
     pyproject_abs = PROJECTS / "MNCS-Commons/pyproject.toml"
-    commons_head = git("MNCS-Commons", "rev-parse", "--short", "HEAD")
-    if pyproject_abs.exists():
-        text = pyproject_abs.read_text(encoding="utf-8")
-        dependency = "zstandard" if "zstandard" in text else "unknown"
-        manifest = base_manifest()
-        manifest["artifact"] = {
-            "id": f"mncs-commons:{commons_head}:dependency/{dependency}",
-            "class": "binary",
-            "repository": "github.com/epi13/MNCS-Commons",
-            "commit": commons_head,
+    text = pyproject_abs.read_text(encoding="utf-8")
+    dependency = "zstandard" if "zstandard" in text else "unknown"
+    manifest = base_manifest()
+    manifest["artifact"] = {
+        "id": f"mncs-commons:{commons_head}:dependency/{dependency}",
+        "class": "binary",
+        "repository": "github.com/epi13/MNCS-Commons",
+        "commit": commons_head,
+    }
+    manifest["provenance"]["origin_classification"] = "third-party-derived"
+    manifest["provenance"]["participants"] = [
+        {"type": "organization", "role": "upstream-author", "name": dependency}
+    ]
+    manifest["rights"]["distribution_license"] = "BSD-3-Clause"
+    manifest["rights"]["copyright_status"] = "third-party-licensed"
+    manifest["rights"]["rights_basis"] = "third-party-license"
+    manifest["rights"]["third_party_material"] = "present"
+    manifest["rights"]["sources"] = [
+        {
+            "kind": "package",
+            "reference": f"pypi.org/project/{dependency}",
+            "license_status": "compatible",
+            "license": "BSD-3-Clause",
+            "confidence": "observed-declaration",
+            "notes": "License per upstream declaration; declaration is evidence, not verification.",
         }
-        manifest["provenance"]["origin_classification"] = "third-party-derived"
-        manifest["provenance"]["participants"] = [
-            {"type": "organization", "role": "upstream-author", "name": dependency}
-        ]
-        manifest["rights"]["distribution_license"] = "BSD-3-Clause"
-        manifest["rights"]["copyright_status"] = "third-party-licensed"
-        manifest["rights"]["rights_basis"] = "third-party-license"
-        manifest["rights"]["third_party_material"] = "present"
-        manifest["rights"]["sources"] = [
-            {
-                "kind": "package",
-                "reference": f"pypi.org/project/{dependency}",
-                "license_status": "compatible",
-                "license": "BSD-3-Clause",
-                "confidence": "observed-declaration",
-                "notes": "License per upstream declaration; declaration is evidence, not verification.",
-            }
-        ]
-        write("third-party-dependency.json", finish(manifest))
+    ]
+    write("third-party-dependency.json", finish(manifest))
 
-    # 5. Uncertain-origin example: mixed history documentation file whose
-    #    authorship split between humans and machine sessions is not resolved.
+
+def section_uncertain_origin(rp_head: str) -> None:
     uncertain_rel = Path("docs/open-questions.md")
     uncertain_abs = PROJECTS / "mncs-rights-provenance" / uncertain_rel
-    if uncertain_abs.exists():
-        manifest = base_manifest()
-        manifest["artifact"] = {
-            "id": f"mncs-rights-provenance:{rp_head}:docs/open-questions.md",
-            "class": "documentation",
-            "repository": "github.com/epi13/mncs-rights-provenance",
-            "commit": rp_head,
-            "paths": [str(uncertain_rel)],
-            "hashes": [
-                {"algorithm": "sha256", "value": sha256_file(uncertain_abs), "scope": "file"}
-            ],
-        }
-        manifest["provenance"]["origin_classification"] = "origin-uncertain"
-        manifest["provenance"]["participants"] = [{"type": "unknown", "role": "contributor"}]
-        manifest["provenance"]["notes"] = (
-            "Edit history mixes human and machine-assisted sessions without "
-            "preserved per-session attribution. Uncertainty is preserved rather "
-            "than resolved by assumption."
-        )
-        manifest["rights"]["distribution_license"] = "Apache-2.0"
-        manifest["rights"]["copyright_status"] = "unresolved"
-        manifest["rights"]["rights_basis"] = "unknown-needs-review"
-        manifest["rights"]["third_party_material"] = "possible"
-        write("uncertain-origin-document.json", finish(manifest))
+    manifest = base_manifest()
+    manifest["artifact"] = {
+        "id": f"mncs-rights-provenance:{rp_head}:docs/open-questions.md",
+        "class": "documentation",
+        "repository": "github.com/epi13/mncs-rights-provenance",
+        "commit": rp_head,
+        "paths": [str(uncertain_rel)],
+        "hashes": [{"algorithm": "sha256", "value": sha256_file(uncertain_abs), "scope": "file"}],
+    }
+    manifest["provenance"]["origin_classification"] = "origin-uncertain"
+    manifest["provenance"]["participants"] = [{"type": "unknown", "role": "contributor"}]
+    manifest["provenance"]["notes"] = (
+        "Edit history mixes human and machine-assisted sessions without "
+        "preserved per-session attribution. Uncertainty is preserved rather "
+        "than resolved by assumption."
+    )
+    manifest["rights"]["distribution_license"] = "Apache-2.0"
+    manifest["rights"]["copyright_status"] = "unresolved"
+    manifest["rights"]["rights_basis"] = "unknown-needs-review"
+    manifest["rights"]["third_party_material"] = "possible"
+    write("uncertain-origin-document.json", finish(manifest))
 
-    print(f"\nGenerated {len(list(OUT.glob('*.json')))} dogfood manifest(s).")
+
+def main() -> int:
+    rp_head = git("mncs-rights-provenance", "rev-parse", "--short", "HEAD")
+
+    sections = (
+        ("human-specification", lambda: section_human_specification(rp_head)),
+        ("agent-directed-fabric-module", lambda: section_agent_directed_fabric(
+            git("mncs-fabric", "rev-parse", "--short", "HEAD"))),
+        ("mncs-language-policy-core", lambda: section_mncs_language_core(rp_head)),
+        ("third-party-dependency", lambda: section_third_party_dependency(
+            git("MNCS-Commons", "rev-parse", "--short", "HEAD"))),
+        ("uncertain-origin-document", lambda: section_uncertain_origin(rp_head)),
+    )
+    generated = 0
+    for label, fn in sections:
+        with skip_guard(label):
+            fn()
+            generated += 1
+
+    total = len(list(OUT.glob("*.json"))) if OUT.exists() else 0
+    print(f"\nGenerated {generated} dogfood manifest(s); {total} present.")
+    if generated == 0 and total == 0:
+        print("no dogfood manifests available; nothing to validate")
     return 0
 
 

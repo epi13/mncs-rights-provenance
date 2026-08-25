@@ -1,7 +1,7 @@
 {
   "artifact": {
     "class": "documentation",
-    "commit": "8855832",
+    "commit": "e4e91b3",
     "hashes": [
       {
         "algorithm": "sha256",
@@ -9,13 +9,13 @@
         "value": "205ec2619d09ffb15ef9525dbde2230a63758754202b0947c729c7f7a5ba7df4"
       }
     ],
-    "id": "mncs-rights-provenance:8855832:docs/problem-statement.md",
+    "id": "mncs-rights-provenance:e4e91b3:docs/problem-statement.md",
     "paths": [
       "docs/problem-statement.md"
     ],
     "repository": "github.com/epi13/mncs-rights-provenance"
   },
-  "manifest_identity": "7e2dd89168a691a81bba5348e799c2b7bd9dea9bda85fac57956a9be1f3020c7",
+  "manifest_identity": "09fd2376c1bb200b898b360dd1a96b0b2393b9a81a21fad108d0c890a3220e89",
   "provenance": {
     "origin_classification": "human-authored",
     "participants": [
@@ -28,7 +28,7 @@
     "process_evidence": [
       {
         "kind": "commit",
-        "reference": "github.com/epi13/mncs-rights-provenance@8855832"
+        "reference": "github.com/epi13/mncs-rights-provenance@e4e91b3"
       }
     ]
   },
