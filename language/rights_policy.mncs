@@ -1,0 +1,334 @@
+mncs 0.6;
+
+// MNCS Rights & Provenance - normative release-policy decision core.
+//
+// Single source of truth for gate severity semantics under the default
+// canonical-release policy. Host implementations (Python reference tooling,
+// mncs-validator-rs) MUST agree with it; golden vectors executed across
+// compiler backends enforce that agreement.
+//
+// Encoding contract (fixed by specs/policy-core.md v0.2):
+//   origin_code        0..8   human-authored .. origin-uncertain
+//   copyright_code     0..6   human-authorship-confirmed .. unresolved
+//   rights_basis_code  0..5   project-owned-or-controlled .. unknown-needs-review
+//   third_party_code   0..3   none-known, present, possible, unknown
+//   prov_valid_code    0..3   passed, failed, incomplete, not-run
+//   human_accept_code  0..3   accepted, rejected, not-reviewed, not-required
+//
+// Severity lattice: Blocking > Review > Finding > None.
+//
+// A passing outcome means the artifact satisfied project evidence
+// requirements. It is never a legal warranty of title or non-infringement.
+
+module mncs.rights.policy.v01;
+
+enum Severity { None, Finding, Review, Blocking }
+
+enum Enforcement { Disabled, FindingCap, ReviewCap, Fatal }
+
+enum Outcome { Pass, PassWithFindings, ReviewRequired, Blocked }
+
+enum Truth { No, Yes }
+
+record GateInput {
+  origin_code: i32,
+  copyright_code: i32,
+  rights_basis_code: i32,
+  third_party_code: i32,
+  prov_valid_code: i32,
+  human_accept_code: i32,
+  incompatible_source_count: i32,
+  unknown_source_count: i32,
+  contradiction_count: i32,
+  hash_mismatch: Truth,
+  broken_evidence_refs: i32,
+  graph_invalid: Truth,
+  attestation_conflicts: i32,
+  impossible_evidence: Truth,
+  canonical_release_profile: Truth,
+}
+
+// Per-gate severities in canonical order. Hosts compare this record field by
+// field against their own implementations.
+record GateSeverities {
+  hash_correspondence: Severity,
+  evidence_refs: Severity,
+  graph_integrity: Severity,
+  incompatible_license: Severity,
+  contradictory_license: Severity,
+  rights_basis_resolved: Severity,
+  third_party_resolved: Severity,
+  copyright_resolved: Severity,
+  provenance_passed: Severity,
+  provenance_complete: Severity,
+  human_review_ok: Severity,
+  unknown_source_license: Severity,
+  attestation_integrity: Severity,
+  impossible_evidence_gate: Severity,
+}
+
+fn combine(left: Severity, right: Severity) -> (result: Severity) {
+  return match left {
+    Severity.None => right,
+    Severity.Finding => match right {
+      Severity.None => Severity.Finding,
+      Severity.Finding => Severity.Finding,
+      Severity.Review => Severity.Review,
+      Severity.Blocking => Severity.Blocking,
+    },
+    Severity.Review => match right {
+      Severity.None => Severity.Review,
+      Severity.Finding => Severity.Review,
+      Severity.Review => Severity.Review,
+      Severity.Blocking => Severity.Blocking,
+    },
+    Severity.Blocking => Severity.Blocking,
+  };
+}
+
+fn apply_enforcement(severity: Severity, enforcement: Enforcement) -> (result: Severity) {
+  return match enforcement {
+    Enforcement.Fatal => severity,
+    Enforcement.ReviewCap => match severity {
+      Severity.None => Severity.None,
+      Severity.Finding => Severity.Finding,
+      Severity.Review => Severity.Review,
+      Severity.Blocking => Severity.Review,
+    },
+    Enforcement.FindingCap => match severity {
+      Severity.None => Severity.None,
+      Severity.Finding => Severity.Finding,
+      Severity.Review => Severity.Finding,
+      Severity.Blocking => Severity.Finding,
+    },
+    Enforcement.Disabled => Severity.None,
+  };
+}
+
+// Codes are inlined as literals below; the encoding contract lives in
+// specs/policy-core.md (rights_basis unknown-needs-review = 5, third_party
+// possible/unknown = 2/3, copyright unresolved = 6, prov failed/incomplete/
+// not-run = 1/2/3, human rejected/not-reviewed = 1/2).
+
+// ---- Per-gate normative severity (canonical-release baseline) -------------
+
+fn g_hash_correspondence(input: GateInput) -> (result: Severity) {
+  return match input.hash_mismatch {
+    Truth.Yes => Severity.Blocking,
+    Truth.No => Severity.None,
+  };
+}
+
+fn g_evidence_refs(input: GateInput) -> (result: Severity) {
+  if input.broken_evidence_refs > 0 {
+    return Severity.Review;
+  }
+  return Severity.None;
+}
+
+fn g_graph_integrity(input: GateInput) -> (result: Severity) {
+  return match input.graph_invalid {
+    Truth.Yes => Severity.Blocking,
+    Truth.No => Severity.None,
+  };
+}
+
+fn g_incompatible_license(input: GateInput) -> (result: Severity) {
+  if input.incompatible_source_count > 0 {
+    return Severity.Blocking;
+  }
+  return Severity.None;
+}
+
+fn g_contradictory_license(input: GateInput) -> (result: Severity) {
+  if input.contradiction_count > 0 {
+    return Severity.Review;
+  }
+  return Severity.None;
+}
+
+fn g_rights_basis_resolved(input: GateInput) -> (result: Severity) {
+  if input.rights_basis_code == 5 {
+    return Severity.Review;
+  }
+  return Severity.None;
+}
+
+fn g_third_party_resolved(input: GateInput) -> (result: Severity) {
+  if input.third_party_code == 2 {
+    return match input.canonical_release_profile {
+      Truth.Yes => Severity.Review,
+      Truth.No => Severity.Finding,
+    };
+  }
+  if input.third_party_code == 3 {
+    return match input.canonical_release_profile {
+      Truth.Yes => Severity.Review,
+      Truth.No => Severity.Finding,
+    };
+  }
+  return Severity.None;
+}
+
+fn g_copyright_resolved(input: GateInput) -> (result: Severity) {
+  if input.copyright_code == 6 {
+    return match input.canonical_release_profile {
+      Truth.Yes => Severity.Review,
+      Truth.No => Severity.Finding,
+    };
+  }
+  return Severity.None;
+}
+
+fn g_provenance_passed(input: GateInput) -> (result: Severity) {
+  if input.prov_valid_code == 1 {
+    return Severity.Blocking;
+  }
+  return Severity.None;
+}
+
+fn g_provenance_complete(input: GateInput) -> (result: Severity) {
+  if input.prov_valid_code == 2 {
+    return Severity.Review;
+  }
+  if input.prov_valid_code == 3 {
+    return Severity.Review;
+  }
+  return Severity.None;
+}
+
+fn g_human_review_ok(input: GateInput) -> (result: Severity) {
+  if input.human_accept_code == 1 {
+    return Severity.Blocking;
+  }
+  if input.human_accept_code == 2 {
+    return match input.canonical_release_profile {
+      Truth.Yes => Severity.Review,
+      Truth.No => Severity.Finding,
+    };
+  }
+  return Severity.None;
+}
+
+fn g_unknown_source_license(input: GateInput) -> (result: Severity) {
+  if input.unknown_source_count > 0 {
+    return match input.canonical_release_profile {
+      Truth.Yes => Severity.Review,
+      Truth.No => Severity.Finding,
+    };
+  }
+  return Severity.None;
+}
+
+fn g_attestation_integrity(input: GateInput) -> (result: Severity) {
+  if input.attestation_conflicts > 0 {
+    return Severity.Review;
+  }
+  return Severity.None;
+}
+
+fn g_impossible_evidence(input: GateInput) -> (result: Severity) {
+  return match input.impossible_evidence {
+    Truth.Yes => Severity.Blocking,
+    Truth.No => Severity.None,
+  };
+}
+
+
+// ---- Aggregation -----------------------------------------------------------
+
+fn gate_severities(input: GateInput) -> (result: GateSeverities) {
+  let hash_gate: Severity = g_hash_correspondence(input);
+  let refs_gate: Severity = g_evidence_refs(input);
+  let graph_gate: Severity = g_graph_integrity(input);
+  let incompatible_gate: Severity = g_incompatible_license(input);
+  let contradictory_gate: Severity = g_contradictory_license(input);
+  let basis_gate: Severity = g_rights_basis_resolved(input);
+  let third_party_gate: Severity = g_third_party_resolved(input);
+  let copyright_gate: Severity = g_copyright_resolved(input);
+  let prov_passed_gate: Severity = g_provenance_passed(input);
+  let prov_complete_gate: Severity = g_provenance_complete(input);
+  let human_gate: Severity = g_human_review_ok(input);
+  let unknown_source_gate: Severity = g_unknown_source_license(input);
+  let attestation_gate: Severity = g_attestation_integrity(input);
+  let impossible_gate: Severity = g_impossible_evidence(input);
+  return GateSeverities {
+    hash_correspondence: hash_gate,
+    evidence_refs: refs_gate,
+    graph_integrity: graph_gate,
+    incompatible_license: incompatible_gate,
+    contradictory_license: contradictory_gate,
+    rights_basis_resolved: basis_gate,
+    third_party_resolved: third_party_gate,
+    copyright_resolved: copyright_gate,
+    provenance_passed: prov_passed_gate,
+    provenance_complete: prov_complete_gate,
+    human_review_ok: human_gate,
+    unknown_source_license: unknown_source_gate,
+    attestation_integrity: attestation_gate,
+    impossible_evidence_gate: impossible_gate,
+  };
+}
+
+fn outcome_from_severity(combined: Severity) -> (result: Outcome) {
+  return match combined {
+    Severity.None => Outcome.Pass,
+    Severity.Finding => Outcome.PassWithFindings,
+    Severity.Review => Outcome.ReviewRequired,
+    Severity.Blocking => Outcome.Blocked,
+  };
+}
+
+// Raw aggregation without enforcement ceilings (exposed for analysis).
+fn evaluate_raw(input: GateInput) -> (result: Outcome) {
+  let gates: GateSeverities = gate_severities(input);
+  let s1: Severity = combine(gates.hash_correspondence, gates.evidence_refs);
+  let s2: Severity = combine(s1, gates.graph_integrity);
+  let s3: Severity = combine(s2, gates.incompatible_license);
+  let s4: Severity = combine(s3, gates.contradictory_license);
+  let s5: Severity = combine(s4, gates.rights_basis_resolved);
+  let s6: Severity = combine(s5, gates.third_party_resolved);
+  let s7: Severity = combine(s6, gates.copyright_resolved);
+  let s8: Severity = combine(s7, gates.provenance_passed);
+  let s9: Severity = combine(s8, gates.provenance_complete);
+  let s10: Severity = combine(s9, gates.human_review_ok);
+  let s11: Severity = combine(s10, gates.unknown_source_license);
+  let s12: Severity = combine(s11, gates.attestation_integrity);
+  let s13: Severity = combine(s12, gates.impossible_evidence_gate);
+  return outcome_from_severity(s13);
+}
+
+// Canonical-release evaluation: every gate passes through its default
+// enforcement ceiling before combining. These ceilings are the normative
+// defaults documented in specs/policy-core.md; profiles may only lower them.
+fn evaluate(input: GateInput) -> (result: Outcome) {
+  let gates: GateSeverities = gate_severities(input);
+  let c1: Severity = apply_enforcement(gates.hash_correspondence, Enforcement.Fatal);
+  let c2: Severity = apply_enforcement(gates.evidence_refs, Enforcement.ReviewCap);
+  let c3: Severity = apply_enforcement(gates.graph_integrity, Enforcement.Fatal);
+  let c4: Severity = apply_enforcement(gates.incompatible_license, Enforcement.Fatal);
+  let c5: Severity = apply_enforcement(gates.contradictory_license, Enforcement.ReviewCap);
+  let c6: Severity = apply_enforcement(gates.rights_basis_resolved, Enforcement.ReviewCap);
+  let c7: Severity = apply_enforcement(gates.third_party_resolved, Enforcement.ReviewCap);
+  let c8: Severity = apply_enforcement(gates.copyright_resolved, Enforcement.ReviewCap);
+  let c9: Severity = apply_enforcement(gates.provenance_passed, Enforcement.Fatal);
+  let c10: Severity = apply_enforcement(gates.provenance_complete, Enforcement.ReviewCap);
+  let c11: Severity = apply_enforcement(gates.human_review_ok, Enforcement.ReviewCap);
+  let c12: Severity = apply_enforcement(gates.unknown_source_license, Enforcement.ReviewCap);
+  let c13: Severity = apply_enforcement(gates.attestation_integrity, Enforcement.ReviewCap);
+  let c14: Severity = apply_enforcement(gates.impossible_evidence_gate, Enforcement.Fatal);
+  let s1: Severity = combine(c1, c2);
+  let s2: Severity = combine(s1, c3);
+  let s3: Severity = combine(s2, c4);
+  let s4: Severity = combine(s3, c5);
+  let s5: Severity = combine(s4, c6);
+  let s6: Severity = combine(s5, c7);
+  let s7: Severity = combine(s6, c8);
+  let s8: Severity = combine(s7, c9);
+  let s9: Severity = combine(s8, c10);
+  let s10: Severity = combine(s9, c11);
+  let s11: Severity = combine(s10, c12);
+  let s12: Severity = combine(s11, c13);
+  let s13: Severity = combine(s12, c14);
+  return outcome_from_severity(s13);
+}

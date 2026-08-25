@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/v0.2.0/policy-profile.schema.json",
+  "title": "MNCS Rights & Provenance Policy Profile v0.2",
+  "description": "Declarative release-policy configuration consumed by validators. A profile selects which gates are fatal (blocked), which route to human review, and which merely produce findings.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "gates"],
+  "properties": {
+    "schema_version": {"const": "0.2.0"},
+    "profile_id": {"type": "string", "minLength": 1},
+    "description": {"type": "string", "maxLength": 2048},
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_valid", "version_supported", "required_fields_present"],
+      "properties": {
+        "schema_valid": {"$ref": "#/$defs/gate"},
+        "version_supported": {"$ref": "#/$defs/gate"},
+        "required_fields_present": {"$ref": "#/$defs/gate"},
+        "artifact_hash_correspondence": {"$ref": "#/$defs/gate"},
+        "evidence_references_resolve": {"$ref": "#/$defs/gate"},
+        "graph_integrity": {"$ref": "#/$defs/gate"},
+        "no_incompatible_third_party_license": {"$ref": "#/$defs/gate"},
+        "no_contradictory_license_evidence": {"$ref": "#/$defs/gate"},
+        "rights_basis_resolved": {"$ref": "#/$defs/gate"},
+        "third_party_material_resolved": {"$ref": "#/$defs/gate"},
+        "copyright_status_resolved": {"$ref": "#/$defs/gate"},
+        "provenance_validation_passed": {"$ref": "#/$defs/gate"},
+        "provenance_complete": {"$ref": "#/$defs/gate"},
+        "technical_validation_passed": {"$ref": "#/$defs/gate"},
+        "human_review_state_acceptable": {"$ref": "#/$defs/gate"},
+        "attestation_integrity": {"$ref": "#/$defs/gate"},
+        "no_falsified_or_impossible_evidence": {"$ref": "#/$defs/gate"}
+      }
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "on_unknown": {"enum": ["finding", "review-required", "blocked"]},
+        "require_manifest_identity": {"type": "boolean"}
+      }
+    },
+    "extensions": {"type": "object", "propertyNames": {"pattern": "^[a-z0-9-]+:"}}
+  },
+  "$defs": {
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enforcement"],
+      "properties": {
+        "enforcement": {"enum": ["fatal", "review", "finding", "disabled"], "description": "fatal=block release; review=route to review-required; finding=report only; disabled=skip."},
+        "applies_to_class": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/artifactClassScope"},
+          "description": "Restrict gate to artifact classes; empty means all."
+        }
+      }
+    },
+    "artifactClassScope": {"enum": ["source-code", "documentation", "dataset", "model-weights", "configuration", "experiment-output", "receipt", "binary", "other"]}
+  }
+}

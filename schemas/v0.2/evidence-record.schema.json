@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/v0.2.0/evidence-record.schema.json",
+  "title": "MNCS Rights & Provenance Evidence Record v0.2",
+  "description": "Standalone, content-addressed evidence document. Producers (Fabric, Forge, Validator, harnesses, humans) emit these; manifests reference them by stableId/contentDigest instead of embedding payloads.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evidence_id", "kind", "producer", "subject", "claims", "content_digest"],
+  "properties": {
+    "schema_version": {"const": "0.2.0"},
+    "evidence_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "description": "Producer-scoped stable identifier, e.g. mncs-fabric://execution/<record-id> or forge://license-finding/<digest>."
+    },
+    "kind": {"enum": ["fabric-execution", "forge-analysis", "validation-result", "commit", "prompt-record", "tool-log", "contribution-attestation", "external-record", "review-decision", "other"]},
+    "producer": {"$ref": "#/$defs/producer_reference"},
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_refs"],
+      "properties": {
+        "artifact_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/artifact_ref"}
+        },
+        "run_id": {"type": "string"},
+        "task_id": {"type": "string"},
+        "parent_evidence_ids": {"type": "array", "items": {"type": "string", "maxLength": 512}}
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/observation"},
+      "description": "What the producer directly observed (inputs, outputs, hashes, identities). Process evidence only."
+    },
+    "claims": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/claim"},
+      "description": "Structured assertions the producer is willing to make about evidence, each with explicit confidence. Claims are evidence items for downstream policy, never legal conclusions."
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timestamp": {"type": "string", "format": "date-time"},
+        "duration_ms": {"type": "integer", "minimum": 0},
+        "environment_identity": {"type": "string"},
+        "policy_notes": {"type": "string", "maxLength": 2048}
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidence_reference"},
+      "description": "Links to receipts, commits, other evidence records."
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "extensions": {"type": "object", "propertyNames": {"pattern": "^[a-z0-9-]+:"}},
+    "content_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$", "description": "SHA-256 of RFC 8785 canonical JSON of this record with content_digest removed."}
+  },
+  "$defs": {
+    "producer_reference": {
+      "type": "object",
+      "required": ["producer", "recordKind", "schemaVersion", "stableId"],
+      "properties": {
+        "producer": {"type": "string", "minLength": 1},
+        "recordKind": {"type": "string", "minLength": 1},
+        "schemaVersion": {"type": "string", "minLength": 1},
+        "stableId": {"type": "string", "minLength": 1},
+        "contentDigest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "scope": {"type": "object"}
+      }
+    },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "class": {"enum": ["source-code", "documentation", "dataset", "model-weights", "configuration", "experiment-output", "receipt", "binary", "other"]},
+        "path": {"type": "string"},
+        "hash_algorithm": {"enum": ["sha256"]},
+        "hash_value": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "role": {"enum": ["input", "output", "subject", "related"]}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "value"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "value": {},
+        "value_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$", "description": "Digest of an oversized value body held elsewhere; value then holds only a pointer/reference string."},
+        "observed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_type", "statement", "confidence"],
+      "properties": {
+        "claim_type": {"enum": ["origin-classification-proposal", "license-identification", "license-status-assessment", "similarity-finding", "dependency-presence", "generated-code-ancestry", "contradictory-declaration", "hash-correspondence", "unknown-license-state", "other"]},
+        "statement": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "confidence": {"enum": ["high", "medium", "low", "insufficient-evidence"], "description": "'insufficient-evidence' exists so producers can say unknown without inventing a confident answer."},
+        "spdx_expression": {"type": "string", "maxLength": 256},
+        "value": {},
+        "supporting_observations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "evidence_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reference"],
+      "properties": {
+        "kind": {"enum": ["fabric-receipt", "fabric-execution-record", "forge-record", "validation-receipt", "commit", "commons-record", "external-record", "other"]},
+        "reference": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
+      }
+    }
+  }
+}

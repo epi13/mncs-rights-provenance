@@ -1,0 +1,1158 @@
+{
+ "schema_version": "0.1",
+ "name": "severity-lattice-v1",
+ "cases": [
+  {
+   "id": "combine-None-None",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-None-Finding",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-None-Review",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-None-Blocking",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Finding-None",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Finding-Finding",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Finding-Review",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Finding-Blocking",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Review-None",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Review-Finding",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Review-Review",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Review-Blocking",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Blocking-None",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Blocking-Finding",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Blocking-Review",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "combine-Blocking-Blocking",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "combine"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-Disabled-None",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::Disabled",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-FindingCap-None",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::FindingCap",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-ReviewCap-None",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::ReviewCap",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-Fatal-None",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::Fatal",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-Disabled-Finding",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::Disabled",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-FindingCap-Finding",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::FindingCap",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-ReviewCap-Finding",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::ReviewCap",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-Fatal-Finding",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::Fatal",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-Disabled-Review",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::Disabled",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-FindingCap-Review",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::FindingCap",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-ReviewCap-Review",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::ReviewCap",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-Fatal-Review",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::Fatal",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-Disabled-Blocking",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::Disabled",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::None",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-FindingCap-Blocking",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::FindingCap",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Finding",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-ReviewCap-Blocking",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::ReviewCap",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Review",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "enforce-Fatal-Blocking",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "apply_enforcement"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Enforcement",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Enforcement::Fatal",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Severity",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Severity::Blocking",
+      "discriminant": 3
+     }
+    }
+   ]
+  }
+ ]
+}
