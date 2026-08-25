@@ -1,60 +1,92 @@
-# MNCS Integration Plan
+# MNCS Integration: what exists now
 
-## Fabric
+This document describes the integrations that are **implemented and tested**,
+not aspirations. For the original v0.1 integration plan, see git history of
+this file.
 
-Fabric should become the primary producer of process evidence. Candidate additions to Fabric receipts include:
+## mncs-fabric — primary process-evidence producer
 
-- artifact identifiers and hashes;
-- input/source references;
-- model/agent/tool participants and roles;
-- transformation steps;
-- validation receipt links;
-- proposed origin classification;
-- pointer to the resulting rights manifest.
+- `src/mncs_fabric/provenance.py` projects execution records into standalone
+  evidence records (`kind=fabric-execution`, schema 0.2.0), content-addressed
+  with the family's canonical-JSON SHA-256 convention.
+- CLI: `mncs-fabric provenance emit <record.json> [--receipt r.json]
+  [--run-id ...] [--task-id ...]`.
+- Boundary: Fabric emits observations (outputs/inputs with sha256, identities,
+  argv digest, outcome, node fingerprint). It never classifies origin by its
+  own authority; caller-supplied proposals are carried as attributed claims.
+- The receipt format is untouched; evidence references receipts by identity.
 
-Fabric should emit evidence, not legal conclusions. The rights layer may consume Fabric receipts and apply policy later.
+## mncs-forge-mcp — evidence analysis
 
-## Commons
+- v0.2 manifests validate alongside v0.1 (version-aware packaged schemas);
+  Forge drafts emit conservative v0.2 documents under `spec_profile=development`.
+- New operation `rights.license-evidence.scan` (CLI
+  `mncs-forge license-evidence scan`, MCP tool
+  `mncs_forge_license_evidence_scan`) produces a confidence-ranked license
+  evidence record: declared metadata → `observed-declaration`; notice-file
+  keywords → `heuristic` + recorded sha256; nothing found →
+  `insufficient-evidence` ("do not infer one").
+- Existing `observe/advisory/enforced` policy modes and candidate-selection
+  enforcement continue to work unchanged on both manifest versions.
 
-Commons should preserve institutional reasoning that cannot be represented as a simple manifest field:
+## mncs-validator-rs — independent release-policy evaluation
 
-- findings about recurring provenance patterns;
-- decisions on classification policy;
-- open legal/technical questions;
-- hypotheses about source similarity;
-- failed approaches;
-- handoffs and artifact references;
-- superseded rights findings with temporal context.
+- `mncs-rs rights-validate <manifest>` performs structural validation,
+  RFC 8785 identity verification, DAG integrity checks, and canonical-release
+  gate evaluation mirroring this repository's MNCS-language core.
+- Golden vectors (`fixtures/rights-conformance/golden-vectors.json`) are
+  generated from `language/rights_policy.mncs`'s reference semantics and must
+  reproduce exactly in Rust tests.
+- Exit codes distinguish outcomes: pass=0, findings/review=4, blocked=3,
+  invalid=1. Reports are structured JSON including per-gate severities.
+- Technical-correctness validation remains a separate layer; neither promotes
+  the other.
 
-A current release manifest should link to relevant Commons records without treating every historical discussion as current policy.
+## MNCS-Commons — institutional memory
 
-## Forge
+- `adapters/rights.py` projects evidence records into inert Observations
+  (producer-attributed, UNKNOWN claim-verification status preserved) and
+  bounds validator reports into retention summaries explicitly marked as
+  historical rather than current policy.
+- Unsupported schema versions refuse to guess; supersession uses standard
+  Commons relations/lifecycle.
 
-Forge can provide analysis evidence for:
+## mncs-control-mcp / mncs-harness — context across boundaries
 
-- dependency/license discovery;
-- source-lineage inspection;
-- similarity findings;
-- generated-code ancestry clues;
-- SPDX extraction/generation;
-- contradictions between declared and observed provenance.
+- Control experiments accept a `rights_evidence` producer-reference relation;
+  rights manifests/evidence ride the existing producer-reference spine across
+  handoffs and publications without payload duplication.
+- Harness `to_rights_participant()` maps actor-provenance records to manifest
+  participants preserving `stable_id`/content-digest traceability.
 
-Forge findings should include confidence/evidence and should be able to return `unknown` rather than inventing a license.
+## Repository conventions
 
-## Validator
+A repository adopting rights & provenance needs exactly one new file plus an
+optional state directory:
 
-Validator should enforce schema and release policy separately from technical correctness. Example gates:
+```
+mncs-rights.toml          # or a "rights_provenance" table in mncs-forge.toml:
+                          #   mode = "observe" | "advisory" | "enforced"
+                          #   manifest = "RIGHTS.json"
+RIGHTS.json               # current manifest (spec_profile selects strictness)
+.mncs-rights/             # optional local evidence store for resolved refs
+```
 
-- schema validity;
-- required evidence present;
-- incompatible license finding blocks release;
-- unresolved rights states route to review;
-- manifest/artifact hashes match.
+Development tolerates incomplete provenance (`spec_profile = "development"`
+downgrades uncertain states to findings). Canonical public releases should use
+`canonical-release` where unresolved states route to review.
 
-## SPDX
+## Release bundle shape
 
-MNCS should map conventional license expressions, packages/files, checksums, dependencies, and AI/supply-chain metadata to SPDX wherever possible. MNCS-specific extensions should be limited to concepts that cannot be represented cleanly in the applicable SPDX version.
+A release pipeline can emit alongside ordinary artifacts:
 
-The goal is an export path such as:
+```
+<artifact files>
+RIGHTS.json                     # sealed manifest (manifest_identity attached)
+evidence/*.json                 # fabric/forge/validation evidence records
+spdx.json                       # SPDX 2.3 export
+validator-report.json           # mncs-rs rights-validate output
+```
 
-`Fabric evidence -> MNCS rights manifest -> Validator policy -> SPDX/release bundle`
+See `examples/end-to-end/run_demo.sh` for a working pipeline through all
+family members.

@@ -1,0 +1,44 @@
+{
+  "artifact": {
+    "class": "documentation",
+    "commit": "8855832",
+    "hashes": [
+      {
+        "algorithm": "sha256",
+        "scope": "file",
+        "value": "d2121f65e90f4132f90503065cac6ff593b69c5cddde6acf04bf6d876c02944d"
+      }
+    ],
+    "id": "mncs-rights-provenance:8855832:docs/open-questions.md",
+    "paths": [
+      "docs/open-questions.md"
+    ],
+    "repository": "github.com/epi13/mncs-rights-provenance"
+  },
+  "manifest_identity": "baa79392305547dc0c4f4dbde50ec2cf505ddbc687507ee03e82e133f11a6f1d",
+  "provenance": {
+    "notes": "Edit history mixes human and machine-assisted sessions without preserved per-session attribution. Uncertainty is preserved rather than resolved by assumption.",
+    "origin_classification": "origin-uncertain",
+    "participants": [
+      {
+        "role": "contributor",
+        "type": "unknown"
+      }
+    ],
+    "process_evidence": []
+  },
+  "review": {
+    "human_acceptance": "not-reviewed",
+    "provenance_validation": "passed",
+    "technical_validation": "not-run"
+  },
+  "rights": {
+    "copyright_status": "unresolved",
+    "distribution_license": "Apache-2.0",
+    "rights_basis": "unknown-needs-review",
+    "sources": [],
+    "third_party_material": "possible"
+  },
+  "schema_version": "0.2.0",
+  "spec_profile": "canonical-release"
+}

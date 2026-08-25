@@ -1,5 +1,10 @@
 # MNCS Rights Manifest Specification v0.1
 
+> **Status:** superseded by the implemented v0.2 contracts. See
+> `schemas/v0.2/`, `specs/policy-core.md`, and the repository README for the
+> system that actually exists. This document is retained for provenance of the
+> v0.1 vocabulary, which v0.2 preserves.
+
 The canonical machine-readable form is defined by `schemas/mncs-rights-manifest.schema.json`.
 
 ## Top-level sections

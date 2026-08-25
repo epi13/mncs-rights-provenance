@@ -13,8 +13,9 @@ the manifest instead of pretending SPDX covers those.
 from __future__ import annotations
 
 import re
-from datetime import datetime, timezone
-from typing import Any, Mapping
+from collections.abc import Mapping
+from datetime import UTC, datetime
+from typing import Any
 
 from .canonical import sha256_hex
 
@@ -69,33 +70,35 @@ def is_valid_spdx_expression(expression: str) -> bool:
     return depth == 0
 
 
-def export_spdx(document: Mapping[str, Any], *, document_uri: str = "https://mncs.invalid/spdx") -> dict[str, Any]:
+def export_spdx(
+    document: Mapping[str, Any], *, document_uri: str = "https://mncs.invalid/spdx"
+) -> dict[str, Any]:
     """Build a minimal SPDX 2.3 JSON document from a rights manifest."""
     artifact = document.get("artifact") or {}
     rights = document.get("rights") or {}
     provenance = document.get("provenance") or {}
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     artifact_id = str(artifact.get("id", "unknown-artifact"))
     package_name = re.sub(r"[^A-Za-z0-9.\-]+", "-", artifact_id)[:80] or "mncs-artifact"
     spdx_ref = f"SPDXRef-Package-{sha256_hex(artifact_id)[:12]}"
     manifest_identity = document.get("manifest_identity") or sha256_hex(document)
 
     subject_package = {
-            "name": package_name,
-            "SPDXID": spdx_ref,
-            "downloadLocation": str(artifact.get("repository") or "NOASSERTION"),
-            "filesAnalyzed": False,
-            "licenseConcluded": str(rights.get("distribution_license") or "NOASSERTION"),
-            "licenseDeclared": str(rights.get("distribution_license") or "NOASSERTION"),
-            "copyrightText": _copyright_text(rights),
-            "versionInfo": str(artifact.get("commit") or "NOASSERTION"),
-            "externalRefs": [
-                {
-                    "referenceCategory": "PACKAGE-MANAGER",
-                    "referenceType": "purl",
-                    "referenceLocator": f"pkg:mncs/{package_name}@{manifest_identity[:12]}",
-                }
-            ],
+        "name": package_name,
+        "SPDXID": spdx_ref,
+        "downloadLocation": str(artifact.get("repository") or "NOASSERTION"),
+        "filesAnalyzed": False,
+        "licenseConcluded": str(rights.get("distribution_license") or "NOASSERTION"),
+        "licenseDeclared": str(rights.get("distribution_license") or "NOASSERTION"),
+        "copyrightText": _copyright_text(rights),
+        "versionInfo": str(artifact.get("commit") or "NOASSERTION"),
+        "externalRefs": [
+            {
+                "referenceCategory": "PACKAGE-MANAGER",
+                "referenceType": "purl",
+                "referenceLocator": f"pkg:mncs/{package_name}@{manifest_identity[:12]}",
+            }
+        ],
     }
     packages = [subject_package]
     relationships = []
@@ -123,9 +126,7 @@ def export_spdx(document: Mapping[str, Any], *, document_uri: str = "https://mnc
         relationships.append(
             {
                 "spdxElementId": spdx_ref,
-                "relationshipType": "DEPENDS_ON"
-                if source.get("kind") == "package"
-                else "OTHER",
+                "relationshipType": "DEPENDS_ON" if source.get("kind") == "package" else "OTHER",
                 "relatedSpdxElement": external_id,
                 "comment": (
                     f"MNCS source kind={source.get('kind', 'other')}; "
@@ -149,7 +150,9 @@ def export_spdx(document: Mapping[str, Any], *, document_uri: str = "https://mnc
     participants = [
         str(participant["model"])
         for participant in provenance.get("participants") or ()
-        if isinstance(participant, Mapping) and isinstance(participant.get("model"), str) and participant.get("model")
+        if isinstance(participant, Mapping)
+        and isinstance(participant.get("model"), str)
+        and participant.get("model")
     ]
     ai_note = None
     if participants:
@@ -177,7 +180,11 @@ def export_spdx(document: Mapping[str, Any], *, document_uri: str = "https://mnc
         },
         "packages": packages,
         "relationships": [
-            {"spdxElementId": "SPDXRef-DOCUMENT", "relationshipType": "DESCRIBES", "relatedSpdxElement": spdx_ref},
+            {
+                "spdxElementId": "SPDXRef-DOCUMENT",
+                "relationshipType": "DESCRIBES",
+                "relatedSpdxElement": spdx_ref,
+            },
             *relationships,
         ],
         "annotations": annotations,
@@ -201,7 +208,9 @@ def import_spdx_sources(spdx_document: Mapping[str, Any]) -> list[dict[str, Any]
         sources.append(
             {
                 "kind": "package",
-                "reference": str(package.get("downloadLocation") or package.get("name", "spdx-package")),
+                "reference": str(
+                    package.get("downloadLocation") or package.get("name", "spdx-package")
+                ),
                 "license_status": status,
                 "license": license_value,
                 "confidence": "observed-declaration" if status == "compatible" else "unknown",

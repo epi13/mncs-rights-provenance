@@ -7,7 +7,7 @@ from copy import deepcopy
 
 import pytest
 
-from mncs_rights_provenance.canonical import canonical_bytes, sha256_hex
+from mncs_rights_provenance.canonical import sha256_hex
 from mncs_rights_provenance.evidence import (
     EvidenceRecord,
     compute_evidence_digest,
@@ -24,13 +24,20 @@ from mncs_rights_provenance.manifest import (
     seal_manifest,
 )
 from mncs_rights_provenance.spdx import export_spdx, import_spdx_sources, is_valid_spdx_expression
-from mncs_rights_provenance.validation import validate_evidence_structure, validate_manifest_structure
+from mncs_rights_provenance.validation import (
+    validate_evidence_structure,
+    validate_manifest_structure,
+)
 
 
 def sample_manifest() -> dict:
     return {
         "schema_version": SCHEMA_VERSION,
-        "artifact": {"id": "example/project#artifact", "class": "source-code", "commit": "cafebabe"},
+        "artifact": {
+            "id": "example/project#artifact",
+            "class": "source-code",
+            "commit": "cafebabe",
+        },
         "provenance": {
             "origin_classification": "human-ai-assisted",
             "participants": [
@@ -83,7 +90,11 @@ def test_deterministic_identity() -> None:
     document = sample_manifest()
     first = compute_manifest_identity(document)
     second = compute_manifest_identity(deepcopy(document))
-    assert first == second == sha256_hex({k: v for k, v in document.items() if k != "manifest_identity"})
+    assert (
+        first
+        == second
+        == sha256_hex({k: v for k, v in document.items() if k != "manifest_identity"})
+    )
 
 
 def test_identity_changes_when_content_changes() -> None:
@@ -104,8 +115,14 @@ def test_structural_validity_happy_path() -> None:
     [
         (lambda d: d.update(schema_version="0.1.0"), "schema_version"),
         (lambda d: d["artifact"].update({"class": "not-a-class"}), "invalid artifact.class"),
-        (lambda d: d["rights"].update(copyright_status="totally-legal"), "copyright_status invalid"),
-        (lambda d: d["provenance"].update(origin_classification="blessed-by-ai"), "origin_classification"),
+        (
+            lambda d: d["rights"].update(copyright_status="totally-legal"),
+            "copyright_status invalid",
+        ),
+        (
+            lambda d: d["provenance"].update(origin_classification="blessed-by-ai"),
+            "origin_classification",
+        ),
         (lambda d: d["review"].update(human_acceptance="sure"), "human_acceptance invalid"),
         (lambda d: d["artifact"].update(paths=["a.py", "a.py"]), "duplicates"),
     ],
@@ -119,7 +136,9 @@ def test_structural_rejections(mutation, expected_fragment) -> None:
 
 def test_graph_cycle_detection() -> None:
     document = sample_manifest()
-    document["provenance"]["graph"]["edges"].append({"from": "out", "to": "src", "relation": "referenced"})
+    document["provenance"]["graph"]["edges"].append(
+        {"from": "out", "to": "src", "relation": "referenced"}
+    )
     ok, issues = check_graph_integrity(document)
     assert not ok
     assert any("cycle" in issue for issue in issues)
@@ -127,7 +146,9 @@ def test_graph_cycle_detection() -> None:
 
 def test_graph_self_loop_detection() -> None:
     document = sample_manifest()
-    document["provenance"]["graph"]["edges"].append({"from": "src", "to": "src", "relation": "referenced"})
+    document["provenance"]["graph"]["edges"].append(
+        {"from": "src", "to": "src", "relation": "referenced"}
+    )
     ok, issues = check_graph_integrity(document)
     assert not ok
     assert any("self-loop" in issue for issue in issues)

@@ -11,12 +11,12 @@ from __future__ import annotations
 
 from .policy_input import (
     BLOCKING,
-    FINDING,
-    NONE,
-    REVIEW,
     COPYRIGHT_CODES,
+    FINDING,
     HUMAN_ACCEPTANCE_CODES,
+    NONE,
     PROVENANCE_VALIDATION_CODES,
+    REVIEW,
     RIGHTS_BASIS_CODES,
     THIRD_PARTY_CODES,
     PolicyInput,
@@ -33,9 +33,9 @@ def apply_enforcement(severity: int, enforcement: int) -> int:
     if enforcement >= ENFORCEMENT_FATAL:
         return severity
     if enforcement == ENFORCEMENT_REVIEW:
-        return severity if severity < REVIEW else REVIEW
+        return min(REVIEW, severity)
     if enforcement == ENFORCEMENT_FINDING:
-        return severity if severity < FINDING else FINDING
+        return min(FINDING, severity)
     return NONE
 
 
@@ -76,7 +76,9 @@ def g_copyright_status(i: PolicyInput) -> int:
 
 
 def g_provenance_passed(i: PolicyInput) -> int:
-    return BLOCKING if i.provenance_validation_code == PROVENANCE_VALIDATION_CODES["failed"] else NONE
+    return (
+        BLOCKING if i.provenance_validation_code == PROVENANCE_VALIDATION_CODES["failed"] else NONE
+    )
 
 
 def g_provenance_complete(i: PolicyInput) -> int:

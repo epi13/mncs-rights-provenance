@@ -7,8 +7,9 @@ explicitly optional: the library never fills missing evidence with defaults.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Any, Mapping
+from typing import Any
 
 ORIGIN_CLASSIFICATIONS = frozenset(
     {

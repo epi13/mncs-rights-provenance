@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Any, Mapping
+from typing import Any
 
 from .canonical import digest_prefixed
 
@@ -63,27 +64,35 @@ def seal_evidence_record(record: EvidenceRecord) -> EvidenceRecord:
 
 def evidence_record_from_dict(value: Mapping[str, Any]) -> EvidenceRecord:
     if not isinstance(value, Mapping):
-        raise ValueError("evidence record must be a JSON object")
+        raise TypeError("evidence record must be a JSON object")
     if value.get("schema_version") != SCHEMA_VERSION:
         raise ValueError(f"unsupported evidence schema_version: {value.get('schema_version')!r}")
     subject = value.get("subject")
     if not isinstance(subject, Mapping):
-        raise ValueError("evidence record requires a subject object")
+        raise TypeError("evidence record requires a subject object")
     producer = value.get("producer")
     if not isinstance(producer, Mapping):
-        raise ValueError("evidence record requires a producer object")
+        raise TypeError("evidence record requires a producer object")
     return EvidenceRecord(
         evidence_id=str(value.get("evidence_id", "")),
         kind=str(value.get("kind", "other")),
         producer=dict(producer),
         subject=dict(subject),
         claims=[dict(item) for item in value.get("claims") or () if isinstance(item, Mapping)],
-        observations=[dict(item) for item in value.get("observations") or () if isinstance(item, Mapping)],
-        references=[dict(item) for item in value.get("references") or () if isinstance(item, Mapping)],
+        observations=[
+            dict(item) for item in value.get("observations") or () if isinstance(item, Mapping)
+        ],
+        references=[
+            dict(item) for item in value.get("references") or () if isinstance(item, Mapping)
+        ],
         context=dict(value["context"]) if isinstance(value.get("context"), Mapping) else None,
         limitations=[str(item) for item in value.get("limitations") or ()],
-        extensions=dict(value["extensions"]) if isinstance(value.get("extensions"), Mapping) else {},
-        content_digest=value.get("content_digest") if isinstance(value.get("content_digest"), str) else None,
+        extensions=dict(value["extensions"])
+        if isinstance(value.get("extensions"), Mapping)
+        else {},
+        content_digest=value.get("content_digest")
+        if isinstance(value.get("content_digest"), str)
+        else None,
     )
 
 
@@ -101,8 +110,8 @@ def verify_evidence_digest(value: Mapping[str, Any]) -> tuple[bool, str]:
 
 
 __all__ = [
-    "EvidenceRecord",
     "SCHEMA_VERSION",
+    "EvidenceRecord",
     "compute_evidence_digest",
     "evidence_record_from_dict",
     "evidence_record_to_dict",

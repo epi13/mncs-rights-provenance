@@ -1,0 +1,43 @@
+{
+  "artifact": {
+    "class": "binary",
+    "commit": "0908f46",
+    "id": "mncs-commons:0908f46:dependency/zstandard",
+    "repository": "github.com/epi13/MNCS-Commons"
+  },
+  "manifest_identity": "88cd32a241b29590d7b385d7bda64df374161b21ad15f3aa038a920eba69ff6d",
+  "provenance": {
+    "origin_classification": "third-party-derived",
+    "participants": [
+      {
+        "name": "zstandard",
+        "role": "upstream-author",
+        "type": "organization"
+      }
+    ],
+    "process_evidence": []
+  },
+  "review": {
+    "human_acceptance": "not-reviewed",
+    "provenance_validation": "passed",
+    "technical_validation": "not-run"
+  },
+  "rights": {
+    "copyright_status": "third-party-licensed",
+    "distribution_license": "BSD-3-Clause",
+    "rights_basis": "third-party-license",
+    "sources": [
+      {
+        "confidence": "observed-declaration",
+        "kind": "package",
+        "license": "BSD-3-Clause",
+        "license_status": "compatible",
+        "notes": "License per upstream declaration; declaration is evidence, not verification.",
+        "reference": "pypi.org/project/zstandard"
+      }
+    ],
+    "third_party_material": "present"
+  },
+  "schema_version": "0.2.0",
+  "spec_profile": "canonical-release"
+}

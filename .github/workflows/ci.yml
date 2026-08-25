@@ -1,0 +1,59 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Lint
+        run: |
+          ruff check src tests scripts language/tools
+          ruff format --check src tests scripts
+      - name: Type check
+        run: mypy src
+      - name: Unit tests (golden vectors, round-trips, graph, SPDX)
+        run: python -m pytest tests -q
+      - name: Legacy v0.1 examples still validate
+        run: python scripts/validate_examples.py
+      - name: Dogfood manifests generate and validate
+        run: |
+          python scripts/dogfood_generate.py
+          python - <<'PY'
+          import json, subprocess, sys
+          from pathlib import Path
+          sys.path.insert(0, "src")
+          from mncs_rights_provenance.validation import validate_manifest_structure
+          from mncs_rights_provenance.manifest import compute_manifest_identity
+          failures = 0
+          for path in sorted(Path("dogfood").glob("*.json")):
+              document = json.loads(path.read_text())
+              issues = validate_manifest_structure(document)
+              identity = compute_manifest_identity(document)
+              if issues or document.get("manifest_identity") != identity:
+                  print(f"FAIL {path}: {issues}")
+                  failures += 1
+          raise SystemExit(failures)
+          PY
+
+  mnscs-language-core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate corpora and golden vectors; verify no drift
+        run: |
+          python3 language/tools/gen_corpus.py
+          git diff --exit-code language/corpora conformance/golden-vectors.json \
+            || (echo "::error::corpora/vectors drifted from gen_corpus.py" && exit 1)

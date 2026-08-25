@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 from .canonical import canonical_bytes, sha256_hex
 from .model import (
@@ -15,8 +16,8 @@ from .model import (
     GraphNode,
     Manifest,
     Participant,
-    Rights,
     Review,
+    Rights,
     Source,
 )
 
@@ -71,27 +72,35 @@ def seal_manifest(document: dict[str, Any]) -> dict[str, Any]:
 
 def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
     if not isinstance(value, Mapping):
-        raise ValueError("manifest must be a JSON object")
+        raise TypeError("manifest must be a JSON object")
     version = value.get("schema_version")
     if version != SCHEMA_VERSION:
-        raise ValueError(f"unsupported manifest schema_version: {version!r} (expected {SCHEMA_VERSION!r})")
+        raise ValueError(
+            f"unsupported manifest schema_version: {version!r} (expected {SCHEMA_VERSION!r})"
+        )
 
     artifact_value = value.get("artifact")
     if not isinstance(artifact_value, Mapping):
-        raise ValueError("manifest.artifact must be an object")
+        raise TypeError("manifest.artifact must be an object")
     artifact = Artifact(
         id=str(artifact_value.get("id", "")),
         artifact_class=str(artifact_value.get("class", "other")),
         repository=_optional_str(artifact_value.get("repository")),
         commit=_optional_str(artifact_value.get("commit")),
         paths=tuple(str(item) for item in artifact_value.get("paths") or ()),
-        hashes=tuple(dict(item) for item in artifact_value.get("hashes") or () if isinstance(item, Mapping)),
-        artifacts=tuple(dict(item) for item in artifact_value.get("artifacts") or () if isinstance(item, Mapping)),
+        hashes=tuple(
+            dict(item) for item in artifact_value.get("hashes") or () if isinstance(item, Mapping)
+        ),
+        artifacts=tuple(
+            dict(item)
+            for item in artifact_value.get("artifacts") or ()
+            if isinstance(item, Mapping)
+        ),
     )
 
     provenance_value = value.get("provenance")
     if not isinstance(provenance_value, Mapping):
-        raise ValueError("manifest.provenance must be an object")
+        raise TypeError("manifest.provenance must be an object")
 
     graph_value = provenance_value.get("graph") or {}
     graph_nodes = tuple(
@@ -100,8 +109,14 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
             kind=str(node.get("kind", "artifact")),
             label=_optional_str(node.get("label")),
             artifact_class=_optional_str(node.get("artifact_class")),
-            hashes=tuple(dict(item) for item in node.get("hashes") or () if isinstance(item, Mapping)),
-            evidence=tuple(_evidence_ref(item) for item in node.get("evidence") or () if isinstance(item, Mapping)),
+            hashes=tuple(
+                dict(item) for item in node.get("hashes") or () if isinstance(item, Mapping)
+            ),
+            evidence=tuple(
+                _evidence_ref(item)
+                for item in node.get("evidence") or ()
+                if isinstance(item, Mapping)
+            ),
             external_ref=_optional_str(node.get("external_ref")),
         )
         for node in graph_value.get("nodes") or ()
@@ -113,7 +128,11 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
             target=str(edge.get("to", "")),
             relation=str(edge.get("relation", "referenced")),
             transformation=_optional_str(edge.get("transformation")),
-            evidence=tuple(_evidence_ref(item) for item in edge.get("evidence") or () if isinstance(item, Mapping)),
+            evidence=tuple(
+                _evidence_ref(item)
+                for item in edge.get("evidence") or ()
+                if isinstance(item, Mapping)
+            ),
             timestamp=_optional_str(edge.get("timestamp")),
         )
         for edge in graph_value.get("edges") or ()
@@ -122,7 +141,7 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
 
     rights_value = value.get("rights")
     if not isinstance(rights_value, Mapping):
-        raise ValueError("manifest.rights must be an object")
+        raise TypeError("manifest.rights must be an object")
     sources = tuple(
         Source(
             source_kind=str(source.get("kind", "other")),
@@ -131,7 +150,11 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
             license=_optional_str(source.get("license")),
             confidence=_optional_str(source.get("confidence")),
             notes=_optional_str(source.get("notes")),
-            evidence=tuple(_evidence_ref(item) for item in source.get("evidence") or () if isinstance(item, Mapping)),
+            evidence=tuple(
+                _evidence_ref(item)
+                for item in source.get("evidence") or ()
+                if isinstance(item, Mapping)
+            ),
         )
         for source in rights_value.get("sources") or ()
         if isinstance(source, Mapping)
@@ -147,14 +170,18 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
 
     review_value = value.get("review")
     if not isinstance(review_value, Mapping):
-        raise ValueError("manifest.review must be an object")
+        raise TypeError("manifest.review must be an object")
     review = Review(
         technical_validation=str(review_value.get("technical_validation", "not-run")),
         provenance_validation=str(review_value.get("provenance_validation", "not-run")),
         human_acceptance=str(review_value.get("human_acceptance", "not-reviewed")),
         reviewer=_optional_str(review_value.get("reviewer")),
         reviewed_at=_optional_str(review_value.get("reviewed_at")),
-        commons_refs=tuple(dict(item) for item in review_value.get("commons_refs") or () if isinstance(item, Mapping)),
+        commons_refs=tuple(
+            dict(item)
+            for item in review_value.get("commons_refs") or ()
+            if isinstance(item, Mapping)
+        ),
         notes=_optional_str(review_value.get("notes")),
     )
 
@@ -166,9 +193,13 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
             statement=str(item.get("statement", "")),
             asserted_by_identity=_optional_str(item.get("assertedByIdentity")),
             applies_to=tuple(str(ref) for ref in item.get("appliesTo") or ()),
-            evidence=tuple(_evidence_ref(sub) for sub in item.get("evidence") or () if isinstance(sub, Mapping)),
+            evidence=tuple(
+                _evidence_ref(sub) for sub in item.get("evidence") or () if isinstance(sub, Mapping)
+            ),
             supersedes=tuple(str(ref) for ref in item.get("supersedes") or ()),
-            signature=dict(item["signature"]) if isinstance(item.get("signature"), Mapping) else None,
+            signature=dict(item["signature"])
+            if isinstance(item.get("signature"), Mapping)
+            else None,
         )
         for item in value.get("attestations") or ()
         if isinstance(item, Mapping)
@@ -192,7 +223,9 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
             if isinstance(participant, Mapping)
         ],
         process_evidence=[
-            _evidence_ref(item) for item in provenance_value.get("process_evidence") or () if isinstance(item, Mapping)
+            _evidence_ref(item)
+            for item in provenance_value.get("process_evidence") or ()
+            if isinstance(item, Mapping)
         ],
         rights=rights,
         review=review,
@@ -201,7 +234,9 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
         manifest_identity=_optional_str(value.get("manifest_identity")),
         provenance_notes=_optional_str(provenance_value.get("notes")),
         policy=dict(value["policy"]) if isinstance(value.get("policy"), Mapping) else None,
-        extensions=dict(value["extensions"]) if isinstance(value.get("extensions"), Mapping) else {},
+        extensions=dict(value["extensions"])
+        if isinstance(value.get("extensions"), Mapping)
+        else {},
         graph_nodes=list(graph_nodes),
         graph_edges=list(graph_edges),
     )
@@ -310,7 +345,9 @@ def _evidence_ref(value: Mapping[str, Any]) -> EvidenceRef:
         kind=str(value.get("kind", "other")),
         reference=str(value.get("reference", "")),
         sha256=value.get("sha256") if isinstance(value.get("sha256"), str) else None,
-        producer_reference=dict(producer_reference) if isinstance(producer_reference, Mapping) else None,
+        producer_reference=dict(producer_reference)
+        if isinstance(producer_reference, Mapping)
+        else None,
     )
 
 

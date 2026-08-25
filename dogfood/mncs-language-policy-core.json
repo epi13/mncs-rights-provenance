@@ -1,0 +1,103 @@
+{
+  "artifact": {
+    "class": "source-code",
+    "commit": "8855832",
+    "hashes": [
+      {
+        "algorithm": "sha256",
+        "scope": "file",
+        "value": "3bee733b15c885f24f4aa8543320179199223c349dee2691922947894d71746a"
+      }
+    ],
+    "id": "mncs-rights-provenance:8855832:language/rights_policy.mncs",
+    "paths": [
+      "language/rights_policy.mncs"
+    ],
+    "repository": "github.com/epi13/mncs-rights-provenance"
+  },
+  "manifest_identity": "785a2b4ab6875ffd87bbfe7e1dda699bd21daf63fe8a7da912c0ce6c607d5ba4",
+  "provenance": {
+    "graph": {
+      "edges": [
+        {
+          "from": "policy-source",
+          "relation": "transformed-by",
+          "to": "compile-action"
+        },
+        {
+          "from": "compile-action",
+          "relation": "validated-by",
+          "to": "corpus-validation"
+        },
+        {
+          "from": "corpus-validation",
+          "relation": "derived-from",
+          "to": "golden-vectors"
+        }
+      ],
+      "nodes": [
+        {
+          "artifact_class": "source-code",
+          "hashes": [
+            {
+              "algorithm": "sha256",
+              "value": "3bee733b15c885f24f4aa8543320179199223c349dee2691922947894d71746a"
+            }
+          ],
+          "id": "policy-source",
+          "kind": "artifact"
+        },
+        {
+          "id": "compile-action",
+          "kind": "transformation",
+          "label": "mncs compile --target research-bytecode|portable-wasm"
+        },
+        {
+          "id": "corpus-validation",
+          "kind": "validation",
+          "label": "experiment run across backends"
+        },
+        {
+          "artifact_class": "dataset",
+          "id": "golden-vectors",
+          "kind": "artifact"
+        }
+      ]
+    },
+    "origin_classification": "autonomous-machine-generated",
+    "participants": [
+      {
+        "model": "ox-alpha (opencode agent)",
+        "provider": "undisclosed",
+        "role": "implementation",
+        "type": "model"
+      },
+      {
+        "name": "mncs-cli (research-bytecode/portable-wasm)",
+        "role": "compiler",
+        "type": "tool"
+      }
+    ],
+    "process_evidence": [
+      {
+        "kind": "validation-receipt",
+        "reference": "mncs://experiment-run/language/corpora/policy-evaluation-corpus.json",
+        "sha256": "b63238b710430422cea2e6a1743898943fefc3e0aba559abf0caf85969824bd8"
+      }
+    ]
+  },
+  "review": {
+    "human_acceptance": "not-reviewed",
+    "provenance_validation": "passed",
+    "technical_validation": "passed"
+  },
+  "rights": {
+    "copyright_status": "machine-originated-unresolved",
+    "distribution_license": "Apache-2.0",
+    "rights_basis": "no-exclusive-right-asserted",
+    "sources": [],
+    "third_party_material": "none-known"
+  },
+  "schema_version": "0.2.0",
+  "spec_profile": "canonical-release"
+}

@@ -8,8 +8,9 @@ specification change.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any
 
 ORIGIN_CODES = {
     "human-authored": 0,
@@ -97,8 +98,12 @@ def policy_input_from_manifest(
     review = document.get("review") or {}
     sources = rights.get("sources") or []
 
-    incompatible = sum(1 for s in sources if isinstance(s, Mapping) and s.get("license_status") == "incompatible")
-    unknown_sources = sum(1 for s in sources if isinstance(s, Mapping) and s.get("license_status") == "unknown")
+    incompatible = sum(
+        1 for s in sources if isinstance(s, Mapping) and s.get("license_status") == "incompatible"
+    )
+    unknown_sources = sum(
+        1 for s in sources if isinstance(s, Mapping) and s.get("license_status") == "unknown"
+    )
 
     if contradiction_count is None:
         contradiction_count = count_license_contradictions(rights)
@@ -107,10 +112,18 @@ def policy_input_from_manifest(
     canonical_release = profile_value != "development"
 
     return PolicyInput(
-        origin_code=ORIGIN_CODES.get(str(provenance.get("origin_classification")), ORIGIN_CODES["origin-uncertain"]),
-        copyright_code=COPYRIGHT_CODES.get(str(rights.get("copyright_status")), COPYRIGHT_CODES["unresolved"]),
-        rights_basis_code=RIGHTS_BASIS_CODES.get(str(rights.get("rights_basis")), RIGHTS_BASIS_CODES["unknown-needs-review"]),
-        third_party_code=THIRD_PARTY_CODES.get(str(rights.get("third_party_material")), THIRD_PARTY_CODES["unknown"]),
+        origin_code=ORIGIN_CODES.get(
+            str(provenance.get("origin_classification")), ORIGIN_CODES["origin-uncertain"]
+        ),
+        copyright_code=COPYRIGHT_CODES.get(
+            str(rights.get("copyright_status")), COPYRIGHT_CODES["unresolved"]
+        ),
+        rights_basis_code=RIGHTS_BASIS_CODES.get(
+            str(rights.get("rights_basis")), RIGHTS_BASIS_CODES["unknown-needs-review"]
+        ),
+        third_party_code=THIRD_PARTY_CODES.get(
+            str(rights.get("third_party_material")), THIRD_PARTY_CODES["unknown"]
+        ),
         provenance_validation_code=PROVENANCE_VALIDATION_CODES.get(
             str(review.get("provenance_validation")), PROVENANCE_VALIDATION_CODES["not-run"]
         ),

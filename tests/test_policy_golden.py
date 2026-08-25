@@ -20,8 +20,16 @@ from mncs_rights_provenance.policy import evaluate_policy
 from mncs_rights_provenance.policy_input import PolicyInput
 
 CONFORMANCE = Path(__file__).resolve().parents[1] / "conformance"
-SEVERITY_RANK = {"none": 0, "finding": 1, "review": 2, "blocking": 3,
-                 "None": 0, "Finding": 1, "Review": 2, "Blocking": 3}
+SEVERITY_RANK = {
+    "none": 0,
+    "finding": 1,
+    "review": 2,
+    "blocking": 3,
+    "None": 0,
+    "Finding": 1,
+    "Review": 2,
+    "Blocking": 3,
+}
 # Language-core GateSeverities field names, canonical order == GATE_NAMES order.
 LANGUAGE_GATE_FIELDS = [
     "hash_correspondence",
@@ -67,7 +75,9 @@ def _policy_input(case: dict) -> PolicyInput:
     )
 
 
-@pytest.mark.parametrize("case", _load_vectors(), ids=lambda c: c["input"].get("_id", str(c["input"])))
+@pytest.mark.parametrize(
+    "case", _load_vectors(), ids=lambda c: c["input"].get("_id", str(c["input"]))
+)
 def test_golden_outcome(case: dict) -> None:
     outcome = evaluate_policy(_policy_input(case))
     # Language enum variants are PascalCase; host outcomes are snake_case.
@@ -106,11 +116,11 @@ def test_gate_table_matches_language_core_order() -> None:
 
 def test_enforcement_ceiling_semantics() -> None:
     from mncs_rights_provenance.gates import (
+        BLOCKING,
         ENFORCEMENT_DISABLED,
         ENFORCEMENT_FATAL,
         ENFORCEMENT_FINDING,
         ENFORCEMENT_REVIEW,
-        BLOCKING,
         FINDING,
         NONE,
         REVIEW,

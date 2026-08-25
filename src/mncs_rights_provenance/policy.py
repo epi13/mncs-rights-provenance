@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Any, Mapping
+from typing import Any
 
 from .gates import (
     BLOCKING,
@@ -114,11 +115,12 @@ def evaluate_policy(
         raw = gate_fn(policy_input)
         cap = caps.get(name, DEFAULT_ENFORCEMENTS[name])
         effective = apply_enforcement(raw, cap)
-        gate_results.append(GateResult(gate=name, severity=raw, enforcement=cap, effective_severity=effective))
+        gate_results.append(
+            GateResult(gate=name, severity=raw, enforcement=cap, effective_severity=effective)
+        )
         if effective > NONE:
             findings.append(GATE_FINDINGS[name])
-            if effective > combined:
-                combined = effective
+            combined = max(combined, effective)
 
     if combined >= BLOCKING:
         outcome = OUTCOME_BLOCKED
@@ -139,13 +141,13 @@ def evaluate_policy(
 
 __all__ = [
     "DEFAULT_PROFILE_ID",
-    "GateResult",
-    "PolicyOutcome",
     "OUTCOME_BLOCKED",
     "OUTCOME_INVALID",
     "OUTCOME_PASS",
     "OUTCOME_PASS_WITH_FINDINGS",
     "OUTCOME_REVIEW_REQUIRED",
+    "GateResult",
+    "PolicyOutcome",
     "evaluate_policy",
     "profile_from_dict",
 ]

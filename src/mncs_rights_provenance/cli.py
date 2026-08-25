@@ -10,7 +10,7 @@ import argparse
 import hashlib
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -31,7 +31,7 @@ def _emit(value: Any, *, human: bool = False) -> None:
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    return datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
 def cmd_validate(args: argparse.Namespace) -> int:
@@ -56,7 +56,11 @@ def cmd_validate(args: argparse.Namespace) -> int:
     declared_identity = document.get("manifest_identity")
     identity_ok = True
     identity_expected = compute_manifest_identity(document) if isinstance(document, dict) else ""
-    if isinstance(declared_identity, str) and declared_identity and declared_identity != identity_expected:
+    if (
+        isinstance(declared_identity, str)
+        and declared_identity
+        and declared_identity != identity_expected
+    ):
         identity_ok = False
         issues.append("manifest_identity does not match canonical content")
 
@@ -65,7 +69,9 @@ def cmd_validate(args: argparse.Namespace) -> int:
         expected = {item.get("value") for item in artifact_hashes if isinstance(item, dict)}
         if digest not in expected:
             hash_mismatch = True
-            issues.append(f"artifact file sha256 {digest} does not match any declared artifact hash")
+            issues.append(
+                f"artifact file sha256 {digest} does not match any declared artifact hash"
+            )
 
     profile_enforcements: dict[str, int] | None = None
     if args.profile:
@@ -73,7 +79,13 @@ def cmd_validate(args: argparse.Namespace) -> int:
             profile_document = json.loads(Path(args.profile).read_text(encoding="utf-8"))
             profile_enforcements = profile_from_dict(profile_document)
         except (OSError, ValueError) as exc:
-            _emit({"valid": False, "outcome": "invalid", "issues": [f"cannot read policy profile: {exc}"]})
+            _emit(
+                {
+                    "valid": False,
+                    "outcome": "invalid",
+                    "issues": [f"cannot read policy profile: {exc}"],
+                }
+            )
             return 2
 
     policy_input = policy_input_from_manifest(
@@ -82,7 +94,9 @@ def cmd_validate(args: argparse.Namespace) -> int:
         broken_evidence_refs=_count_broken_refs(document, args.evidence_dir),
         graph_invalid=not graph_ok,
     )
-    outcome = evaluate_policy(policy_input, structurally_valid=structurally_valid, enforcements=profile_enforcements)
+    outcome = evaluate_policy(
+        policy_input, structurally_valid=structurally_valid, enforcements=profile_enforcements
+    )
 
     report: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
@@ -148,7 +162,9 @@ def cmd_identity(args: argparse.Namespace) -> int:
             "ok": declared in (None, "", expected),
             "manifest_identity": expected,
             "declared": declared,
-            "canonical_bytes": len(canonical_bytes({k: v for k, v in document.items() if k != "manifest_identity"})),
+            "canonical_bytes": len(
+                canonical_bytes({k: v for k, v in document.items() if k != "manifest_identity"})
+            ),
         }
     )
     return 0
@@ -191,7 +207,9 @@ def cmd_attest(args: argparse.Namespace) -> int:
     if args.identity:
         attestation["assertedByIdentity"] = args.identity
     if args.applies_to:
-        attestation["appliesTo"] = [item.strip() for item in args.applies_to.split(",") if item.strip()]
+        attestation["appliesTo"] = [
+            item.strip() for item in args.applies_to.split(",") if item.strip()
+        ]
     _emit(attestation)
     return 0
 
@@ -262,11 +280,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--version", action="version", version=f"mncs-rp {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    validate_parser = subparsers.add_parser("validate", help="validate a manifest and evaluate release policy")
+    validate_parser = subparsers.add_parser(
+        "validate", help="validate a manifest and evaluate release policy"
+    )
     validate_parser.add_argument("manifest")
-    validate_parser.add_argument("--artifact-file", help="verify sha256 of this file against declared artifact hashes")
+    validate_parser.add_argument(
+        "--artifact-file", help="verify sha256 of this file against declared artifact hashes"
+    )
     validate_parser.add_argument("--profile", help="path to a policy-profile JSON document")
-    validate_parser.add_argument("--evidence-dir", help="root for resolving local evidence references")
+    validate_parser.add_argument(
+        "--evidence-dir", help="root for resolving local evidence references"
+    )
     validate_parser.add_argument("--human", action="store_true")
     validate_parser.add_argument(
         "--findings-are-not-failures",
@@ -284,7 +308,9 @@ def build_parser() -> argparse.ArgumentParser:
     graph_parser.add_argument("--human", action="store_true")
     graph_parser.set_defaults(func=cmd_graph)
 
-    attest_parser = subparsers.add_parser("attest", help="emit a contribution attestation JSON fragment")
+    attest_parser = subparsers.add_parser(
+        "attest", help="emit a contribution attestation JSON fragment"
+    )
     attest_parser.add_argument("--type", required=True, dest="type")
     attest_parser.add_argument("--by", required=True)
     attest_parser.add_argument("--statement", required=True)
@@ -299,20 +325,39 @@ def build_parser() -> argparse.ArgumentParser:
 
     evidence_parser = subparsers.add_parser("evidence", help="evidence-record operations")
     evidence_sub = evidence_parser.add_subparsers(dest="evidence_command", required=True)
-    evidence_verify = evidence_sub.add_parser("verify", help="verify an evidence record's content digest")
+    evidence_verify = evidence_sub.add_parser(
+        "verify", help="verify an evidence record's content digest"
+    )
     evidence_verify.add_argument("evidence")
     evidence_verify.add_argument("--human", action="store_true")
     evidence_verify.set_defaults(func=cmd_evidence_verify)
 
     init_parser = subparsers.add_parser("init", help="scaffold an uncertain-by-default manifest")
     init_parser.add_argument("artifact_id")
-    init_parser.add_argument("--artifact-class", default="source-code", choices=sorted({
-        "source-code", "documentation", "dataset", "model-weights", "configuration",
-        "experiment-output", "receipt", "binary", "other",
-    }))
+    init_parser.add_argument(
+        "--artifact-class",
+        default="source-code",
+        choices=sorted(
+            {
+                "source-code",
+                "documentation",
+                "dataset",
+                "model-weights",
+                "configuration",
+                "experiment-output",
+                "receipt",
+                "binary",
+                "other",
+            }
+        ),
+    )
     init_parser.add_argument("--license", default="Apache-2.0")
-    init_parser.add_argument("--profile", default="canonical-release", choices=["development", "canonical-release"])
-    init_parser.add_argument("--seal", action="store_true", help="attach computed manifest_identity")
+    init_parser.add_argument(
+        "--profile", default="canonical-release", choices=["development", "canonical-release"]
+    )
+    init_parser.add_argument(
+        "--seal", action="store_true", help="attach computed manifest_identity"
+    )
     init_parser.set_defaults(func=cmd_init)
 
     return parser

@@ -1,0 +1,57 @@
+{
+  "artifact": {
+    "class": "source-code",
+    "commit": "8718527",
+    "hashes": [
+      {
+        "algorithm": "sha256",
+        "scope": "file",
+        "value": "e445538e0a585f9c9eb8d1518b334f23131fc189cfb3980f7b802d99f42a60d6"
+      }
+    ],
+    "id": "mncs-fabric:8718527:src/mncs_fabric/provenance.py",
+    "paths": [
+      "src/mncs_fabric/provenance.py"
+    ],
+    "repository": "github.com/epi13/mncs-fabric"
+  },
+  "manifest_identity": "86a1a85ade0e61e6b36e719c996ea6889ca0985f2bd30b2b35b2289e8fd6955e",
+  "provenance": {
+    "notes": "Classification describes process only. Machine participation does not determine copyright status; rights fields remain evidence states.",
+    "origin_classification": "human-directed-machine-generated",
+    "participants": [
+      {
+        "digest": null,
+        "name": "project operator",
+        "role": "director",
+        "type": "human"
+      },
+      {
+        "model": "ox-alpha (opencode agent)",
+        "provider": "undisclosed",
+        "role": "implementation",
+        "type": "model"
+      },
+      {
+        "name": "opencode",
+        "role": "orchestrator",
+        "type": "agent"
+      }
+    ],
+    "process_evidence": []
+  },
+  "review": {
+    "human_acceptance": "not-reviewed",
+    "provenance_validation": "passed",
+    "technical_validation": "not-run"
+  },
+  "rights": {
+    "copyright_status": "machine-originated-unresolved",
+    "distribution_license": "Apache-2.0",
+    "rights_basis": "no-exclusive-right-asserted",
+    "sources": [],
+    "third_party_material": "none-known"
+  },
+  "schema_version": "0.2.0",
+  "spec_profile": "canonical-release"
+}

@@ -9,14 +9,17 @@ against them with ``jsonschema`` when available.
 from __future__ import annotations
 
 import re
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from .model import ARTIFACT_CLASSES
 
 SCHEMA_VERSION = "0.2.0"
 
 _SHA256_RE = re.compile(r"^[a-fA-F0-9]{64}$")
-_TIMESTAMP_RE = re.compile(r"^\d{4}-\d{2}-\d{2}[Tt ]\d{2}:\d{2}:\d{2}(\.\d+)?([Zz]|[+-]\d{2}:\d{2})$")
+_TIMESTAMP_RE = re.compile(
+    r"^\d{4}-\d{2}-\d{2}[Tt ]\d{2}:\d{2}:\d{2}(\.\d+)?([Zz]|[+-]\d{2}:\d{2})$"
+)
 
 ORIGINS = frozenset(
     {
@@ -68,7 +71,9 @@ EVIDENCE_KINDS = frozenset(
     }
 )
 NODE_KINDS = frozenset({"artifact", "action", "transformation", "validation", "external"})
-EDGE_RELATIONS = frozenset({"derived-from", "transformed-by", "validated-by", "executed-by", "attested-by", "referenced"})
+EDGE_RELATIONS = frozenset(
+    {"derived-from", "transformed-by", "validated-by", "executed-by", "attested-by", "referenced"}
+)
 REVIEW_TECHNICAL = frozenset({"passed", "failed", "not-run", "not-applicable"})
 REVIEW_PROVENANCE = frozenset({"passed", "failed", "incomplete", "not-run"})
 REVIEW_HUMAN = frozenset({"accepted", "rejected", "not-reviewed", "not-required"})
@@ -169,7 +174,11 @@ def _validate_artifact(value: Any) -> list[str]:
             issues.append("artifact.artifacts must be an array")
         else:
             for index, member in enumerate(artifacts):
-                if not isinstance(member, Mapping) or not member.get("id") or member.get("class") not in ARTIFACT_CLASSES:
+                if (
+                    not isinstance(member, Mapping)
+                    or not member.get("id")
+                    or member.get("class") not in ARTIFACT_CLASSES
+                ):
                     issues.append(f"artifact.artifacts[{index}] requires id and valid class")
     commit = value.get("commit")
     if commit is not None and (not isinstance(commit, str) or not commit.strip()):
@@ -215,7 +224,11 @@ def _validate_evidence_refs(items: Any, label: str) -> list[str]:
             issues.append(f"{label}[{index}].sha256 must be sha256 hex")
         producer_reference = item.get("producer_reference")
         if producer_reference is not None:
-            issues.extend(_validate_producer_reference(producer_reference, f"{label}[{index}].producer_reference"))
+            issues.extend(
+                _validate_producer_reference(
+                    producer_reference, f"{label}[{index}].producer_reference"
+                )
+            )
     return issues
 
 
@@ -229,7 +242,9 @@ def _validate_producer_reference(value: Any, label: str) -> list[str]:
         if not isinstance(entry, str) or not entry:
             issues.append(f"{label}.{field} must be a non-empty string")
     digest = value.get("contentDigest")
-    if digest is not None and not (isinstance(digest, str) and digest.startswith("sha256:") and _SHA256_RE.match(digest[7:])):
+    if digest is not None and not (
+        isinstance(digest, str) and digest.startswith("sha256:") and _SHA256_RE.match(digest[7:])
+    ):
         issues.append(f"{label}.contentDigest must be 'sha256:<64 hex>'")
     return issues
 
@@ -239,7 +254,9 @@ def _validate_provenance(value: Any) -> list[str]:
     if not _require_object(value, "provenance", issues):
         return issues
     if value.get("origin_classification") not in ORIGINS:
-        issues.append(f"provenance.origin_classification invalid: {value.get('origin_classification')!r}")
+        issues.append(
+            f"provenance.origin_classification invalid: {value.get('origin_classification')!r}"
+        )
     participants = value.get("participants")
     if not isinstance(participants, list):
         issues.append("provenance.participants must be an array")
@@ -248,12 +265,23 @@ def _validate_provenance(value: Any) -> list[str]:
             if not isinstance(participant, Mapping):
                 issues.append(f"provenance.participants[{index}] must be an object")
                 continue
-            if participant.get("type") not in {"human", "model", "agent", "tool", "organization", "unknown"}:
-                issues.append(f"provenance.participants[{index}].type invalid: {participant.get('type')!r}")
+            if participant.get("type") not in {
+                "human",
+                "model",
+                "agent",
+                "tool",
+                "organization",
+                "unknown",
+            }:
+                issues.append(
+                    f"provenance.participants[{index}].type invalid: {participant.get('type')!r}"
+                )
             role = participant.get("role")
             if not isinstance(role, str) or not role:
                 issues.append(f"provenance.participants[{index}].role must be non-empty")
-    issues.extend(_validate_evidence_refs(value.get("process_evidence"), "provenance.process_evidence"))
+    issues.extend(
+        _validate_evidence_refs(value.get("process_evidence"), "provenance.process_evidence")
+    )
 
     graph = value.get("graph")
     if graph is not None:
@@ -282,7 +310,9 @@ def _validate_provenance(value: Any) -> list[str]:
                     else:
                         node_ids.add(node_id)
                     if node.get("kind") not in NODE_KINDS:
-                        issues.append(f"provenance.graph.nodes[{index}].kind invalid: {node.get('kind')!r}")
+                        issues.append(
+                            f"provenance.graph.nodes[{index}].kind invalid: {node.get('kind')!r}"
+                        )
                 for index, edge in enumerate(edges):
                     if not isinstance(edge, Mapping):
                         issues.append(f"provenance.graph.edges[{index}] must be an object")
@@ -290,11 +320,15 @@ def _validate_provenance(value: Any) -> list[str]:
                     source = edge.get("from")
                     target = edge.get("to")
                     if not isinstance(source, str) or source not in node_ids:
-                        issues.append(f"provenance.graph.edges[{index}].from references unknown node")
+                        issues.append(
+                            f"provenance.graph.edges[{index}].from references unknown node"
+                        )
                     if not isinstance(target, str) or target not in node_ids:
                         issues.append(f"provenance.graph.edges[{index}].to references unknown node")
                     if edge.get("relation") not in EDGE_RELATIONS:
-                        issues.append(f"provenance.graph.edges[{index}].relation invalid: {edge.get('relation')!r}")
+                        issues.append(
+                            f"provenance.graph.edges[{index}].relation invalid: {edge.get('relation')!r}"
+                        )
     return issues
 
 
@@ -332,8 +366,15 @@ def _validate_rights(value: Any) -> list[str]:
             issues.append(f"rights.sources[{index}].kind invalid: {source.get('kind')!r}")
         if not isinstance(source.get("reference"), str) or not source["reference"]:
             issues.append(f"rights.sources[{index}].reference must be non-empty")
-        if source.get("license_status") not in {"compatible", "incompatible", "unknown", "not-applicable"}:
-            issues.append(f"rights.sources[{index}].license_status invalid: {source.get('license_status')!r}")
+        if source.get("license_status") not in {
+            "compatible",
+            "incompatible",
+            "unknown",
+            "not-applicable",
+        }:
+            issues.append(
+                f"rights.sources[{index}].license_status invalid: {source.get('license_status')!r}"
+            )
         confidence = source.get("confidence")
         if confidence is not None and confidence not in {
             "observed-declaration",
@@ -343,7 +384,9 @@ def _validate_rights(value: Any) -> list[str]:
             "unknown",
         }:
             issues.append(f"rights.sources[{index}].confidence invalid: {confidence!r}")
-        issues.extend(_validate_evidence_refs(source.get("evidence"), f"rights.sources[{index}].evidence"))
+        issues.extend(
+            _validate_evidence_refs(source.get("evidence"), f"rights.sources[{index}].evidence")
+        )
     return issues
 
 
@@ -354,11 +397,15 @@ def _validate_review(value: Any) -> list[str]:
     if value.get("technical_validation") not in REVIEW_TECHNICAL:
         issues.append(f"review.technical_validation invalid: {value.get('technical_validation')!r}")
     if value.get("provenance_validation") not in REVIEW_PROVENANCE:
-        issues.append(f"review.provenance_validation invalid: {value.get('provenance_validation')!r}")
+        issues.append(
+            f"review.provenance_validation invalid: {value.get('provenance_validation')!r}"
+        )
     if value.get("human_acceptance") not in REVIEW_HUMAN:
         issues.append(f"review.human_acceptance invalid: {value.get('human_acceptance')!r}")
     reviewed_at = value.get("reviewed_at")
-    if reviewed_at is not None and not (isinstance(reviewed_at, str) and _TIMESTAMP_RE.match(reviewed_at)):
+    if reviewed_at is not None and not (
+        isinstance(reviewed_at, str) and _TIMESTAMP_RE.match(reviewed_at)
+    ):
         issues.append("review.reviewed_at must be an ISO-8601 timestamp")
     refs = value.get("commons_refs")
     if refs is not None:
@@ -382,7 +429,9 @@ def _validate_attestations(value: Any) -> list[str]:
             issues.append(f"attestations[{index}] must be an object")
             continue
         if attestation.get("assertion_type") not in ATTESTATION_TYPES:
-            issues.append(f"attestations[{index}].assertion_type invalid: {attestation.get('assertion_type')!r}")
+            issues.append(
+                f"attestations[{index}].assertion_type invalid: {attestation.get('assertion_type')!r}"
+            )
         for field in ("assertedBy", "assertedAt", "statement"):
             entry = attestation.get(field)
             if not isinstance(entry, str) or not entry:
@@ -425,7 +474,9 @@ def validate_evidence_structure(document: Mapping[str, Any]) -> list[str]:
     }:
         issues.append(f"kind invalid: {document.get('kind')!r}")
     digest = document.get("content_digest")
-    if not (isinstance(digest, str) and digest.startswith("sha256:") and _SHA256_RE.match(digest[7:])):
+    if not (
+        isinstance(digest, str) and digest.startswith("sha256:") and _SHA256_RE.match(digest[7:])
+    ):
         issues.append("content_digest must be 'sha256:<64 hex>'")
     issues.extend(_validate_producer_reference(document.get("producer"), "producer"))
     subject = document.get("subject")
