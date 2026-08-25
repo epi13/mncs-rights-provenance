@@ -1,0 +1,4046 @@
+{
+ "schema_version": "0.1",
+ "name": "rights-policy-evaluation-v1",
+ "cases": [
+  {
+   "id": "evaluate-00",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::Pass",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-01",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::Blocked",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-02",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::Blocked",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-03",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::Blocked",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-04",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::Blocked",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-05",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::Blocked",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-06",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-07",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 5,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-08",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-09",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-10",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 6,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-11",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-12",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-13",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-14",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-15",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-16",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-17",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::Yes",
+           "discriminant": 1
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::ReviewRequired",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-18",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::PassWithFindings",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "evaluate-19",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.policy.v01",
+     "function": "evaluate"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.policy.v01::GateInput::attestation_conflicts%3Ai32%3Bbroken_evidence_refs%3Ai32%3Bcanonical_release_profile%3ATruth%3Bcontradiction_count%3Ai32%3Bcopyright_code%3Ai32%3Bgraph_invalid%3ATruth%3Bhash_mismatch%3ATruth%3Bhuman_accept_code%3Ai32%3Bimpossible_evidence%3ATruth%3Bincompatible_source_count%3Ai32%3Borigin_code%3Ai32%3Bprov_valid_code%3Ai32%3Brights_basis_code%3Ai32%3Bthird_party_code%3Ai32%3Bunknown_source_count%3Ai32%3B",
+       "name": "GateInput",
+       "fields": [
+        [
+         "attestation_conflicts",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "broken_evidence_refs",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "canonical_release_profile",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "contradiction_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "copyright_code",
+         {
+          "integer": {
+           "value": 6,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "graph_invalid",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "hash_mismatch",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "human_accept_code",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "impossible_evidence",
+         {
+          "finite": {
+           "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Truth",
+           "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Truth::No",
+           "discriminant": 0
+          }
+         }
+        ],
+        [
+         "incompatible_source_count",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "origin_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "prov_valid_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "rights_basis_code",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "third_party_code",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ],
+        [
+         "unknown_source_count",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 32,
+            "signed": true
+           }
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.policy.v01::Outcome",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.policy.v01::Outcome::PassWithFindings",
+      "discriminant": 1
+     }
+    }
+   ]
+  }
+ ]
+}
