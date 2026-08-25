@@ -281,14 +281,17 @@ def section_uncertain_origin(rp_head: str) -> None:
 
 def main() -> int:
     rp_head = git("mncs-rights-provenance", "rev-parse", "--short", "HEAD")
+    fabric_head = git("mncs-fabric", "rev-parse", "--short", "HEAD")
+    commons_head = git("MNCS-Commons", "rev-parse", "--short", "HEAD")
 
     sections = (
         ("human-specification", lambda: section_human_specification(rp_head)),
-        ("agent-directed-fabric-module", lambda: section_agent_directed_fabric(
-            git("mncs-fabric", "rev-parse", "--short", "HEAD"))),
+        (
+            "agent-directed-fabric-module",
+            lambda: section_agent_directed_fabric(fabric_head),
+        ),
         ("mncs-language-policy-core", lambda: section_mncs_language_core(rp_head)),
-        ("third-party-dependency", lambda: section_third_party_dependency(
-            git("MNCS-Commons", "rev-parse", "--short", "HEAD"))),
+        ("third-party-dependency", lambda: section_third_party_dependency(commons_head)),
         ("uncertain-origin-document", lambda: section_uncertain_origin(rp_head)),
     )
     generated = 0
