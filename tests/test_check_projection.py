@@ -19,7 +19,6 @@ import sys
 from pathlib import Path
 
 import pytest
-import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -375,15 +374,24 @@ def test_caller_workflow_pins_immutable_revision():
 
 
 def test_provider_ids_match_declared_boundary():
-    doc = yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))
-    job = doc["jobs"]["family"]
-    required = [item.strip() for item in job["with"]["required-checks"].split(",")]
+    # Parsed with regex on purpose: pyyaml is not a dependency of this
+    # repository and the wiring assertions need only scalar fields.
+    text = WORKFLOW.read_text(encoding="utf-8")
+    required_match = re.search(r"required-checks:\s*([^\s#]+)", text)
+    assert required_match, "required-checks not found"
+    required = [item.strip() for item in required_match.group(1).split(",")]
     assert required == ["rights-provenance", "project-tests"]
-    assert job["with"]["rights-check-id"] in required
-    assert job["with"]["project-check-id"] in required
-    assert job["with"]["rights-provider"] == "mncs-rights-provenance"
+
+    def field(name: str) -> str:
+        match = re.search(rf"^\s*{name}:\s*(\S+)\s*$", text, re.MULTILINE)
+        assert match, f"{name} not found"
+        return match.group(1)
+
+    assert field("rights-check-id") in required
+    assert field("project-check-id") in required
+    assert field("rights-provider") == "mncs-rights-provenance"
     # mncs-validation is intentionally not applicable here: this repository
     # ships no validator-consumable bundle; its MNCS cores are covered by
     # project-tests (backend agreement). Absence is declared, never PASS.
     assert "mncs-validation" not in required
-    assert "mncs-command" not in job["with"]
+    assert "mncs-command" not in text
