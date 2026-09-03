@@ -210,3 +210,5 @@ class Manifest:
     provenance_notes: str | None = None
     policy: Mapping[str, Any] | None = None
     extensions: dict[str, Any] = field(default_factory=dict)
+    schema_version: str = "0.2.0"
+    lineage: dict[str, Any] | None = None

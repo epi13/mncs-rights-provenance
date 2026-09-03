@@ -1,7 +1,7 @@
 {
   "artifact": {
     "class": "documentation",
-    "commit": "8d27d87",
+    "commit": "5764c6b",
     "hashes": [
       {
         "algorithm": "sha256",
@@ -9,13 +9,13 @@
         "value": "d2121f65e90f4132f90503065cac6ff593b69c5cddde6acf04bf6d876c02944d"
       }
     ],
-    "id": "mncs-rights-provenance:8d27d87:docs/open-questions.md",
+    "id": "mncs-rights-provenance:5764c6b:docs/open-questions.md",
     "paths": [
       "docs/open-questions.md"
     ],
     "repository": "github.com/epi13/mncs-rights-provenance"
   },
-  "manifest_identity": "a4638fb2c24169e64dd2f0cf85bd4bce538c006473d8d414f096600d8353eee7",
+  "manifest_identity": "75cb1ac911139e2afc4064df52230c84680508378911252a34f6ebd99999770b",
   "provenance": {
     "notes": "Edit history mixes human and machine-assisted sessions without preserved per-session attribution. Uncertainty is preserved rather than resolved by assumption.",
     "origin_classification": "origin-uncertain",

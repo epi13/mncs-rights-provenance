@@ -18,11 +18,24 @@ from . import __version__
 from .canonical import canonical_bytes
 from .evidence import evidence_record_from_dict, seal_evidence_record, verify_evidence_digest
 from .graph import check_graph_integrity
-from .manifest import SCHEMA_VERSION, compute_manifest_identity, load_manifest_file
+from .lineage import (
+    lineage_record_from_dict,
+    verify_lineage_digest,
+)
+from .manifest import (
+    BASE_SCHEMA_VERSION,
+    SCHEMA_VERSION,
+    compute_manifest_identity,
+    load_manifest_file,
+)
 from .policy import evaluate_policy, profile_from_dict
 from .policy_input import policy_input_from_manifest
+from .promotion import promotion_inputs_from_dict, promotion_report
 from .spdx import export_spdx
-from .validation import validate_manifest_structure
+from .validation import (
+    validate_lineage_structure,
+    validate_manifest_structure,
+)
 
 
 def _emit(value: Any, *, human: bool = False) -> None:
@@ -245,7 +258,9 @@ def cmd_evidence_verify(args: argparse.Namespace) -> int:
 
 def cmd_init(args: argparse.Namespace) -> int:
     manifest = {
-        "schema_version": SCHEMA_VERSION,
+        # Scaffolds carry no lineage yet, so they stay at the base version
+        # that every pinned consumer (Forge, mncs-validator-rs) accepts.
+        "schema_version": BASE_SCHEMA_VERSION,
         "spec_profile": args.profile,
         "artifact": {"id": args.artifact_id, "class": args.artifact_class},
         "provenance": {
@@ -272,6 +287,64 @@ def cmd_init(args: argparse.Namespace) -> int:
 
         manifest = seal_manifest(manifest)
     _emit(manifest)
+    return 0
+
+
+def cmd_lineage_verify(args: argparse.Namespace) -> int:
+    try:
+        document = json.loads(Path(args.lineage).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        _emit({"ok": False, "error": str(exc)})
+        return 2
+    issues = validate_lineage_structure(document)
+    ok_digest, expected = verify_lineage_digest(document)
+    if not ok_digest:
+        issues = sorted(set(issues + ["content_digest does not match canonical content"]))
+    try:
+        record = lineage_record_from_dict(document)
+        parsed: dict[str, Any] = {
+            "lineage_id": record.lineage_id,
+            "changesets": [item.get("changeset_id") for item in record.changesets],
+            "authority_claims": len(record.authority_claims),
+            "capability_gap_links": len(record.capability_gap_links),
+        }
+    except (TypeError, ValueError) as exc:
+        issues = sorted(set(issues + [f"cannot parse lineage record: {exc}"]))
+        parsed = {}
+    result: dict[str, Any] = {
+        "ok": not issues,
+        "issues": issues,
+        "content_digest_expected": expected,
+        "content_digest_matches": ok_digest,
+        **parsed,
+    }
+    _emit(result, human=args.human)
+    return 0 if not issues else 1
+
+
+def cmd_promotion_evaluate(args: argparse.Namespace) -> int:
+    try:
+        document = json.loads(Path(args.document).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        _emit({"ok": False, "error": str(exc)})
+        return 2
+    dimensions_value: Any = None
+    if isinstance(document, dict):
+        if "promotion_dimensions" in document:
+            dimensions_value = document.get("promotion_dimensions")
+        elif isinstance(document.get("lineage"), dict):
+            dimensions_value = document["lineage"].get("promotion_dimensions")
+    if not isinstance(dimensions_value, dict):
+        _emit(
+            {
+                "ok": False,
+                "error": "no promotion_dimensions found (lineage record or manifest lineage block required)",
+            }
+        )
+        return 2
+    inputs = promotion_inputs_from_dict(dimensions_value)
+    report = promotion_report(inputs)
+    _emit({"ok": True, **report}, human=args.human)
     return 0
 
 
@@ -359,6 +432,22 @@ def build_parser() -> argparse.ArgumentParser:
         "--seal", action="store_true", help="attach computed manifest_identity"
     )
     init_parser.set_defaults(func=cmd_init)
+
+    lineage_parser = subparsers.add_parser("lineage", help="lineage-record operations")
+    lineage_sub = lineage_parser.add_subparsers(dest="lineage_command", required=True)
+    lineage_verify = lineage_sub.add_parser("verify", help="verify a lineage record")
+    lineage_verify.add_argument("lineage")
+    lineage_verify.add_argument("--human", action="store_true")
+    lineage_verify.set_defaults(func=cmd_lineage_verify)
+
+    promotion_parser = subparsers.add_parser("promotion", help="promotion-input operations")
+    promotion_sub = promotion_parser.add_subparsers(dest="promotion_command", required=True)
+    promotion_eval = promotion_sub.add_parser(
+        "evaluate", help="combine promotion dimensions (FAIL > UNKNOWN > PASS)"
+    )
+    promotion_eval.add_argument("document", help="lineage record or manifest with lineage block")
+    promotion_eval.add_argument("--human", action="store_true")
+    promotion_eval.set_defaults(func=cmd_promotion_evaluate)
 
     return parser
 

@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# Run the rights-policy MNCS-language core across available compiler backends
-# and verify cross-backend agreement.
+# Run the rights-policy and distributed-pressure MNCS-language cores across
+# available compiler backends and verify cross-backend agreement.
 #
-# Backend coverage notes (recorded 2026-08):
-# - research-bytecode: full corpus (evaluate + gate_severities + lattice).
-# - portable-wasm:     evaluate + lattice corpora. The gate-severities corpus
-#                      is excluded because the WASM realization currently
-#                      returns "unresolved" type identities for enum-typed
-#                      fields inside returned records. See
-#                      docs/language-findings.md finding LF-1.
+# Backend coverage notes (recorded 2026-08, updated 2026-09):
+# - research-bytecode: full corpora (evaluate + gate_severities + lattice +
+#   pressure verdicts).
+# - portable-wasm:     evaluate + lattice + pressure-verdict corpora. The
+#   gate-severities corpus is excluded because the WASM realization currently
+#   returns "unresolved" type identities for enum-typed fields inside
+#   returned records. See docs/language-findings.md finding LF-1.
+#   The pressure core deliberately returns bare Verdict enums (never
+#   records-of-enums) so its full corpus runs on both backends with agreement.
 # - c11/llvm-ir/cranelift: refuse records/payload sums at HEAD (scalar
 #   realization envelope); excluded until that expansion lands.
 set -euo pipefail
@@ -18,10 +20,10 @@ MNCS="${MNCS_BIN:-mncs}"
 OUT="${TMPDIR:-/tmp}/mncs-rp-backends"
 mkdir -p "$OUT"
 
-run() { # backend corpus outdir
-  local backend="$1" corpus="$2" outdir="$3"
+run() { # program backend corpus outdir
+  local program="$1" backend="$2" corpus="$3" outdir="$4"
   echo "== $backend / $(basename "$corpus")"
-  "$MNCS" experiment run "$ROOT/language/rights_policy.mncs" \
+  "$MNCS" experiment run "$program" \
     --backend "$backend" --corpus "$corpus" --output-dir "$outdir" >/dev/null
   python3 - "$outdir/result.json" <<'PY'
 import json, sys
@@ -39,10 +41,11 @@ PY
 STATUS=0
 for backend in research-bytecode portable-wasm; do
   for corpus in policy-evaluation-corpus.json severity-combine-corpus.json; do
-    if ! run "$backend" "$ROOT/language/corpora/$corpus" "$OUT/$backend"; then STATUS=1; fi
+    if ! run "$ROOT/language/rights_policy.mncs" "$backend" "$ROOT/language/corpora/$corpus" "$OUT/$backend"; then STATUS=1; fi
   done
+  if ! run "$ROOT/language/pressure_provenance.mncs" "$backend" "$ROOT/language/corpora/pressure-verdict-corpus.json" "$OUT/$backend-pressure"; then STATUS=1; fi
   if [ "$backend" = "research-bytecode" ]; then
-    if ! run "$backend" "$ROOT/language/corpora/gate-severities-corpus.json" "$OUT/$backend"; then STATUS=1; fi
+    if ! run "$ROOT/language/rights_policy.mncs" "$backend" "$ROOT/language/corpora/gate-severities-corpus.json" "$OUT/$backend"; then STATUS=1; fi
   fi
 done
 
@@ -65,5 +68,20 @@ if mismatch:
     raise SystemExit(1)
 PY
 }
+
+echo "== cross-backend compare (pressure verdicts)"
+python3 - <<'PY' || STATUS=1
+import json, glob
+rb = json.load(open("/tmp/mncs-rp-backends/research-bytecode-pressure/result.json"))
+pw = json.load(open("/tmp/mncs-rp-backends/portable-wasm-pressure/result.json"))
+def outcomes(result):
+    return {c["case_id"]: json.dumps(c.get("returned"), sort_keys=True) for c in result["cases"]}
+left, right = outcomes(rb), outcomes(pw)
+mismatch = [k for k in left if left[k] != right.get(k)]
+print("   pressure agreement:", f"{len(left)-len(mismatch)}/{len(left)}")
+if mismatch:
+    print("   MISMATCH:", mismatch)
+    raise SystemExit(1)
+PY
 
 exit $STATUS

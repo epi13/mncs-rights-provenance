@@ -1,0 +1,261 @@
+{
+  "authority_claims": [
+    {
+      "asserted_by": "repository-maintainer",
+      "scope": "may_propose",
+      "subject": {
+        "actor_class": "human-directed-agent",
+        "role": "author",
+        "type": "agent"
+      },
+      "unresolved": [
+        "maintainer-review-pending"
+      ],
+      "verdict": "unknown"
+    }
+  ],
+  "capability_gap_links": [
+    {
+      "backend_runtime": "portable-wasm",
+      "gap_ref": "mncs-language/LF-1",
+      "originating_repository": "github.com/epi13/mncs-rights-provenance",
+      "producer": "mncs-rights-provenance backend conformance",
+      "proposed_workaround": "pressure core returns bare Verdict enums; gate-severities corpus stays research-bytecode-only",
+      "relation": "reports-gap",
+      "triggering_artifact": "language/rights_policy.mncs gate_severities record return"
+    }
+  ],
+  "changesets": [
+    {
+      "base_revisions": [
+        {
+          "commit": "256bcad7e6cca9333954c2f2f37b3f6da8f1a8bd",
+          "repository": "github.com/epi13/machine-native-complexity-development-specification"
+        },
+        {
+          "commit": "ead5366fa4700657ef246df88ca17e206dd62845",
+          "repository": "github.com/epi13/MNCS-Commons"
+        },
+        {
+          "commit": "805f821f4eea457c3940274750b21774c487d9a1",
+          "repository": "github.com/epi13/mncs-forge-mcp"
+        },
+        {
+          "commit": "4f3146a97f92389490d3e8dffdf08266e3390968",
+          "repository": "github.com/epi13/mncs-language"
+        },
+        {
+          "commit": "8dcab5f64816cd1994eff39e78f628a6a02bf8a6",
+          "repository": "github.com/epi13/machine-native-complexity-standard"
+        },
+        {
+          "commit": "0c5e17e5ea08fe03d479b5d75496beddb4affa68",
+          "repository": "github.com/epi13/mncs-rights-provenance"
+        }
+      ],
+      "changeset_id": "changeset/distributed-pressure-001",
+      "source": "MNCDS development-pressure protocol (six-repository coordination)"
+    }
+  ],
+  "content_digest": "sha256:5f5fe166292bcc9dcfcaa44bdef249ed65ba658bc2b49780a33d67827ac19a1c",
+  "contributions": [
+    {
+      "changeset_id": "changeset/distributed-pressure-001",
+      "contribution_id": "mncds-pressure-docs-pr7",
+      "contributor": {
+        "actor_class": "human-directed-agent",
+        "role": "author",
+        "type": "agent"
+      }
+    },
+    {
+      "changeset_id": "changeset/distributed-pressure-001",
+      "contribution_id": "commons-pressure-docs-pr32",
+      "contributor": {
+        "actor_class": "human-directed-agent",
+        "role": "author",
+        "type": "agent"
+      }
+    },
+    {
+      "changeset_id": "changeset/distributed-pressure-001",
+      "contribution_id": "forge-pressure-docs-pr74",
+      "contributor": {
+        "actor_class": "human-directed-agent",
+        "role": "author",
+        "type": "agent"
+      }
+    },
+    {
+      "changeset_id": "changeset/distributed-pressure-001",
+      "contribution_id": "language-pressure-docs-pr104",
+      "contributor": {
+        "actor_class": "human-directed-agent",
+        "role": "author",
+        "type": "agent"
+      }
+    },
+    {
+      "changeset_id": "changeset/distributed-pressure-001",
+      "contribution_id": "mncs-pressure-docs-pr71",
+      "contributor": {
+        "actor_class": "human-directed-agent",
+        "role": "author",
+        "type": "agent"
+      }
+    },
+    {
+      "changeset_id": "changeset/distributed-pressure-001",
+      "contribution_id": "rights-pressure-docs",
+      "contributor": {
+        "actor_class": "human-directed-agent",
+        "role": "author",
+        "type": "agent"
+      }
+    }
+  ],
+  "derivations": [
+    {
+      "from": "mncds#protocol",
+      "relation": "gap-derived-from",
+      "to": "commons#records"
+    },
+    {
+      "from": "mncds#protocol",
+      "relation": "gap-derived-from",
+      "to": "forge#workflow"
+    },
+    {
+      "from": "mncds#protocol",
+      "relation": "gap-derived-from",
+      "to": "language#capability-gaps"
+    },
+    {
+      "from": "mncds#protocol",
+      "relation": "gap-derived-from",
+      "to": "mncs#evidence-boundary"
+    },
+    {
+      "from": "mncds#protocol",
+      "relation": "gap-derived-from",
+      "to": "rights#distributed-pressure"
+    },
+    {
+      "from": "language#capability-gaps",
+      "relation": "referenced",
+      "to": "rights#capability-gap-links"
+    },
+    {
+      "from": "forge#workflow",
+      "relation": "referenced",
+      "to": "rights#evaluation-bindings"
+    },
+    {
+      "from": "rights#distributed-pressure",
+      "relation": "member-of",
+      "to": "changeset/distributed-pressure-001"
+    }
+  ],
+  "lifecycle": {
+    "from_state": "proposed",
+    "to_state": "evaluating"
+  },
+  "lineage_id": "mncs-rights://lineage/distributed-pressure-six-repo-001",
+  "promotion_dimensions": {
+    "authority": {
+      "unresolved": [
+        "no-promotion-evaluation-yet"
+      ],
+      "verdict": "unknown"
+    },
+    "compiler_backend": {
+      "unresolved": [
+        "no-promotion-evaluation-yet"
+      ],
+      "verdict": "unknown"
+    },
+    "coordination_dependency": {
+      "unresolved": [
+        "no-promotion-evaluation-yet"
+      ],
+      "verdict": "unknown"
+    },
+    "policy": {
+      "unresolved": [
+        "no-promotion-evaluation-yet"
+      ],
+      "verdict": "unknown"
+    },
+    "provenance": {
+      "unresolved": [
+        "no-promotion-evaluation-yet"
+      ],
+      "verdict": "unknown"
+    },
+    "rights_license": {
+      "unresolved": [
+        "no-promotion-evaluation-yet"
+      ],
+      "verdict": "unknown"
+    },
+    "technical": {
+      "unresolved": [
+        "no-promotion-evaluation-yet"
+      ],
+      "verdict": "unknown"
+    },
+    "test_conformance": {
+      "unresolved": [
+        "no-promotion-evaluation-yet"
+      ],
+      "verdict": "unknown"
+    }
+  },
+  "rights_summary": {
+    "legal_conclusion": "NOT_MADE",
+    "outcome": "unknown"
+  },
+  "schema_version": "0.3.0",
+  "subject": {
+    "artifact_refs": [
+      {
+        "class": "documentation",
+        "id": "github.com/epi13/machine-native-complexity-development-specification#docs/development-pressure-protocol.md",
+        "role": "subject"
+      },
+      {
+        "class": "documentation",
+        "id": "github.com/epi13/MNCS-Commons#docs/development-pressure-records.md",
+        "role": "subject"
+      },
+      {
+        "class": "documentation",
+        "id": "github.com/epi13/mncs-forge-mcp#docs/development-pressure-workflow.md",
+        "role": "subject"
+      },
+      {
+        "class": "documentation",
+        "id": "github.com/epi13/mncs-language#docs/capability-gap-artifacts.md",
+        "role": "subject"
+      },
+      {
+        "class": "documentation",
+        "id": "github.com/epi13/machine-native-complexity-standard#docs/development-pressure-evidence.md",
+        "role": "subject"
+      },
+      {
+        "class": "documentation",
+        "id": "github.com/epi13/mncs-rights-provenance#specs/distributed-pressure.md",
+        "role": "subject"
+      }
+    ]
+  },
+  "unresolved": [
+    "forge-evaluation-bindings",
+    "commons-retention-refs",
+    "promotion-decision",
+    "resolving-change-for-LF-1",
+    "rights-pr-number",
+    "maintainer-approvals"
+  ]
+}

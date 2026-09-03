@@ -280,19 +280,28 @@ def section_uncertain_origin(rp_head: str) -> None:
 
 
 def main() -> int:
-    rp_head = git("mncs-rights-provenance", "rev-parse", "--short", "HEAD")
-    fabric_head = git("mncs-fabric", "rev-parse", "--short", "HEAD")
-    commons_head = git("MNCS-Commons", "rev-parse", "--short", "HEAD")
+    # Heads resolve lazily inside each section lambda so the surrounding
+    # skip_guard can tolerate missing sibling checkouts (e.g. CI runners
+    # with only this repository present). A missing sibling skips its
+    # section with an explicit message instead of aborting generation.
+    def rp_head() -> str:
+        return git("mncs-rights-provenance", "rev-parse", "--short", "HEAD")
+
+    def fabric_head() -> str:
+        return git("mncs-fabric", "rev-parse", "--short", "HEAD")
+
+    def commons_head() -> str:
+        return git("MNCS-Commons", "rev-parse", "--short", "HEAD")
 
     sections = (
-        ("human-specification", lambda: section_human_specification(rp_head)),
+        ("human-specification", lambda: section_human_specification(rp_head())),
         (
             "agent-directed-fabric-module",
-            lambda: section_agent_directed_fabric(fabric_head),
+            lambda: section_agent_directed_fabric(fabric_head()),
         ),
-        ("mncs-language-policy-core", lambda: section_mncs_language_core(rp_head)),
-        ("third-party-dependency", lambda: section_third_party_dependency(commons_head)),
-        ("uncertain-origin-document", lambda: section_uncertain_origin(rp_head)),
+        ("mncs-language-policy-core", lambda: section_mncs_language_core(rp_head())),
+        ("third-party-dependency", lambda: section_third_party_dependency(commons_head())),
+        ("uncertain-origin-document", lambda: section_uncertain_origin(rp_head())),
     )
     generated = 0
     for label, fn in sections:

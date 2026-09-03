@@ -1,0 +1,108 @@
+mncs 0.6;
+
+// MNCS Rights & Provenance - normative distributed-pressure verdict core.
+//
+// Single source of truth for tri-state promotion/authority/lineage verdicts
+// used by the six-repository coordinated pressure workflow. Host
+// implementations (Python reference tooling) MUST agree with it; golden
+// vectors executed across compiler backends enforce that agreement.
+//
+// Tri-state rule everywhere: Fail > Unknown > Pass.
+// Unknown is legitimate: missing evidence never becomes Pass.
+// Tampering is Fail, never Unknown.
+//
+// A passing verdict means the stated evidence requirements were met for the
+// stated scope. It is never a legal warranty, never a correctness proof,
+// and never a promotion decision by itself.
+
+module mncs.rights.pressure.v01;
+
+enum Verdict { Pass, Fail, Unknown }
+
+enum Truth { No, Yes }
+
+record PromotionInputs {
+  technical: Verdict,
+  test_conformance: Verdict,
+  compiler_backend: Verdict,
+  coordination_dependency: Verdict,
+  provenance: Verdict,
+  authority: Verdict,
+  rights_license: Verdict,
+  policy: Verdict,
+}
+
+// ---- Tri-state combination ----------------------------------------------
+
+fn combine_verdict(left: Verdict, right: Verdict) -> (result: Verdict) {
+  return match left {
+    Verdict.Fail => Verdict.Fail,
+    Verdict.Unknown => match right {
+      Verdict.Fail => Verdict.Fail,
+      Verdict.Unknown => Verdict.Unknown,
+      Verdict.Pass => Verdict.Unknown,
+    },
+    Verdict.Pass => right,
+  };
+}
+
+// ---- Promotion: eight independent dimensions, one explicit summary ------
+//
+// Dimensions stay independent: callers always retain the per-dimension
+// breakdown alongside this summary. A failure or Unknown in one dimension
+// never fabricates a conclusion in another.
+
+fn promotion_combined(input: PromotionInputs) -> (result: Verdict) {
+  let s1: Verdict = combine_verdict(input.technical, input.test_conformance);
+  let s2: Verdict = combine_verdict(s1, input.compiler_backend);
+  let s3: Verdict = combine_verdict(s2, input.coordination_dependency);
+  let s4: Verdict = combine_verdict(s3, input.provenance);
+  let s5: Verdict = combine_verdict(s4, input.authority);
+  let s6: Verdict = combine_verdict(s5, input.rights_license);
+  let s7: Verdict = combine_verdict(s6, input.policy);
+  return s7;
+}
+
+// ---- Authority: identity is not permission --------------------------------
+//
+// Scope mismatch is Fail (explicitly out of scope). Missing evidence or
+// approval basis is Unknown, never Pass. Pass requires scope match plus a
+// present evidence and approval basis. Unknown authority stays unknown:
+// classifiers must not default to human, trusted, or permitted.
+
+fn authority_verdict(scope_matches: Truth, evidence_present: Truth, approval_present: Truth) -> (result: Verdict) {
+  return match scope_matches {
+    Truth.No => Verdict.Fail,
+    Truth.Yes => match evidence_present {
+      Truth.No => Verdict.Unknown,
+      Truth.Yes => match approval_present {
+        Truth.No => Verdict.Unknown,
+        Truth.Yes => Verdict.Pass,
+      },
+    },
+  };
+}
+
+// ---- Lineage completeness -------------------------------------------------
+//
+// Tampering is Fail. Anything missing is Unknown: a lineage record never
+// passes on partial evidence, and missing fields are never invented.
+
+fn lineage_verdict(has_changeset: Truth, has_derivation: Truth, has_producer: Truth, evidence_bound: Truth, tamper_detected: Truth) -> (result: Verdict) {
+  return match tamper_detected {
+    Truth.Yes => Verdict.Fail,
+    Truth.No => match has_changeset {
+      Truth.No => Verdict.Unknown,
+      Truth.Yes => match has_derivation {
+        Truth.No => Verdict.Unknown,
+        Truth.Yes => match has_producer {
+          Truth.No => Verdict.Unknown,
+          Truth.Yes => match evidence_bound {
+            Truth.No => Verdict.Unknown,
+            Truth.Yes => Verdict.Pass,
+          },
+        },
+      },
+    },
+  };
+}
