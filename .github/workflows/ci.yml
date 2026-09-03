@@ -31,15 +31,27 @@ jobs:
       - name: Dogfood manifests generate and validate
         run: |
           python scripts/dogfood_generate.py
+          python scripts/dogfood_pressure.py
           python - <<'PY'
           import json, subprocess, sys
           from pathlib import Path
           sys.path.insert(0, "src")
-          from mncs_rights_provenance.validation import validate_manifest_structure
+          from mncs_rights_provenance.lineage import verify_lineage_digest
           from mncs_rights_provenance.manifest import compute_manifest_identity
+          from mncs_rights_provenance.validation import (
+              validate_lineage_structure,
+              validate_manifest_structure,
+          )
           failures = 0
           for path in sorted(Path("dogfood").glob("*.json")):
               document = json.loads(path.read_text())
+              if "lineage_id" in document:
+                  issues = validate_lineage_structure(document)
+                  ok, _ = verify_lineage_digest(document)
+                  if issues or not ok:
+                      print(f"FAIL {path}: {issues}")
+                      failures += 1
+                  continue
               issues = validate_manifest_structure(document)
               identity = compute_manifest_identity(document)
               if issues or document.get("manifest_identity") != identity:
@@ -57,3 +69,8 @@ jobs:
           python3 language/tools/gen_corpus.py
           git diff --exit-code language/corpora conformance/golden-vectors.json \
             || (echo "::error::corpora/vectors drifted from gen_corpus.py" && exit 1)
+      - name: Regenerate pressure corpora and vectors; verify no drift
+        run: |
+          python3 language/tools/gen_pressure_corpus.py
+          git diff --exit-code language/corpora/pressure-verdict-corpus.json conformance/pressure-golden-vectors.json \
+            || (echo "::error::pressure corpora/vectors drifted from gen_pressure_corpus.py" && exit 1)

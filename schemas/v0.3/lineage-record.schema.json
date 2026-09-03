@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/v0.3.0/lineage-record.schema.json",
+  "title": "MNCS Rights & Provenance Lineage Record v0.3",
+  "description": "Standalone, content-addressed causal-chain record for distributed development pressure. References ChangeSets, derivations, contributions, evaluations, approvals, supersessions, and capability gaps owned elsewhere; it never redefines their authority. Unknown fields stay explicit unknowns.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "lineage_id", "subject", "content_digest"],
+  "properties": {
+    "schema_version": {"const": "0.3.0"},
+    "lineage_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "description": "Producer-scoped stable identifier, e.g. mncs-rights://lineage/<slug>."
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_refs"],
+      "properties": {
+        "artifact_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/artifact_ref"}
+        },
+        "change_ref": {"type": "string", "maxLength": 512},
+        "evidence_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        }
+      }
+    },
+    "changesets": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/changeset_ref"},
+      "description": "ChangeSets this subject belongs to. Empty means membership unknown, not none."
+    },
+    "derivations": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {"$ref": "#/$defs/derivation"}
+    },
+    "contributions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/contribution"}
+    },
+    "evaluations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evaluation_binding"}
+    },
+    "approvals": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/approval_claim"}
+    },
+    "authority_claims": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/authority_claim"},
+      "description": "Scoped authority assertions (actor identity vs permission stay separate)."
+    },
+    "supersessions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/supersession_link"}
+    },
+    "capability_gap_links": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/capability_gap_link"}
+    },
+    "promotion_dimensions": {
+      "$ref": "#/$defs/promotion_dimensions",
+      "description": "Optional per-dimension promotion inputs snapshot bound to this lineage."
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from_state": {"type": "string", "maxLength": 64},
+        "to_state": {"type": "string", "minLength": 1, "maxLength": 64},
+        "actor": {"$ref": "#/$defs/actor_ref"},
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        },
+        "observed_at": {"type": "string", "format": "date-time"}
+      },
+      "description": "Records that an MNCDS lifecycle transition was observed. MNCDS owns the lifecycle."
+    },
+    "rights_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "manifest_identity": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "outcome": {"enum": ["pass", "pass-with-findings", "review-required", "blocked", "invalid", "unknown"]},
+        "legal_conclusion": {"const": "NOT_MADE"}
+      },
+      "description": "Cached hint only; never a substitute for the manifest itself."
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "description": "Explicit names of fields that remain unknown."
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z0-9-]+:"}
+    },
+    "content_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "SHA-256 of RFC 8785 canonical JSON of this record with content_digest removed."
+    }
+  },
+  "$defs": {
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 512},
+        "class": {"enum": ["source-code", "documentation", "dataset", "model-weights", "configuration", "experiment-output", "receipt", "binary", "other"]},
+        "path": {"type": "string", "maxLength": 512},
+        "hash_algorithm": {"enum": ["sha256"]},
+        "hash_value": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "role": {"enum": ["input", "output", "subject", "related"]}
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reference"],
+      "properties": {
+        "kind": {"enum": ["fabric-receipt", "fabric-execution-record", "forge-analysis", "forge-evaluation", "validation-receipt", "prompt", "tool-log", "commit", "external-record", "rights-evidence-record", "lineage-record", "capability-gap-artifact", "promotion-record", "commons-record", "other"]},
+        "reference": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "producer_reference": {"$ref": "#/$defs/producer_reference"}
+      }
+    },
+    "producer_reference": {
+      "type": "object",
+      "required": ["producer", "recordKind", "schemaVersion", "stableId"],
+      "properties": {
+        "producer": {"type": "string", "minLength": 1},
+        "recordKind": {"type": "string", "minLength": 1},
+        "schemaVersion": {"type": "string", "minLength": 1},
+        "stableId": {"type": "string", "minLength": 1},
+        "contentDigest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "scope": {"type": "object"}
+      }
+    },
+    "actor_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": {"enum": ["human", "model", "agent", "tool", "organization", "unknown"]},
+        "actor_class": {"enum": ["human", "human-directed-agent", "autonomous-agent", "forge-evaluator", "ci", "maintainer", "mnel-model", "fabric-worker", "external-contributor", "federated-deployment", "unknown"]},
+        "role": {"type": "string", "maxLength": 256},
+        "name": {"type": "string", "maxLength": 256},
+        "participant_ref": {"type": "string", "maxLength": 512},
+        "digest": {"type": "string", "maxLength": 512}
+      },
+      "description": "Identity only. Carries no authority by itself."
+    },
+    "changeset_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["changeset_id"],
+      "properties": {
+        "changeset_id": {"type": "string", "minLength": 1, "maxLength": 512},
+        "content_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "final_tree": {"type": "string", "maxLength": 512},
+        "source": {"type": "string", "maxLength": 512},
+        "base_revisions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/repository_change_ref"}
+        }
+      }
+    },
+    "repository_change_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 1, "maxLength": 512},
+        "commit": {"type": "string", "maxLength": 256},
+        "paths": {"type": "array", "items": {"type": "string", "maxLength": 512}},
+        "tree_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "relation"],
+      "properties": {
+        "from": {"type": "string", "minLength": 1, "maxLength": 512},
+        "to": {"type": "string", "minLength": 1, "maxLength": 512},
+        "relation": {"enum": ["derived-from", "transformed-by", "validated-by", "executed-by", "attested-by", "referenced", "member-of", "supersedes", "superseded-by", "resolves-gap", "gap-derived-from", "evaluated-by", "approved-by"]},
+        "transformation": {"type": "string", "maxLength": 256},
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        }
+      }
+    },
+    "contribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contributor"],
+      "properties": {
+        "contributor": {"$ref": "#/$defs/actor_ref"},
+        "contribution_id": {"type": "string", "maxLength": 512},
+        "changeset_id": {"type": "string", "maxLength": 512},
+        "attestation_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        }
+      },
+      "description": "A submitted work unit. The attestation is evidence an assertion was made, not proof it is true."
+    },
+    "evaluation_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evaluator", "verdict"],
+      "properties": {
+        "evaluator": {"type": "string", "minLength": 1, "maxLength": 256},
+        "evaluator_version": {"type": "string", "maxLength": 256},
+        "policy_revision": {"type": "string", "maxLength": 256},
+        "input_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "corpus_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "backend": {"type": "string", "maxLength": 256},
+        "worker_identity": {"type": "string", "maxLength": 512},
+        "verdict": {"enum": ["pass", "fail", "unknown"]},
+        "binding": {"enum": ["advisory", "authoritative", "unknown"]},
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        },
+        "unresolved": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "description": "What a bounded evaluation considered and produced. Missing fields are explicit unknowns."
+    },
+    "authority_claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject", "scope", "asserted_by", "verdict"],
+      "properties": {
+        "subject": {"$ref": "#/$defs/actor_ref"},
+        "scope": {"enum": ["may_propose", "may_provide_evidence", "may_evaluate", "may_attest", "may_approve", "may_promote", "may_modify_repository", "may_approve_change_class", "unknown"]},
+        "repository": {"type": "string", "maxLength": 512},
+        "change_class": {"type": "string", "maxLength": 256},
+        "authority_level": {"type": "integer", "minimum": 1, "maximum": 5},
+        "asserted_by": {"type": "string", "minLength": 1, "maxLength": 512},
+        "basis_evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        },
+        "verdict": {"enum": ["pass", "fail", "unknown"]},
+        "unresolved": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "description": "Evidence that asserted_by asserted a scoped permission. Not proof the permission exists."
+    },
+    "approval_claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approver", "scope", "verdict"],
+      "properties": {
+        "approver": {"$ref": "#/$defs/actor_ref"},
+        "scope": {"type": "string", "minLength": 1, "maxLength": 512},
+        "authority_level": {"type": "integer", "minimum": 1, "maximum": 5},
+        "verdict": {"enum": ["pass", "fail", "unknown"]},
+        "basis_evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        },
+        "policy": {"type": "string", "maxLength": 512},
+        "unresolved": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "description": "A scoped acceptance. Never inferred from evaluation success alone."
+    },
+    "supersession_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "supersedes_lineage": {"type": "string", "maxLength": 512},
+        "superseded_by": {"type": "string", "maxLength": 512},
+        "reason": {"type": "string", "maxLength": 1024},
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        }
+      },
+      "description": "Explicit successor links. History is never rewritten."
+    },
+    "capability_gap_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gap_ref"],
+      "properties": {
+        "gap_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+        "gap_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "originating_repository": {"type": "string", "maxLength": 512},
+        "originating_changeset": {"type": "string", "maxLength": 512},
+        "triggering_artifact": {"type": "string", "maxLength": 512},
+        "triggering_evidence": {"type": "string", "maxLength": 1024},
+        "backend_runtime": {"type": "string", "maxLength": 256},
+        "producer": {"type": "string", "maxLength": 512},
+        "environment_toolchain": {"type": "string", "maxLength": 512},
+        "proposed_workaround": {"type": "string", "maxLength": 1024},
+        "resolving_change": {"type": "string", "maxLength": 512},
+        "resolution_validation": {"type": "string", "maxLength": 1024},
+        "adoption_ref": {"type": "string", "maxLength": 512},
+        "relation": {"enum": ["reports-gap", "resolves-gap", "gap-derived-from", "workaround-for", "validates-resolution", "adopts-resolution", "unknown"]}
+      },
+      "description": "Why a language feature exists. Every field except gap_ref may be unknown."
+    },
+    "promotion_dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict"],
+      "properties": {
+        "verdict": {"enum": ["pass", "fail", "unknown"]},
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence_ref"}
+        },
+        "unresolved": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "promotion_dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["technical", "test_conformance", "compiler_backend", "coordination_dependency", "provenance", "authority", "rights_license", "policy"],
+      "properties": {
+        "technical": {"$ref": "#/$defs/promotion_dimension"},
+        "test_conformance": {"$ref": "#/$defs/promotion_dimension"},
+        "compiler_backend": {"$ref": "#/$defs/promotion_dimension"},
+        "coordination_dependency": {"$ref": "#/$defs/promotion_dimension"},
+        "provenance": {"$ref": "#/$defs/promotion_dimension"},
+        "authority": {"$ref": "#/$defs/promotion_dimension"},
+        "rights_license": {"$ref": "#/$defs/promotion_dimension"},
+        "policy": {"$ref": "#/$defs/promotion_dimension"}
+      },
+      "description": "Eight independent dimensions. Combined only by FAIL > UNKNOWN > PASS; breakdown always retained."
+    }
+  }
+}

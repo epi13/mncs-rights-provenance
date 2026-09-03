@@ -1,0 +1,147 @@
+{
+  "authority_claims": [
+    {
+      "asserted_by": "example-maintainer",
+      "scope": "may_propose",
+      "subject": {
+        "actor_class": "human",
+        "role": "developer",
+        "type": "human"
+      },
+      "verdict": "pass"
+    }
+  ],
+  "capability_gap_links": [
+    {
+      "backend_runtime": "research-bytecode",
+      "gap_ref": "mncs-language://gap/example-001",
+      "originating_changeset": "changeset/example-001",
+      "originating_repository": "github.com/example/app",
+      "producer": "example-app developers",
+      "relation": "resolves-gap",
+      "resolving_change": "example/mncs-language@bbb2222",
+      "triggering_artifact": "example/app#gap-driven-feature"
+    }
+  ],
+  "changesets": [
+    {
+      "base_revisions": [
+        {
+          "commit": "aaa1111",
+          "repository": "github.com/example/app"
+        },
+        {
+          "commit": "bbb2222",
+          "repository": "github.com/example/mncs-language"
+        }
+      ],
+      "changeset_id": "changeset/example-001",
+      "source": "example coordinated change"
+    }
+  ],
+  "content_digest": "sha256:8f6e79cdc326239ab3ac4c6c33affd19d5c047f56c63ce05de132f9731b0d42d",
+  "contributions": [
+    {
+      "changeset_id": "changeset/example-001",
+      "contribution_id": "contrib-example-001",
+      "contributor": {
+        "actor_class": "human",
+        "name": "Example Developer",
+        "role": "developer",
+        "type": "human"
+      }
+    }
+  ],
+  "derivations": [
+    {
+      "from": "example/app#pressure",
+      "relation": "gap-derived-from",
+      "to": "mncs-language://gap/example-001"
+    },
+    {
+      "from": "mncs-language://gap/example-001",
+      "relation": "resolves-gap",
+      "to": "example/mncs-language@bbb2222"
+    },
+    {
+      "from": "example/mncs-language@bbb2222",
+      "relation": "derived-from",
+      "to": "example/app#gap-driven-feature"
+    },
+    {
+      "from": "example/app#gap-driven-feature",
+      "relation": "member-of",
+      "to": "changeset/example-001"
+    }
+  ],
+  "evaluations": [
+    {
+      "backend": "research-bytecode",
+      "binding": "advisory",
+      "evaluator": "forge",
+      "evaluator_version": "0.1.0",
+      "evidence": [
+        {
+          "kind": "forge-evaluation",
+          "reference": "forge://evaluation/eval-001"
+        }
+      ],
+      "verdict": "pass"
+    }
+  ],
+  "lifecycle": {
+    "from_state": "evaluating",
+    "to_state": "selected"
+  },
+  "lineage_id": "mncs-rights://lineage/example-001",
+  "promotion_dimensions": {
+    "authority": {
+      "unresolved": [
+        "maintainer-approval"
+      ],
+      "verdict": "unknown"
+    },
+    "compiler_backend": {
+      "unresolved": [
+        "wasm-coverage"
+      ],
+      "verdict": "unknown"
+    },
+    "coordination_dependency": {
+      "verdict": "pass"
+    },
+    "policy": {
+      "unresolved": [
+        "release-policy-review"
+      ],
+      "verdict": "unknown"
+    },
+    "provenance": {
+      "verdict": "pass"
+    },
+    "rights_license": {
+      "verdict": "pass"
+    },
+    "technical": {
+      "verdict": "pass"
+    },
+    "test_conformance": {
+      "verdict": "pass"
+    }
+  },
+  "schema_version": "0.3.0",
+  "subject": {
+    "artifact_refs": [
+      {
+        "class": "source-code",
+        "id": "example/app#gap-driven-feature",
+        "role": "output"
+      }
+    ]
+  },
+  "unresolved": [
+    "wasm-coverage",
+    "maintainer-approval",
+    "release-policy-review"
+  ]
+}

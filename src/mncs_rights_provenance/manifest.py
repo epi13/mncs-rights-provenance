@@ -21,7 +21,9 @@ from .model import (
     Source,
 )
 
-SCHEMA_VERSION = "0.2.0"
+SCHEMA_VERSION = "0.3.0"
+BASE_SCHEMA_VERSION = "0.2.0"
+SUPPORTED_MANIFEST_VERSIONS = frozenset({"0.2.0", "0.3.0"})
 
 _IDENTITY_EXCLUDED_FIELDS = frozenset({"manifest_identity"})
 
@@ -41,12 +43,19 @@ def manifest_to_dict(manifest: Manifest) -> dict[str, Any]:
         }
 
     value: dict[str, Any] = {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": manifest.schema_version,
         "artifact": manifest.artifact.to_dict(),
         "provenance": provenance,
         "rights": _rights_to_dict(manifest.rights),
         "review": _review_to_dict(manifest.review),
     }
+    if manifest.lineage is not None:
+        # Lineage content requires a v0.3-aware consumer: bump upward so a
+        # lineage-carrying document never masquerades as v0.2. The bump only
+        # ever moves 0.2.0 -> 0.3.0, never downward, and never invents content.
+        if value["schema_version"] == BASE_SCHEMA_VERSION:
+            value["schema_version"] = SCHEMA_VERSION
+        value["lineage"] = dict(manifest.lineage)
     if manifest.spec_profile is not None:
         value["spec_profile"] = manifest.spec_profile
     if manifest.attestations:
@@ -74,9 +83,9 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
     if not isinstance(value, Mapping):
         raise TypeError("manifest must be a JSON object")
     version = value.get("schema_version")
-    if version != SCHEMA_VERSION:
+    if version not in SUPPORTED_MANIFEST_VERSIONS:
         raise ValueError(
-            f"unsupported manifest schema_version: {version!r} (expected {SCHEMA_VERSION!r})"
+            f"unsupported manifest schema_version: {version!r} (expected one of {sorted(SUPPORTED_MANIFEST_VERSIONS)!r})"
         )
 
     artifact_value = value.get("artifact")
@@ -239,6 +248,8 @@ def manifest_from_dict(value: Mapping[str, Any]) -> Manifest:
         else {},
         graph_nodes=list(graph_nodes),
         graph_edges=list(graph_edges),
+        schema_version=str(version),
+        lineage=dict(value["lineage"]) if isinstance(value.get("lineage"), Mapping) else None,
     )
     return manifest
 
@@ -356,7 +367,9 @@ def _optional_str(value: Any) -> str | None:
 
 
 __all__ = [
+    "BASE_SCHEMA_VERSION",
     "SCHEMA_VERSION",
+    "SUPPORTED_MANIFEST_VERSIONS",
     "canonical_bytes",
     "compute_manifest_identity",
     "load_manifest_file",

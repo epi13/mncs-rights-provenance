@@ -57,6 +57,24 @@ executable envelope"), branch `feat/backend-family-expansion`.
   `language/run_backend_tests.sh` encodes exactly this coverage and should be
   widened when the scalar expansion lands.
 
+## LF-6 pressure-verdict probe (2026-09): no new gap; LF-1 avoided by shape
+
+- While implementing `language/pressure_provenance.mncs`
+  (`mncs.rights.pressure.v01`: `combine_verdict`, `promotion_combined`,
+  `authority_verdict`, `lineage_verdict`) no new compiler capability gap was
+  encountered. The module validates cleanly and its 44-case corpus passes
+  fully on **both** `research-bytecode` (44/44) and `portable-wasm` (44/44)
+  with cross-backend agreement (44/44).
+- The design deliberately avoids LF-1: all four functions return **bare
+  `Verdict` enums** and take either bare `Verdict`/`Truth` arguments or a
+  `PromotionInputs` record *input* (record inputs reconstruct correctly on
+  WASM). No function returns a record-of-enums, the shape LF-1 degrades to
+  `unresolved`. This is a workaround-by-shape, not a fix for LF-1 itself:
+  LF-1 remains open for the existing `gate_severities` corpus.
+- No capability-gap artifact was emitted for this work because no obstruction
+  was met. The dogfood lineage references LF-1 as a `reports-gap` link with
+  `resolving_change` UNKNOWN, preserving the honest state.
+
 ## Non-findings (worked as intended)
 
 - Payload-bearing enums, exhaustive matching with payload binders, records with

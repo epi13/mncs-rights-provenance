@@ -1,0 +1,90 @@
+{
+  "schema_version": "0.3.0",
+  "artifact": {
+    "id": "example/app#gap-driven-feature",
+    "class": "source-code",
+    "repository": "github.com/example/app",
+    "commit": "aaa1111",
+    "hashes": [
+      {
+        "algorithm": "sha256",
+        "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "scope": "tree"
+      }
+    ]
+  },
+  "provenance": {
+    "origin_classification": "human-directed-machine-generated",
+    "participants": [
+      {"type": "human", "role": "developer", "name": "Example Developer"},
+      {"type": "agent", "role": "assistant", "name": "example-agent"}
+    ],
+    "process_evidence": [
+      {"kind": "capability-gap-artifact", "reference": "mncs-language://gap/example-001"},
+      {"kind": "forge-evaluation", "reference": "forge://evaluation/eval-001"},
+      {"kind": "lineage-record", "reference": "examples/v0.3/lineage-record-example.json"}
+    ],
+    "graph": {
+      "nodes": [
+        {"id": "pressure", "kind": "external", "label": "application pressure"},
+        {"id": "gap", "kind": "artifact", "label": "capability gap"},
+        {"id": "change", "kind": "artifact", "artifact_class": "source-code"},
+        {"id": "eval", "kind": "validation", "label": "forge evaluation"},
+        {"id": "changeset", "kind": "artifact", "label": "coordinated changeset"}
+      ],
+      "edges": [
+        {"from": "pressure", "to": "gap", "relation": "gap-derived-from"},
+        {"from": "gap", "to": "change", "relation": "resolves-gap"},
+        {"from": "change", "to": "eval", "relation": "evaluated-by"},
+        {"from": "change", "to": "changeset", "relation": "member-of"}
+      ]
+    }
+  },
+  "rights": {
+    "distribution_license": "Apache-2.0",
+    "copyright_status": "mixed-or-undetermined",
+    "rights_basis": "contributor-attested",
+    "third_party_material": "none-known",
+    "sources": []
+  },
+  "review": {
+    "technical_validation": "passed",
+    "provenance_validation": "passed",
+    "human_acceptance": "not-reviewed"
+  },
+  "attestations": [
+    {
+      "assertion_type": "changeset-membership",
+      "assertedBy": "example-developer",
+      "assertedAt": "2026-09-02T00:00:00Z",
+      "statement": "This change belongs to changeset/example-001 alongside the language resolution."
+    },
+    {
+      "assertion_type": "capability-gap-link",
+      "assertedBy": "example-developer",
+      "assertedAt": "2026-09-02T00:00:00Z",
+      "statement": "Implements the workaround for mncs-language://gap/example-001 pending the compiler change."
+    }
+  ],
+  "lineage": {
+    "changesets": [
+      {"changeset_id": "changeset/example-001", "source": "example coordinated change"}
+    ],
+    "lineage_records": [
+      {"lineage_id": "mncs-rights://lineage/example-001"}
+    ],
+    "capability_gaps": ["mncs-language://gap/example-001"],
+    "promotion_dimensions": {
+      "technical": {"verdict": "pass"},
+      "test_conformance": {"verdict": "pass"},
+      "compiler_backend": {"verdict": "unknown", "unresolved": ["wasm-coverage"]},
+      "coordination_dependency": {"verdict": "pass"},
+      "provenance": {"verdict": "pass"},
+      "authority": {"verdict": "unknown", "unresolved": ["maintainer-approval"]},
+      "rights_license": {"verdict": "pass"},
+      "policy": {"verdict": "unknown", "unresolved": ["release-policy-review"]}
+    },
+    "lifecycle": {"from_state": "evaluating", "to_state": "selected"},
+    "unresolved": ["wasm-coverage", "maintainer-approval"]
+  }
+}

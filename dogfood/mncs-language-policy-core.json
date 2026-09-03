@@ -1,7 +1,7 @@
 {
   "artifact": {
     "class": "source-code",
-    "commit": "8d27d87",
+    "commit": "33ba041",
     "hashes": [
       {
         "algorithm": "sha256",
@@ -9,13 +9,13 @@
         "value": "3bee733b15c885f24f4aa8543320179199223c349dee2691922947894d71746a"
       }
     ],
-    "id": "mncs-rights-provenance:8d27d87:language/rights_policy.mncs",
+    "id": "mncs-rights-provenance:33ba041:language/rights_policy.mncs",
     "paths": [
       "language/rights_policy.mncs"
     ],
     "repository": "github.com/epi13/mncs-rights-provenance"
   },
-  "manifest_identity": "885248ec90ae657150272c6e25581f2b97e084f32bdbb8e20ccbd94df6e7f754",
+  "manifest_identity": "79f7689938facf3ae1f86ecef32321e8f7ca6071b685492312871a1863cbe2c7",
   "provenance": {
     "graph": {
       "edges": [

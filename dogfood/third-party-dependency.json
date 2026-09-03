@@ -1,11 +1,11 @@
 {
   "artifact": {
     "class": "binary",
-    "commit": "597b33f",
-    "id": "mncs-commons:597b33f:dependency/zstandard",
+    "commit": "ead5366",
+    "id": "mncs-commons:ead5366:dependency/zstandard",
     "repository": "github.com/epi13/MNCS-Commons"
   },
-  "manifest_identity": "42c7f020e098cc88502cfd90807df4ac8f8dd010ce22a9ed0a85305883b1fc7e",
+  "manifest_identity": "2c76a3c665ebbbb6932cc44bd3651e69e4682d130d272ce3ccb08cd7fa75a52e",
   "provenance": {
     "origin_classification": "third-party-derived",
     "participants": [
