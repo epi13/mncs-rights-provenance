@@ -1,0 +1,38 @@
+name: mncs-family
+# First real cross-repository family integration: this repository's native
+# rights/provenance evaluation is projected into mncs.check-result/1 and
+# composed by mncs-actions with project tests under a declared boundary.
+#
+# Revision pin: immutable mncs-actions commit SHA (see
+# docs/mncs-actions-integration.md). Never @main: a historical workflow
+# revision must not silently execute a newer action implementation.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  family:
+    # Pinned mncs-actions revision; internal action pins bake the same
+    # release implementation (see epi13/mncs-actions docs/revision-coherence.md).
+    uses: epi13/mncs-actions/.github/workflows/mncs-family-verify.yml@013b5c533ae9571627b7105b35422d4473021298
+    with:
+      required-checks: rights-provenance,project-tests
+      boundary: rights-family
+      # The rights provider honestly reports UNKNOWN today (human review
+      # outstanding on the dogfood manifest); the boundary records it
+      # visibly without fabricating PASS. Flip to true with a reviewed
+      # release manifest (see docs/mncs-actions-integration.md).
+      fail-on-unknown: false
+      rights-command: python3 -m pip install --quiet -e . && bash scripts/ci-rights-check.sh
+      rights-check-id: rights-provenance
+      rights-provider: mncs-rights-provenance
+      project-command: python3 -m pip install --quiet pytest -e . && bash scripts/ci-project-check.sh
+      project-check-id: project-tests
+      project-provider: project-verifier
+      upload-artifacts: true

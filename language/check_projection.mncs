@@ -1,0 +1,58 @@
+mncs 0.6;
+
+// MNCS Rights & Provenance - normative check-boundary projection core.
+//
+// Pure deterministic projection from the release-policy outcome vocabulary
+// (language/rights_policy.mncs, Outcome) to the shared family check
+// verdict carried by mncs-actions (mncs.check-result/1). Host
+// implementations (src/mncs_rights_provenance/check_projection.py, and
+// its mirror in mncs-actions adapters/rights_adapter.py) MUST agree with
+// it; tests/test_check_projection.py pins that agreement.
+//
+// Vocabulary rule: anything that is not an established positive or
+// negative stays Unknown. Unrecognized outcomes are Unknown, never Pass.
+// Binding failure (manifest identity mismatch) downgrades an otherwise
+// passing claim to Fail: tampering is Fail, never a pass.
+//
+// What stays host-side (explicit escape, no safe MNCS surface yet):
+// - reading the native mncs-rp JSON report (filesystem + JSON parsing);
+// - detecting missing/contradictory reports, which establish NO claim
+//   (the host emits nothing; there is intentionally no Status arm that
+//   turns a contradiction into a verdict);
+// - writing the check-result file and uploading evidence artifacts.
+
+module mncs.rights.check_projection.v01;
+
+enum Outcome { Pass, PassWithFindings, ReviewRequired, Blocked, Invalid, Unknown, Unrecognized }
+
+enum CheckVerdict { Pass, Fail, Unknown }
+
+enum Truth { No, Yes }
+
+// Pure projection for coherent reports.
+fn project_outcome(outcome: Outcome) -> (result: CheckVerdict) {
+  return match outcome {
+    Outcome.Pass => CheckVerdict.Pass,
+    Outcome.Blocked => CheckVerdict.Fail,
+    Outcome.Invalid => CheckVerdict.Fail,
+    Outcome.PassWithFindings => CheckVerdict.Unknown,
+    Outcome.ReviewRequired => CheckVerdict.Unknown,
+    Outcome.Unknown => CheckVerdict.Unknown,
+    Outcome.Unrecognized => CheckVerdict.Unknown,
+  };
+}
+
+record BoundClaim { claim: CheckVerdict, binding_ok: Truth }
+
+// Binding failure downgrades an established Pass to Fail; every other
+// claim passes through unchanged. No arm turns Unknown into Pass.
+fn apply_binding(observed: BoundClaim) -> (result: CheckVerdict) {
+  return match observed.claim {
+    CheckVerdict.Pass => match observed.binding_ok {
+      Truth.Yes => CheckVerdict.Pass,
+      Truth.No => CheckVerdict.Fail,
+    },
+    CheckVerdict.Fail => CheckVerdict.Fail,
+    CheckVerdict.Unknown => CheckVerdict.Unknown,
+  };
+}
