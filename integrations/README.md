@@ -59,6 +59,20 @@ this file.
 - Harness `to_rights_participant()` maps actor-provenance records to manifest
   participants preserving `stable_id`/content-digest traceability.
 
+## mncs-actions — family verification caller
+
+- This repository calls the pinned reusable workflow
+  (`.github/workflows/mncs-family.yml` -> `epi13/mncs-actions@<sha>`,
+  boundary `rights-family`, required `rights-provenance,project-tests`).
+- Native `mncs-rp validate` reports are projected by
+  `src/mncs_rights_provenance/check_projection.py`
+  (`scripts/rp_to_check.py`, `scripts/ci-rights-check.sh`) into
+  `mncs.check-result/1`; project tests via `scripts/ci-project-check.sh`.
+- Authority stays here: the projection table, FAIL vs NOT_ESTABLISHED
+  discipline, and native-result preservation are defined in
+  `docs/mncs-actions-integration.md`; mncs-actions carries the checks
+  without reinterpreting them.
+
 ## Repository conventions
 
 A repository adopting rights & provenance needs exactly one new file plus an
