@@ -1,6 +1,5 @@
 """Pin the rights agent contract to the normative MNCS cores."""
 
-import re
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]

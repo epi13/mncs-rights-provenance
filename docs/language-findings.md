@@ -75,6 +75,30 @@ executable envelope"), branch `feat/backend-family-expansion`.
   was met. The dogfood lineage references LF-1 as a `reports-gap` link with
   `resolving_change` UNKNOWN, preserving the honest state.
 
+## LF-7 claims-status probe (2026-09): no new gap; LF-1/LF-2 avoided by shape
+
+- While implementing `language/rights_claims.mncs`
+  (`mncs.rights.claims.v01`: `claim_status`, `temporal_state`,
+  `evidence_state`, `basis_compatible`, `attribution_due`, `signed_state`,
+  `supersede_link_valid`) no new compiler capability gap was encountered.
+  The module validates cleanly and its 50-case corpus passes fully on
+  **both** `research-bytecode` (50/50) and `portable-wasm` (50/50) with
+  cross-backend agreement (50/50).
+- The design deliberately avoids LF-1 and LF-2: all entry functions take
+  scalar (`u64`) or bare-enum arguments and return bare enums or `u64`
+  (never records-of-enums, never records at all), so there is nothing for
+  the WASM finite-identity degradation or the missing wildcard arm to
+  catch on. The corpus generator needs a small encoding helper for enum
+  arguments (`status()` in `language/tools/gen_claims_corpus.py`), but that
+  is ordinary corpus tooling, not a language gap: declaration-inventory
+  identities for enum arguments already work.
+- No capability-gap artifact was emitted for this work because no
+  obstruction was met. Set-level composition (supersession-edge walking,
+  cycle detection, pairwise conflict reporting) stays host-side in
+  `src/mncs_rights_provenance/claims.py` by design: the normative core
+  never walks graphs, so no graph-traversal surface was requested from
+  the language.
+
 ## Non-findings (worked as intended)
 
 - Payload-bearing enums, exhaustive matching with payload binders, records with
