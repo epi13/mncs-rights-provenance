@@ -1,0 +1,225 @@
+mncs 0.18;
+
+// MNCS Rights & Provenance - normative rights-claim status core.
+//
+// Single source of truth for per-claim rights status, temporal state,
+// evidence freshness, mechanical basis compatibility, attribution duty,
+// signed-assertion layering, and supersession-link validity. Host
+// implementations MUST agree with it; execution corpora executed
+// across compiler backends enforce that agreement.
+//
+// What this core is: a deterministic status engine over explicit claim
+// records. What it is not: a legal reasoner. A passing/verified status
+// means the stated evidence requirements were met for the stated
+// scope. It is never a legal warranty of title, ownership, or
+// non-infringement, and uncertainty stays explicit everywhere.
+//
+// Conceptual boundaries (load-bearing):
+// - A CLAIM (machine-readable statement) is not a FACT (legal truth).
+// - Missing evidence is UNKNOWN, never Pass/Verified by default.
+// - Conflicting claims coexist; this core reports the conflict, it
+//   does not resolve it by fiat.
+// - A valid SIGNATURE proves a key signed a statement. It does not
+//   prove the signer owned the claimed rights (see signed_state).
+// - Compatibility here is MECHANICAL (explicit forbid-vs-permit on
+//   shared dimensions). Anything needing legal interpretation
+//   reports Unknown, never Compatible.
+// - Time is an opaque u64 in the host clock domain; the core only
+//   compares. A claim valid at creation may be expired now; the
+//   timeline is preserved, never rewritten.
+//
+// Claim record (all corpus-executable scalars):
+//   id            claim identity (host-resolved)
+//   subject       artifact digest identity (host-resolved)
+//   claimant      asserting-party identity (host-resolved)
+//   basis         rights-basis code 0..5, shared with the policy core:
+//                 0 project-owned-or-controlled, 1 contributor-attested,
+//                 2 third-party-license, 3 public-domain-basis,
+//                 4 no-exclusive-right-asserted, 5 unknown-needs-review
+//   license       license-identity code (host registry; 0 = none)
+//   attribution   0 not-required, 1 required
+//   redistribute  0 forbidden, 1 permitted, 2 unknown
+//   derivatives   0 forbidden, 1 permitted, 2 unknown
+//   commercial    0 forbidden, 1 permitted, 2 unknown
+//   evidence      evidence digest identity (0 = none)
+//   effective     opaque start time
+//   expires       opaque end time (0 = no expiry)
+//   revoked       0/1 revocation flag
+//   supersedes    claim id this claim supersedes (0 = none)
+//   verified      0/1 content-verification flag (host verification)
+//   contested     0/1 dispute flag
+//
+// Status lattice (discriminants pinned by corpus):
+//   Asserted 0, Verified 1, Contested 2, Superseded 3,
+//   Expired 4, Revoked 5, Incompatible 6, Unknown 7.
+
+module mncs.rights.claims.v01;
+
+enum ClaimStatus { Asserted, Verified, Contested, Superseded, Expired, Revoked, Incompatible, Unknown }
+
+record Claim {
+    id: u64,
+    subject: u64,
+    claimant: u64,
+    basis: u64,
+    license: u64,
+    attribution: u64,
+    redistribute: u64,
+    derivatives: u64,
+    commercial: u64,
+    evidence: u64,
+    effective: u64,
+    expires: u64,
+    revoked: u64,
+    supersedes: u64,
+    verified: u64,
+    contested: u64
+}
+
+// Canonical per-claim status. `superseded` is resolved by the caller
+// from supersession edges (another live claim names this one); the
+// core never walks graphs. Precedence is fixed and total:
+// Revoked > Expired > Superseded > Contested > Unknown (no evidence)
+// > Verified > Asserted.
+fn claim_status(item: Claim, now: u64, superseded: u64) -> (result: ClaimStatus) {
+    if item.revoked == 1 {
+        return ClaimStatus.Revoked;
+    }
+    if item.expires == 0 || now < item.expires {
+        if superseded == 1 {
+            return ClaimStatus.Superseded;
+        }
+        if item.contested == 1 {
+            return ClaimStatus.Contested;
+        }
+        if item.evidence == 0 {
+            return ClaimStatus.Unknown;
+        }
+        if item.verified == 1 {
+            return ClaimStatus.Verified;
+        }
+        return ClaimStatus.Asserted;
+    }
+    return ClaimStatus.Expired;
+}
+
+// Pure temporal projection: 0 live, 1 not-yet-effective,
+// 2 expired, 3 revoked. Revocation dominates time.
+fn temporal_state(effective: u64, expires: u64, now: u64, revoked: u64) -> (result: u64) {
+    if revoked == 1 {
+        return 3;
+    }
+    if expires == 0 || now < expires {
+        if now < effective {
+            return 1;
+        }
+        return 0;
+    }
+    return 2;
+}
+
+// Evidence freshness against exact identities: 0 current (nonzero
+// digests agree), 1 stale (they differ — conclusions must not migrate
+// silently), 2 missing (no evidence was ever bound), 3 unchecked
+// (freshness was never evaluated: UNKNOWN-flavored, never current).
+fn evidence_state(evidence: u64, current: u64, checked: u64) -> (result: u64) {
+    if checked == 0 {
+        return 3;
+    }
+    if evidence == 0 {
+        return 2;
+    }
+    if evidence == current {
+        return 0;
+    }
+    return 1;
+}
+
+// Mechanical compatibility of two claims over the three scope
+// dimensions (redistribute/derivatives/commercial, each 0 forbid,
+// 1 permit, 2 unknown): 0 compatible, 1 conflict, 2 unknown.
+// Unknown basis (5) on either side forces Unknown: the core does not
+// guess what an unreviewed basis permits. Forbid-vs-permit on any
+// shared dimension is a conflict both claims keep (reported, never
+// merged). Unknown scope against a decided scope is Unknown, not
+// consent: silence is not permission.
+fn basis_compatible(a_basis: u64, a_redistribute: u64, a_derivatives: u64, a_commercial: u64, b_basis: u64, b_redistribute: u64, b_derivatives: u64, b_commercial: u64) -> (result: u64) {
+    if a_basis == 5 || b_basis == 5 {
+        return 2;
+    }
+    let r: u64 = dim_compatible(a_redistribute, b_redistribute);
+    let d: u64 = dim_compatible(a_derivatives, b_derivatives);
+    let c: u64 = dim_compatible(a_commercial, b_commercial);
+    if r == 1 || d == 1 || c == 1 {
+        return 1;
+    }
+    if r == 2 || d == 2 || c == 2 {
+        return 2;
+    }
+    return 0;
+}
+
+fn dim_compatible(left: u64, right: u64) -> (result: u64) {
+    if left == 2 || right == 2 {
+        return 2;
+    }
+    if left == right {
+        return 0;
+    }
+    return 1;
+}
+
+// Attribution duty for one claim in a given status: 1 due, 0 not
+// due, 2 uncertain scope (non-live statuses: the core does not decide
+// what expired or revoked claims still require — that needs review).
+// Live claims with attribution required report due; the exact notice
+// text stays with the evidence, never guessed here.
+fn attribution_due(attribution: u64, status: ClaimStatus) -> (result: u64) {
+    return match status {
+        ClaimStatus.Asserted => select(attribution == 1, 1, 0),
+        ClaimStatus.Verified => select(attribution == 1, 1, 0),
+        ClaimStatus.Contested => 2,
+        ClaimStatus.Superseded => 2,
+        ClaimStatus.Expired => 2,
+        ClaimStatus.Revoked => 2,
+        ClaimStatus.Incompatible => 2,
+        ClaimStatus.Unknown => 2,
+    };
+}
+
+// Signed-assertion layering. A valid signature from an authorized
+// signer over verified content is Verified; a valid signature over
+// unverified content stays Asserted (a claim, not a fact); a valid
+// signature without signer authority is Contested (the disagreement
+// is preserved, not laundered); anything without a valid signature
+// is Unknown. Signature validity never implies legal authority or
+// truth on its own.
+fn signed_state(sig_valid: u64, signer_authorized: u64, content_verified: u64) -> (result: ClaimStatus) {
+    if sig_valid == 0 {
+        return ClaimStatus.Unknown;
+    }
+    if signer_authorized == 0 {
+        return ClaimStatus.Contested;
+    }
+    if content_verified == 1 {
+        return ClaimStatus.Verified;
+    }
+    return ClaimStatus.Asserted;
+}
+
+// Single-link supersession validity: 0 valid, 1 subject mismatch,
+// 2 successor basis unknown, 3 base not live. Chains compose
+// host-side over existing supersession edges; cycles and dangling
+// links surface through the query layer, never as silent heads.
+fn supersede_link_valid(base_live: u64, successor_known: u64, same_subject: u64) -> (result: u64) {
+    if same_subject == 0 {
+        return 1;
+    }
+    if successor_known == 0 {
+        return 2;
+    }
+    if base_live == 0 {
+        return 3;
+    }
+    return 0;
+}

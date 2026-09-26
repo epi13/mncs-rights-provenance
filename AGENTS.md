@@ -17,6 +17,11 @@ defined once in MNCS-language and mirrored in host code, never the reverse:
   verdicts (`combine_verdict`, `promotion_combined`, `authority_verdict`,
   `lineage_verdict`).
 - `language/check_projection.mncs` — Outcome to check-verdict projection.
+- `language/rights_claims.mncs` — per-claim rights status, conflict,
+  supersession, attribution, and UNKNOWN preservation (module
+  `mncs.rights.claims.v01`), mirrored in host code by
+  `src/mncs_rights_provenance/claims.py` (scalar mirror plus set-level
+  query layer, pinned by `tests/test_claims_host.py`).
 - `language/corpora/` plus `language/run_backend_tests.sh` — execution
   corpora with cross-backend agreement checks.
 

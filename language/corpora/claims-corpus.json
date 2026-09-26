@@ -1,0 +1,5574 @@
+{
+ "schema_version": "0.1",
+ "name": "rights-claims-v1",
+ "cases": [
+  {
+   "id": "status-revoked-dominates",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Revoked",
+      "discriminant": 5
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-expired",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 400,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Expired",
+      "discriminant": 4
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-expiry-boundary",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 500,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Expired",
+      "discriminant": 4
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-live-before-expiry",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 501,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Verified",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-no-expiry",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 1000000000000,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Verified",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-superseded",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Superseded",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-contested-beats-verified",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Contested",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-no-evidence-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Unknown",
+      "discriminant": 7
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-verified-flag-without-evidence-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Unknown",
+      "discriminant": 7
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-verified",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Verified",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-asserted",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Asserted",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-revoked-beats-contested",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Revoked",
+      "discriminant": 5
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-expired-beats-superseded",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Expired",
+      "discriminant": 4
+     }
+    }
+   ]
+  },
+  {
+   "id": "status-superseded-beats-contested",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "claim_status"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:mncs.rights.claims.v01::Claim::attribution%3Au64%3Bbasis%3Au64%3Bclaimant%3Au64%3Bcommercial%3Au64%3Bcontested%3Au64%3Bderivatives%3Au64%3Beffective%3Au64%3Bevidence%3Au64%3Bexpires%3Au64%3Bid%3Au64%3Blicense%3Au64%3Bredistribute%3Au64%3Brevoked%3Au64%3Bsubject%3Au64%3Bsupersedes%3Au64%3Bverified%3Au64%3B",
+       "name": "Claim",
+       "fields": [
+        [
+         "attribution",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "basis",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "claimant",
+         {
+          "integer": {
+           "value": 3,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "commercial",
+         {
+          "integer": {
+           "value": 2,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "contested",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "derivatives",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "effective",
+         {
+          "integer": {
+           "value": 100,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "evidence",
+         {
+          "integer": {
+           "value": 42,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "expires",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "id",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "license",
+         {
+          "integer": {
+           "value": 9,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "redistribute",
+         {
+          "integer": {
+           "value": 1,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "revoked",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "subject",
+         {
+          "integer": {
+           "value": 7,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "supersedes",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ],
+        [
+         "verified",
+         {
+          "integer": {
+           "value": 0,
+           "type": {
+            "bits": 64,
+            "signed": false
+           }
+          }
+         }
+        ]
+       ]
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Superseded",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "temporal-live",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "temporal_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 100,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "temporal-not-yet",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "temporal_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 600,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "temporal-expired",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "temporal_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 100,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 400,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "temporal-expiry-boundary",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "temporal_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 100,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "temporal-revoked-dominates",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "temporal_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 100,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 3,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "temporal-revoked-beats-expiry",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "temporal_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 100,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 400,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 500,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 3,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "evidence-current",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "evidence_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 42,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 42,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "evidence-stale",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "evidence_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 42,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 43,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "evidence-missing",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "evidence_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 43,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "evidence-unchecked",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "evidence_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 42,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 42,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 3,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "evidence-unchecked-beats-missing",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "evidence_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 3,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-permit-permit",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-forbid-forbid",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-redistribute-conflict",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-derivatives-conflict",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 3,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-commercial-conflict",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 4,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-unknown-basis",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 5,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-unknown-basis-other-side",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 5,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-unknown-scope",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "compat-conflict-beats-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "basis_compatible"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 2,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "attrib-asserted-required",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "attribution_due"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Asserted",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "attrib-verified-required",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "attribution_due"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Verified",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "attrib-verified-not-required",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "attribution_due"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Verified",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "attrib-asserted-not-required",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "attribution_due"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Asserted",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "attrib-expired-uncertain",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "attribution_due"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Expired",
+       "discriminant": 4
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "attrib-revoked-uncertain",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "attribution_due"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Revoked",
+       "discriminant": 5
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "attrib-unknown-uncertain",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "attribution_due"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Unknown",
+       "discriminant": 7
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "signed-none-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "signed_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Unknown",
+      "discriminant": 7
+     }
+    }
+   ]
+  },
+  {
+   "id": "signed-naked-sig-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "signed_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Unknown",
+      "discriminant": 7
+     }
+    }
+   ]
+  },
+  {
+   "id": "signed-no-authority-contested",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "signed_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Contested",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "signed-unverified-asserted",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "signed_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Asserted",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "signed-full-verified",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "signed_state"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.claims.v01::ClaimStatus",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.claims.v01::ClaimStatus::Verified",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "link-valid",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "supersede_link_valid"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "link-subject-mismatch",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "supersede_link_valid"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "link-basis-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "supersede_link_valid"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 2,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "link-base-not-live",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.claims.v01",
+     "function": "supersede_link_valid"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 0,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     },
+     {
+      "integer": {
+       "value": 1,
+       "type": {
+        "bits": 64,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 4096
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 3,
+      "type": {
+       "bits": 64,
+       "signed": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

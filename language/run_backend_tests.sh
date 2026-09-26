@@ -13,6 +13,9 @@
 #   records-of-enums) so its full corpus runs on both backends with agreement.
 # - c11/llvm-ir/cranelift: refuse records/payload sums at HEAD (scalar
 #   realization envelope); excluded until that expansion lands.
+# - rights-claims corpus runs on research-bytecode AND portable-wasm
+#   with agreement: its entry functions return bare enums/u64 (never
+#   records-of-enums), dodging finding LF-1 by construction.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -44,6 +47,7 @@ for backend in research-bytecode portable-wasm; do
     if ! run "$ROOT/language/rights_policy.mncs" "$backend" "$ROOT/language/corpora/$corpus" "$OUT/$backend"; then STATUS=1; fi
   done
   if ! run "$ROOT/language/pressure_provenance.mncs" "$backend" "$ROOT/language/corpora/pressure-verdict-corpus.json" "$OUT/$backend-pressure"; then STATUS=1; fi
+  if ! run "$ROOT/language/rights_claims.mncs" "$backend" "$ROOT/language/corpora/claims-corpus.json" "$OUT/$backend-claims"; then STATUS=1; fi
   if [ "$backend" = "research-bytecode" ]; then
     if ! run "$ROOT/language/rights_policy.mncs" "$backend" "$ROOT/language/corpora/gate-severities-corpus.json" "$OUT/$backend"; then STATUS=1; fi
   fi
@@ -54,10 +58,11 @@ echo "== cross-backend compare (evaluation corpus)"
   "$OUT/research-bytecode/result.json" \
   "$OUT/portable-wasm/result.json" >/dev/null 2>&1 || {
     # compare expects same corpus; evaluation corpus ran on both, so compare directly
-    python3 - <<'PY' || STATUS=1
+    python3 - <<PY || STATUS=1
 import json
-rb = json.load(open("/tmp/mncs-rp-backends/research-bytecode/result.json"))
-pw = json.load(open("/tmp/mncs-rp-backends/portable-wasm/result.json"))
+OUT = "$OUT"
+rb = json.load(open(f"{OUT}/research-bytecode/result.json"))
+pw = json.load(open(f"{OUT}/portable-wasm/result.json"))
 def outcomes(result):
     return {c["case_id"]: json.dumps(c.get("returned")) for c in result["cases"] if c["case_id"].startswith("evaluate")}
 left, right = outcomes(rb), outcomes(pw)
@@ -70,15 +75,32 @@ PY
 }
 
 echo "== cross-backend compare (pressure verdicts)"
-python3 - <<'PY' || STATUS=1
+python3 - <<PY || STATUS=1
 import json, glob
-rb = json.load(open("/tmp/mncs-rp-backends/research-bytecode-pressure/result.json"))
-pw = json.load(open("/tmp/mncs-rp-backends/portable-wasm-pressure/result.json"))
+OUT = "$OUT"
+rb = json.load(open(f"{OUT}/research-bytecode-pressure/result.json"))
+pw = json.load(open(f"{OUT}/portable-wasm-pressure/result.json"))
 def outcomes(result):
     return {c["case_id"]: json.dumps(c.get("returned"), sort_keys=True) for c in result["cases"]}
 left, right = outcomes(rb), outcomes(pw)
 mismatch = [k for k in left if left[k] != right.get(k)]
 print("   pressure agreement:", f"{len(left)-len(mismatch)}/{len(left)}")
+if mismatch:
+    print("   MISMATCH:", mismatch)
+    raise SystemExit(1)
+PY
+
+echo "== cross-backend compare (rights claims)"
+python3 - <<PY || STATUS=1
+import json
+OUT = "$OUT"
+rb = json.load(open(f"{OUT}/research-bytecode-claims/result.json"))
+pw = json.load(open(f"{OUT}/portable-wasm-claims/result.json"))
+def outcomes(result):
+    return {c["case_id"]: json.dumps(c.get("returned"), sort_keys=True) for c in result["cases"]}
+left, right = outcomes(rb), outcomes(pw)
+mismatch = [k for k in left if left[k] != right.get(k)]
+print("   claims agreement:", f"{len(left)-len(mismatch)}/{len(left)}")
 if mismatch:
     print("   MISMATCH:", mismatch)
     raise SystemExit(1)
