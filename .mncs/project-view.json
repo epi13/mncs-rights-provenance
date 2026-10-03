@@ -1,0 +1,24 @@
+{
+  "capabilities": [
+    {
+      "contract": "rights-provenance",
+      "fingerprint_sources": [
+        "language/",
+        "src/mncs_rights_provenance/",
+        "schemas/v0.3/"
+      ],
+      "kind": "mncs-library",
+      "stability": "experimental",
+      "version": "0.3.0"
+    }
+  ],
+  "dependencies": [],
+  "entry": [
+    "python3 -m pytest tests -q"
+  ],
+  "purpose": "Working rights-and-provenance subsystem for MNCS: machine-native provenance evidence, rights manifests, contribution attestations, release-policy evaluation, and SPDX interoperability, with uncertainty as a first-class state throughout.",
+  "repository": "mncs-rights-provenance",
+  "schema_version": "mncs.project-view/1",
+  "source_identity": "sha256:8e2248005e04488b5105cf430c566c1024152c53e2a769d28d5326d864fcfcb5",
+  "structure": {}
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "mncs.project-intent/1",
+  "purpose": "Working rights-and-provenance subsystem for MNCS: machine-native provenance evidence, rights manifests, contribution attestations, release-policy evaluation, and SPDX interoperability, with uncertainty as a first-class state throughout.",
+  "entry": [
+    "python3 -m pytest tests -q"
+  ],
+  "milestones": [
+    {
+      "id": "mncs-rights-provenance:projection-conformance",
+      "title": "Declared ambient projection surfaces satisfy their contract",
+      "subject_slot": "declarations",
+      "evidence": "projection-conformance",
+      "dependencies": [],
+      "blockers": []
+    }
+  ]
+}
