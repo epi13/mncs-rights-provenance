@@ -1,6 +1,19 @@
 # MNCS Rights & Provenance
 
 <!-- MNCS:generated:begin -->
+## Project entry
+
+Working rights-and-provenance subsystem for MNCS: machine-native provenance evidence, rights manifests, contribution attestations, release-policy evaluation, and SPDX interoperability, with uncertainty as a first-class state throughout.
+
+```bash
+python3 -m pytest tests -q
+```
+
+Declared capabilities (declarations do not establish execution health):
+
+- `rights-provenance/0.3.0` — mncs-library (experimental)
+
+Semantic sources and ownership: `.mncs/projections.json`.
 <!-- MNCS:generated:end -->
 
 A working rights-and-provenance subsystem for the MNCS ecosystem: machine-native
