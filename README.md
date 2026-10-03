@@ -1,5 +1,8 @@
 # MNCS Rights & Provenance
 
+<!-- MNCS:generated:begin -->
+<!-- MNCS:generated:end -->
+
 A working rights-and-provenance subsystem for the MNCS ecosystem: machine-native
 provenance evidence, rights manifests, contribution attestations, release-policy
 evaluation, and SPDX interoperability.
