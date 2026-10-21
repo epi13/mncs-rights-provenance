@@ -279,6 +279,11 @@ def test_license_candidate_registry_is_valid_and_points_to_the_unadopted_draft()
     assert candidate["effective_grant"] is False
     assert candidate["retroactive_application"] is False
     assert candidate["adoption_authority"] is None
+    assert {
+        "patent-licensed-acts-and-term",
+        "covered-work-contributor-and-contribution-definitions",
+        "patent-combination-scope",
+    } <= set(candidate["legal_review_decisions"])
     assert (ROOT / candidate["text_ref"]).is_file()
 
 

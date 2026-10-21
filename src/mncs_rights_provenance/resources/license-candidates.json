@@ -13,6 +13,9 @@
       "declared_rights_prove_authority": false,
       "legal_review_decisions": [
         "patent-grant-scope",
+        "patent-licensed-acts-and-term",
+        "covered-work-contributor-and-contribution-definitions",
+        "patent-combination-scope",
         "patent-litigation-response",
         "contributor-authority-and-third-party-rights",
         "machine-generated-authorship-and-ownership",

@@ -17,3 +17,7 @@ THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. TO THE EXTENT PERMIT
 ## Review notes
 
 The permission and notice structure is intentionally short. The patent clause is modeled on the contribution-limited approach in BSD-2-Clause-Patent; the candidate does not reproduce Apache-2.0's broader notice file, modified-file, contribution, or patent termination framework. The existing Apache-2.0 license remains operative for this repository. Counsel must decide the final wording, grant scope, and whether any patent-litigation response belongs in a later version.
+
+### Drafting review note — 2026-10-21
+
+The patent paragraph is incomplete as a grant description. It does not enumerate the licensed patent acts, define the term and other scope attributes, or define `covered work`, `contributor`, and `contribution`. Its combination boundary also needs a deliberate rule. Do not infer that this paragraph grants a complete or verified patent license. A later candidate revision should resolve these points before legal review; this note does not amend or adopt the draft terms.

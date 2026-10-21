@@ -1,0 +1,75 @@
+{
+  "schema_version": "mncs.rights-provenance.license-candidate-review-evidence/1",
+  "observed_at": "2026-10-21T16:38:12Z",
+  "candidate": {
+    "identifier": "LicenseRef-MNCS-Permissive-0.1",
+    "version": "0.1",
+    "status": "draft-for-legal-review",
+    "adoption_status": "not-adopted",
+    "effective_grant": false,
+    "repository_license_unchanged": "Apache-2.0"
+  },
+  "review_scope": "Textual comparison of permissive-license grant and notice structures, with attention to whether the current patent paragraph is fully specified. This is not a legal opinion.",
+  "sources": [
+    {
+      "identifier": "MIT",
+      "authority": "Open Source Initiative",
+      "url": "https://opensource.org/license/mit",
+      "observations": [
+        "The published text grants broad copyright permissions with a notice condition and warranty/liability disclaimer.",
+        "The published text contains no express patent grant."
+      ]
+    },
+    {
+      "identifier": "BSD-2-Clause",
+      "authority": "SPDX License List",
+      "url": "https://spdx.org/licenses/BSD-2-Clause.html",
+      "observations": [
+        "The published text distinguishes source redistribution notice retention from binary redistribution notice reproduction."
+      ]
+    },
+    {
+      "identifier": "BSD-2-Clause-Patent",
+      "authority": "SPDX License List",
+      "url": "https://spdx.org/licenses/BSD-2-Clause-Patent.html",
+      "observations": [
+        "The published text enumerates patent-licensed acts and specifies term and other grant attributes.",
+        "The claim boundary is contribution-linked and separately constrains combinations.",
+        "The published text has no patent-litigation termination clause."
+      ]
+    },
+    {
+      "identifier": "Apache-2.0",
+      "authority": "Apache Software Foundation",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+      "observations": [
+        "The published text defines contribution-linked patent scope and enumerates licensed acts.",
+        "It terminates patent licenses for a specified class of patent litigation.",
+        "It includes broader redistribution, modified-file, contribution, and conditional NOTICE provisions."
+      ]
+    }
+  ],
+  "candidate_gap": {
+    "path": "legal-candidates/MNCS-Permissive-0.1.md",
+    "section": "patent grant",
+    "unresolved_dimensions": [
+      "licensed patent acts",
+      "grant term and other scope attributes",
+      "definition of covered work",
+      "definition of contributor and contribution",
+      "combination boundary"
+    ],
+    "conclusion": "The current paragraph is an incomplete draft description; it must not be treated as a fully specified or verified patent license."
+  },
+  "next_draft_decisions": [
+    "Whether an express patent grant is needed for MNCS at all.",
+    "Which patent acts, term, territory, fee, and irrevocability attributes to grant.",
+    "Which contributions and combinations fall within the grant and when the combination boundary is measured.",
+    "Whether any patent-litigation response term belongs in a later version."
+  ],
+  "limits": [
+    "This comparison does not assess enforceability, jurisdiction-specific effects, or license compatibility.",
+    "The candidate remains unadopted and has no effective grant.",
+    "No existing repository license or contribution was changed."
+  ]
+}

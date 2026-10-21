@@ -6,9 +6,9 @@ The candidate keeps a short MIT/BSD-style copyright permission and notice condit
 
 | Reference | Relevant structure | Candidate decision |
 |---|---|---|
-| [MIT](https://spdx.org/licenses/MIT.html) | Broad permission to use, modify, distribute, sublicense, and sell; preserve copyright and permission notices; warranty and liability disclaimer; no express patent grant in the text. | Use as a model for short, broad copyright permissions and familiar notice language. |
+| [MIT](https://opensource.org/license/mit) | Broad permission to use, modify, distribute, sublicense, and sell; preserve copyright and permission notices; warranty and liability disclaimer; no express patent grant in the text. | Use as a model for short, broad copyright permissions and familiar notice language. |
 | [BSD-2-Clause](https://spdx.org/licenses/BSD-2-Clause.html) | Source and binary redistribution conditions preserve or reproduce notices, conditions, and disclaimer. | Keep notice obligations clear for source and compiled forms. |
-| [BSD-2-Clause-Patent](https://spdx.org/licenses/BSD-2-Clause-Patent.html) | BSD-style notice conditions plus an express contribution-limited patent grant; the text does not use Apache-2.0's patent-litigation termination clause. | Use as a reference for the proposed narrow patent scope; leave retaliation absent pending deliberate review. |
+| [BSD-2-Clause-Patent](https://spdx.org/licenses/BSD-2-Clause-Patent.html) | BSD-style notice conditions plus an express patent grant that names licensed acts, scope terms, and contribution/combination boundaries. | Use as a drafting reference only. The 0.1 patent paragraph is incomplete; leave retaliation absent pending deliberate review. |
 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html) | Explicit copyright and patent grants, contributor-linked scope, patent-litigation termination, modified-file notices, license-copy and conditional NOTICE obligations. | Keep as the current repository license. A new candidate should not recreate all of Apache-2.0's framework unless MNCS needs it. |
 
 The machine-readable summary identifies license text, a small set of notice conditions, and explicit patent scope where stated. It leaves cross-license compatibility and ownership unresolved. A declared license or contributor assertion does not prove authority to grant rights. Machine assistance or generation does not itself establish who owns copyright.
@@ -28,3 +28,17 @@ candidate, not a replacement for an effective repository license.
 - Whether a patent-litigation response clause is desirable and what scope it could safely cover.
 - How to handle works whose copyright ownership is unclear, including machine-generated material.
 - Final notice, trademark, and disclaimer language under applicable jurisdictions.
+
+## Drafting finding
+
+The 0.1 candidate's patent paragraph identifies a contributor-limited claim
+class, but does not enumerate licensed patent acts or define the grant's term,
+`covered work`, `contributor`, or `contribution`. It also does not settle which
+combinations fall within the grant. The BSD-2-Clause-Patent text makes those
+boundaries explicit, while Apache-2.0 also defines contributor relationships
+and includes a patent-litigation termination condition. These are candidate
+design references, not terms MNCS has adopted. Keep patent rights unresolved
+until a later draft records the decisions and receives legal review.
+
+The reviewed source observations and their limits are recorded in
+`evidence/license-candidate-patent-drafting-review-20261021.json`.
