@@ -19,7 +19,17 @@ from typing import Any
 
 from .canonical import sha256_hex
 
-_SPDX_ID_RE = re.compile(r"^[A-Za-z0-9.\-]+$")
+_IDSTRING = r"[A-Za-z0-9.-]+"
+_LICENSE_REF_RE = re.compile(
+    rf"^(?:(?i:DocumentRef-){_IDSTRING}:)?(?i:LicenseRef-){_IDSTRING}$"
+)
+_LICENSE_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9.-]*\+?$")
+_EXCEPTION_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9.-]*$")
+_TOKEN_RE = re.compile(
+    rf"\s*(\(|\)|AND\b|OR\b|WITH\b|"
+    rf"(?:(?i:DocumentRef-){_IDSTRING}:)?(?i:LicenseRef-){_IDSTRING}|"
+    rf"[A-Za-z0-9][A-Za-z0-9.-]*\+?)"
+)
 
 _KNOWN_SIMPLE = {
     "MIT",
@@ -42,32 +52,112 @@ _KNOWN_SIMPLE = {
 
 
 def is_valid_spdx_expression(expression: str) -> bool:
-    """Conservative structural check; NOT a full SPDX parser or validator."""
-    if not expression or len(expression) > 256:
+    """Check SPDX 2.3 expression shape without asserting list membership.
+
+    License identifiers that this package does not recognize remain valid
+    syntax and are resolved as unknown terms. This parser validates operator
+    placement, grouping, ``WITH`` shape, and local/external ``LicenseRef``
+    syntax; it is not a license-list or legal-compatibility validator.
+    """
+    try:
+        parse_spdx_expression(expression)
+    except (TypeError, ValueError):
         return False
-    cleaned = expression.strip()
-    if cleaned != expression or "\n" in expression or "\t" in expression:
-        return False
-    depth = 0
-    for token in cleaned.replace("(", " ( ").replace(")", " ) ").split():
-        if token == "(":
-            depth += 1
-            if depth > 8:
-                return False
-            continue
-        if token == ")":
-            depth -= 1
-            if depth < 0:
-                return False
-            continue
-        if token in {"AND", "OR"}:
-            continue
-        if not _SPDX_ID_RE.match(token):
-            return False
-        first = token[0]
-        if not (first.isalpha() or first.isdigit()):
-            return False
-    return depth == 0
+    return True
+
+
+class _SPDXExpressionParser:
+    def __init__(self, expression: str) -> None:
+        if (not isinstance(expression, str) or not expression
+                or len(expression) > 256 or expression.strip() != expression
+                or "\n" in expression or "\r" in expression or "\t" in expression):
+            raise ValueError("invalid SPDX expression text")
+        self.tokens: list[str] = []
+        offset = 0
+        while offset < len(expression):
+            match = _TOKEN_RE.match(expression, offset)
+            if match is None:
+                raise ValueError("unsupported SPDX expression syntax")
+            self.tokens.append(match.group(1))
+            offset = match.end()
+        self.offset = 0
+        self.depth = 0
+
+    def parse(self) -> dict[str, Any]:
+        if not self.tokens:
+            raise ValueError("missing SPDX license expression")
+        value, _ = self._or()
+        if self.offset != len(self.tokens):
+            raise ValueError("unexpected SPDX expression token")
+        return value
+
+    def _or(self) -> tuple[dict[str, Any], bool]:
+        children = [self._and()]
+        while self._peek("OR"):
+            self.offset += 1
+            children.append(self._and())
+        values = [value for value, _ in children]
+        return (values[0] if len(values) == 1 else
+                {"operator": "OR", "terms": values}, len(values) == 1 and children[0][1])
+
+    def _and(self) -> tuple[dict[str, Any], bool]:
+        children = [self._with()]
+        while self._peek("AND"):
+            self.offset += 1
+            children.append(self._with())
+        values = [value for value, _ in children]
+        return (values[0] if len(values) == 1 else
+                {"operator": "AND", "terms": values}, len(values) == 1 and children[0][1])
+
+    def _with(self) -> tuple[dict[str, Any], bool]:
+        value, simple = self._atom()
+        if not self._peek("WITH"):
+            return value, simple
+        if not simple:
+            raise ValueError("WITH must follow a simple SPDX expression")
+        self.offset += 1
+        if self.offset >= len(self.tokens):
+            raise ValueError("WITH must be followed by an exception identifier")
+        exception = self.tokens[self.offset]
+        if not _EXCEPTION_ID_RE.fullmatch(exception):
+            raise ValueError("WITH must be followed by an exception identifier")
+        self.offset += 1
+        return {"license": value["license"], "exception": exception}, True
+
+    def _atom(self) -> tuple[dict[str, Any], bool]:
+        if self._peek("("):
+            if self.depth >= 8:
+                raise ValueError("SPDX expression nesting exceeds 8 levels")
+            self.offset += 1
+            self.depth += 1
+            value, _ = self._or()
+            if not self._peek(")"):
+                raise ValueError("unclosed SPDX expression group")
+            self.offset += 1
+            self.depth -= 1
+            return value, False
+        if self.offset >= len(self.tokens):
+            raise ValueError("missing SPDX license identifier")
+        identifier = self.tokens[self.offset]
+        if identifier in {"AND", "OR", "WITH", ")"}:
+            raise ValueError("missing SPDX license identifier")
+        if not (_LICENSE_REF_RE.fullmatch(identifier)
+                or _LICENSE_ID_RE.fullmatch(identifier)):
+            raise ValueError("invalid SPDX license identifier or reference")
+        self.offset += 1
+        return {"license": identifier}, True
+
+    def _peek(self, token: str) -> bool:
+        return self.offset < len(self.tokens) and self.tokens[self.offset] == token
+
+
+def parse_spdx_expression(expression: str) -> dict[str, Any]:
+    """Parse SPDX 2.3 expression structure while preserving identifiers.
+
+    The returned tree preserves OR alternatives and AND obligations. It does
+    not verify that an identifier exists in the SPDX License List.
+    """
+    return _SPDXExpressionParser(expression).parse()
 
 
 def export_spdx(
@@ -250,4 +340,9 @@ def _copyright_text(rights: Mapping[str, Any]) -> str:
     return "UNDETERMINED (MNCS copyright-status: " + status + ")"
 
 
-__all__ = ["export_spdx", "import_spdx_sources", "is_valid_spdx_expression"]
+__all__ = [
+    "export_spdx",
+    "import_spdx_sources",
+    "is_valid_spdx_expression",
+    "parse_spdx_expression",
+]

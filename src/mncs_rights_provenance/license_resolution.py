@@ -14,12 +14,16 @@ import re
 from importlib.resources import files
 from typing import Any
 
-from .spdx import is_valid_spdx_expression
+from .spdx import parse_spdx_expression
 
-RESOLUTION_SCHEMA = "mncs.rights.license-resolution/1"
+RESOLUTION_SCHEMA = "mncs.rights.license-resolution/2"
 _CANDIDATE_REGISTRY_REF = "mncs_rights_provenance/resources/license-candidates.json"
 
-_TOKENS = re.compile(r"\s*(\(|\)|AND\b|OR\b|[A-Za-z0-9][A-Za-z0-9.+-]*)")
+_LOCAL_LICENSE_REF = re.compile(r"^LicenseRef-[A-Za-z0-9.-]+$", re.IGNORECASE)
+_DOCUMENT_LICENSE_REF = re.compile(
+    r"^DocumentRef-[A-Za-z0-9.-]+:LicenseRef-[A-Za-z0-9.-]+$",
+    re.IGNORECASE,
+)
 
 # Each entry is a short machine-readable index to the identified license text,
 # not an independent grant or an exhaustive legal interpretation.
@@ -102,11 +106,12 @@ def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
     if not isinstance(entries, list):
         raise TypeError("packaged license candidate registry has no candidate list")
     candidates: dict[str, dict[str, Any]] = {}
+    folded_identifiers: set[str] = set()
     for entry in entries:
         if (
             not isinstance(entry, dict)
             or not isinstance(entry.get("identifier"), str)
-            or entry["identifier"] in candidates
+            or entry["identifier"].casefold() in folded_identifiers
             or not isinstance(entry.get("version"), str)
             or not entry["version"]
             or entry.get("status") != "draft-for-legal-review"
@@ -120,18 +125,24 @@ def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
         ):
             raise TypeError("packaged license candidate registry has an invalid entry")
         candidates[entry["identifier"]] = entry
+        folded_identifiers.add(entry["identifier"].casefold())
     if not candidates:
         raise RuntimeError("packaged license candidate registry is empty")
     return candidates, "sha256:" + hashlib.sha256(registry_bytes).hexdigest()
 
 
 _CANDIDATES, _CANDIDATE_REGISTRY_DIGEST = _load_license_candidates()
+_CANDIDATE_IDENTIFIERS = {
+    identifier.casefold(): identifier for identifier in _CANDIDATES
+}
+_TERM_IDENTIFIERS = {identifier.casefold(): identifier for identifier in _TERMS}
 
 
 def license_resolver_identity() -> str:
-    """Return the content identity of the bounded license term index."""
+    """Return the content identity of the parser and bounded license term index."""
     value = {
         "schema_version": RESOLUTION_SCHEMA,
+        "expression_parser": "spdx-2.3-license-expression/1",
         "terms": _TERMS,
         "candidate_registry_sha256": _CANDIDATE_REGISTRY_DIGEST,
     }
@@ -139,66 +150,6 @@ def license_resolver_identity() -> str:
         value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
     ).encode("utf-8")
     return "sha256:" + hashlib.sha256(encoded).hexdigest()
-
-
-class _ExpressionParser:
-    def __init__(self, expression: str) -> None:
-        tokens: list[str] = []
-        offset = 0
-        while offset < len(expression):
-            match = _TOKENS.match(expression, offset)
-            if match is None:
-                raise ValueError("unsupported SPDX expression syntax")
-            tokens.append(match.group(1))
-            offset = match.end()
-        self.tokens = tokens
-        self.offset = 0
-
-    def parse(self) -> dict[str, Any]:
-        value = self._or()
-        if self.offset != len(self.tokens):
-            raise ValueError("unexpected SPDX expression token")
-        return value
-
-    def _or(self) -> dict[str, Any]:
-        children = [self._and()]
-        while self._peek("OR"):
-            self.offset += 1
-            children.append(self._and())
-        return children[0] if len(children) == 1 else {"operator": "OR", "terms": children}
-
-    def _and(self) -> dict[str, Any]:
-        children = [self._atom()]
-        while self._peek("AND"):
-            self.offset += 1
-            children.append(self._atom())
-        return children[0] if len(children) == 1 else {"operator": "AND", "terms": children}
-
-    def _atom(self) -> dict[str, Any]:
-        if self._peek("("):
-            self.offset += 1
-            value = self._or()
-            if not self._peek(")"):
-                raise ValueError("unclosed SPDX expression group")
-            self.offset += 1
-            return value
-        if self.offset >= len(self.tokens) or self.tokens[self.offset] in {"AND", "OR", ")"}:
-            raise ValueError("missing SPDX license identifier")
-        identifier = self.tokens[self.offset]
-        self.offset += 1
-        if identifier == "WITH":
-            raise ValueError("WITH must follow a license identifier")
-        if self._peek("WITH"):
-            self.offset += 1
-            if self.offset >= len(self.tokens) or self.tokens[self.offset] in {"AND", "OR", ")", "WITH"}:
-                raise ValueError("WITH must be followed by an exception identifier")
-            exception = self.tokens[self.offset]
-            self.offset += 1
-            return {"license": identifier, "exception": exception}
-        return {"license": identifier}
-
-    def _peek(self, token: str) -> bool:
-        return self.offset < len(self.tokens) and self.tokens[self.offset] == token
 
 
 def resolve_license_expression(expression: str) -> dict[str, Any]:
@@ -212,9 +163,7 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
             "compatibility": {"status": "unknown", "reason": "expression was not resolved"},
         }
     try:
-        if not is_valid_spdx_expression(expression):
-            raise ValueError("invalid SPDX expression shape")
-        tree = _ExpressionParser(expression).parse()
+        tree = parse_spdx_expression(expression)
     except ValueError as error:
         return {
             "schema_version": RESOLUTION_SCHEMA,
@@ -238,10 +187,11 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
                     "exception": exception,
                     "status": "unknown-license-exception-terms",
                 }
-            candidate = _CANDIDATES.get(identifier)
+            candidate_identifier = _CANDIDATE_IDENTIFIERS.get(identifier.casefold())
+            candidate = _CANDIDATES.get(candidate_identifier) if candidate_identifier else None
             if candidate is not None:
-                unresolved.append(identifier)
-                candidate_references.add(identifier)
+                unresolved.append(candidate_identifier)
+                candidate_references.add(candidate_identifier)
                 return {
                     "license": identifier,
                     "status": "candidate-unapproved",
@@ -254,7 +204,24 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
                     "registry_ref": _CANDIDATE_REGISTRY_REF,
                     "registry_sha256": _CANDIDATE_REGISTRY_DIGEST,
                 }
-            terms = _TERMS.get(identifier)
+            if _DOCUMENT_LICENSE_REF.fullmatch(identifier):
+                unresolved.append(identifier)
+                return {
+                    "license": identifier,
+                    "status": "unresolved-license-reference",
+                    "reference_kind": "external-document-license-ref",
+                    "reason": "the referenced SPDX document and its extracted license terms were not supplied",
+                }
+            if _LOCAL_LICENSE_REF.fullmatch(identifier):
+                unresolved.append(identifier)
+                return {
+                    "license": identifier,
+                    "status": "unresolved-license-reference",
+                    "reference_kind": "document-local-license-ref",
+                    "reason": "the document-local extracted license terms were not supplied",
+                }
+            terms_identifier = _TERM_IDENTIFIERS.get(identifier.casefold())
+            terms = _TERMS.get(terms_identifier) if terms_identifier else None
             if terms is None:
                 unresolved.append(identifier)
                 return {"license": identifier, "status": "unknown-license-terms"}

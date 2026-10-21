@@ -179,7 +179,7 @@ def build_agent_context(
     )
     expression = rights.get("distribution_license")
     license_resolution: dict[str, Any] = resolve_license_expression(expression) if isinstance(expression, str) else {
-        "schema_version": "mncs.rights.license-resolution/1",
+        "schema_version": "mncs.rights.license-resolution/2",
         "expression": None,
         "status": "unresolved",
         "reason": "distribution license is absent",
@@ -400,7 +400,7 @@ def build_agent_context(
     if candidate_registry_source is not None:
         context_sources["license_candidate_registry"] = candidate_registry_source
     license_resolver_source = {
-        "reference": "mncs_rights_provenance.license_resolution/1",
+        "reference": "mncs_rights_provenance.license_resolution/2",
         "sha256": license_resolver_identity(),
     }
     context_sources["license_resolver"] = license_resolver_source
