@@ -127,14 +127,15 @@ service, although the process serving that tool call was not mapped to a
 specific PID. No shared service was restarted. The observation and its limits
 are recorded in
 `evidence/rights-handoff-context-transport-freshness-20261021.json`; repeat the
-read-only context request after the normal MCP lifecycle refresh. Coordination
-cleanup also exposed a Control bridge mismatch: it forwards an expected Store
-generation on claim release although the Environment CLI accepts that fence
-only on acquire. The temporary main claim remained held after the rejected
-attempt and released successfully without the unsupported fence. A separate
-active Control worktree claim was left untouched. The same evidence record
-preserves these observations. The current v1 binding resolves paths from the
-workspace root, so the Rights definition points at the canonical workspace
+read-only context request after the normal MCP lifecycle refresh. The claim
+cleanup observation initially exposed a Control bridge mismatch: it forwarded
+an expected Store generation on release although the Environment CLI accepts
+that fence only on acquire. Control commit `8f4c9eae` now rejects that argument
+before RPC while preserving generation fencing on acquire; all 25 tests in the
+Control bridge test file pass. A separate active Control worktree for the typed
+Compiler build gate remained untouched. The evidence record preserves the
+failure, safe release, and repair. The current v1 binding resolves paths from
+the workspace root, so the Rights definition points at the canonical workspace
 checkout. The separate Environment worktree adds selected-checkout scope; until
 that contract is integrated, rights changes that exist only in another
 worktree do not update this project's admission context.

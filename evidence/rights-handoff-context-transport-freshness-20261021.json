@@ -1,6 +1,6 @@
 {
   "schema_version": "mncs.rights-provenance.context-transport-freshness-evidence/1",
-  "observed_at": "2026-10-21T13:52:16Z",
+  "observed_at": "2026-10-21T14:14:03Z",
   "project": "mncs-rights-provenance",
   "session_id": "ses_de553dd5fd5d1178",
   "connected_tool_observation": {
@@ -11,7 +11,7 @@
   },
   "fresh_bridge_observation": {
     "control_repository": "mncs-control-mcp",
-    "control_main_commit": "f1cc2437fcc8b0ff92bb2adad875aa9ddf677131",
+    "control_main_commit": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
     "projection_change_commit": "a37aa686",
     "projection_change_time_utc": "2026-10-21T10:09:41Z",
     "interface": "LocalEnvironmentMCP.invoke(context)",
@@ -19,6 +19,20 @@
     "rights_context_present": true,
     "rights_context_identity": "sha256:40b482ba2b76f8aba72df8d47031d0a36e7b67d4c50c81ba9b7996bb2d729576",
     "rights_context_status": "review"
+  },
+  "recheck_after_control_fix": {
+    "observed_at": "2026-10-21T14:14:03Z",
+    "connected_tool": {
+      "operation": "context",
+      "session_id": "ses_de553dd5fd5d1178",
+      "rights_context_present": false
+    },
+    "current_source_bridge": {
+      "control_main_commit": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
+      "rights_context_present": true,
+      "identity": "sha256:40b482ba2b76f8aba72df8d47031d0a36e7b67d4c50c81ba9b7996bb2d729576",
+      "status": "review"
+    }
   },
   "bridge_process_freshness": {
     "enumerated_process_count": 3,
@@ -32,7 +46,7 @@
   },
   "assessment": {
     "state": "strong-inference",
-    "summary": "The connected MCP omits a rights context that the same Environment RPC returns to a fresh bridge using current Control source. Every enumerated bridge process predates the pass-through change, consistent with stale service code.",
+    "summary": "At the latest recheck, the connected MCP still omits a rights context that the same Environment RPC returns to a fresh bridge using current Control main. All three enumerated bridge processes still predate the pass-through change, consistent with stale service code.",
     "limits": [
       "The PID serving the connected tool request was not identified among the enumerated processes.",
       "A fresh local bridge invocation verifies current source and RPC behavior, not a refreshed connected MCP service.",
@@ -63,6 +77,6 @@
       "status": "held",
       "action": "No files in that worktree or branch were modified."
     },
-    "assessment": "The Control bridge currently forwards an expected Store generation on release even though the Environment CLI accepts that fence only on acquire. The main claim was released using the supported form. No Control code change was made while a separate Control worktree claim remained active."
+    "assessment": "The Control bridge initially forwarded an expected Store generation on release even though the Environment CLI accepts that fence only on acquire. The main claim was released using the supported form. Control commit 8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c now rejects this unsupported argument before RPC, and its full bridge test file passes. The separate typed Compiler build-gate worktree remained untouched."
   }
 }
