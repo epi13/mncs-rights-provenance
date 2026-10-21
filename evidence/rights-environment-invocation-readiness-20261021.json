@@ -1,0 +1,110 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-invocation-evidence/1",
+  "observed_at": "2026-10-21T16:34:00Z",
+  "project": "mncs-rights-provenance",
+  "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+  "session_id": "ses_973d1b67eb66857e",
+  "implementation_commit": "5f483ffff775918f60e6a032a88e0a00700623be",
+  "implementation": {
+    "project_manifest_revision": 2,
+    "capability": "mncs-rights-provenance:rights-provenance",
+    "effects": ["read"],
+    "invocation": [
+      "python",
+      "scripts/environment_rights_validate.py",
+      "validate",
+      "RIGHTS.json",
+      "--findings-are-not-failures"
+    ],
+    "timeout_seconds": 30,
+    "result": {
+      "state": "review-required",
+      "legal_conclusion": "NOT_MADE",
+      "manifest_identity_matches": true
+    }
+  },
+  "validation": {
+    "tests": {
+      "command": "python -m pytest tests/test_environment_invocation.py -q -rA",
+      "state": "passed"
+    },
+    "lint": {
+      "command": "ruff check scripts/environment_rights_validate.py tests/test_environment_invocation.py",
+      "state": "passed"
+    },
+    "environment_descriptor_resolution": {
+      "addressing": "descriptor",
+      "availability": "available",
+      "transport": "ok",
+      "returncode": 0,
+      "identity_matches": true,
+      "state": "review-required",
+      "legal_conclusion": "NOT_MADE"
+    }
+  },
+  "environment_observations": {
+    "readiness": {
+      "state": "ready",
+      "unknown_count": 0,
+      "unavailable_count": 0,
+      "available_capabilities": [
+        "mncs-rights-provenance:rights-provenance",
+        "mncs-rights-provenance:test/rights-provenance-tests"
+      ]
+    },
+    "connected_context": {
+      "operation": "context",
+      "rights_context_present": false,
+      "resumed_session_recheck_present": false
+    },
+    "canonical_cli_context": {
+      "operation": "mncs-env context",
+      "rights_context_present": true,
+      "status": "review",
+      "stored_binding_references": [
+        "RIGHTS.json",
+        "governance/agent-governance.json"
+      ],
+      "unavailable_at_workspace_root": [
+        "/home/epi13/Documents/Projects/RIGHTS.json",
+        "/home/epi13/Documents/Projects/governance/agent-governance.json"
+      ],
+      "resume_refreshed_binding": false,
+      "interpretation": "The persisted session retained an earlier binding while the current project definition names the canonical workspace checkout. No legal status is inferred from the incomplete context."
+    },
+    "project_view": {
+      "projection": "mncs-rights-provenance:project-view",
+      "apply_state": "deferred",
+      "reason": "structure-verdict-provider-unbound",
+      "provider_capability": "mncs-doctor:projection-health",
+      "environment_store_evidence": "mncs-store:ses_973d1b67eb66857e:projections:74921befab3891ee2f12320dd6dacf503cf224871d1114a91fc228ec0b8a7687",
+      "projected_file_modified": false,
+      "control_operation_available": false
+    }
+  },
+  "coordination": {
+    "our_worktree_claims": [
+      "claim:mncs-rights-provenance:worktree:38bf523f7028",
+      "claim:mncs-rights-provenance:worktree:48f5c4109182"
+    ],
+    "other_active_work": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "session_id": "ses_a6a27331d7d348b9",
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "status": "held",
+      "modified": false
+    },
+    "interference": "none; the other agent's claim and worktree were left unchanged"
+  },
+  "delivery": {
+    "feature_branch": "campaign/luna-max-spdx-import-evidence-20261021",
+    "main_commit": "5f483ffff775918f60e6a032a88e0a00700623be",
+    "origin_main_commit": "5f483ffff775918f60e6a032a88e0a00700623be",
+    "state": "pushed"
+  },
+  "limits": [
+    "A review-required validator result is not a legal conclusion.",
+    "The context transport and stored-binding refresh gaps remain unresolved.",
+    "Projection application was not completed because its Doctor authority was unbound in this session."
+  ]
+}

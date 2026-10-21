@@ -144,3 +144,23 @@ the workspace root, so the Rights definition points at the canonical workspace
 checkout. The separate Environment worktree adds selected-checkout scope; until
 that contract is integrated, rights changes that exist only in another
 worktree do not update this project's admission context.
+
+On 2026-10-21, the Rights provider was declared as a bounded, read-only
+Environment invocation. Live readiness now reports `ready` with zero unknown
+capabilities, and the provider and targeted test capability are available.
+The connected Environment MCP context operation still omits `rights_context`.
+A canonical `mncs-env context` read of the persisted session does contain the
+field, but returns `review`: its stored binding still uses checkout-relative
+`RIGHTS.json` and `governance/agent-governance.json` references, which resolve
+at the workspace root and are unavailable. The current project definition
+points to the canonical workspace checkout; a normal `resume` did not refresh
+the stored binding. The observation is recorded in
+`evidence/rights-environment-invocation-readiness-20261021.json`.
+
+The generated `.mncs/project-view.json` also remains pending. A targeted
+Environment projection apply was safely deferred because
+`mncs-doctor:projection-health` is unbound in this Rights-only selected scope;
+no projection bytes were written. Control does not expose the `projections`
+operation through its operation contract. Repairing that requires the active
+Environment integration or an explicitly authorized provider scope, so this
+campaign left its Environment and Doctor worktrees untouched.
