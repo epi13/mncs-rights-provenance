@@ -1,0 +1,82 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-context-probe-evidence/1",
+  "identity": "ev_rights_context_fresh_entry_20261021",
+  "observed_at": "2026-10-21T20:31:20Z",
+  "follows_evidence": "ev_rights_context_runtime_projection_20261021",
+  "source_revisions": {
+    "rights_main": "2688f5268fab5b1f491bd7f06a344d3ba8e790a4",
+    "environment_main": "54e6412e0f114f8f49349739a52166a8e6b0135b",
+    "control_main": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c"
+  },
+  "fresh_admission": {
+    "live_mcp_operation": "enter",
+    "definition": ".mncs/environment.json",
+    "new_session": true,
+    "session_id": "ses_f554c8a999e32d25",
+    "campaign_id": "cmp_ff3f91cb1a6badbf",
+    "environment_id": "renv_accf812dab47967d",
+    "definition_id": "env_844e2a58825f7226",
+    "result": "ready",
+    "mcp_rights_context_present": false,
+    "session_snapshot_rights_context": {
+      "present": true,
+      "identity": "sha256:da54ac4d6faaacb1a53caadcdf8b201e3feb817ef4012dd8d15b7b6e36bc22de",
+      "status": "review",
+      "diagnostic_codes": [
+        "copyright-status-unresolved",
+        "rights-basis-unknown",
+        "third-party-material-unknown",
+        "provenance-origin-uncertain",
+        "source-license-unknown",
+        "lineage-reference-missing"
+      ],
+      "manifest_reference": "mncs-rights-provenance/RIGHTS.json",
+      "manifest_sha256": "sha256:8f2870edba5f7d026d993115bf83b9136e6462c84e67269d9ad404a7f9e8a7a7",
+      "governance_reference": "mncs-rights-provenance/governance/agent-governance.json",
+      "governance_sha256": "sha256:bf7a1444d17f31e74edc204fa11c9a17917697cb93633ab92a1e68059d6e1666"
+    },
+    "current_source_adapter_call": {
+      "path": "mncs-control-mcp/src/mncs_control_mcp/local_environment_mcp.py#L701",
+      "route": "LocalEnvironmentMCP.invoke -> Control RPC -> Environment context",
+      "session_id": "ses_f554c8a999e32d25",
+      "rights_context_present": true,
+      "identity": "sha256:da54ac4d6faaacb1a53caadcdf8b201e3feb817ef4012dd8d15b7b6e36bc22de",
+      "status": "review"
+    },
+    "completion": {
+      "outcome": "completed",
+      "at": "2026-10-21T20:31:20Z",
+      "checkpoint_id": "chk_0c305fb4f32943f4",
+      "claims_released": []
+    }
+  },
+  "existing_session_observation": {
+    "session_id": "ses_973d1b67eb66857e",
+    "stored_definition_id": "env_33f4b225f7808c54",
+    "current_definition_id": "env_844e2a58825f7226",
+    "resume_revalidated": true,
+    "old_binding_retained": true,
+    "old_manifest_reference": "RIGHTS.json",
+    "old_manifest_sha256": null,
+    "old_governance_reference": "governance/agent-governance.json",
+    "old_governance_sha256": null,
+    "interpretation": "The resumed session retained its original definition-bound rights_context_binding. A fresh entry using the current definition resolved the authorized repository-relative inputs. Whether resume should adopt a changed definition or deliberately preserve the original binding remains an Environment lifecycle contract question."
+  },
+  "coordination": {
+    "probe_session_claims_acquired": 0,
+    "feature_worktree_claim": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:6c5434410247",
+      "session_id": "ses_973d1b67eb66857e",
+      "branch": "campaign/luna-max-rights-context-fresh-entry-20261021",
+      "checkout": ".worktrees/luna-max-rights-context-fresh-entry-20261021",
+      "acquired_at": "2026-10-21T20:32:58Z",
+      "status": "held-during-recording"
+    },
+    "other_agents_worktrees_modified": false
+  },
+  "limitations": [
+    "The live MCP enter response still omits rights_context even though the fresh stored session and current adapter source call both contain it.",
+    "The current source adapter call does not prove which already-running MCP process served the live tool request.",
+    "The review state preserves unresolved ownership, third-party material, origin, and compatibility; it is not a compliance determination."
+  ]
+}
