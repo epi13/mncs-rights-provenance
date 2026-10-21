@@ -1,0 +1,94 @@
+{
+  "schema_version": "mncs.rights-provenance.context-transport-recheck/1",
+  "observed_at": "2026-10-21T17:10:22Z",
+  "method": "Read-only Environment context operations through the connected MCP.",
+  "observations": [
+    {
+      "role": "rights-campaign-session",
+      "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+      "session_id": "ses_973d1b67eb66857e",
+      "lifecycle": "active",
+      "rights_context_present": false,
+      "readiness": {
+        "status": "ready",
+        "unknown_count": 0,
+        "unavailable_count": 0
+      },
+      "doctor": {
+        "readiness": "degraded",
+        "degraded_count": 1,
+        "blockers": 0,
+        "remaining": []
+      },
+      "available_capabilities": [
+        "mncs-rights-provenance:rights-provenance",
+        "mncs-rights-provenance:test/rights-provenance-tests"
+      ]
+    },
+    {
+      "role": "active-rights-context-environment-session",
+      "campaign_id": "cmp_luna_max_rights_provenance_context_20261020",
+      "session_id": "ses_7c6fc883b31968fd",
+      "lifecycle": "active",
+      "rights_context_present": false,
+      "readiness": {
+        "status": "degraded",
+        "unknown_count": 1,
+        "unavailable_count": 0
+      },
+      "doctor": {
+        "readiness": "degraded",
+        "degraded_count": 1,
+        "blockers": 0,
+        "remaining": []
+      },
+      "available_capabilities_include": [
+        "mncs-environment:workspace-readiness",
+        "mncs-rights-provenance:test/rights-provenance-tests"
+      ],
+      "available_capabilities_exclude": [
+        "mncs-rights-provenance:rights-provenance"
+      ]
+    }
+  ],
+  "doctor_provider": {
+    "capability": "mncs-doctor:projection-health",
+    "declared_contract_version": "1",
+    "invocation": "python:/home/epi13/Documents/Projects/mncs-doctor/tools/projections.py",
+    "environment_binding_observation": {
+      "status": "available",
+      "code": "executable-present",
+      "observed_at": "2026-10-21T06:11:03+00:00"
+    },
+    "rights_session_binding": "not-listed",
+    "note": "The provider is declared and has an earlier executable-present observation, but neither Rights session exposed it as a bound capability. This recheck did not invoke Doctor or apply a projection."
+  },
+  "coordination": {
+    "rights_artifact_handoff": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "session_id": "ses_a6a27331d7d348b9",
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "head": "fd90bce80dbd38fa9cf83604ed0be8b0ee1eb73a",
+      "worktree_clean_at_observation": true,
+      "modified_by_this_campaign": false
+    },
+    "environment_rights_integration": {
+      "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+      "session_id": "ses_f13d176c86a23e69",
+      "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+      "head": "9f68b0f3efd14288ebcbf6de8371cc2bf69e47cc",
+      "reason_recorded_by_owner": "Live MCP Rights-context verification remains pending.",
+      "modified_by_this_campaign": false
+    }
+  },
+  "assessment": {
+    "state": "connected-context-projection-missing",
+    "summary": "Two active Environment sessions were rechecked. Neither returned rights_context. The Rights campaign session reports ready with zero unknown capabilities; the separate Rights-context Environment session reports one unknown capability and does not list the Rights validator as available.",
+    "limits": [
+      "This records connected MCP context responses, not the local Rights resolver result.",
+      "The Doctor provider observation is from 06:11 UTC and is not a fresh invocation result.",
+      "A context response without rights_context does not establish that the local provider or project binding is invalid."
+    ],
+    "next_check": "Repeat the same bounded context reads after the active Environment integration and its normal MCP lifecycle refresh; then confirm the selected Rights context identity and available Rights validator capability."
+  }
+}
