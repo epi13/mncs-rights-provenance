@@ -1,0 +1,42 @@
+{
+  "isolation": {
+    "peer_worktree_clean_at_observation": true,
+    "peer_worktree_modified": false,
+    "separate_environment_session_stores": true,
+    "separate_temporary_state_directories": true
+  },
+  "limitations": [
+    "This is a bounded two-session concurrency test in temporary stores, not evidence that two live agent processes were concurrently executing this test.",
+    "It does not validate the live Environment MCP rights_context projection, which remains absent in admission and context responses."
+  ],
+  "observed_assertions": {
+    "context_identities_distinct": true,
+    "repo_a_governance_scope": [
+      "repo-a"
+    ],
+    "repo_a_writable_scope": [
+      "repo-a"
+    ],
+    "repo_b_governance_scope": [
+      "repo-b"
+    ],
+    "repo_b_writable_scope": [
+      "repo-b"
+    ]
+  },
+  "observed_at": "2026-10-21T13:33:45.229589+00:00",
+  "schema_version": "mncs.rights-provenance.concurrency-test-evidence/1",
+  "test": {
+    "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+    "command": "python -m pytest -q tests/test_rights_context.py::RightsContextTests::test_concurrent_agents_keep_distinct_authorized_scopes",
+    "commit": "9f68b0f3efd14288ebcbf6de8371cc2bf69e47cc",
+    "elapsed_seconds": 0.19,
+    "failed": 0,
+    "passed": 1,
+    "path": "tests/test_rights_context.py",
+    "pythonpath": "/home/epi13/Documents/Projects/mncs-rights-provenance/src",
+    "repository": "mncs-environment",
+    "result": "passed",
+    "test_id": "RightsContextTests.test_concurrent_agents_keep_distinct_authorized_scopes"
+  }
+}
