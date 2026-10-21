@@ -1,0 +1,39 @@
+{
+  "schema_version": "mncs.rights-provenance.test-run/1",
+  "identity": "rights-language-cli-toolchain-test-20261021",
+  "recorded_at": "2026-10-21T17:51:11Z",
+  "repository": "mncs-rights-provenance",
+  "branch": "campaign/luna-max-rights-language-toolchain-20261021",
+  "base_commit": "91f72316e9f8305094b091195fd15a846efdb489",
+  "inputs": {
+    ".mncs/environment.json": "bd4e273b6b3dc564c2bc98cb568252782694f6d1eda0e80c53a6f0acf719157b",
+    ".mncs/project.json": "cb7021d12512857d982a253551b43e0ffdf6727a3923229b8978410afe40db09"
+  },
+  "command": "python3 -m pytest -q tests",
+  "started_at": "2026-10-21T17:51:08.309031Z",
+  "completed_at": "2026-10-21T17:51:11.128778Z",
+  "duration_seconds": 2.82,
+  "execution": {
+    "scope": "workspace",
+    "sandbox_backend": "bwrap",
+    "network": false,
+    "exit_code": 0,
+    "status": "pass",
+    "summary": "All progress reached 100%; quiet pytest output did not report an aggregate test count."
+  },
+  "environment": {
+    "MNCS_BIN": "/workspace/mncs-language/target/release/mncs"
+  },
+  "toolchain": {
+    "repository": "mncs-language",
+    "branch": "main",
+    "commit": "b339aaabcb8cbe5ebba4ab67ce113400f3b0bc81",
+    "path": "target/release/mncs",
+    "sha256": "88676fb9d5e8c828e75774993402a179bc7ec353bca5f647b10857637f28d683"
+  },
+  "limits": [
+    "This records the test run only and does not establish legal compliance.",
+    "The run used a prebuilt Language CLI selected from the workspace.",
+    "The normal Environment verify operation was not exercised because the active Control authorization gate does not yet recognize test-command toolchains as an allowed protected repository."
+  ]
+}
