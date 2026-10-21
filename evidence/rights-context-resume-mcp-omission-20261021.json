@@ -1,0 +1,67 @@
+{
+  "schema_version": "mncs.rights.environment-context-resume-evidence/1",
+  "recorded_at": "2026-10-21T21:20:23Z",
+  "repository": "mncs-rights-provenance",
+  "environment_id": "renv_b1b3554f7e895e66",
+  "session_id": "ses_973d1b67eb66857e",
+  "observations": [
+    {
+      "surface": "connected Environment MCP",
+      "operation": "resume",
+      "exit_code": 0,
+      "readiness": "ready"
+    },
+    {
+      "surface": "connected Environment MCP",
+      "operation": "context",
+      "rights_context_present": false,
+      "returned_context_keys": [
+        "schema_version",
+        "session_id",
+        "lifecycle",
+        "environment_id",
+        "work_intent",
+        "workspace_root",
+        "persistence",
+        "toolchain",
+        "writable_repositories",
+        "protected_repositories",
+        "authority",
+        "readiness",
+        "doctor",
+        "projects",
+        "capabilities"
+      ],
+      "readiness": "ready"
+    },
+    {
+      "surface": "authenticated Control Environment CLI",
+      "operation": "mncs-env continuation followed by mncs-env context in one protected execution",
+      "exit_code": 0,
+      "rights_context_present": true,
+      "rights_context_identity": "sha256:aee94a0e9af579ebb9b660c4a95c542362409ebcda46d0c6e2d0cbc95857210f",
+      "rights_context_status": "review",
+      "manifest_reference": "RIGHTS.json",
+      "governance_reference": "governance/agent-governance.json",
+      "diagnosed_missing_paths": [
+        "/home/epi13/Documents/Projects/RIGHTS.json",
+        "/home/epi13/Documents/Projects/governance/agent-governance.json"
+      ]
+    }
+  ],
+  "configured_project_binding": {
+    "source": ".mncs/environment.json#/rights_context",
+    "manifest_reference": "mncs-rights-provenance/RIGHTS.json",
+    "governance_reference": "mncs-rights-provenance/governance/agent-governance.json"
+  },
+  "interpretation": "The connected MCP context operation still omits rights_context after a successful resume. The authenticated CLI includes it, but the persisted session uses unqualified workspace-root references that do not match the repository-qualified project binding. Resume did not refresh those references.",
+  "coordination": {
+    "shared_service_restarted": false,
+    "repository_files_modified_to_repair_the_runtime": false,
+    "active_environment_or_control_worktrees_modified": false
+  },
+  "limits": [
+    "This read identifies a transport and persisted-session freshness gap but does not map the connected MCP call to a specific serving process.",
+    "The connected MCP omission and the stale path binding are distinct observations; the record does not claim they share one root cause."
+  ]
+}

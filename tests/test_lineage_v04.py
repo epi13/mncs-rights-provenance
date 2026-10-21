@@ -126,6 +126,44 @@ def test_v04_schema_accepts_lineage_from_binding_and_keeps_v03_separate() -> Non
     assert list(jsonschema.Draft202012Validator(schema03).iter_errors(document))
 
 
+def test_recorded_compiler_handoff_projection_matches_native_binding() -> None:
+    jsonschema = pytest.importorskip("jsonschema")
+    binding_path = ROOT / "evidence/rights-handoff-native-artifact-binding-20261021.json"
+    lineage_path = ROOT / "examples/v0.4/lineage-from-live-compiler-binding.json"
+    binding = json.loads(binding_path.read_text())
+    recorded = json.loads(lineage_path.read_text())
+    expected = lineage_record_from_artifact_binding(
+        binding,
+        lineage_id="mncs-rights://lineage/rights-handoff-compiler-build-20261021",
+        binding_reference=(
+            "mncs-rights-provenance:evidence/rights-handoff-native-artifact-binding-20261021.json"
+        ),
+    )
+    seal_lineage_record(expected)
+    expected_document = expected.to_dict()
+
+    schema04 = json.loads((ROOT / "schemas/v0.4/lineage-record.schema.json").read_text())
+    assert recorded == expected_document
+    assert validate_lineage_structure(recorded) == []
+    assert list(jsonschema.Draft202012Validator(schema04).iter_errors(recorded)) == []
+    assert verify_lineage_digest(recorded)[0]
+    assert {edge["relation"] for edge in recorded["artifact_relationships"]} == {
+        "compiled-from", "transformed-by"
+    }
+    assert any(
+        evidence["state"] == "directly-observed"
+        for edge in recorded["artifact_relationships"]
+        for evidence in edge["evidence"]
+    )
+    assert recorded["rights_summary"] == {
+        "rights_state": "review",
+        "compatibility": "unknown",
+        "legal_conclusion": "NOT_MADE",
+    }
+    assert recorded["artifact_lineage_state"]["state"] == "partial"
+    assert recorded["artifact_lineage_state"]["evidence_state"] == "inferred"
+
+
 def test_v04_migration_reseals_only_the_schema_version() -> None:
     legacy = LineageRecord(
         lineage_id="mncs-rights://lineage/legacy",

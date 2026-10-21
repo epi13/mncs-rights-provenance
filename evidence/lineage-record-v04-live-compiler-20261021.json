@@ -1,0 +1,55 @@
+{
+  "schema_version": "mncs.rights.lineage-live-compiler-evidence/1",
+  "recorded_at": "2026-10-21T21:20:23Z",
+  "repository": "mncs-rights-provenance",
+  "branch": "campaign/luna-max-rights-live-projection-20261021",
+  "source_binding": {
+    "path": "evidence/rights-handoff-native-artifact-binding-20261021.json",
+    "file_sha256": "74798b01f06ee3406e2a7637b0e5d0cfdf0a893c3cd976fb2cb44606e570ff23",
+    "content_digest": "sha256:e9834e5060d89e942d75f3bd3eb7aba42fcf98ce82245a92ba305dabe0267088",
+    "producer": "mncs-compiler",
+    "producer_contract": "mncs.compiler.application-build/4",
+    "source_snapshot_identity": "sha256:868d4d753a3e1b6194434ea11765440ebbd67cb07ea24280754c751c80d6a55c",
+    "artifact_identity": "sha256:8e554bca6e1c00781d1ee15cac2b4644c656e1a7becd13617eb4d46382e7096d"
+  },
+  "projection": {
+    "command": "mncs-rp lineage from-artifact-binding evidence/rights-handoff-native-artifact-binding-20261021.json --lineage-id mncs-rights://lineage/rights-handoff-compiler-build-20261021 --reference mncs-rights-provenance:evidence/rights-handoff-native-artifact-binding-20261021.json",
+    "output_path": "examples/v0.4/lineage-from-live-compiler-binding.json",
+    "output_file_sha256": "651c7cdb372bee9bcb8237901c8047f5d1b710086b5e9a77984eb8fa1cabe4da",
+    "content_digest": "sha256:7c9ff988d3d581660e662b22b2f4b204060b56638a717955d3ef7d67dc19ac9f",
+    "artifact_binding_digest": "sha256:e9834e5060d89e942d75f3bd3eb7aba42fcf98ce82245a92ba305dabe0267088",
+    "relationships": ["compiled-from", "transformed-by"],
+    "transformation": "compilation",
+    "lineage_state": {"state": "partial", "evidence_state": "inferred"},
+    "rights_state": "review",
+    "compatibility": "unknown",
+    "legal_conclusion": "NOT_MADE",
+    "directly_observed_evidence_retained": "mncs-store:ses_c510d6b818542581:capability-invocation-artifacts:5fd1397083db952778517d3634a96f4455a5dc96c3a3cbe144f167cdd99f121c"
+  },
+  "verification": {
+    "command": "mncs-rp lineage verify examples/v0.4/lineage-from-live-compiler-binding.json",
+    "exit_code": 0,
+    "content_digest_matches": true,
+    "issues": [],
+    "focused_tests": {
+      "command": "python3 -m pytest -q tests/test_lineage_v04.py",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "repository_suite": {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python3 -m pytest -q tests",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "lint": {
+      "command": "python3 -m ruff check tests/test_lineage_v04.py",
+      "exit_code": 0,
+      "result": "passed"
+    }
+  },
+  "limits": [
+    "Compiler build fields and the binding relationship evidence retain their recorded declared or directly observed states; the projection does not authenticate the producer.",
+    "The source Rights manifest retains unresolved rights, so the lineage record remains in review and compatibility remains unknown.",
+    "The content digest binds the exact binding value but is not a signature, authorship proof, or legal conclusion."
+  ]
+}
