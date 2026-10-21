@@ -27,6 +27,7 @@ from .authority import (
     authority_verdict,
 )
 from .canonical import canonical_bytes, sha256_hex
+from .compiler_adapter import build_compiler_application_artifact_binding
 from .evidence import (
     EvidenceRecord,
     compute_evidence_digest,
@@ -117,6 +118,7 @@ __all__ = [
     "authority_claim_from_dict",
     "authority_verdict",
     "build_agent_context",
+    "build_compiler_application_artifact_binding",
     "build_forge_provider_artifact_binding",
     "build_native_artifact_binding",
     "canonical_bytes",

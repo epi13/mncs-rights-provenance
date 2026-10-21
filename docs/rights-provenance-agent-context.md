@@ -66,8 +66,22 @@ on-demand machine interface. The request must supply any applicable manifest
 references explicitly; the command does not treat receipt metadata or an
 external license file as an authoritative instruction.
 
-The Compiler does not yet emit the binding. The live Environment vertical
-slice emits admission context and its own artifact lineage; Compiler and
-Language have active concurrent worktrees, so integration at their build
-boundary remains a follow-up that must bind their existing identities and
-receipts without changing their active implementation.
+Compiler continues to own its application-build result. The Rights-only
+`build_compiler_application_artifact_binding` adapter consumes the existing
+`mncs.compiler.application-build/11` response without changing or rerunning
+Compiler. It requires a `verified` response with a materialized artifact,
+retains the source-snapshot file hashes, dependency-graph identity, selected
+SSA identity, `application-ssa-closure/1` reference, and available toolchain
+identity, then records source-to-artifact `compiled-from` edges and the build
+result as a `transformed-by` reference. Every Compiler-supplied fact remains
+declared evidence; the adapter checks the outer and nested artifact identities
+agree but does not rehash the VM artifact or authenticate the producer.
+Without explicit manifest references rights remain unknown; supplied manifests
+can change the declared rights summary to `declared` or `review`, while cross
+license compatibility remains unknown. The bounded request schema and
+`mncs-rp artifact-binding compiler-build REQUEST.json` expose this path.
+
+The live Environment vertical slice emits admission context and its own
+artifact lineage. Compiler and Language have active concurrent worktrees, so
+this adapter stays within the Rights repository and consumes their published
+versioned contract without modifying those worktrees.

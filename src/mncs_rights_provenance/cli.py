@@ -16,6 +16,10 @@ from typing import Any
 
 from . import __version__
 from .canonical import canonical_bytes
+from .compiler_adapter import (
+    COMPILER_BINDING_REQUEST_SCHEMA,
+    build_compiler_application_artifact_binding,
+)
 from .evidence import evidence_record_from_dict, seal_evidence_record, verify_evidence_digest
 from .forge_adapter import BUILD_BINDING_REQUEST_SCHEMA, build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
@@ -39,6 +43,7 @@ from .validation import (
 )
 
 MAX_FORGE_BINDING_REQUEST_BYTES = 2 * 1024 * 1024
+MAX_COMPILER_BINDING_REQUEST_BYTES = 2 * 1024 * 1024
 
 
 def _emit(value: Any, *, human: bool = False) -> None:
@@ -384,6 +389,39 @@ def cmd_forge_build_binding(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_compiler_build_binding(args: argparse.Namespace) -> int:
+    """Build a Rights binding from a bounded Compiler application response."""
+    try:
+        with Path(args.request).open("rb") as request_file:
+            raw = request_file.read(MAX_COMPILER_BINDING_REQUEST_BYTES + 1)
+        if len(raw) > MAX_COMPILER_BINDING_REQUEST_BYTES:
+            raise ValueError("Compiler binding request exceeds the 2 MiB input bound")
+        request = json.loads(raw.decode("utf-8"))
+        if not isinstance(request, dict):
+            raise TypeError("Compiler binding request must be an object")
+        if set(request) - {
+            "schema_version", "application_build", "contributing_manifests", "context_identity"
+        }:
+            raise ValueError("Compiler binding request contains unsupported fields")
+        if request.get("schema_version") != COMPILER_BINDING_REQUEST_SCHEMA:
+            raise ValueError(f"schema_version must be {COMPILER_BINDING_REQUEST_SCHEMA}")
+        if "application_build" not in request:
+            raise ValueError("Compiler binding request requires application_build")
+        manifests = request.get("contributing_manifests", [])
+        if not isinstance(manifests, list):
+            raise TypeError("contributing_manifests must be a list")
+        binding = build_compiler_application_artifact_binding(
+            request["application_build"],
+            manifests,
+            context_identity=request.get("context_identity"),
+        )
+    except (OSError, UnicodeError, ValueError, TypeError) as exc:
+        _emit({"ok": False, "error": str(exc), "legal_conclusion": "NOT_MADE"})
+        return 2
+    _emit(binding, human=args.human)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="mncs-rp", description="MNCS Rights & Provenance tooling")
     parser.add_argument("--version", action="version", version=f"mncs-rp {__version__}")
@@ -499,6 +537,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     forge_build.add_argument("--human", action="store_true")
     forge_build.set_defaults(func=cmd_forge_build_binding)
+
+    compiler_build = artifact_binding_sub.add_parser(
+        "compiler-build", help="bind one Compiler application-build/11 response"
+    )
+    compiler_build.add_argument(
+        "request", help="versioned JSON request containing a Compiler application build"
+    )
+    compiler_build.add_argument("--human", action="store_true")
+    compiler_build.set_defaults(func=cmd_compiler_build_binding)
 
     return parser
 
