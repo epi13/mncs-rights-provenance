@@ -111,12 +111,16 @@ def test_forge_receipt_projects_declared_inputs_and_compilation_event() -> None:
 
 
 def test_missing_or_unresolved_rights_remain_unknown_or_review() -> None:
-    unknown = build_forge_provider_artifact_binding(_build_receipt())
+    metadata_receipt = _build_receipt()
+    metadata_receipt["core"]["inputs"]["configuration"]["license"] = "MIT"
+    metadata_receipt["identity"] = _digest(metadata_receipt["core"])
+    unknown = build_forge_provider_artifact_binding(metadata_receipt)
     unresolved = build_forge_provider_artifact_binding(
         _build_receipt(), [_manifest("dependency/RIGHTS.json", "unresolved")]
     )
 
     assert unknown["rights"]["state"] == "unknown"
+    assert unknown["rights"]["contributing_manifests"] == []
     assert unresolved["rights"]["state"] == "review"
     assert unknown["legal_conclusion"] == unresolved["legal_conclusion"] == "NOT_MADE"
 
