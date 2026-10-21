@@ -18,8 +18,12 @@ candidate as a versioned, unadopted draft. The license resolver recognizes
 that local `LicenseRef` and points agents to this status and its draft text;
 it does not add proposed permissions to the effective license-term index.
 Environment context therefore surfaces an actionable review diagnostic while
-preserving `unknown` compatibility. The registry is metadata about the
-candidate, not a replacement for an effective repository license.
+preserving `unknown` compatibility. The versioned license-resolution view
+also exposes the count and JSON Pointer for a candidate's
+`legal_review_decisions`; the registry digest in context binds that on-demand
+reference without repeating the decision list or draft terms. The registry is
+metadata about the candidate, not a replacement for an effective repository
+license.
 
 ## Decisions still open
 

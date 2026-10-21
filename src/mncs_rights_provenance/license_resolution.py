@@ -16,7 +16,7 @@ from typing import Any
 
 from .spdx import parse_spdx_expression
 
-RESOLUTION_SCHEMA = "mncs.rights.license-resolution/2"
+RESOLUTION_SCHEMA = "mncs.rights.license-resolution/3"
 _CANDIDATE_REGISTRY_REF = "mncs_rights_provenance/resources/license-candidates.json"
 
 _LOCAL_LICENSE_REF = re.compile(r"^LicenseRef-[A-Za-z0-9.-]+$", re.IGNORECASE)
@@ -122,6 +122,16 @@ def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
             or not isinstance(entry.get("text_ref"), str)
             or not entry["text_ref"]
             or entry.get("declared_rights_prove_authority") is not False
+            or not isinstance(entry.get("legal_review_decisions"), list)
+            or len(entry["legal_review_decisions"]) > 64
+            or any(
+                not isinstance(decision, str)
+                or not decision.strip()
+                or len(decision) > 128
+                for decision in entry["legal_review_decisions"]
+            )
+            or len(set(entry["legal_review_decisions"]))
+            != len(entry["legal_review_decisions"])
         ):
             raise TypeError("packaged license candidate registry has an invalid entry")
         candidates[entry["identifier"]] = entry
@@ -136,6 +146,9 @@ _CANDIDATE_IDENTIFIERS = {
     identifier.casefold(): identifier for identifier in _CANDIDATES
 }
 _TERM_IDENTIFIERS = {identifier.casefold(): identifier for identifier in _TERMS}
+_CANDIDATE_INDEX = {
+    identifier: index for index, identifier in enumerate(_CANDIDATES)
+}
 
 
 def license_resolver_identity() -> str:
@@ -250,4 +263,18 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
             "reference": _CANDIDATE_REGISTRY_REF,
             "sha256": _CANDIDATE_REGISTRY_DIGEST,
         }
+        result["candidate_review_details"] = [
+            {
+                "license": identifier,
+                "status": _CANDIDATES[identifier]["status"],
+                "decision_count": len(
+                    _CANDIDATES[identifier]["legal_review_decisions"]
+                ),
+                "decisions_ref": (
+                    f"{_CANDIDATE_REGISTRY_REF}#/candidates/"
+                    f"{_CANDIDATE_INDEX[identifier]}/legal_review_decisions"
+                ),
+            }
+            for identifier in sorted(candidate_references)
+        ]
     return result

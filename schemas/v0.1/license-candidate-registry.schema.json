@@ -41,6 +41,7 @@
         "declared_rights_prove_authority": {"const": false},
         "legal_review_decisions": {
           "type": "array",
+          "maxItems": 64,
           "items": {"type": "string", "minLength": 1, "maxLength": 128},
           "uniqueItems": true
         }
