@@ -1,6 +1,6 @@
 {
   "schema_version": "mncs.rights-provenance.context-transport-freshness-evidence/1",
-  "observed_at": "2026-10-21T13:44:09Z",
+  "observed_at": "2026-10-21T13:52:16Z",
   "project": "mncs-rights-provenance",
   "session_id": "ses_de553dd5fd5d1178",
   "connected_tool_observation": {
@@ -39,5 +39,30 @@
       "No shared MCP process was restarted."
     ],
     "next_check": "Repeat the read-only context operation after the normal MCP lifecycle refresh; confirm that the connected result includes the bounded rights_context projection."
+  },
+  "coordination_observation": {
+    "temporary_main_claim": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+      "session_id": "ses_de553dd5fd5d1178",
+      "acquire_expected_store_generation": 66037,
+      "release_with_expected_store_generation": {
+        "exit_code": 2,
+        "released": false,
+        "error": "--expected-store-generation requires --acquire and cannot be combined with other claim operations"
+      },
+      "release_without_expected_store_generation": {
+        "exit_code": 0,
+        "released": true
+      }
+    },
+    "separate_active_control_worktree": {
+      "repository": "mncs-control-mcp",
+      "claim_id": "claim:mncs-control-mcp:worktree:9478a2d0206f",
+      "branch": "campaign/luna-max-rights-control-gate-20261021",
+      "checkout": "/home/epi13/Documents/Projects/mncs-control-mcp/.worktrees/luna-max-rights-control-gate-20261021",
+      "status": "held",
+      "action": "No files in that worktree or branch were modified."
+    },
+    "assessment": "The Control bridge currently forwards an expected Store generation on release even though the Environment CLI accepts that fence only on acquire. The main claim was released using the supported form. No Control code change was made while a separate Control worktree claim remained active."
   }
 }
