@@ -5,8 +5,7 @@
   "workspace_scope": {
     "kind": "workspace",
     "repositories": [
-      "mncs-rights-provenance",
-      "mncs-language"
+      "mncs-rights-provenance"
     ]
   },
   "required_capabilities": [],

@@ -1,0 +1,37 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-integration-evidence/1",
+  "identity": "ev_rights_environment_scope_repair_20261021",
+  "observed_at": "2026-10-21T19:42:00Z",
+  "repository": "mncs-rights-provenance",
+  "authority_check": {
+    "repository": "mncs-control-mcp",
+    "source": "src/mncs_control_mcp/environment_rpc.py",
+    "revision": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
+    "rule": "project workspace_scope.repositories must equal the single granted repository and workspace_root must remain '.'"
+  },
+  "repair": {
+    "path": ".mncs/environment.json",
+    "change": "Restricted workspace_scope.repositories to [mncs-rights-provenance].",
+    "preserved": [
+      "The project still declares mncs-language:cli-toolchain as its test toolchain.",
+      "The Language repository remains protected from writes.",
+      "The existing rights_context binding and governance profile remain unchanged."
+    ]
+  },
+  "verification": {
+    "environment_campaign_state": "resolved",
+    "environment_context": {
+      "status": "resolved",
+      "schema_version": "mncs.environment.entry-context/1",
+      "writable_repositories": ["mncs-rights-provenance"],
+      "readiness": "ready",
+      "returned_rights_context": false
+    },
+    "interpretation": "The repository-local scope restores Environment continuation. The generic entry context still does not project rights_context, so agent-admission integration remains open."
+  },
+  "limitations": [
+    "This records an Environment context operation, not a complete admission lifecycle test.",
+    "The successful context response does not establish legal ownership or license compatibility.",
+    "The Control branch authorization gap for protected test toolchains remains unresolved."
+  ]
+}
