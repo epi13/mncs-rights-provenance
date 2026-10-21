@@ -1,0 +1,53 @@
+{
+  "schema_version": "mncs.rights.candidate-review-context-evidence/1",
+  "recorded_at": "2026-10-21T20:56:02Z",
+  "repository": "mncs-rights-provenance",
+  "branch": "campaign/luna-max-candidate-review-context-20261021",
+  "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-candidate-review-context-20261021/mncs-rights-provenance",
+  "base_commit": "66f3cc398dc2208bd84c3f9b5a4f9454aa096a7b",
+  "coordination": {
+    "environment_claim": "claim:mncs-rights-provenance:worktree:00fe3758846d",
+    "owner_session": "ses_973d1b67eb66857e",
+    "observed_concurrent_claim": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "session_id": "ses_a6a27331d7d348b9",
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-artifact-handoff-20261021",
+      "status": "held"
+    },
+    "working_scopes_overlap": false,
+    "repository_main_head_at_start": "66f3cc398dc2208bd84c3f9b5a4f9454aa096a7b"
+  },
+  "implementation": {
+    "license_resolution_schema": "mncs.rights.license-resolution/3",
+    "candidate_review_view": "candidate_review_details",
+    "candidate_review_fields": [
+      "license",
+      "status",
+      "decision_count",
+      "decisions_ref"
+    ],
+    "candidate_registry_reference": "mncs_rights_provenance/resources/license-candidates.json",
+    "candidate_reference_example": "#/candidates/1/legal_review_decisions",
+    "authority_effect": "none; candidate remains draft-for-legal-review, not adopted, with no effective grant",
+    "context_behavior": "The decision count and registry JSON Pointer remain available when the larger expression tree is removed to fit the configured context budget. The candidate registry digest binds the reference target."
+  },
+  "verification": {
+    "focused": {
+      "command": "python3 -m pytest -q tests/test_agent_context_projection.py tests/test_manifest.py",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "repository_suite": {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python3 -m pytest -q tests",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "scope": "The test verifies machine-readable references and context compaction, not legal approval, grant authority, or compatibility."
+  },
+  "limitations": [
+    "The reference points to declared legal-review decision labels and does not decide them.",
+    "The candidate remains unapproved and grants no rights.",
+    "The resolver does not infer copyright ownership, contributor authority, or cross-license compatibility."
+  ]
+}

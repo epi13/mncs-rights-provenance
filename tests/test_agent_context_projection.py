@@ -8,6 +8,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
+import mncs_rights_provenance.agent_context as agent_context_module
 import mncs_rights_provenance.license_resolution as license_resolution_module
 from mncs_rights_provenance.agent_context import build_agent_context
 from mncs_rights_provenance.license_resolution import resolve_license_expression
@@ -307,10 +308,20 @@ def test_license_candidate_v02_remains_non_effective_and_points_to_draft() -> No
     result = resolve_license_expression(candidate["identifier"])
     leaf = result["expression_tree"]
     assert result["status"] == "partial"
+    assert result["schema_version"] == "mncs.rights.license-resolution/3"
     assert result["unresolved_identifiers"] == [candidate["identifier"]]
     assert leaf["status"] == "candidate-unapproved"
     assert leaf["effective_grant"] is False
     assert "permissions" not in leaf
+    assert result["candidate_review_details"] == [{
+        "license": candidate["identifier"],
+        "status": "draft-for-legal-review",
+        "decision_count": len(candidate["legal_review_decisions"]),
+        "decisions_ref": (
+            "mncs_rights_provenance/resources/license-candidates.json"
+            "#/candidates/1/legal_review_decisions"
+        ),
+    }]
 
 
 def test_candidate_license_reference_never_becomes_an_effective_term_summary() -> None:
@@ -359,13 +370,18 @@ def test_agent_context_explains_candidate_status_without_treating_it_as_rights()
     assert "license-terms-unresolved" not in codes
     assert "rights-manifest-invalid" not in codes
     assert context["rights"]["compatibility"]["status"] == "unknown"
+    candidate_review = context["rights"]["license_terms"]["candidate_review_details"][0]
+    assert candidate_review["status"] == "draft-for-legal-review"
+    assert candidate_review["decisions_ref"].endswith(
+        "#/candidates/0/legal_review_decisions"
+    )
     assert context["sources"]["license_candidate_registry"] == (
         context["rights"]["license_terms"]["candidate_registry"]
     )
     assert context["sources"]["license_resolver"]["sha256"].startswith("sha256:")
     resolver_edge = next(
         edge for edge in context["provenance"]["projection"]["relationships"]
-        if edge["from"] == "mncs_rights_provenance.license_resolution/2"
+        if edge["from"] == "mncs_rights_provenance.license_resolution/3"
     )
     assert resolver_edge["relation"] == "referenced"
     assert resolver_edge["content_digest"] == context["sources"]["license_resolver"]["sha256"]
@@ -375,6 +391,31 @@ def test_agent_context_explains_candidate_status_without_treating_it_as_rights()
     )
     assert registry_edge["relation"] == "generated-from"
     assert registry_edge["content_digest"] == context["sources"]["license_candidate_registry"]["sha256"]
+
+
+def test_candidate_review_reference_survives_expression_detail_compaction(monkeypatch) -> None:
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = "LicenseRef-MNCS-Permissive-0.2"
+    resolve = agent_context_module.resolve_license_expression
+
+    def oversized_resolution(expression):
+        result = resolve(expression)
+        result["expression_tree"] = {"bounded-test-padding": "x" * 10_000}
+        return result
+
+    monkeypatch.setattr(
+        agent_context_module,
+        "resolve_license_expression",
+        oversized_resolution,
+    )
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    license_terms = context["rights"]["license_terms"]
+
+    assert "expression_tree" not in license_terms
+    assert license_terms["detail_ref"].endswith("#/rights/distribution_license")
+    assert license_terms["candidate_review_details"][0]["decisions_ref"].endswith(
+        "#/candidates/1/legal_review_decisions"
+    )
 
 
 def test_candidate_registry_revision_invalidates_agent_context(monkeypatch) -> None:
@@ -447,7 +488,7 @@ def test_spdx_or_and_expression_keeps_branch_obligations_and_unknown_compatibili
     result = resolve_license_expression("MIT OR (BSD-2-Clause AND LicenseRef-Local)")
 
     assert result["status"] == "partial"
-    assert result["schema_version"] == "mncs.rights.license-resolution/2"
+    assert result["schema_version"] == "mncs.rights.license-resolution/3"
     assert result["expression_tree"]["operator"] == "OR"
     assert result["expression_tree"]["terms"][1]["operator"] == "AND"
     assert result["unresolved_identifiers"] == ["LicenseRef-Local"]
