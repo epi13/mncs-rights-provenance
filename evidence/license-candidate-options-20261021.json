@@ -1,0 +1,111 @@
+{
+  "architecture": {
+    "candidate_required_for_rights_provenance": false,
+    "operative_repository_license": "Apache-2.0",
+    "candidate_status": "draft-for-legal-review; not approved or adopted",
+    "decision": "Keep the rights and provenance machinery interoperable with established and local licenses; do not make an MNCS-specific license a prerequisite.",
+    "retroactive_relicensing": false
+  },
+  "coordination": {
+    "active_other_agent_claim": {
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "scope_overlap": false,
+      "session_id": "ses_a6a27331d7d348b9"
+    },
+    "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "environment_session_id": "ses_973d1b67eb66857e",
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:5277cee91e05"
+  },
+  "identity": "ev_rights_license_candidate_options_20261021",
+  "implementation": {
+    "base_commit": "94bc9db1cb985c62d5f03fcefc8b2d79bf0438a8",
+    "branch": "campaign/luna-max-license-patent-options-20261021",
+    "files_sha256": {
+      "docs/license-candidate-review.md": "sha256:d614ab4df87298dafe20c66806aedfa95a93e42c833ce83ba0bd6a17a49bedf4"
+    }
+  },
+  "observations": {
+    "apache_2_0": {
+      "copyright_and_patent_grants": true,
+      "patent_litigation_response": "Section 3 terminates the patent license when the licensee initiates specified patent litigation alleging the work or a contribution infringes.",
+      "redistribution_terms": [
+        "provide a copy of the license",
+        "mark modified files with change notices",
+        "retain applicable source-form notices",
+        "preserve applicable NOTICE attributions when a NOTICE file is included"
+      ]
+    },
+    "bsd_2_clause": {
+      "copyright_permission": true,
+      "express_patent_grant_in_text": false,
+      "redistribution_terms": [
+        "retain notice, conditions, and disclaimer in source",
+        "reproduce notice, conditions, and disclaimer in binary materials"
+      ]
+    },
+    "bsd_2_clause_patent": {
+      "express_patent_grant": true,
+      "licensed_acts": [
+        "make",
+        "have made",
+        "use",
+        "offer to sell",
+        "sell",
+        "import",
+        "otherwise transfer"
+      ],
+      "claim_boundary": "Claims licensable by the grantor that are necessarily infringed by the contribution alone or by its qualifying combination with the work to which it was added, measured when the addition occurs.",
+      "grant_condition": "Irrevocable except for failure to satisfy license conditions.",
+      "patent_litigation_response": "No express patent-litigation response clause appears in the identified text."
+    },
+    "mit": {
+      "copyright_permission": true,
+      "permissions_named": [
+        "use",
+        "copy",
+        "modify",
+        "merge",
+        "publish",
+        "distribute",
+        "sublicense",
+        "sell"
+      ],
+      "notice_condition": "Include the copyright and permission notices in copies or substantial portions.",
+      "express_patent_grant_in_text": false
+    }
+  },
+  "open_legal_questions": [
+    "Whether an MNCS-specific license is needed at all remains undecided.",
+    "Whether Candidate 0.2 should retain a BSD-2-Clause-Patent-style grant condition requires legal review.",
+    "Whether a patent-litigation response belongs in the candidate is undecided; the candidate currently proposes none.",
+    "Definitions, grant authority, third-party material, machine-generated ownership, jurisdiction, and enforceability require qualified review."
+  ],
+  "recorded_at": "2026-10-21T23:34:57Z",
+  "repository": "mncs-rights-provenance",
+  "schema_version": "mncs.rights-provenance.license-candidate-options-evidence/1",
+  "sources": [
+    {
+      "url": "https://spdx.org/licenses/MIT.html",
+      "title": "SPDX MIT License text"
+    },
+    {
+      "url": "https://spdx.org/licenses/BSD-2-Clause.html",
+      "title": "SPDX BSD-2-Clause text"
+    },
+    {
+      "url": "https://spdx.org/licenses/BSD-2-Clause-Patent.html",
+      "title": "SPDX BSD-2-Clause-Patent text"
+    },
+    {
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+      "title": "Apache License 2.0 text"
+    }
+  ],
+  "status": "source-text-comparison; not legal advice, approval, or a compatibility determination",
+  "verification": {
+    "candidate_text_changed": false,
+    "operative_license_changed": false,
+    "source_urls_checked": 4
+  }
+}

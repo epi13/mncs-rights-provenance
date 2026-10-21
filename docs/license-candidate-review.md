@@ -33,6 +33,40 @@ license.
 - How to handle works whose copyright ownership is unclear, including machine-generated material.
 - Final notice, trademark, and disclaimer language under applicable jurisdictions.
 
+## License choice is independent of the Rights & Provenance system
+
+Rights and provenance should remain useful for projects using MIT, BSD,
+Apache-2.0, a local license reference, or an unresolved declaration. Adopting
+an MNCS-specific license is not a prerequisite for the resolver, provenance
+records, or agent-governance context. The existing Rights repository remains
+Apache-2.0 licensed; the candidate stays separate from repository licensing
+and contribution history.
+
+This separation keeps current work on an established license and avoids
+introducing a new legal instrument solely to make machine-readable rights
+possible. A future MNCS license could describe computational forms and carry
+an express patent grant in compact language, but it adds drafting, adoption,
+ownership, grant-authority, and compatibility questions that the
+Rights & Provenance system cannot settle. The candidate must therefore stay
+optional and non-effective until its own authority approves it.
+
+| Model | What the text supplies | Design consequence for the candidate |
+|---|---|---|
+| MIT | Broad copyright permission, a notice condition, and warranty/liability language; it states no express patent grant. | A concise pattern for broad copyright permissions and notice retention. Patent rights remain unstated by that text. |
+| BSD-2-Clause | Permits source and binary redistribution subject to separate notice-preservation conditions; it states no express patent grant. | A concise pattern when source and other-form notice handling should be explicit. |
+| BSD-2-Clause-Patent | Adds a patent grant for specified acts and claims necessarily infringed by a contribution alone or a qualifying combination at contribution time. Its text makes the patent grant irrevocable except for failure to satisfy license conditions; it includes no express patent-litigation response clause. | Candidate 0.2 follows a similar contribution boundary and breach condition. Those conditions still require legal review; they should not be mistaken for a patent-litigation retaliation clause. |
+| Apache-2.0 | Defines contributor relationships, grants copyright and patent rights, terminates the patent grant for specified patent litigation, and sets out license-copy, modified-file, notice, and conditional NOTICE duties. | Keep Apache-2.0 operative here. Reproducing its broader framework in a new candidate would add terms that require a specific MNCS reason and separate review. |
+
+Candidate 0.2 proposes a technology-neutral covered-work definition and a
+contribution-limited patent grant, but it does not establish that any
+contributor owns or can grant the described rights. Its express grant extends
+only as far as the grantor is authorized to grant. The absence of a
+patent-litigation response is a deliberate draft state, not an adopted policy;
+whether to keep that choice remains open for legal review. These comparisons
+are drafting observations, not legal advice or a compatibility determination.
+The source-linked observations are recorded in
+`evidence/license-candidate-options-20261021.json`.
+
 ## Drafting finding
 
 The 0.1 candidate's patent paragraph identifies a contributor-limited claim
