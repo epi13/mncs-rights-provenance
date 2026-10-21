@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/forge-build-binding-request/0.1.0.schema.json",
+  "title": "MNCS Forge build binding request 0.1.0",
+  "description": "A bounded request to project a Forge-owned provider build receipt into the Rights artifact binding contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "build_receipt"],
+  "properties": {
+    "schema_version": {
+      "const": "mncs.rights-provenance.forge-build-binding-request/0.1.0"
+    },
+    "build_receipt": {
+      "type": "object",
+      "description": "Forge-owned mncs.provider-build-receipt/1 record. Rights validates its core identity and supported fields."
+    },
+    "contributing_manifests": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "type": "object" },
+      "description": "Explicit Rights manifest references for inputs. The CLI does not discover or elevate external metadata."
+    },
+    "context_identity": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

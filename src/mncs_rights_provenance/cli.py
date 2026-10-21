@@ -17,6 +17,7 @@ from typing import Any
 from . import __version__
 from .canonical import canonical_bytes
 from .evidence import evidence_record_from_dict, seal_evidence_record, verify_evidence_digest
+from .forge_adapter import BUILD_BINDING_REQUEST_SCHEMA, build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
 from .lineage import (
     lineage_record_from_dict,
@@ -36,6 +37,8 @@ from .validation import (
     validate_lineage_structure,
     validate_manifest_structure,
 )
+
+MAX_FORGE_BINDING_REQUEST_BYTES = 2 * 1024 * 1024
 
 
 def _emit(value: Any, *, human: bool = False) -> None:
@@ -348,6 +351,39 @@ def cmd_promotion_evaluate(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_forge_build_binding(args: argparse.Namespace) -> int:
+    """Build a Rights binding from a bounded Forge receipt request document."""
+    try:
+        with Path(args.request).open("rb") as request_file:
+            raw = request_file.read(MAX_FORGE_BINDING_REQUEST_BYTES + 1)
+        if len(raw) > MAX_FORGE_BINDING_REQUEST_BYTES:
+            raise ValueError("Forge binding request exceeds the 2 MiB input bound")
+        request = json.loads(raw.decode("utf-8"))
+        if not isinstance(request, dict):
+            raise TypeError("Forge binding request must be an object")
+        if set(request) - {
+            "schema_version", "build_receipt", "contributing_manifests", "context_identity"
+        }:
+            raise ValueError("Forge binding request contains unsupported fields")
+        if request.get("schema_version") != BUILD_BINDING_REQUEST_SCHEMA:
+            raise ValueError(f"schema_version must be {BUILD_BINDING_REQUEST_SCHEMA}")
+        if "build_receipt" not in request:
+            raise ValueError("Forge binding request requires build_receipt")
+        manifests = request.get("contributing_manifests", [])
+        if not isinstance(manifests, list):
+            raise TypeError("contributing_manifests must be a list")
+        binding = build_forge_provider_artifact_binding(
+            request["build_receipt"],
+            manifests,
+            context_identity=request.get("context_identity"),
+        )
+    except (OSError, UnicodeError, ValueError, TypeError) as exc:
+        _emit({"ok": False, "error": str(exc), "legal_conclusion": "NOT_MADE"})
+        return 2
+    _emit(binding, human=args.human)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="mncs-rp", description="MNCS Rights & Provenance tooling")
     parser.add_argument("--version", action="version", version=f"mncs-rp {__version__}")
@@ -448,6 +484,21 @@ def build_parser() -> argparse.ArgumentParser:
     promotion_eval.add_argument("document", help="lineage record or manifest with lineage block")
     promotion_eval.add_argument("--human", action="store_true")
     promotion_eval.set_defaults(func=cmd_promotion_evaluate)
+
+    artifact_binding = subparsers.add_parser(
+        "artifact-binding", help="produce bounded cross-system artifact bindings"
+    )
+    artifact_binding_sub = artifact_binding.add_subparsers(
+        dest="artifact_binding_command", required=True
+    )
+    forge_build = artifact_binding_sub.add_parser(
+        "forge-build", help="bind one Forge provider build receipt to Rights references"
+    )
+    forge_build.add_argument(
+        "request", help="versioned JSON request containing a Forge build receipt"
+    )
+    forge_build.add_argument("--human", action="store_true")
+    forge_build.set_defaults(func=cmd_forge_build_binding)
 
     return parser
 

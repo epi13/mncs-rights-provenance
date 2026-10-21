@@ -16,6 +16,7 @@ from typing import Any, cast
 from .artifact_binding import build_native_artifact_binding
 
 BUILD_RECEIPT_SCHEMA = "mncs.provider-build-receipt/1"
+BUILD_BINDING_REQUEST_SCHEMA = "mncs.rights-provenance.forge-build-binding-request/0.1.0"
 _HEX_DIGEST_LENGTH = 64
 
 

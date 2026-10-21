@@ -59,6 +59,12 @@ not retain the primary source binding as a source snapshot, so inputs are
 represented as declared `depends-upon` relationships and
 `source_snapshot_identity` stays unavailable. Missing rights remain unknown,
 compatibility stays unknown, and the binding makes no legal conclusion.
+The versioned request schema at
+`schemas/v0.1/forge-build-binding-request.schema.json` and
+`mncs-rp artifact-binding forge-build REQUEST.json` expose the adapter as an
+on-demand machine interface. The request must supply any applicable manifest
+references explicitly; the command does not treat receipt metadata or an
+external license file as an authoritative instruction.
 
 The Compiler does not yet emit the binding. The live Environment vertical
 slice emits admission context and its own artifact lineage; Compiler and
