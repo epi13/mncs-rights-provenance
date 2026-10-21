@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/agent-governance/v0.1.0.schema.json",
+  "title": "MNCS Agent Governance Profile v0.1.0",
+  "description": "A bounded operational profile. Authority and scope are supplied by an explicit Environment binding, never by this file.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "profile_version", "rights", "provenance", "agent_governance"],
+  "properties": {
+    "schema_version": {"const": "mncs.rights.agent-governance/0.1.0"},
+    "profile_id": {"type": "string", "minLength": 1},
+    "profile_version": {"type": "integer", "minimum": 1},
+    "rights": {
+      "type": "object", "additionalProperties": false,
+      "required": ["external_material", "incompatible_rights", "unknown_rights"],
+      "properties": {
+        "external_material": {"enum": ["verify", "record-source"]},
+        "incompatible_rights": {"enum": ["resolve-before-inclusion", "explain-and-escalate"]},
+        "unknown_rights": {"enum": ["investigate", "preserve-unknown"]}
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lineage", "transformations", "external_inputs", "unverifiable_claims"],
+      "properties": {
+        "lineage": {"enum": ["preserve", "best-effort"]},
+        "transformations": {"enum": ["record", "best-effort"]},
+        "external_inputs": {"enum": ["identify", "best-effort"]},
+        "unverifiable_claims": {"enum": ["distinguish", "record"]}
+      }
+    },
+    "agent_governance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["copying_external_implementations", "independent_implementation", "rights_conflict", "provenance_loss"],
+      "properties": {
+        "copying_external_implementations": {"enum": ["authorization-required", "verify-rights"]},
+        "independent_implementation": {"enum": ["permitted-when-lawful", "investigate"]},
+        "rights_conflict": {"enum": ["explain-and-escalate", "investigate"]},
+        "provenance_loss": {"enum": ["diagnose-and-recover", "record-unknown"]}
+      }
+    }
+  }
+}

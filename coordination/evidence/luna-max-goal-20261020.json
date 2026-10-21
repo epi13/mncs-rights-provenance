@@ -1,0 +1,72 @@
+{
+  "schema_version": "mncs.rights-provenance.coordination-evidence/1",
+  "observed_at": "2026-10-21T05:43:53Z",
+  "observed_workspace_time": "2026-10-20T22:43:53-07:00",
+  "campaign": "Luna Max Goal — MNCS Machine-Native Rights, Provenance & Governance",
+  "owned_scopes": [
+    {
+      "repository": "mncs-rights-provenance",
+      "session_id": "ses_34263c3e885efc22",
+      "campaign_id": "cmp_luna_max_rights_current_20261020",
+      "claim_id": "claim:mncs-rights-provenance:worktree:7eb929fe35d1",
+      "branch": "campaign/luna-max-rights-provenance-20261020",
+      "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-provenance-20261020",
+      "base_head": "79fadfbca1cb2c5ea99f2f9ad73bf8a1a1f7d6cf",
+      "claim_live": true
+    },
+    {
+      "repository": "mncs-environment",
+      "session_id": "ses_f13d176c86a23e69",
+      "campaign_id": "cmp_luna_max_rights_env_worktree_20261020",
+      "claim_id": "claim:mncs-environment:worktree:a76c547054b5",
+      "branch": "campaign/luna-max-rights-context-20261020",
+      "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/luna-max-rights-context-20261020",
+      "base_head": "1c12e0fcbeeeb0502d3fbd73900ca2a8c2756bd8",
+      "claim_live": true
+    }
+  ],
+  "foreign_live_scopes_observed": [
+    {
+      "repository": "mncs-environment",
+      "session_id": "ses_2289d3de4deffd20",
+      "claim_id": "claim:mncs-environment:worktree:5053f3907a1c",
+      "branch": "main",
+      "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/merge-main-authority-20261020",
+      "reason": "Continue the Environment main-worktree claim for the nested checkout continuity fix.",
+      "live": true
+    },
+    {
+      "repository": "mncs-environment",
+      "session_id": "ses_fb57424feb72607c",
+      "claim_id": "claim:mncs-environment:worktree:5c5d66ca4373",
+      "branch": "campaign/nested-claim-resolution-20261020",
+      "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/nested-claim-resolution-20261020",
+      "reason": "Implement Git-identity-based resolution for claims on registered nested Environment worktrees.",
+      "live": true
+    }
+  ],
+  "coordination_findings": [
+    {
+      "finding": "Explicit campaign selection resolves ambiguous continuation state.",
+      "evidence": "A project-level claims query without campaign_id returned four matching campaigns. Supplying campaign_id and selecting the owned worktree returned its active session and context."
+    },
+    {
+      "finding": "An old path claim remained recorded but was expired and not live.",
+      "evidence": "claim:mncs-environment:paths:8e5c21a0fdfd held mncs_env/sessions.py for session ses_1af8b3bf5e25368c until 2026-10-21T03:29:58Z; at 2026-10-21T05:43:53Z Control reported live=false. Work stayed in the separately claimed Environment worktree."
+    },
+    {
+      "finding": "The lifecycle bridge exposes claims listing but rejects claim mutation and explanation fields on that operation.",
+      "evidence": "Arguments acquire and explain returned unsupported-arguments errors. Repository, offset, and limit were accepted. Previously established worktree claims were used; no foreign claim was altered."
+    },
+    {
+      "finding": "Worktree metadata required a local-path namespace repair.",
+      "evidence": "New worktree .git pointers referenced /workspace paths unavailable in the host checkout. Only the two owned worktrees' pointers and mirror metadata were repaired to /home/epi13/Documents/Projects paths."
+    }
+  ],
+  "noninterference": {
+    "foreign_worktrees_modified": false,
+    "foreign_sessions_interrupted": false,
+    "shared_branches_overwritten": false,
+    "changes_written_only_to_owned_worktrees": true
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "mncs-rights-provenance-development",
+  "working_checkout": "current",
+  "workspace_root": ".",
+  "workspace_scope": {
+    "kind": "workspace",
+    "repositories": [
+      "mncs-rights-provenance"
+    ]
+  },
+  "required_capabilities": [],
+  "services": [],
+  "intent": {
+    "goal": "Establish machine-readable MNCS rights, provenance, and agent-governance context.",
+    "repositories": [
+      "mncs-rights-provenance"
+    ],
+    "constraints": [
+      "Keep the current legal license authoritative; the MNCS permissive-license text remains a candidate.",
+      "Keep legal rights separate from operational agent governance.",
+      "Preserve unknown, declared, observed, and verified evidence states.",
+      "Respect other sessions and modify only worktrees covered by this campaign's claims."
+    ],
+    "forbidden_actions": [
+      "delete",
+      "retire"
+    ],
+    "expected_artifacts": [
+      "Versioned MNCS permissive-license candidate.",
+      "Machine-readable rights and governance context."
+    ],
+    "acceptance_criteria": [
+      "Unresolved rights stay explicit and actionable.",
+      "Context identity changes when its declared profile changes."
+    ],
+    "provenance_expectations": [
+      "Preserve artifact identities and transformation lineage.",
+      "Distinguish declared, observed, and verified facts."
+    ],
+    "write_scope": [
+      "mncs-rights-provenance: governance profile, context resolver, candidate license, targeted tests."
+    ]
+  },
+  "rights_context": {
+    "schema_version": "mncs.environment.rights-context-binding/1",
+    "manifest": "RIGHTS.json",
+    "governance_profile": "governance/agent-governance.json",
+    "profile_id": "mncs-rights-provenance/native-open@0.1.0",
+    "authority": {
+      "identity": "workspace-owner/luna-max-goal/2026-10-20",
+      "basis": "explicit-user-authorized-campaign",
+      "source_ref": ".mncs/environment.json#/rights_context",
+      "scope": [
+        "mncs-rights-provenance"
+      ]
+    },
+    "external_metadata_authoritative": false,
+    "context_budget_bytes": 8192
+  }
+}

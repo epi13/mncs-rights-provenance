@@ -1,0 +1,22 @@
+{
+  "schema_version": "mncs.rights.agent-governance/0.1.0",
+  "profile_id": "mncs-rights-provenance/native-open@0.1.0",
+  "profile_version": 1,
+  "rights": {
+    "external_material": "verify",
+    "incompatible_rights": "resolve-before-inclusion",
+    "unknown_rights": "investigate"
+  },
+  "provenance": {
+    "lineage": "preserve",
+    "transformations": "record",
+    "external_inputs": "identify",
+    "unverifiable_claims": "distinguish"
+  },
+  "agent_governance": {
+    "copying_external_implementations": "authorization-required",
+    "independent_implementation": "permitted-when-lawful",
+    "rights_conflict": "explain-and-escalate",
+    "provenance_loss": "diagnose-and-recover"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/agent-context/v0.1.0.schema.json",
+  "title": "MNCS Rights and Provenance Agent Context v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "context_budget_bytes", "identity", "status", "sources", "rights", "provenance", "governance", "diagnostics"],
+  "properties": {
+    "schema_version": {"const": "mncs.rights-provenance.agent-context/1"},
+    "context_budget_bytes": {"type": "integer", "minimum": 4096, "maximum": 8192},
+    "identity": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "status": {"enum": ["declared", "review"]},
+    "sources": {"type": "object"},
+    "rights": {"type": "object"},
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "projection": {
+          "type": "object",
+          "required": ["schema_version", "output_ref", "relationships"],
+          "properties": {
+            "schema_version": {"const": "mncs.rights-provenance.context-lineage/1"},
+            "output_ref": {"type": "string"},
+            "relationships": {
+              "type": "array", "maxItems": 3,
+              "items": {
+                "type": "object", "additionalProperties": false,
+                "required": ["from", "to", "relation", "content_digest", "evidence_state"],
+                "properties": {
+                  "from": {"type": "string"},
+                  "to": {"type": "string"},
+                  "relation": {"enum": ["generated-from", "transformed-by", "referenced"]},
+                  "content_digest": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"},
+                  "evidence_state": {"enum": ["observed-input", "observed-execution", "unavailable"]}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "governance": {"type": "object"},
+    "diagnostics": {"type": "array", "maxItems": 12, "items": {"type": "object"}}
+  }
+}
