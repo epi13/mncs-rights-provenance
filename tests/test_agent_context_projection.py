@@ -236,6 +236,65 @@ def test_license_term_index_preserves_conditional_notices_and_patent_scope() -> 
     assert apache["compatibility"]["status"] == "unknown"
 
 
+def test_license_candidate_registry_is_valid_and_points_to_the_unadopted_draft() -> None:
+    registry = json.loads(
+        (ROOT / "src/mncs_rights_provenance/resources/license-candidates.json").read_text()
+    )
+    schema = json.loads((ROOT / "schemas/v0.1/license-candidate-registry.schema.json").read_text())
+    Draft202012Validator.check_schema(schema)
+    assert list(Draft202012Validator(schema).iter_errors(registry)) == []
+
+    candidate = registry["candidates"][0]
+    assert candidate["identifier"] == "LicenseRef-MNCS-Permissive-0.1"
+    assert candidate["status"] == "draft-for-legal-review"
+    assert candidate["adoption_status"] == "not-adopted"
+    assert candidate["effective_grant"] is False
+    assert candidate["retroactive_application"] is False
+    assert candidate["adoption_authority"] is None
+    assert (ROOT / candidate["text_ref"]).is_file()
+
+
+def test_candidate_license_reference_never_becomes_an_effective_term_summary() -> None:
+    identifier = "LicenseRef-MNCS-Permissive-0.1"
+    result = resolve_license_expression(identifier)
+    leaf = result["expression_tree"]
+
+    assert result["status"] == "partial"
+    assert result["unresolved_identifiers"] == [identifier]
+    assert result["candidate_references"] == [identifier]
+    assert leaf["status"] == "candidate-unapproved"
+    assert leaf["candidate_version"] == "0.1"
+    assert leaf["effective_grant"] is False
+    assert leaf["adoption_status"] == "not-adopted"
+    assert leaf["declared_rights_prove_authority"] is False
+    assert "permissions" not in leaf
+    assert leaf["source_ref"] == "legal-candidates/MNCS-Permissive-0.1.md"
+    assert result["compatibility"]["status"] == "unknown"
+
+    combined = resolve_license_expression(f"{identifier} AND MIT")
+    branches = combined["expression_tree"]["terms"]
+    assert branches[0]["status"] == "candidate-unapproved"
+    assert branches[1]["status"] == "reference-summary"
+    assert "permissions" not in branches[0]
+    assert combined["compatibility"]["status"] == "unknown"
+
+
+def test_agent_context_explains_candidate_status_without_treating_it_as_rights() -> None:
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = "LicenseRef-MNCS-Permissive-0.1"
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+
+    assert context["rights"]["license_terms"]["candidate_references"] == [
+        "LicenseRef-MNCS-Permissive-0.1",
+    ]
+    codes = {item["code"] for item in context["diagnostics"]}
+    assert "license-candidate-not-effective" in codes
+    assert "license-terms-unresolved" not in codes
+    assert "rights-manifest-invalid" not in codes
+    assert context["rights"]["compatibility"]["status"] == "unknown"
+
+
 def test_spdx_or_and_expression_keeps_branch_obligations_and_unknown_compatibility() -> None:
     result = resolve_license_expression("MIT OR (BSD-2-Clause AND LicenseRef-Local)")
 

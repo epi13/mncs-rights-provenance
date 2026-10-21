@@ -13,6 +13,14 @@ The candidate keeps a short MIT/BSD-style copyright permission and notice condit
 
 The machine-readable summary identifies license text, a small set of notice conditions, and explicit patent scope where stated. It leaves cross-license compatibility and ownership unresolved. A declared license or contributor assertion does not prove authority to grant rights. Machine assistance or generation does not itself establish who owns copyright.
 
+`src/mncs_rights_provenance/resources/license-candidates.json` records the
+candidate as a versioned, unadopted draft. The license resolver recognizes
+that local `LicenseRef` and points agents to this status and its draft text;
+it does not add proposed permissions to the effective license-term index.
+Environment context therefore surfaces an actionable review diagnostic while
+preserving `unknown` compatibility. The registry is metadata about the
+candidate, not a replacement for an effective repository license.
+
 ## Decisions still open
 
 - Whether MNCS needs its own legal license at all, or should retain Apache-2.0 for new work and invest only in machine-readable rights and provenance.

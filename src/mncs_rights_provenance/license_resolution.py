@@ -8,7 +8,9 @@ unknown instead of being reduced to permission flags.
 
 from __future__ import annotations
 
+import json
 import re
+from importlib.resources import files
 from typing import Any
 
 from .spdx import is_valid_spdx_expression
@@ -81,6 +83,46 @@ _TERMS: dict[str, dict[str, Any]] = {
         "warranty": "as-is-and-liability-disclaimer",
     },
 }
+
+
+def _load_license_candidates() -> dict[str, dict[str, Any]]:
+    resource = files("mncs_rights_provenance").joinpath(
+        "resources", "license-candidates.json"
+    )
+    value = json.loads(resource.read_text(encoding="utf-8"))
+    if (
+        not isinstance(value, dict)
+        or value.get("schema_version") != "mncs.rights.license-candidates/1"
+    ):
+        raise RuntimeError("packaged license candidate registry has an unsupported schema")
+    entries = value.get("candidates")
+    if not isinstance(entries, list):
+        raise TypeError("packaged license candidate registry has no candidate list")
+    candidates: dict[str, dict[str, Any]] = {}
+    for entry in entries:
+        if (
+            not isinstance(entry, dict)
+            or not isinstance(entry.get("identifier"), str)
+            or entry["identifier"] in candidates
+            or not isinstance(entry.get("version"), str)
+            or not entry["version"]
+            or entry.get("status") != "draft-for-legal-review"
+            or entry.get("adoption_status") != "not-adopted"
+            or entry.get("effective_grant") is not False
+            or entry.get("retroactive_application") is not False
+            or entry.get("adoption_authority") is not None
+            or not isinstance(entry.get("text_ref"), str)
+            or not entry["text_ref"]
+            or entry.get("declared_rights_prove_authority") is not False
+        ):
+            raise TypeError("packaged license candidate registry has an invalid entry")
+        candidates[entry["identifier"]] = entry
+    if not candidates:
+        raise RuntimeError("packaged license candidate registry is empty")
+    return candidates
+
+
+_CANDIDATES = _load_license_candidates()
 
 
 class _ExpressionParser:
@@ -167,6 +209,7 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
         }
 
     unresolved: list[str] = []
+    candidate_references: set[str] = set()
 
     def expand(node: dict[str, Any]) -> dict[str, Any]:
         if "license" in node:
@@ -178,6 +221,21 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
                     "license": identifier,
                     "exception": exception,
                     "status": "unknown-license-exception-terms",
+                }
+            candidate = _CANDIDATES.get(identifier)
+            if candidate is not None:
+                unresolved.append(identifier)
+                candidate_references.add(identifier)
+                return {
+                    "license": identifier,
+                    "status": "candidate-unapproved",
+                    "candidate_status": candidate["status"],
+                    "candidate_version": candidate["version"],
+                    "effective_grant": candidate["effective_grant"],
+                    "adoption_status": candidate["adoption_status"],
+                    "declared_rights_prove_authority": False,
+                    "source_ref": candidate["text_ref"],
+                    "registry_ref": "mncs_rights_provenance/resources/license-candidates.json",
                 }
             terms = _TERMS.get(identifier)
             if terms is None:
@@ -197,6 +255,7 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
         "status": status,
         "expression_tree": expanded,
         "unresolved_identifiers": sorted(set(unresolved)),
+        "candidate_references": sorted(candidate_references),
         "compatibility": {
             "status": "unknown",
             "reason": "license terms are summarized per expression branch; compatibility is not inferred",

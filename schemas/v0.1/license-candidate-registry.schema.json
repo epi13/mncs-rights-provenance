@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/license-candidate-registry/v0.1.0.schema.json",
+  "title": "MNCS Rights License Candidate Registry v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "candidates"],
+  "properties": {
+    "schema_version": {"const": "mncs.rights.license-candidates/1"},
+    "candidates": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/candidate"},
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identifier",
+        "version",
+        "status",
+        "adoption_status",
+        "effective_grant",
+        "retroactive_application",
+        "adoption_authority",
+        "text_ref",
+        "declared_rights_prove_authority",
+        "legal_review_decisions"
+      ],
+      "properties": {
+        "identifier": {"type": "string", "pattern": "^LicenseRef-[A-Za-z0-9.+-]+$"},
+        "version": {"type": "string", "minLength": 1, "maxLength": 32},
+        "status": {"const": "draft-for-legal-review"},
+        "adoption_status": {"const": "not-adopted"},
+        "effective_grant": {"const": false},
+        "retroactive_application": {"const": false},
+        "adoption_authority": {"type": "null"},
+        "text_ref": {"type": "string", "minLength": 1, "maxLength": 256},
+        "declared_rights_prove_authority": {"const": false},
+        "legal_review_decisions": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 128},
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

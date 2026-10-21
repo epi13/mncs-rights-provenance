@@ -204,7 +204,23 @@ def build_agent_context(
                 "evidence_ref": f"{manifest_ref}#/rights/{field}",
                 "remedy": remedy,
             })
-    if license_resolution.get("status") in {"unresolved", "partial"}:
+    candidate_references = license_resolution.get("candidate_references", [])
+    for candidate_reference in candidate_references:
+        diagnostics.append({
+            "code": "license-candidate-not-effective",
+            "severity": "review",
+            "summary": (
+                f"{candidate_reference} is an unadopted draft and grants no rights here."
+            ),
+            "evidence_ref": "mncs_rights_provenance/resources/license-candidates.json",
+            "remedy": "identify-effective-license-declaration",
+        })
+    unresolved_identifiers = set(license_resolution.get("unresolved_identifiers", []))
+    unresolved_identifiers.difference_update(candidate_references)
+    if (
+        license_resolution.get("status") in {"unresolved", "partial"}
+        and unresolved_identifiers
+    ):
         diagnostics.append({
             "code": "license-terms-unresolved",
             "severity": "review",

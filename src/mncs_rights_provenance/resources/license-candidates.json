@@ -1,0 +1,23 @@
+{
+  "schema_version": "mncs.rights.license-candidates/1",
+  "candidates": [
+    {
+      "identifier": "LicenseRef-MNCS-Permissive-0.1",
+      "version": "0.1",
+      "status": "draft-for-legal-review",
+      "adoption_status": "not-adopted",
+      "effective_grant": false,
+      "retroactive_application": false,
+      "adoption_authority": null,
+      "text_ref": "legal-candidates/MNCS-Permissive-0.1.md",
+      "declared_rights_prove_authority": false,
+      "legal_review_decisions": [
+        "patent-grant-scope",
+        "patent-litigation-response",
+        "contributor-authority-and-third-party-rights",
+        "machine-generated-authorship-and-ownership",
+        "jurisdiction-and-enforceability"
+      ]
+    }
+  ]
+}
