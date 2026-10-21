@@ -1,7 +1,7 @@
 {
   "schema_version": "mncs-family.repository-manifest/v0alpha1",
   "repository": "mncs-rights-provenance",
-  "revision": 2,
+  "revision": 3,
   "manifest_location": "in-repository",
   "authority": {"note": "Rights-provenance owns provenance evidence, rights manifests, contribution attestations, release-policy evaluation, and SPDX interoperability. Uncertainty is first-class (unknown/unresolved/insufficient-evidence); the system records evidence and never fabricates legal conclusions. Not legal advice."},
   "contracts": {
@@ -16,6 +16,7 @@
           "language/",
           "src/mncs_rights_provenance/",
           "schemas/v0.3/",
+          "schemas/v0.4/",
           "RIGHTS.json",
           "scripts/environment_rights_validate.py"
         ],

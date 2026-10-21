@@ -1,0 +1,87 @@
+{
+  "schema_version": "mncs.rights.lineage-record-v04-evidence/1",
+  "recorded_at": "2026-10-21T21:10:35Z",
+  "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+  "repository": "mncs-rights-provenance",
+  "branch": "campaign/luna-max-lineage-relations-20261021",
+  "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-lineage-relations-20261021",
+  "base_commit": "d7cd55043aa8e4d30cd56cd6c78ef1a861b80284",
+  "coordination": {
+    "owner_session": "ses_973d1b67eb66857e",
+    "environment_claim": "claim:mncs-rights-provenance:worktree:276fcd6bd986",
+    "scope_kind": "worktree",
+    "scope_branch": "campaign/luna-max-lineage-relations-20261021",
+    "concurrent_claims_observed": [
+      {
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "session_id": "ses_a6a27331d7d348b9",
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+        "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-artifact-handoff-20261021",
+        "status": "held",
+        "reason": "Own the canonical isolated Rights worktree while implementing the live artifact handoff."
+      }
+    ],
+    "working_scopes_overlap": false,
+    "claim_acquisition": "Used Control-scoped Environment continuation followed by the canonical mncs-env claims CLI in the same protected execution. The Environment lifecycle MCP claims operation remained read-only.",
+    "rejected_attempts": [
+      {
+        "attempt": "Claim using the host checkout path through the protected Control terminal.",
+        "result": "rejected",
+        "diagnostic": "client path escapes its scoped sandbox root",
+        "publication_completed": false
+      },
+      {
+        "attempt": "Claim using the workspace-visible path without running continuation in the same execution.",
+        "result": "rejected",
+        "diagnostic": "session mutation requires the exact session selected by Environment continuation in this execution",
+        "publication_completed": false
+      }
+    ],
+    "recovery": "The claim succeeded after using /workspace/mncs-rights-provenance/.worktrees/... and running continuation before claim acquisition in one protected terminal execution."
+  },
+  "architecture_gap": {
+    "producer_contract": "mncs.rights-provenance.native-artifact-binding/0.1.0",
+    "previous_lineage_contract": "0.3.0",
+    "observation": "Native artifact bindings preserve compiled-from, incorporates, references, depends-upon, and independently-implemented-against, but standalone v0.3 lineage records reject those relationship meanings.",
+    "resolution": "Add a versioned v0.4 standalone lineage contract with artifact_relationships, artifact_transformations, artifact_binding_refs, and evidence-bearing artifact_lineage_state. Keep pressure-oriented derivations separate."
+  },
+  "implementation": {
+    "lineage_schema": "schemas/v0.4/lineage-record.schema.json",
+    "artifact_binding_validator": "validate_native_artifact_binding",
+    "projection_api": "lineage_record_from_artifact_binding",
+    "projection_cli": "mncs-rp lineage from-artifact-binding BINDING.json --lineage-id ID --reference REF",
+    "migration": "migrate_lineage_record_03_to_04 updates schema_version and recomputes the digest; it adds no missing lineage facts.",
+    "evidence_behavior": "Relationships and transformation records retain their producer evidence states and reference the exact canonical digest of the bounded input binding. Empty producer relationship arrays remain explicit.",
+    "rights_behavior": "Rights state is retained, compatibility remains unknown, and legal_conclusion remains NOT_MADE.",
+    "completeness_behavior": "Partial or unknown lineage status inferred from the binding remains evidence_state inferred; a supplied complete value remains declared and is not turned into a completeness attestation.",
+    "license_effect": "None. The existing Apache-2.0 LICENSE and unapproved MNCS legal candidate are unchanged."
+  },
+  "verification": {
+    "focused": {
+      "command": "python3 -m pytest -q tests/test_lineage_v04.py tests/test_pressure_provenance.py",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "repository_suite": {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python3 -m pytest -q tests",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "lint": {
+      "command": "python3 -m ruff check src/mncs_rights_provenance/lineage.py src/mncs_rights_provenance/artifact_binding.py src/mncs_rights_provenance/validation.py src/mncs_rights_provenance/cli.py src/mncs_rights_provenance/__init__.py tests/test_lineage_v04.py",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "passed"
+    }
+  },
+  "limitations": [
+    "The projection preserves supplied producer assertions; it does not independently verify source identity, origin, or authorship.",
+    "independently-implemented-against records a claimed specification relationship and is not proof of independent origin.",
+    "The content digest is an integrity binding, not a producer signature or authority attestation.",
+    "No compatibility or legal conclusion is made."
+  ]
+}

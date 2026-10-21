@@ -19,6 +19,7 @@ from .agent_context import build_agent_context
 from .artifact_binding import (
     build_native_artifact_binding,
     diagnose_native_artifact_binding,
+    validate_native_artifact_binding,
 )
 from .authority import (
     ACTOR_CLASSES,
@@ -40,12 +41,15 @@ from .evidence import (
 from .forge_adapter import build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
 from .license_resolution import license_resolver_identity, resolve_license_expression
-from .spdx import parse_spdx_expression
 from .lineage import (
+    ARTIFACT_EVIDENCE_STATES,
+    ARTIFACT_RELATIONS,
     LineageRecord,
     compute_lineage_digest,
+    lineage_record_from_artifact_binding,
     lineage_record_from_dict,
     lineage_verdict,
+    migrate_lineage_record_03_to_04,
     migrate_manifest_02_to_03,
     seal_lineage_record,
     verify_lineage_digest,
@@ -86,6 +90,7 @@ from .promotion import (
     promotion_inputs_from_dict,
     promotion_report,
 )
+from .spdx import parse_spdx_expression
 from .validation import (
     validate_lineage_structure,
     validate_manifest_structure,
@@ -96,6 +101,8 @@ __version__ = "0.3.0"
 __all__ = [
     "ACTOR_CLASSES",
     "ACTOR_TYPES",
+    "ARTIFACT_EVIDENCE_STATES",
+    "ARTIFACT_RELATIONS",
     "AUTHORITY_SCOPES",
     "BASE_SCHEMA_VERSION",
     "DEFAULT_PROFILE_ID",
@@ -136,21 +143,24 @@ __all__ = [
     "evidence_record_from_dict",
     "evidence_record_to_dict",
     "license_resolver_identity",
+    "lineage_record_from_artifact_binding",
     "lineage_record_from_dict",
     "lineage_verdict",
     "load_manifest_file",
     "manifest_from_dict",
     "manifest_to_dict",
+    "migrate_lineage_record_03_to_04",
     "migrate_manifest_02_to_03",
+    "parse_spdx_expression",
     "profile_from_dict",
     "promotion_combined",
     "promotion_inputs_from_dict",
     "promotion_report",
-    "parse_spdx_expression",
     "resolve_license_expression",
     "seal_lineage_record",
     "sha256_hex",
     "validate_lineage_structure",
     "validate_manifest_structure",
+    "validate_native_artifact_binding",
     "verify_lineage_digest",
 ]

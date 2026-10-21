@@ -15,7 +15,11 @@ from typing import Any
 from .model import ARTIFACT_CLASSES
 
 SCHEMA_VERSION = "0.2.0"
-LINEAGE_SCHEMA_VERSION = "0.3.0"
+LINEAGE_SCHEMA_VERSION = "0.4.0"
+PREVIOUS_LINEAGE_SCHEMA_VERSION = "0.3.0"
+SUPPORTED_LINEAGE_SCHEMA_VERSIONS = frozenset(
+    {PREVIOUS_LINEAGE_SCHEMA_VERSION, LINEAGE_SCHEMA_VERSION}
+)
 SUPPORTED_MANIFEST_VERSIONS = frozenset({"0.2.0", "0.3.0"})
 
 _SHA256_RE = re.compile(r"^[a-fA-F0-9]{64}$")
@@ -672,13 +676,23 @@ def _validate_authority_claim(value: Any, label: str) -> list[str]:
 
 
 def validate_lineage_structure(document: Mapping[str, Any]) -> list[str]:
-    """Structural checks for standalone v0.3 lineage records."""
+    """Structural checks for standalone v0.3 and v0.4 lineage records."""
     issues: list[str] = []
     if not isinstance(document, Mapping):
         return ["lineage record must be a JSON object"]
-    if document.get("schema_version") != LINEAGE_SCHEMA_VERSION:
+    schema_version = document.get("schema_version")
+    if schema_version not in SUPPORTED_LINEAGE_SCHEMA_VERSIONS:
         issues.append(f"unsupported lineage schema_version: {document.get('schema_version')!r}")
         return sorted(issues)
+    is_v04 = schema_version == LINEAGE_SCHEMA_VERSION
+    v04_fields = {
+        "artifact_relationships",
+        "artifact_transformations",
+        "artifact_binding_refs",
+        "artifact_lineage_state",
+    }
+    if not is_v04 and any(field in document for field in v04_fields):
+        issues.append("v0.3 lineage records cannot contain v0.4 artifact fields")
     if not isinstance(document.get("lineage_id"), str) or not document["lineage_id"]:
         issues.append("lineage_id must be a non-empty string")
     subject = document.get("subject")
@@ -750,6 +764,51 @@ def validate_lineage_structure(document: Mapping[str, Any]) -> list[str]:
             continue
         if not isinstance(entry.get("gap_ref"), str) or not entry["gap_ref"]:
             issues.append(f"capability_gap_links[{index}].gap_ref must be non-empty")
+    if is_v04:
+        artifact_state = document.get("artifact_lineage_state")
+        if artifact_state is not None:
+            if not isinstance(artifact_state, Mapping):
+                issues.append("artifact_lineage_state must be an evidence-bearing object")
+            else:
+                if not {"state", "evidence_state", "binding_digest"}.issubset(artifact_state):
+                    issues.append("artifact_lineage_state is missing required fields")
+                if set(artifact_state) - {
+                    "state", "evidence_state", "binding_digest", "verifier_ref"
+                }:
+                    issues.append("artifact_lineage_state contains unsupported fields")
+                state_value = artifact_state.get("state")
+                if not isinstance(state_value, str) or state_value not in {
+                    "complete", "partial", "unknown"
+                }:
+                    issues.append("artifact_lineage_state.state is invalid")
+                evidence_state = artifact_state.get("evidence_state")
+                if not isinstance(evidence_state, str) or evidence_state not in _ARTIFACT_EVIDENCE_STATES:
+                    issues.append("artifact_lineage_state.evidence_state is invalid")
+                if evidence_state == "verified-attestation" and not artifact_state.get("verifier_ref"):
+                    issues.append("artifact_lineage_state.verifier_ref is required for verified evidence")
+                digest = artifact_state.get("binding_digest")
+                if not (isinstance(digest, str) and digest.startswith("sha256:")
+                        and _SHA256_RE.fullmatch(digest[7:])):
+                    issues.append("artifact_lineage_state.binding_digest must be sha256:<64 hex>")
+                verifier = artifact_state.get("verifier_ref")
+                if verifier is not None and (not isinstance(verifier, str) or not verifier):
+                    issues.append("artifact_lineage_state.verifier_ref must be non-empty")
+        issues.extend(_validate_artifact_binding_refs(document.get("artifact_binding_refs")))
+        issues.extend(_validate_artifact_relationships(document.get("artifact_relationships")))
+        issues.extend(_validate_artifact_transformations(document.get("artifact_transformations")))
+        rights_summary = document.get("rights_summary")
+        if rights_summary is not None and not isinstance(rights_summary, Mapping):
+            issues.append("rights_summary must be an object")
+        elif isinstance(rights_summary, Mapping):
+            rights_state = rights_summary.get("rights_state")
+            if rights_state is not None and (
+                not isinstance(rights_state, str)
+                or rights_state not in {"declared", "review", "unknown"}
+            ):
+                issues.append("rights_summary.rights_state is invalid")
+            compatibility = rights_summary.get("compatibility")
+            if compatibility is not None and compatibility != "unknown":
+                issues.append("rights_summary.compatibility must remain unknown")
     dimensions = document.get("promotion_dimensions")
     if dimensions is not None:
         issues.extend(_validate_promotion_dimensions(dimensions, "promotion_dimensions"))
@@ -757,6 +816,168 @@ def validate_lineage_structure(document: Mapping[str, Any]) -> list[str]:
     if not isinstance(digest, str) or not _Digest_RE.match(digest):
         issues.append("content_digest must be 'sha256:<64 hex>'")
     return sorted(set(issues))
+
+
+_ARTIFACT_RELATIONS = frozenset(
+    {
+        "created-from",
+        "derived-from",
+        "generated-from",
+        "transformed-by",
+        "compiled-from",
+        "incorporates",
+        "references",
+        "depends-upon",
+        "independently-implemented-against",
+    }
+)
+_ARTIFACT_EVIDENCE_STATES = frozenset(
+    {
+        "directly-observed",
+        "declared",
+        "inferred",
+        "verified-attestation",
+        "unverified-attestation",
+        "unavailable",
+    }
+)
+_TRANSFORMATION_EVIDENCE_STATES = frozenset(
+    {"directly-observed", "declared", "inferred", "unavailable"}
+)
+
+
+def _validate_artifact_evidence(value: Any, label: str) -> list[str]:
+    issues: list[str] = []
+    if not isinstance(value, list) or len(value) > 16:
+        return [f"{label} must be an array of at most 16 entries"]
+    for index, item in enumerate(value):
+        entry_label = f"{label}[{index}]"
+        if not isinstance(item, Mapping):
+            issues.append(f"{entry_label} must be an object")
+            continue
+        if set(item) - {"reference", "state", "sha256", "verifier_ref"}:
+            issues.append(f"{entry_label} contains unsupported fields")
+        if not isinstance(item.get("reference"), str) or not item["reference"]:
+            issues.append(f"{entry_label}.reference must be non-empty")
+        state = item.get("state")
+        if not isinstance(state, str) or state not in _ARTIFACT_EVIDENCE_STATES:
+            issues.append(f"{entry_label}.state is invalid")
+        sha = item.get("sha256")
+        if sha is not None and (not isinstance(sha, str) or not _SHA256_RE.fullmatch(sha)):
+            issues.append(f"{entry_label}.sha256 must be sha256 hex")
+        verifier = item.get("verifier_ref")
+        if verifier is not None and (not isinstance(verifier, str) or not verifier):
+            issues.append(f"{entry_label}.verifier_ref must be non-empty")
+        if state == "verified-attestation" and not verifier:
+            issues.append(f"{entry_label}.verifier_ref is required for verified attestation")
+    return issues
+
+
+def _validate_artifact_binding_refs(value: Any) -> list[str]:
+    if value is None:
+        return []
+    issues: list[str] = []
+    if not isinstance(value, list) or len(value) > 64:
+        return ["artifact_binding_refs must be an array of at most 64 entries"]
+    required = {
+        "reference", "content_digest", "schema_version", "artifact_identity",
+        "producer", "producer_contract",
+    }
+    for index, item in enumerate(value):
+        label = f"artifact_binding_refs[{index}]"
+        if not isinstance(item, Mapping):
+            issues.append(f"{label} must be an object")
+            continue
+        if set(item) != required:
+            issues.append(f"{label} does not match the v0.4 binding reference contract")
+        for key in ("reference", "artifact_identity", "producer", "producer_contract"):
+            if not isinstance(item.get(key), str) or not item[key]:
+                issues.append(f"{label}.{key} must be non-empty")
+        digest = item.get("content_digest")
+        if not (isinstance(digest, str) and digest.startswith("sha256:")
+                and _SHA256_RE.fullmatch(digest[7:])):
+            issues.append(f"{label}.content_digest must be sha256:<64 hex>")
+        if item.get("schema_version") != "mncs.rights-provenance.native-artifact-binding/0.1.0":
+            issues.append(f"{label}.schema_version is unsupported")
+    return issues
+
+
+def _validate_artifact_relationships(value: Any) -> list[str]:
+    if value is None:
+        return []
+    issues: list[str] = []
+    if not isinstance(value, list) or len(value) > 128:
+        return ["artifact_relationships must be an array of at most 128 entries"]
+    required = {"from", "to", "relation", "evidence_state", "evidence", "binding_digest"}
+    for index, item in enumerate(value):
+        label = f"artifact_relationships[{index}]"
+        if not isinstance(item, Mapping):
+            issues.append(f"{label} must be an object")
+            continue
+        if set(item) != required:
+            issues.append(f"{label} does not match the v0.4 relationship contract")
+        for key in ("from", "to"):
+            if not isinstance(item.get(key), str) or not item[key]:
+                issues.append(f"{label}.{key} must be non-empty")
+        if item.get("from") == item.get("to"):
+            issues.append(f"{label} cannot be a self-loop")
+        relation = item.get("relation")
+        if not isinstance(relation, str) or relation not in _ARTIFACT_RELATIONS:
+            issues.append(f"{label}.relation is unsupported")
+        state = item.get("evidence_state")
+        if not isinstance(state, str) or state not in _ARTIFACT_EVIDENCE_STATES:
+            issues.append(f"{label}.evidence_state is invalid")
+        evidence = item.get("evidence")
+        issues.extend(_validate_artifact_evidence(evidence, f"{label}.evidence"))
+        if state != "unavailable" and isinstance(evidence, list) and not evidence:
+            issues.append(f"{label}.evidence is required unless unavailable")
+        digest = item.get("binding_digest")
+        if not (isinstance(digest, str) and digest.startswith("sha256:")
+                and _SHA256_RE.fullmatch(digest[7:])):
+            issues.append(f"{label}.binding_digest must be sha256:<64 hex>")
+    return issues
+
+
+def _validate_artifact_transformations(value: Any) -> list[str]:
+    if value is None:
+        return []
+    issues: list[str] = []
+    if not isinstance(value, list) or len(value) > 64:
+        return ["artifact_transformations must be an array of at most 64 entries"]
+    required = {
+        "artifact_identity", "kind", "toolchain_identity", "event_ref",
+        "evidence_state", "evidence", "binding_digest",
+    }
+    kinds = {"source-write", "generation", "transformation", "compilation", "link", "packaging", "other"}
+    for index, item in enumerate(value):
+        label = f"artifact_transformations[{index}]"
+        if not isinstance(item, Mapping):
+            issues.append(f"{label} must be an object")
+            continue
+        if set(item) != required:
+            issues.append(f"{label} does not match the v0.4 transformation contract")
+        for key in ("artifact_identity", "kind"):
+            if not isinstance(item.get(key), str) or not item[key]:
+                issues.append(f"{label}.{key} must be non-empty")
+        kind = item.get("kind")
+        if not isinstance(kind, str) or kind not in kinds:
+            issues.append(f"{label}.kind is unsupported")
+        for key in ("toolchain_identity", "event_ref"):
+            entry = item.get(key)
+            if entry is not None and (not isinstance(entry, str) or not entry):
+                issues.append(f"{label}.{key} must be null or non-empty")
+        state = item.get("evidence_state")
+        if not isinstance(state, str) or state not in _TRANSFORMATION_EVIDENCE_STATES:
+            issues.append(f"{label}.evidence_state is invalid")
+        evidence = item.get("evidence")
+        issues.extend(_validate_artifact_evidence(evidence, f"{label}.evidence"))
+        if state != "unavailable" and isinstance(evidence, list) and not evidence:
+            issues.append(f"{label}.evidence is required unless unavailable")
+        digest = item.get("binding_digest")
+        if not (isinstance(digest, str) and digest.startswith("sha256:")
+                and _SHA256_RE.fullmatch(digest[7:])):
+            issues.append(f"{label}.binding_digest must be sha256:<64 hex>")
+    return issues
 
 
 def validate_evidence_structure(document: Mapping[str, Any]) -> list[str]:
@@ -813,6 +1034,7 @@ def validate_evidence_structure(document: Mapping[str, Any]) -> list[str]:
 __all__ = [
     "LINEAGE_SCHEMA_VERSION",
     "SCHEMA_VERSION",
+    "SUPPORTED_LINEAGE_SCHEMA_VERSIONS",
     "SUPPORTED_MANIFEST_VERSIONS",
     "validate_evidence_structure",
     "validate_lineage_structure",
