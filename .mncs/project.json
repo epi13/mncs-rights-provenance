@@ -31,8 +31,30 @@
         }
       }
     ],
-    "consumes": [],
-    "tests": [{"test": "rights-provenance-tests", "covers": ["rights-provenance"], "obligation": "self", "command": {"argv": ["python3", "-m", "pytest", "tests", "-q"], "timeout_seconds": 900}}]
+    "consumes": [
+      {
+        "contract": "mncs-language.cli-toolchain",
+        "envelope": {"op": "any"},
+        "required": false,
+        "evidence_refs": ["tests/test_claims.py"]
+      }
+    ],
+    "tests": [
+      {
+        "test": "rights-provenance-tests",
+        "covers": ["rights-provenance"],
+        "obligation": "self",
+        "command": {
+          "argv": ["python3", "-m", "pytest", "tests", "-q"],
+          "toolchain": {
+            "repository": "mncs-language",
+            "path": "target/release/mncs"
+          },
+          "toolchain_env": "MNCS_BIN",
+          "timeout_seconds": 900
+        }
+      }
+    ]
   }
 ,
   "projection_inventory": ".mncs/projections.json",

@@ -5,15 +5,25 @@
   "workspace_scope": {
     "kind": "workspace",
     "repositories": [
-      "mncs-rights-provenance"
+      "mncs-rights-provenance",
+      "mncs-language"
     ]
   },
   "required_capabilities": [],
   "services": [],
+  "execution_roles": {
+    "reference": {
+      "capability": "mncs-language:cli-toolchain",
+      "use_reference_toolchain": true
+    }
+  },
   "intent": {
     "goal": "Establish machine-readable MNCS rights, provenance, and agent-governance context.",
     "repositories": [
       "mncs-rights-provenance"
+    ],
+    "protected_repositories": [
+      "mncs-language"
     ],
     "constraints": [
       "Keep the current legal license authoritative; the MNCS permissive-license text remains a candidate.",
