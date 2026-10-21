@@ -365,7 +365,7 @@ def test_agent_context_explains_candidate_status_without_treating_it_as_rights()
     assert context["sources"]["license_resolver"]["sha256"].startswith("sha256:")
     resolver_edge = next(
         edge for edge in context["provenance"]["projection"]["relationships"]
-        if edge["from"] == "mncs_rights_provenance.license_resolution/1"
+        if edge["from"] == "mncs_rights_provenance.license_resolution/2"
     )
     assert resolver_edge["relation"] == "referenced"
     assert resolver_edge["content_digest"] == context["sources"]["license_resolver"]["sha256"]
@@ -447,6 +447,7 @@ def test_spdx_or_and_expression_keeps_branch_obligations_and_unknown_compatibili
     result = resolve_license_expression("MIT OR (BSD-2-Clause AND LicenseRef-Local)")
 
     assert result["status"] == "partial"
+    assert result["schema_version"] == "mncs.rights.license-resolution/2"
     assert result["expression_tree"]["operator"] == "OR"
     assert result["expression_tree"]["terms"][1]["operator"] == "AND"
     assert result["unresolved_identifiers"] == ["LicenseRef-Local"]
@@ -521,9 +522,35 @@ def test_required_lineage_without_a_reference_has_actionable_diagnostic() -> Non
 
 
 def test_unrecognized_identifier_remains_unknown() -> None:
-    result = resolve_license_expression("LicenseRef-External")
+    result = resolve_license_expression("licenseref-External")
     assert result["status"] == "partial"
-    assert result["unresolved_identifiers"] == ["LicenseRef-External"]
+    assert result["unresolved_identifiers"] == ["licenseref-External"]
+    assert result["expression_tree"]["status"] == "unresolved-license-reference"
+    assert result["expression_tree"]["reference_kind"] == "document-local-license-ref"
+
+
+def test_known_spdx_license_lookup_is_case_insensitive_and_preserves_declaration() -> None:
+    result = resolve_license_expression("mit")
+
+    assert result["status"] == "reference-summary"
+    assert result["expression_tree"]["license"] == "mit"
+    assert "retain-copyright-and-permission-notice" == (
+        result["expression_tree"]["conditions"][0]["id"]
+    )
+
+
+def test_external_spdx_document_reference_stays_unresolved_with_its_source_identity() -> None:
+    result = resolve_license_expression(
+        "MIT AND documentref-vendor.1:licenseref-Restricted-terms"
+    )
+    external = result["expression_tree"]["terms"][1]
+
+    assert result["status"] == "partial"
+    assert external["license"] == "documentref-vendor.1:licenseref-Restricted-terms"
+    assert external["status"] == "unresolved-license-reference"
+    assert external["reference_kind"] == "external-document-license-ref"
+    assert "document and its extracted license terms were not supplied" in external["reason"]
+    assert result["compatibility"]["status"] == "unknown"
 
 
 def test_oversized_license_expression_is_bounded_and_unresolved() -> None:

@@ -23,7 +23,12 @@ from mncs_rights_provenance.manifest import (
     manifest_to_dict,
     seal_manifest,
 )
-from mncs_rights_provenance.spdx import export_spdx, import_spdx_sources, is_valid_spdx_expression
+from mncs_rights_provenance.spdx import (
+    export_spdx,
+    import_spdx_sources,
+    is_valid_spdx_expression,
+    parse_spdx_expression,
+)
 from mncs_rights_provenance.validation import (
     validate_evidence_structure,
     validate_manifest_structure,
@@ -201,8 +206,41 @@ def test_spdx_expression_checks() -> None:
     assert is_valid_spdx_expression("Apache-2.0")
     assert is_valid_spdx_expression("MIT OR Apache-2.0")
     assert is_valid_spdx_expression("(MIT OR GPL-2.0-only WITH Classpath-exception-2.0)")
+    assert is_valid_spdx_expression("GPL-2.0-or-later+")
+    assert is_valid_spdx_expression("LicenseRef-Local-terms")
+    assert is_valid_spdx_expression(
+        "DocumentRef-upstream.1:LicenseRef-Vendor-terms"
+    )
+    assert is_valid_spdx_expression(
+        "documentref-upstream.1:licenseref-Vendor-terms"
+    )
     assert not is_valid_spdx_expression("")
     assert not is_valid_spdx_expression("Not A License!!")
+    assert not is_valid_spdx_expression("MIT AND AND BSD-2-Clause")
+    assert not is_valid_spdx_expression("MIT OR")
+    assert not is_valid_spdx_expression("(MIT) WITH Classpath-exception-2.0")
+    assert not is_valid_spdx_expression("DocumentRef-upstream:LicenseRef-")
+    assert not is_valid_spdx_expression("(" * 9 + "MIT" + ")" * 9)
+
+
+def test_spdx_parser_preserves_precedence_and_external_reference_identity() -> None:
+    tree = parse_spdx_expression(
+        "MIT OR BSD-2-Clause AND DocumentRef-upstream:LicenseRef-Vendor"
+    )
+
+    assert tree == {
+        "operator": "OR",
+        "terms": [
+            {"license": "MIT"},
+            {
+                "operator": "AND",
+                "terms": [
+                    {"license": "BSD-2-Clause"},
+                    {"license": "DocumentRef-upstream:LicenseRef-Vendor"},
+                ],
+            },
+        ],
+    }
 
 
 def test_spdx_export_import_round_trip() -> None:

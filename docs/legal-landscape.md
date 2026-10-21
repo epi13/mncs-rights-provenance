@@ -24,7 +24,9 @@ Primary source: <https://opensource.org/ai/open-source-ai-definition>
 
 SPDX provides standardized license expressions and software supply-chain metadata. MNCS should map to SPDX rather than invent incompatible license identifiers or dependency metadata where SPDX already has a suitable representation.
 
-Primary source: <https://spdx.dev/>
+The bounded Rights parser follows SPDX 2.3 Annex D expression structure, including operator precedence, `WITH`, the `+` suffix, and local or document-qualified `LicenseRef` references. Syntax acceptance does not verify list membership, supply the referenced license text, or establish compatibility.
+
+Primary sources: <https://spdx.dev/> and [SPDX Specification 2.3.1, Annex D](https://spdx.github.io/spdx-spec/v2-draft/SPDX-license-expressions/)
 
 ## Developer Certificate of Origin
 

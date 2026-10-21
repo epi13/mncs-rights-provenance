@@ -40,6 +40,7 @@ from .evidence import (
 from .forge_adapter import build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
 from .license_resolution import license_resolver_identity, resolve_license_expression
+from .spdx import parse_spdx_expression
 from .lineage import (
     LineageRecord,
     compute_lineage_digest,
@@ -145,6 +146,7 @@ __all__ = [
     "promotion_combined",
     "promotion_inputs_from_dict",
     "promotion_report",
+    "parse_spdx_expression",
     "resolve_license_expression",
     "seal_lineage_record",
     "sha256_hex",

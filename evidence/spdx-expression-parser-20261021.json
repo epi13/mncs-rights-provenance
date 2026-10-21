@@ -1,0 +1,66 @@
+{
+  "schema_version": "mncs.rights.spdx-expression-parser-evidence/1",
+  "recorded_at": "2026-10-21T20:50:11Z",
+  "repository": "mncs-rights-provenance",
+  "branch": "campaign/luna-max-rights-spdx-parser-20261021",
+  "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-spdx-parser-20261021/mncs-rights-provenance",
+  "base_commit": "f56f2fc88dc5c20e387d1a4ed13124008948f085",
+  "coordination": {
+    "environment_claim": "claim:mncs-rights-provenance:worktree:8d5ad75f88b6",
+    "owner_session": "ses_973d1b67eb66857e",
+    "scope_kind": "worktree",
+    "scope_branch": "campaign/luna-max-rights-spdx-parser-20261021",
+    "claim_status": "held",
+    "concurrent_claims_observed": [
+      {
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "session_id": "ses_a6a27331d7d348b9",
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+        "scope_kind": "worktree",
+        "status": "held",
+        "reason": "Own the canonical isolated Rights worktree while implementing the live artifact handoff."
+      }
+    ],
+    "overlap_observed": false,
+    "claim_acquisition": "Environment mncs-env claims CLI backed by the canonical Store; lifecycle MCP claims operation remained read-only."
+  },
+  "implementation": {
+    "parser_contract": "spdx-2.3-license-expression/1",
+    "resolution_schema": "mncs.rights.license-resolution/2",
+    "source_specification": "https://spdx.github.io/spdx-spec/v2-draft/SPDX-license-expressions/",
+    "recognized_structure": [
+      "AND and OR precedence",
+      "WITH on a simple expression",
+      "license-id plus suffix",
+      "case-insensitive identifier lookup with original declaration spelling preserved",
+      "LicenseRef identifiers",
+      "DocumentRef-qualified LicenseRef identifiers",
+      "bounded parenthesis nesting"
+    ],
+    "unknown_handling": "Unrecognized license identifiers remain unknown terms. Local or external LicenseRef pointers without extracted term evidence remain unresolved references with their identifiers preserved.",
+    "compatibility": "Always unknown unless a separately supported rule and adequate evidence are supplied; this change adds no compatibility inference."
+  },
+  "verification": {
+    "focused": {
+      "command": "python3 -m pytest -q tests/test_manifest.py tests/test_agent_context_projection.py",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "repository_suite": {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python3 -m pytest -q tests",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "passed"
+    }
+  },
+  "limitations": [
+    "Syntax validation does not establish SPDX License List membership.",
+    "LicenseRef terms remain unresolved until their referenced evidence is supplied.",
+    "The expression parser does not determine cross-license compatibility, ownership, or legal authority.",
+    "The MNCS permissive-license candidate remains unapproved and has no effective grant."
+  ]
+}
