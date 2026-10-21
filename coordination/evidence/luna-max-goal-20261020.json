@@ -78,6 +78,49 @@
       "work_intent_goal": "exercise canonical Environment persistence through the Control socket",
       "campaign_state": "no persisted checkpoint",
       "note": "Claim reason is more specific than the stored work intent; retained as an Environment coordination metadata deficiency."
+    },
+    {
+      "observed_at": "2026-10-21T15:20:42Z",
+      "repository": "mncs-rights-provenance",
+      "kind": "independent-spdx-import-worktree",
+      "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+      "session_id": "ses_973d1b67eb66857e",
+      "owned_scope": {
+        "branch": "campaign/luna-max-spdx-import-evidence-20261021",
+        "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-spdx-import-evidence-20261021",
+        "base_head": "9e4d248666f87ba9bf5550314c53844a63312728",
+        "claim_id": "claim:mncs-rights-provenance:worktree:38bf523f7028",
+        "claim_released_after_integration": true,
+        "claim_reacquired_for_evidence_amendment": {
+          "basis": "explicit-adoption",
+          "adopted_dirty": true,
+          "adopted_head": "424ff1b6d94fcfcc49774c657757a90f68b729e0",
+          "claim_released_after_follow_up_integration": true
+        }
+      },
+      "temporary_main_ownership": {
+        "claim_id": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+        "purpose": "create the isolated worktree and fast-forward the validated implementation and its coordination evidence",
+        "released_after_each_operation": true
+      },
+      "concurrent_rights_scope": {
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "session_id": "ses_a6a27331d7d348b9",
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+        "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-artifact-handoff-20261021",
+        "status_at_observation": "held",
+        "action": "No files in the peer worktree or branch were modified."
+      },
+      "delivery": {
+        "commit": "424ff1b",
+        "main_fast_forwarded": true,
+        "origin_main_pushed": true
+      },
+      "verification": {
+        "command": "PYTHONPATH=src python -m pytest tests/test_manifest.py tests/test_agent_context_projection.py -q",
+        "result": "passed",
+        "tests": 41
+      }
     }
   ],
   "coordination_findings": [
@@ -96,6 +139,10 @@
     {
       "finding": "Worktree metadata required a local-path namespace repair.",
       "evidence": "New worktree .git pointers referenced /workspace paths unavailable in the host checkout. Only the two owned worktrees' pointers and mirror metadata were repaired to /home/epi13/Documents/Projects paths."
+    },
+    {
+      "finding": "Rights development continued alongside the active artifact-handoff agent without scope collision.",
+      "evidence": "Environment claims showed the peer's artifact-handoff worktree remained held while an SPDX-import worktree was independently claimed. The new change was committed and fast-forwarded after validation; the peer branch and claim remained untouched."
     }
   ],
   "noninterference": {
