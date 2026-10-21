@@ -305,10 +305,24 @@ def build_agent_context(
             ] if isinstance(source.get("evidence"), list) else [],
         })
         if status in {"unknown", "incompatible"}:
+            has_license_expression = (
+                isinstance(source_license, str)
+                and bool(source_license)
+                and source_license not in {"NOASSERTION", "NONE"}
+            )
+            if status == "unknown" and has_license_expression:
+                summary = (
+                    "A license expression is recorded, but compatibility with the "
+                    "distribution license and source verification remain unresolved."
+                )
+            elif status == "unknown":
+                summary = "No usable source license expression is recorded; source rights remain unknown."
+            else:
+                summary = "A source license status is declared as incompatible."
             diagnostics.append({
                 "code": "source-license-" + status,
                 "severity": "review",
-                "summary": "A source license status is declared as " + status + ".",
+                "summary": summary,
                 "evidence_ref": f"{manifest_ref}#/rights/sources/{index}",
                 "remedy": "investigate-external-rights",
             })

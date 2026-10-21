@@ -211,6 +211,32 @@ def test_declared_incompatible_source_stays_evidence_and_gets_actionable_review(
     assert context["rights"]["compatibility"]["status"] == "unknown"
 
 
+def test_declared_license_with_unknown_compatibility_explains_what_remains_unresolved() -> None:
+    manifest = _manifest()
+    manifest["rights"]["sources"] = [{
+        "kind": "package",
+        "reference": "external-package",
+        "license_status": "unknown",
+        "license": "BSD-3-Clause",
+        "confidence": "observed-declaration",
+        "evidence": [{"kind": "external-record", "reference": "SPDX metadata"}],
+    }]
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+
+    finding = next(item for item in context["diagnostics"] if item["code"] == "source-license-unknown")
+    source = context["rights"]["sources"][0]
+    assert finding["summary"] == (
+        "A license expression is recorded, but compatibility with the distribution "
+        "license and source verification remain unresolved."
+    )
+    assert source["license"] == "BSD-3-Clause"
+    assert source["license_status_declared"] == "unknown"
+    assert source["license_terms_status"] == "reference-summary"
+    assert source["verification_state"] == "unverified"
+    assert context["rights"]["compatibility"]["status"] == "unknown"
+
+
 def test_machine_generated_origin_does_not_assert_copyright_ownership() -> None:
     manifest = _manifest()
     manifest["provenance"]["origin_classification"] = "autonomous-machine-generated"

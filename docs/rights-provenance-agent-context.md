@@ -8,6 +8,11 @@ MNCS Rights & Provenance v0.3 already owns rights manifests, typed provenance, c
 
 The projection keeps legal terms, unresolved claims, provenance state, and agent guidance in separate fields. A declared license is resolved to a reference summary of known notice and patent terms only for a small allow-listed set of SPDX identifiers. The SPDX expression tree is retained when it fits the configured context budget; larger detail remains available through the manifest reference. Unknown identifiers and `AND`/`OR` combinations do not receive an invented compatibility result. The MNCS permissive-license `LicenseRef` resolves to versioned candidate metadata that explicitly says the draft is unadopted, has no effective grant, and cannot establish contributor authority; context points to the draft and requests an effective license declaration. The summary links to the identified license text and is not a legal opinion.
 
+When a source records a usable license expression but leaves `license_status`
+unknown, its diagnostic names the unresolved compatibility and source
+verification. Missing expressions and SPDX `NOASSERTION`/`NONE` remain a
+separate unknown state.
+
 ## Incremental identity
 
 The context identity binds the exact manifest digest, governance profile digest, Environment binding, and compact projection. `sources.license_resolver` exposes a content identity for the bounded SPDX term index and candidate registry, and the provenance projection records it as an input. A recomputed context therefore changes identity when those packaged summaries change; a referenced MNCS candidate also retains its exact registry source digest. Environment reuses a prior projection only when the binding, manifest digest, governance digest, and `license_resolver_identity()` all still match. A change to any of these inputs invalidates the persisted context. When a projection is reused for a selected working checkout, Environment refreshes the recorded manifest source root so its provenance points to the checkout currently selected by the authoritative session. The admission view includes stable references and bounded relationship counts; the detailed manifest and lineage remain on demand.
