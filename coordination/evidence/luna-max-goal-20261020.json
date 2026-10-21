@@ -45,6 +45,41 @@
       "live": true
     }
   ],
+  "later_observations": [
+    {
+      "observed_at": "2026-10-21T06:02:43Z",
+      "repository": "mncs-environment",
+      "kind": "main-integration-ownership",
+      "claim_id": "claim:mncs-environment:worktree:5053f3907a1c",
+      "session_id": "ses_2289d3de4deffd20",
+      "claim_live": true,
+      "claim_expires_at": "2026-10-21T07:16:23Z",
+      "origin_main_head": "1c12e0fcbeeeb0502d3fbd73900ca2a8c2756bd8",
+      "candidate_branch": "campaign/luna-max-rights-context-20261020",
+      "candidate_head": "d4020ae57fc826e58e75131588659c02f0c1a2d0",
+      "candidate_remote_branch_present": true,
+      "integration_action": "deferred-until-main-claim-release"
+    },
+    {
+      "observed_at": "2026-10-21T06:02:43Z",
+      "repository": "mncs-environment",
+      "kind": "campaign-evidence-checkpoint",
+      "session_id": "ses_f13d176c86a23e69",
+      "campaign_id": "cmp_luna_max_rights_env_worktree_20261020",
+      "checkpoint_id": "chk_016af59c7af13ef8",
+      "campaign_state_digest": "9346a7318525df6c",
+      "evidence_count": 4
+    },
+    {
+      "observed_at": "2026-10-21T06:02:43Z",
+      "repository": "mncs-environment",
+      "kind": "main-session-context",
+      "session_id": "ses_2289d3de4deffd20",
+      "work_intent_goal": "exercise canonical Environment persistence through the Control socket",
+      "campaign_state": "no persisted checkpoint",
+      "note": "Claim reason is more specific than the stored work intent; retained as an Environment coordination metadata deficiency."
+    }
+  ],
   "coordination_findings": [
     {
       "finding": "Explicit campaign selection resolves ambiguous continuation state.",
