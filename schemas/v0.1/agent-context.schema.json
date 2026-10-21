@@ -45,6 +45,14 @@
     "rights": {
       "type": "object",
       "properties": {
+        "license_terms_access": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["query_ref"],
+          "properties": {
+            "query_ref": {"const": "mncs-rp license-resolve"}
+          }
+        },
         "action_guidance": {
           "type": "object",
           "additionalProperties": false,

@@ -25,7 +25,7 @@ from .compiler_adapter import (
 from .evidence import evidence_record_from_dict, seal_evidence_record, verify_evidence_digest
 from .forge_adapter import BUILD_BINDING_REQUEST_SCHEMA, build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
-from .license_resolution import license_action_guidance
+from .license_resolution import license_action_guidance, resolve_license_expression
 from .lineage import (
     lineage_record_from_artifact_binding,
     lineage_record_from_dict,
@@ -256,6 +256,21 @@ def cmd_action_guidance(args: argparse.Namespace) -> int:
         return 2
     _emit(report, human=args.human)
     # Unknown terms are a useful diagnostic result, not a command failure.
+    return 0
+
+
+def cmd_license_resolve(args: argparse.Namespace) -> int:
+    try:
+        report = resolve_license_expression(args.expression)
+    except (TypeError, ValueError) as exc:
+        _emit({
+            "ok": False,
+            "error": str(exc),
+            "legal_conclusion": "NOT_MADE",
+        })
+        return 2
+    _emit(report, human=args.human)
+    # Unresolved terms are a useful structured result, not a command failure.
     return 0
 
 
@@ -550,6 +565,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     action_parser.add_argument("--human", action="store_true")
     action_parser.set_defaults(func=cmd_action_guidance)
+
+    license_resolve_parser = subparsers.add_parser(
+        "license-resolve",
+        help="resolve a bounded SPDX license-expression summary",
+    )
+    license_resolve_parser.add_argument(
+        "expression", help="quoted SPDX expression to inspect"
+    )
+    license_resolve_parser.add_argument("--human", action="store_true")
+    license_resolve_parser.set_defaults(func=cmd_license_resolve)
 
     evidence_parser = subparsers.add_parser("evidence", help="evidence-record operations")
     evidence_sub = evidence_parser.add_subparsers(dest="evidence_command", required=True)

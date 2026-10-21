@@ -9,6 +9,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from .license_resolution import (
+    RESOLUTION_SCHEMA,
     license_action_guidance,
     license_action_ruleset_identity,
     license_resolver_identity,
@@ -125,6 +126,11 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
         license_compatibility = terms.get("compatibility")
         if isinstance(license_compatibility, dict):
             license_compatibility.pop("reason", None)
+    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if len(encoded) > target and isinstance(terms.get("detail_ref"), str):
+        # The declaration is already projected on rights.distribution_license;
+        # drop its duplicate resolver copy once the authoritative reference is present.
+        terms.pop("expression", None)
 
 
 def _validate_governance(value: Any) -> tuple[dict[str, Any] | None, list[str]]:
@@ -408,7 +414,8 @@ def build_agent_context(
     )
     expression = rights.get("distribution_license")
     license_resolution: dict[str, Any] = resolve_license_expression(expression) if isinstance(expression, str) else {
-        "schema_version": "mncs.rights.license-resolution/3",
+        "schema_version": RESOLUTION_SCHEMA,
+        "expression_evidence": "no-usable-declaration",
         "expression": None,
         "status": "unresolved",
         "reason": "distribution license is absent",
@@ -629,7 +636,10 @@ def build_agent_context(
     if candidate_registry_source is not None:
         context_sources["license_candidate_registry"] = candidate_registry_source
     license_resolver_source = {
-        "reference": "mncs_rights_provenance.license_resolution/3",
+        "reference": (
+            "mncs_rights_provenance.license_resolution/"
+            + RESOLUTION_SCHEMA.rsplit("/", 1)[1]
+        ),
         "sha256": license_resolver_identity(),
     }
     context_sources["license_resolver"] = license_resolver_source
@@ -704,6 +714,9 @@ def build_agent_context(
             "source_count": len(raw_sources),
             "sources_truncated": len(raw_sources) > 4,
             "license_terms": license_resolution,
+            "license_terms_access": {
+                "query_ref": "mncs-rp license-resolve",
+            },
             "action_guidance": _action_guidance_context(
                 expression, f"{manifest_ref}#/rights/distribution_license"
             ),

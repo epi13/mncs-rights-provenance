@@ -1,0 +1,69 @@
+{
+  "base_commit": "4d416cd26dfa3d6bf4a58be78672e475db028341",
+  "branch": "campaign/luna-max-license-resolution-query-20261021",
+  "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-license-resolution-query-20261021",
+  "coordination": {
+    "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "claim_session_selection": "Initial acquire without campaign_id was safely rejected as ambiguous; retried with the explicit campaign selector and generation token.",
+    "concurrent_claims_observed": [
+      {
+        "action": "preserved; no files or branch state changed",
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "scope_kind": "worktree",
+        "scope_overlap": false,
+        "session_id": "ses_a6a27331d7d348b9",
+        "status": "held"
+      }
+    ],
+    "environment_session_id": "ses_973d1b67eb66857e",
+    "feature_paths_claim_id": "claim:mncs-rights-provenance:paths:867ca8a3729e",
+    "feature_worktree_claim_id": "claim:mncs-rights-provenance:worktree:68d2e5c3919f",
+    "main_claim_store_generation": 68125,
+    "main_integration_paths_claim_id": "claim:mncs-rights-provenance:paths:889787fc2cae"
+  },
+  "files_sha256": {
+    "docs/rights-provenance-agent-context.md": "sha256:a775ea9db597df705a22841c41671a75708912ba0b0ea941e773584518571ffd",
+    "schemas/v0.1/agent-context.schema.json": "sha256:55ba57f793f525e436de026f8937fa592280e06344887f5f4d8a5e4533c1e2c3",
+    "schemas/v0.1/license-action-guidance.schema.json": "sha256:5ff6032cab9580d2eef6539b88c783afeff2b05a2da387cb5b0173948b868f3e",
+    "schemas/v0.1/license-resolution.schema.json": "sha256:c7a42aa596a04f135522625c9cee9dc17207bfd31a0d28e85d206815c562b7e6",
+    "src/mncs_rights_provenance/agent_context.py": "sha256:d683a132e97244a04a8ef69cd3337500fba9e21d44ea9914a142d6d656f86e7c",
+    "src/mncs_rights_provenance/cli.py": "sha256:cd9a95041323e107c63facd5b47cc93df91369a0fe33c0427f639994858da197",
+    "src/mncs_rights_provenance/license_resolution.py": "sha256:89cc89262a7cebeeb6b9d547348a03aef8650878ab017d197d01dcbfbfd4113c",
+    "tests/test_agent_context_projection.py": "sha256:316f9ebb3cf6c7d4ce12cfe5d96d040bdc31810236489f3254150b275bca8c72",
+    "tests/test_license_action_guidance.py": "sha256:d7d224e19405282a3e70f4b86de4feef8b6e849bbdca1d852f796a2368b370cb",
+    "tests/test_license_resolution_cli.py": "sha256:faa75bab2026573fb792e5c3fc984f51106408f0d8c517eb44f22a812d030c93"
+  },
+  "implementation": {
+    "candidate_status": "MNCS permissive-license candidate remains not adopted and non-effective",
+    "cli": "mncs-rp license-resolve '<SPDX expression>'",
+    "compatibility": "unknown; no compatibility conclusion inferred",
+    "context_absent_declaration": "no-usable-declaration; expression is null and unresolved",
+    "context_query_ref": "rights.license_terms_access.query_ref",
+    "evidence_state": "caller-supplied-declaration-unverified",
+    "operative_license": "Repository Apache-2.0 declaration unchanged",
+    "resolver_schema": "mncs.rights.license-resolution/4"
+  },
+  "limits": [
+    "Resolution summarizes allow-listed terms and is not a legal conclusion or authority verification.",
+    "Unknown identifiers, exceptions, compatibility, and ownership remain unresolved or unknown.",
+    "Environment admission still needs its separate rights_context integration work."
+  ],
+  "recorded_at": "2026-10-21T23:08:53Z",
+  "repository": "mncs-rights-provenance",
+  "schema_version": "mncs.rights-provenance.license-resolution-cli-evidence/1",
+  "verification": {
+    "cli_smoke": {
+      "compatibility": "unknown",
+      "expression": "MIT OR BSD-2-Clause",
+      "expression_evidence": "caller-supplied-declaration-unverified",
+      "status": "reference-summary"
+    },
+    "diff_check": "passed",
+    "focused_command": "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_license_resolution_cli.py tests/test_agent_context_projection.py tests/test_license_action_guidance.py tests/test_manifest.py tests/test_agent_contract.py",
+    "focused_exit_code": 0,
+    "focused_result": "72 passed",
+    "ruff_check": "passed",
+    "schema_json_parse": "passed"
+  }
+}

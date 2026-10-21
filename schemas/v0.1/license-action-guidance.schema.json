@@ -48,7 +48,7 @@
       "type": "object",
       "required": ["version", "identity"],
       "properties": {
-        "version": {"const": "mncs.rights.license-resolution/3"},
+        "version": {"const": "mncs.rights.license-resolution/4"},
         "identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
       },
       "additionalProperties": false

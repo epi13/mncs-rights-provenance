@@ -72,7 +72,7 @@ def test_compound_expression_keeps_and_or_structure_and_unknown_rights() -> None
     assert result["ruleset"]["identity"].startswith("sha256:")
     assert result["ruleset"]["module"] == "mncs.rights.license_actions.v01"
     assert result["ruleset"]["module_ref"] == "language/rights_license_actions.mncs"
-    assert result["license_resolver"]["version"] == "mncs.rights.license-resolution/3"
+    assert result["license_resolver"]["version"] == "mncs.rights.license-resolution/4"
     assert result["license_resolver"]["identity"].startswith("sha256:")
     assert result["unresolved_conditions"] == []
     assert any("OR branch" in note for note in result["decision_notes"])

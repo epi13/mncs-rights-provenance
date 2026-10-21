@@ -16,12 +16,13 @@ from typing import Any
 
 from .spdx import parse_spdx_expression
 
-RESOLUTION_SCHEMA = "mncs.rights.license-resolution/3"
+RESOLUTION_SCHEMA = "mncs.rights.license-resolution/4"
 ACTION_GUIDANCE_SCHEMA = "mncs.rights.license-action-guidance/1"
 ACTION_RULESET_VERSION = "mncs.rights.license-action-rules/1"
 ACTION_RULESET_MODULE = "mncs.rights.license_actions.v01"
 ACTION_RULESET_REF = "language/rights_license_actions.mncs"
 _CANDIDATE_REGISTRY_REF = "mncs_rights_provenance/resources/license-candidates.json"
+EXPRESSION_EVIDENCE = "caller-supplied-declaration-unverified"
 
 _LOCAL_LICENSE_REF = re.compile(r"^LicenseRef-[A-Za-z0-9.-]+$", re.IGNORECASE)
 _DOCUMENT_LICENSE_REF = re.compile(
@@ -278,6 +279,7 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
     if len(expression) > 4096:
         return {
             "schema_version": RESOLUTION_SCHEMA,
+            "expression_evidence": EXPRESSION_EVIDENCE,
             "expression": expression[:256],
             "status": "unresolved",
             "reason": "expression exceeds the bounded resolver input size",
@@ -288,6 +290,7 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
     except ValueError as error:
         return {
             "schema_version": RESOLUTION_SCHEMA,
+            "expression_evidence": EXPRESSION_EVIDENCE,
             "expression": expression,
             "status": "unresolved",
             "reason": str(error),
@@ -356,6 +359,7 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
     status = "partial" if unresolved else "reference-summary"
     result: dict[str, Any] = {
         "schema_version": RESOLUTION_SCHEMA,
+        "expression_evidence": EXPRESSION_EVIDENCE,
         "expression": expression,
         "status": status,
         "expression_tree": expanded,
@@ -411,7 +415,7 @@ def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
             "status": "unresolved",
             "action": action,
             "expression": resolved.get("expression", expression[:256]),
-            "expression_evidence": "caller-supplied-declaration-unverified",
+            "expression_evidence": EXPRESSION_EVIDENCE,
             "expression_tree": None,
             "unresolved_identifiers": list(resolved.get("unresolved_identifiers", [])),
             "unresolved_conditions": [],
@@ -532,7 +536,7 @@ def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
         "status": status,
         "action": action,
         "expression": expression,
-        "expression_evidence": "caller-supplied-declaration-unverified",
+        "expression_evidence": EXPRESSION_EVIDENCE,
         "expression_tree": expression_tree,
         "unresolved_identifiers": sorted(unresolved),
         "unresolved_conditions": unresolved_conditions,

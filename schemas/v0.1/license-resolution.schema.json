@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/v0.1/license-resolution.schema.json",
+  "title": "MNCS SPDX license expression resolution summary",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "expression_evidence",
+    "expression",
+    "status",
+    "compatibility"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs.rights.license-resolution/4"},
+    "expression_evidence": {
+      "enum": ["caller-supplied-declaration-unverified", "no-usable-declaration"]
+    },
+    "expression": {"type": ["string", "null"], "maxLength": 4096},
+    "status": {"enum": ["unresolved", "partial", "reference-summary"]},
+    "reason": {"type": "string", "minLength": 1},
+    "expression_tree": {"$ref": "#/$defs/expression_node"},
+    "unresolved_identifiers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "candidate_references": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "candidate_registry": {"$ref": "#/$defs/content_reference"},
+    "candidate_review_details": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/candidate_review_detail"},
+      "uniqueItems": true
+    },
+    "compatibility": {"$ref": "#/$defs/compatibility"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "unresolved"}}, "required": ["status"]},
+      "then": {"required": ["reason"]}
+    },
+    {
+      "if": {"properties": {"status": {"enum": ["partial", "reference-summary"]}}, "required": ["status"]},
+      "then": {
+        "required": ["expression_tree", "unresolved_identifiers", "candidate_references"],
+        "not": {"required": ["reason"]}
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "expression_evidence": {"const": "no-usable-declaration"}
+        },
+        "required": ["expression_evidence"]
+      },
+      "then": {
+        "properties": {
+          "expression": {"type": "null"},
+          "status": {"const": "unresolved"}
+        },
+        "required": ["expression", "status"]
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "compatibility": {
+      "type": "object",
+      "required": ["status", "reason"],
+      "properties": {
+        "status": {"const": "unknown"},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "content_reference": {
+      "type": "object",
+      "required": ["reference", "sha256"],
+      "properties": {
+        "reference": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "candidate_review_detail": {
+      "type": "object",
+      "required": ["license", "status", "decision_count", "decisions_ref"],
+      "properties": {
+        "license": {"type": "string", "minLength": 1},
+        "status": {"type": "string", "minLength": 1},
+        "decision_count": {"type": "integer", "minimum": 0},
+        "decisions_ref": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "expression_node": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["operator", "terms"],
+          "properties": {
+            "operator": {"enum": ["AND", "OR"]},
+            "terms": {
+              "type": "array",
+              "minItems": 2,
+              "items": {"$ref": "#/$defs/expression_node"}
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["license", "status"],
+          "properties": {
+            "license": {"type": "string", "minLength": 1},
+            "status": {"type": "string", "minLength": 1},
+            "exception": {"type": "string"},
+            "reason": {"type": "string"},
+            "reference_kind": {"type": "string"},
+            "candidate_status": {"type": "string"},
+            "candidate_version": {"type": "string"},
+            "effective_grant": {"type": "boolean"},
+            "adoption_status": {"type": "string"},
+            "declared_rights_prove_authority": {"type": "boolean"},
+            "source_ref": {"type": "string"},
+            "registry_ref": {"type": "string"},
+            "registry_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+            "permissions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "conditions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "when"],
+                "properties": {
+                  "id": {"type": "string", "minLength": 1},
+                  "when": {"type": "string", "minLength": 1}
+                },
+                "additionalProperties": false
+              }
+            },
+            "patent": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string", "minLength": 1},
+                "scope": {"type": "string"},
+                "termination": {"type": "string"}
+              },
+              "required": ["status"],
+              "additionalProperties": false
+            },
+            "source": {"type": "string", "minLength": 1},
+            "warranty": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

@@ -125,6 +125,9 @@ def test_context_action_guidance_preserves_spdx_branches_and_unknown_terms() -> 
     assert guidance["expression_ref"].endswith("#/rights/distribution_license")
     assert "cross-license compatibility" in guidance["not_assessed"]
     assert guidance["legal_conclusion"] == "NOT_MADE"
+    assert context["rights"]["license_terms_access"] == {
+        "query_ref": "mncs-rp license-resolve",
+    }
 
 
 def test_context_projects_isc_zerobsd_and_zlib_without_losing_branch_triggers() -> None:
@@ -144,6 +147,9 @@ def test_context_projects_isc_zerobsd_and_zlib_without_losing_branch_triggers() 
     assert tree["operator"] == "AND"
     assert tree["terms"][0]["license"] == "ISC"
     assert tree["terms"][0]["conditions"][0]["when"] == "all copies"
+    assert context["rights"]["license_terms_access"]["query_ref"] == (
+        "mncs-rp license-resolve"
+    )
     assert tree["terms"][1]["operator"] == "OR"
     zlib, zerobsd = tree["terms"][1]["terms"]
     assert zlib["license"] == "Zlib"
@@ -188,8 +194,19 @@ def test_absent_distribution_license_keeps_action_guidance_unknown() -> None:
 
     assert guidance["status"] == "unresolved"
     assert guidance["expression_evidence"] == "no-usable-declaration"
+    assert context["rights"]["license_terms"]["expression_evidence"] == (
+        "no-usable-declaration"
+    )
     assert all(item["status"] == "unresolved" for item in guidance["actions"].values())
     assert guidance["expression_tree"] is None
+    resolver_schema = json.loads(
+        (ROOT / "schemas/v0.1/license-resolution.schema.json").read_text()
+    )
+    assert list(
+        Draft202012Validator(resolver_schema).iter_errors(
+            context["rights"]["license_terms"]
+        )
+    ) == []
 
 
 def test_long_unknown_license_identifier_is_bounded_and_referenced() -> None:
@@ -228,6 +245,10 @@ def test_large_action_guidance_falls_back_to_on_demand_reference() -> None:
     assert guidance["unresolved_action_counts"]["redistribute-source"]["identifiers"] == 10
     assert "unresolved_identifiers" not in context["rights"]["license_terms"]
     assert "unresolved_identifiers_ref" in context["rights"]["license_terms"]
+    assert "expression" not in context["rights"]["license_terms"]
+    assert context["rights"]["license_terms"]["detail_ref"].endswith(
+        "#/rights/distribution_license"
+    )
     assert guidance["query_ref"] == "mncs-rp action-guidance"
     schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
     assert list(Draft202012Validator(schema).iter_errors(context)) == []
@@ -463,7 +484,8 @@ def test_license_candidate_v02_remains_non_effective_and_points_to_draft() -> No
     result = resolve_license_expression(candidate["identifier"])
     leaf = result["expression_tree"]
     assert result["status"] == "partial"
-    assert result["schema_version"] == "mncs.rights.license-resolution/3"
+    assert result["schema_version"] == "mncs.rights.license-resolution/4"
+    assert result["expression_evidence"] == "caller-supplied-declaration-unverified"
     assert result["unresolved_identifiers"] == [candidate["identifier"]]
     assert leaf["status"] == "candidate-unapproved"
     assert leaf["effective_grant"] is False
@@ -536,7 +558,7 @@ def test_agent_context_explains_candidate_status_without_treating_it_as_rights()
     assert context["sources"]["license_resolver"]["sha256"].startswith("sha256:")
     resolver_edge = next(
         edge for edge in context["provenance"]["projection"]["relationships"]
-        if edge["from"] == "mncs_rights_provenance.license_resolution/3"
+        if edge["from"] == "mncs_rights_provenance.license_resolution/4"
     )
     assert resolver_edge["relation"] == "referenced"
     assert resolver_edge["content_digest"] == context["sources"]["license_resolver"]["sha256"]
@@ -643,7 +665,7 @@ def test_spdx_or_and_expression_keeps_branch_obligations_and_unknown_compatibili
     result = resolve_license_expression("MIT OR (BSD-2-Clause AND LicenseRef-Local)")
 
     assert result["status"] == "partial"
-    assert result["schema_version"] == "mncs.rights.license-resolution/3"
+    assert result["schema_version"] == "mncs.rights.license-resolution/4"
     assert result["expression_tree"]["operator"] == "OR"
     assert result["expression_tree"]["terms"][1]["operator"] == "AND"
     assert result["unresolved_identifiers"] == ["LicenseRef-Local"]
