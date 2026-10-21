@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/native-artifact-binding/0.1.0.schema.json",
+  "title": "MNCS Rights native artifact binding 0.1.0",
+  "description": "A bounded cross-system reference contract. It does not certify ownership, compatibility, or legal compliance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifact", "rights", "lineage", "legal_conclusion"],
+  "properties": {
+    "schema_version": { "const": "mncs.rights-provenance.native-artifact-binding/0.1.0" },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["producer", "producer_contract", "identity", "content_digest"],
+      "properties": {
+        "producer": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "producer_contract": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "identity": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "content_digest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "contributing_manifests", "compatibility"],
+      "properties": {
+        "state": { "enum": ["declared", "review", "unknown"] },
+        "context_identity": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+        "contributing_manifests": {
+          "type": "array",
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/contributing_manifest" }
+        },
+        "compatibility": { "const": "unknown" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "declared" } }, "required": ["state"] },
+          "then": { "properties": { "contributing_manifests": { "minItems": 1 } } }
+        }
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "source_snapshot_identity", "transformation", "relationships"],
+      "properties": {
+        "state": { "enum": ["complete", "partial", "unknown"] },
+        "source_snapshot_identity": { "type": ["string", "null"], "maxLength": 512 },
+        "transformation": { "$ref": "#/$defs/transformation" },
+        "relationships": {
+          "type": "array",
+          "maxItems": 128,
+          "items": { "$ref": "#/$defs/relationship" }
+        }
+      }
+    },
+    "legal_conclusion": { "const": "NOT_MADE" }
+  },
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "state"],
+      "properties": {
+        "reference": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "sha256": { "type": ["string", "null"], "pattern": "^[a-fA-F0-9]{64}$" },
+        "state": {
+          "enum": ["directly-observed", "declared", "inferred", "verified-attestation", "unverified-attestation", "unavailable"]
+        },
+        "verifier_ref": { "type": "string", "minLength": 1, "maxLength": 512 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "state": { "const": "verified-attestation" } },
+            "required": ["state"]
+          },
+          "then": { "required": ["verifier_ref"] }
+        }
+      ]
+    },
+    "contributing_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "manifest_digest", "manifest_identity", "evidence_state", "rights_state", "license_expression_ref", "obligations_ref"],
+      "properties": {
+        "reference": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "manifest_digest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+        "manifest_identity": { "type": ["string", "null"], "pattern": "^[a-fA-F0-9]{64}$" },
+        "evidence_state": { "enum": ["directly-observed", "declared", "inferred", "verified-attestation", "unverified-attestation", "unavailable"] },
+        "rights_state": { "enum": ["declared", "unresolved", "unknown"] },
+        "license_expression_ref": { "type": ["string", "null"], "maxLength": 1024 },
+        "obligations_ref": { "type": ["string", "null"], "maxLength": 1024 }
+      }
+    },
+    "transformation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "toolchain_identity", "event_ref", "evidence_state", "evidence"],
+      "properties": {
+        "kind": { "enum": ["source-write", "generation", "transformation", "compilation", "link", "packaging", "other"] },
+        "toolchain_identity": { "type": ["string", "null"], "maxLength": 512 },
+        "event_ref": { "type": ["string", "null"], "maxLength": 1024 },
+        "evidence_state": { "enum": ["directly-observed", "declared", "inferred", "unavailable"] },
+        "evidence": { "type": "array", "maxItems": 16, "items": { "$ref": "#/$defs/evidence_ref" } }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "relation", "evidence_state", "evidence"],
+      "properties": {
+        "from": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "to": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "relation": {
+          "enum": ["created-from", "derived-from", "generated-from", "transformed-by", "compiled-from", "incorporates", "references", "depends-upon", "independently-implemented-against"]
+        },
+        "evidence_state": { "enum": ["directly-observed", "declared", "inferred", "verified-attestation", "unverified-attestation", "unavailable"] },
+        "evidence": { "type": "array", "maxItems": 16, "items": { "$ref": "#/$defs/evidence_ref" } }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "evidence_state": {
+                "enum": ["directly-observed", "declared", "inferred", "verified-attestation", "unverified-attestation"]
+              }
+            },
+            "required": ["evidence_state"]
+          },
+          "then": { "properties": { "evidence": { "minItems": 1 } } }
+        }
+      ]
+    }
+  }
+}

@@ -81,6 +81,92 @@ def test_context_projection_matches_its_versioned_schema() -> None:
     assert list(Draft202012Validator(schema).iter_errors(context)) == []
 
 
+def test_native_artifact_binding_preserves_multi_input_lineage_without_a_legal_conclusion() -> None:
+    schema = json.loads((ROOT / "schemas/v0.1/native-artifact-binding.schema.json").read_text())
+    Draft202012Validator.check_schema(schema)
+    evidence = {
+        "reference": "mncs-compiler:build-receipt/build-17",
+        "sha256": "a" * 64,
+        "state": "directly-observed",
+    }
+    binding = {
+        "schema_version": "mncs.rights-provenance.native-artifact-binding/0.1.0",
+        "artifact": {
+            "producer": "mncs-compiler",
+            "producer_contract": "mncs.compiler.application-build/11",
+            "identity": "artifact:app-17",
+            "content_digest": "sha256:" + "b" * 64,
+        },
+        "rights": {
+            "state": "review",
+            "context_identity": "sha256:" + "c" * 64,
+            "contributing_manifests": [
+                {
+                    "reference": "repo-a/RIGHTS.json",
+                    "manifest_digest": "sha256:" + "d" * 64,
+                    "manifest_identity": "e" * 64,
+                    "evidence_state": "directly-observed",
+                    "rights_state": "declared",
+                    "license_expression_ref": "#/rights/distribution_license",
+                    "obligations_ref": "#/rights/license_terms",
+                },
+                {
+                    "reference": "dependency-b/RIGHTS.json",
+                    "manifest_digest": None,
+                    "manifest_identity": None,
+                    "evidence_state": "unavailable",
+                    "rights_state": "unknown",
+                    "license_expression_ref": None,
+                    "obligations_ref": None,
+                },
+            ],
+            "compatibility": "unknown",
+        },
+        "lineage": {
+            "state": "partial",
+            "source_snapshot_identity": "snapshot:source-17",
+            "transformation": {
+                "kind": "compilation",
+                "toolchain_identity": "mncs-compiler:producer-3",
+                "event_ref": "mncs-environment:event/build-17",
+                "evidence_state": "directly-observed",
+                "evidence": [evidence],
+            },
+            "relationships": [
+                {
+                    "from": "artifact:source-17",
+                    "to": "artifact:app-17",
+                    "relation": "compiled-from",
+                    "evidence_state": "directly-observed",
+                    "evidence": [evidence],
+                },
+                {
+                    "from": "spec:format-1",
+                    "to": "artifact:app-17",
+                    "relation": "independently-implemented-against",
+                    "evidence_state": "declared",
+                    "evidence": [{"reference": "work-record:implementation-note", "state": "declared"}],
+                },
+            ],
+        },
+        "legal_conclusion": "NOT_MADE",
+    }
+
+    assert list(Draft202012Validator(schema).iter_errors(binding)) == []
+    binding["lineage"]["relationships"][1]["relation"] = "copied-from-specification"
+    assert list(Draft202012Validator(schema).iter_errors(binding))
+
+
+def test_verified_attestation_requires_a_verifier_reference() -> None:
+    schema = json.loads((ROOT / "schemas/v0.1/native-artifact-binding.schema.json").read_text())
+    evidence = {"reference": "attestation:123", "state": "verified-attestation"}
+    validator = Draft202012Validator(schema)
+    errors = list(validator.evolve(schema=schema["$defs"]["evidence_ref"]).iter_errors(evidence))
+
+    assert errors
+    assert "verifier_ref" in errors[0].message
+
+
 def test_project_manifest_is_valid_v03_and_keeps_existing_license_declaration() -> None:
     manifest = _manifest()
     assert validate_manifest_structure(manifest) == []
