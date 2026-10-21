@@ -1,0 +1,86 @@
+{
+  "schema_version": "mncs.rights-provenance.vertical-slice-evidence/1",
+  "identity": "ev_rights_end_to_end_forge_20261021",
+  "observed_at": "2026-10-21T19:48:30Z",
+  "execution": {
+    "runner": "MNCS Control terminal sandbox",
+    "sandbox_backend": "bwrap",
+    "scope": "workspace",
+    "network": false,
+    "exit_code": 0,
+    "duration_seconds": 1.167,
+    "runtime_selection": {
+      "forge_python": "mncs-forge/.venv/bin/python",
+      "forge_source": "mncs-forge/src",
+      "rights_source": "mncs-rights-provenance/src"
+    }
+  },
+  "forge_evidence": {
+    "evidence_id": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+    "schema_version": "0.3.0",
+    "content_digest": "sha256:9de1dfe7c72608f9bf3d05ce7837d9638e87429859ba96a50690f1f4ef32b4d3",
+    "observed_declaration": {
+      "path": "pyproject.toml",
+      "value": "Apache-2.0",
+      "confidence": "observed-declaration",
+      "sha256": "f16abe79fd1a122491d841befd7f1264ab254e54e439af865a0542de6f975895",
+      "byte_length": 69
+    },
+    "heuristic_identification": {
+      "path": "LICENSE",
+      "spdx_expression": "Apache-2.0",
+      "confidence": "heuristic",
+      "sha256": "da0a45ba8ade58d6156fe561dbaa8ea664725ab65ec9c9dfc0812b1a1c815b1d",
+      "byte_length": 41
+    }
+  },
+  "rights_manifest": {
+    "manifest_identity": "b3b4dfc049dd8e6b6cadb312d89f925c608fc1c4dac66c1b34f2952dce2496df",
+    "rights": {
+      "distribution_license": "Apache-2.0",
+      "copyright_status": "mixed-or-undetermined",
+      "rights_basis": "unknown-needs-review",
+      "third_party_material": "unknown"
+    },
+    "provenance_edges": [
+      {
+        "from": "job",
+        "relation": "derived-from",
+        "to": "outputs"
+      },
+      {
+        "from": "outputs",
+        "relation": "referenced",
+        "to": "license-analysis",
+        "evidence_reference": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+        "evidence_digest": "sha256:9de1dfe7c72608f9bf3d05ce7837d9638e87429859ba96a50690f1f4ef32b4d3"
+      }
+    ]
+  },
+  "artifact_validation": {
+    "artifact_sha256": "92955ce6ae8d3fabd70a0d314958513a1d58ceb21991e235a36cb1bb7db00e31",
+    "manifest_identity_matches": true,
+    "outcome": "review-required",
+    "findings": [
+      "human review state is unacceptable for release",
+      "provenance validation is incomplete or has not run",
+      "rights basis is explicitly unknown and needs review",
+      "third-party material state is unresolved"
+    ]
+  },
+  "downstream": {
+    "commons_retained_observation_digest_prefix": "sha256:8e00e0f75bfe",
+    "spdx_export_bytes": 1466
+  },
+  "validator": {
+    "status": "unavailable",
+    "exit_code": 127,
+    "reason": "The optional independent Rust validator was deliberately pointed at an unavailable path in this bounded demo."
+  },
+  "limitations": [
+    "The Forge record preserves declaration and heuristic evidence; it does not verify ownership, license authority, SPDX syntax, or compatibility.",
+    "The demo's Apache-2.0 distribution license is copied from the fixture declaration and does not establish contributor authority.",
+    "The artifact identity match is not a legal compliance result; the rights resolver correctly retains review-required findings.",
+    "The Forge MCP server operation remained unavailable; this run invoked Forge's source scanner through its own Python environment."
+  ]
+}
