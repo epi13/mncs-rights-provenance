@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from mncs_rights_provenance import build_compiler_application_artifact_binding
+from mncs_rights_provenance import build_agent_context, build_compiler_application_artifact_binding
 from mncs_rights_provenance.cli import MAX_COMPILER_BINDING_REQUEST_BYTES, main
 from mncs_rights_provenance.compiler_adapter import (
     APPLICATION_BUILD_SCHEMA,
@@ -125,6 +125,42 @@ def test_missing_rights_remain_unknown_even_when_compiler_metadata_mentions_a_li
     assert binding["rights"]["state"] == "unknown"
     assert binding["rights"]["contributing_manifests"] == []
     assert binding["legal_conclusion"] == "NOT_MADE"
+
+
+def test_candidate_context_flows_into_compiler_artifact_binding_with_uncertainty_preserved() -> None:
+    manifest = json.loads((ROOT / "RIGHTS.json").read_text())
+    manifest["rights"]["distribution_license"] = "LicenseRef-MNCS-Permissive-0.1"
+    governance = json.loads((ROOT / "governance/agent-governance.json").read_text())
+    context = build_agent_context(
+        manifest,
+        governance,
+        binding={
+            "authorized": True,
+            "profile_id": governance["profile_id"],
+            "authority": {
+                "issuer": "mncs-environment",
+                "basis": "explicit-environment-owner-binding",
+                "source_ref": ".mncs/environment.json#/rights_context",
+                "scope": ["mncs-rights-provenance"],
+            },
+            "context_budget_bytes": 8192,
+        },
+    )
+    artifact_binding = build_compiler_application_artifact_binding(
+        _application_build(),
+        [_manifest("project/RIGHTS.json", "unresolved")],
+        context_identity=context["identity"],
+    )
+
+    diagnostics = {item["code"] for item in context["diagnostics"]}
+    assert "license-candidate-not-effective" in diagnostics
+    assert context["rights"]["license_terms"]["candidate_references"] == [
+        "LicenseRef-MNCS-Permissive-0.1",
+    ]
+    assert artifact_binding["rights"]["state"] == "review"
+    assert artifact_binding["rights"]["context_identity"] == context["identity"]
+    assert artifact_binding["rights"]["compatibility"] == "unknown"
+    assert artifact_binding["legal_conclusion"] == "NOT_MADE"
 
 
 def test_compiler_adapter_rejects_unverified_or_inconsistent_build_results() -> None:
