@@ -276,6 +276,135 @@ def build_native_artifact_binding(
     }
 
 
+def validate_native_artifact_binding(value: Mapping[str, Any]) -> dict[str, Any]:
+    """Validate and normalize one v0.1 native artifact binding.
+
+    This checks the bounded producer contract without inferring missing source
+    facts or making a compatibility or legal conclusion.
+    """
+    if not isinstance(value, Mapping):
+        raise TypeError("artifact binding must be an object")
+    required = {"schema_version", "artifact", "rights", "lineage", "legal_conclusion"}
+    if set(value) != required or value.get("schema_version") != SCHEMA_VERSION:
+        raise ValueError("artifact binding does not match native-artifact-binding/0.1.0")
+    if value.get("legal_conclusion") != "NOT_MADE":
+        raise ValueError("artifact binding legal_conclusion must be NOT_MADE")
+
+    artifact = value.get("artifact")
+    artifact_fields = {"producer", "producer_contract", "identity", "content_digest"}
+    if not isinstance(artifact, Mapping) or set(artifact) != artifact_fields:
+        raise ValueError("artifact does not match the producer identity contract")
+    clean_artifact = {
+        "producer": _text(artifact["producer"], "artifact.producer", 160),
+        "producer_contract": _text(
+            artifact["producer_contract"], "artifact.producer_contract", 160
+        ),
+        "identity": _text(artifact["identity"], "artifact.identity", 512),
+        "content_digest": _digest(artifact["content_digest"], "artifact.content_digest"),
+    }
+
+    rights = value.get("rights")
+    rights_fields = {"state", "context_identity", "contributing_manifests", "compatibility"}
+    if not isinstance(rights, Mapping) or set(rights) != rights_fields:
+        raise ValueError("rights does not match the native artifact binding contract")
+    if rights.get("compatibility") != "unknown":
+        raise ValueError("native artifact binding cannot assert compatibility")
+    manifests = rights.get("contributing_manifests")
+    if not isinstance(manifests, Sequence) or isinstance(manifests, (str, bytes)):
+        raise TypeError("rights.contributing_manifests must be a list")
+    if len(manifests) > 64:
+        raise ValueError("rights.contributing_manifests exceeds the 64-input bound")
+    clean_manifests = [
+        _contributing_manifest(item, index) for index, item in enumerate(manifests)
+    ]
+    input_rights = [item["rights_state"] for item in clean_manifests]
+    expected_rights_state = (
+        "unknown" if not input_rights or "unknown" in input_rights
+        else "review" if "unresolved" in input_rights
+        else "declared"
+    )
+    if rights.get("state") != expected_rights_state:
+        raise ValueError("rights.state conflicts with contributing manifest evidence")
+    context_identity = _digest(rights.get("context_identity"), "rights.context_identity")
+
+    lineage = value.get("lineage")
+    lineage_fields = {
+        "state", "source_snapshot_identity", "transformation", "relationships"
+    }
+    if not isinstance(lineage, Mapping) or set(lineage) != lineage_fields:
+        raise ValueError("lineage does not match the native artifact binding contract")
+    lineage_state = lineage.get("state")
+    if not isinstance(lineage_state, str) or lineage_state not in {"complete", "partial", "unknown"}:
+        raise ValueError("lineage.state is unsupported")
+    source_identity = _optional_text(
+        lineage.get("source_snapshot_identity"), "lineage.source_snapshot_identity", 512
+    )
+    transformation_value = lineage.get("transformation")
+    if not isinstance(transformation_value, Mapping):
+        raise TypeError("lineage.transformation must be an object")
+    transformation_fields = {
+        "kind", "toolchain_identity", "event_ref", "evidence_state", "evidence"
+    }
+    if set(transformation_value) != transformation_fields:
+        raise ValueError("lineage.transformation does not match the producer event contract")
+    transform_kind = transformation_value.get("kind")
+    transform_state = transformation_value.get("evidence_state")
+    if not isinstance(transform_kind, str) or transform_kind not in _TRANSFORMATIONS:
+        raise ValueError("lineage.transformation.kind is unsupported")
+    if not isinstance(transform_state, str) or transform_state not in {
+        "directly-observed", "declared", "inferred", "unavailable"
+    }:
+        raise ValueError("lineage.transformation.evidence_state is unsupported")
+    clean_transformation = {
+        "kind": transform_kind,
+        "toolchain_identity": _optional_text(
+            transformation_value.get("toolchain_identity"),
+            "lineage.transformation.toolchain_identity", 512,
+        ),
+        "event_ref": _optional_text(
+            transformation_value.get("event_ref"), "lineage.transformation.event_ref", 1024
+        ),
+        "evidence_state": transform_state,
+        "evidence": _evidence_list(
+            transformation_value.get("evidence"), "lineage.transformation.evidence",
+            required=transform_state != "unavailable",
+        ),
+    }
+    relationships = lineage.get("relationships")
+    if not isinstance(relationships, Sequence) or isinstance(relationships, (str, bytes)):
+        raise TypeError("lineage.relationships must be a list")
+    if len(relationships) > 128:
+        raise ValueError("lineage.relationships exceeds the 128-edge bound")
+    clean_relationships = [
+        _relationship(item, index) for index, item in enumerate(relationships)
+    ]
+    expected_lineage_state = (
+        "partial"
+        if source_identity or clean_relationships or clean_transformation["evidence"]
+        else "unknown"
+    )
+    if lineage_state != expected_lineage_state and lineage_state != "complete":
+        raise ValueError("lineage.state conflicts with available binding evidence")
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "artifact": clean_artifact,
+        "rights": {
+            "state": expected_rights_state,
+            "context_identity": context_identity,
+            "contributing_manifests": clean_manifests,
+            "compatibility": "unknown",
+        },
+        "lineage": {
+            "state": lineage_state,
+            "source_snapshot_identity": source_identity,
+            "transformation": clean_transformation,
+            "relationships": clean_relationships,
+        },
+        "legal_conclusion": "NOT_MADE",
+    }
+
+
 def diagnose_native_artifact_binding(binding: Mapping[str, Any]) -> dict[str, Any]:
     """Explain unresolved rights or lineage in one native artifact binding.
 
@@ -488,4 +617,5 @@ __all__ = [
     "SCHEMA_VERSION",
     "build_native_artifact_binding",
     "diagnose_native_artifact_binding",
+    "validate_native_artifact_binding",
 ]

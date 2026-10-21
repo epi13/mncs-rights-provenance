@@ -26,7 +26,9 @@ from .evidence import evidence_record_from_dict, seal_evidence_record, verify_ev
 from .forge_adapter import BUILD_BINDING_REQUEST_SCHEMA, build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
 from .lineage import (
+    lineage_record_from_artifact_binding,
     lineage_record_from_dict,
+    seal_lineage_record,
     verify_lineage_digest,
 )
 from .manifest import (
@@ -333,6 +335,27 @@ def cmd_lineage_verify(args: argparse.Namespace) -> int:
     return 0 if not issues else 1
 
 
+def cmd_lineage_from_artifact_binding(args: argparse.Namespace) -> int:
+    try:
+        binding = json.loads(Path(args.binding).read_text(encoding="utf-8"))
+        record = lineage_record_from_artifact_binding(
+            binding,
+            lineage_id=args.lineage_id,
+            binding_reference=args.reference,
+        )
+        seal_lineage_record(record)
+        document = record.to_dict()
+    except (OSError, TypeError, ValueError) as exc:
+        _emit({"ok": False, "error": str(exc)})
+        return 2
+    issues = validate_lineage_structure(document)
+    if issues:
+        _emit({"ok": False, "issues": issues})
+        return 1
+    _emit(document)
+    return 0
+
+
 def cmd_promotion_evaluate(args: argparse.Namespace) -> int:
     try:
         document = json.loads(Path(args.document).read_text(encoding="utf-8"))
@@ -546,6 +569,16 @@ def build_parser() -> argparse.ArgumentParser:
     lineage_verify.add_argument("lineage")
     lineage_verify.add_argument("--human", action="store_true")
     lineage_verify.set_defaults(func=cmd_lineage_verify)
+    lineage_from_binding = lineage_sub.add_parser(
+        "from-artifact-binding",
+        help="create a v0.4 lineage record from one native artifact binding",
+    )
+    lineage_from_binding.add_argument("binding", help="native artifact binding JSON document")
+    lineage_from_binding.add_argument("--lineage-id", required=True)
+    lineage_from_binding.add_argument(
+        "--reference", required=True, help="stable reference for the input artifact binding"
+    )
+    lineage_from_binding.set_defaults(func=cmd_lineage_from_artifact_binding)
 
     promotion_parser = subparsers.add_parser("promotion", help="promotion-input operations")
     promotion_sub = promotion_parser.add_subparsers(dest="promotion_command", required=True)
