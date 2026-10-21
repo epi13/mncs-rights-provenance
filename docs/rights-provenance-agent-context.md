@@ -48,7 +48,19 @@ collection, retains declaration/evidence states, leaves compatibility
 unknown, and never claims complete lineage: that requires an authoritative
 completeness attestation contract. Its tests exercise multi-input builds,
 agent-generated origin claims, unresolved rights, and missing verification.
-Compiler and Forge do not yet emit the binding. The live Environment vertical
+`build_forge_provider_artifact_binding` adapts Forge's
+`mncs.provider-build-receipt/1` into that binding after checking the receipt's
+core identity. Forge remains the receipt authority. Because the receipt is not
+signed, projected fields remain declared evidence; the adapter does not claim
+to have reread the input bytes or authenticated the producer. It preserves the
+output artifact identity and digest, compiler artifact hash, build invocation,
+provider source-input hashes, and dependency-root identities. Receipt v1 does
+not retain the primary source binding as a source snapshot, so inputs are
+represented as declared `depends-upon` relationships and
+`source_snapshot_identity` stays unavailable. Missing rights remain unknown,
+compatibility stays unknown, and the binding makes no legal conclusion.
+
+The Compiler does not yet emit the binding. The live Environment vertical
 slice emits admission context and its own artifact lineage; Compiler and
 Language have active concurrent worktrees, so integration at their build
 boundary remains a follow-up that must bind their existing identities and

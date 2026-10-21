@@ -33,6 +33,7 @@ from .evidence import (
     evidence_record_from_dict,
     evidence_record_to_dict,
 )
+from .forge_adapter import build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
 from .license_resolution import resolve_license_expression
 from .lineage import (
@@ -116,6 +117,7 @@ __all__ = [
     "authority_claim_from_dict",
     "authority_verdict",
     "build_agent_context",
+    "build_forge_provider_artifact_binding",
     "build_native_artifact_binding",
     "canonical_bytes",
     "check_graph_integrity",
