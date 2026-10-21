@@ -287,6 +287,32 @@ def test_license_candidate_registry_is_valid_and_points_to_the_unadopted_draft()
     assert (ROOT / candidate["text_ref"]).is_file()
 
 
+def test_license_candidate_v02_remains_non_effective_and_points_to_draft() -> None:
+    registry = json.loads(
+        (ROOT / "src/mncs_rights_provenance/resources/license-candidates.json").read_text()
+    )
+    candidate = next(
+        item for item in registry["candidates"]
+        if item["identifier"] == "LicenseRef-MNCS-Permissive-0.2"
+    )
+
+    assert candidate["version"] == "0.2"
+    assert candidate["status"] == "draft-for-legal-review"
+    assert candidate["adoption_status"] == "not-adopted"
+    assert candidate["effective_grant"] is False
+    assert candidate["retroactive_application"] is False
+    assert candidate["declared_rights_prove_authority"] is False
+    assert (ROOT / candidate["text_ref"]).is_file()
+
+    result = resolve_license_expression(candidate["identifier"])
+    leaf = result["expression_tree"]
+    assert result["status"] == "partial"
+    assert result["unresolved_identifiers"] == [candidate["identifier"]]
+    assert leaf["status"] == "candidate-unapproved"
+    assert leaf["effective_grant"] is False
+    assert "permissions" not in leaf
+
+
 def test_candidate_license_reference_never_becomes_an_effective_term_summary() -> None:
     identifier = "LicenseRef-MNCS-Permissive-0.1"
     result = resolve_license_expression(identifier)

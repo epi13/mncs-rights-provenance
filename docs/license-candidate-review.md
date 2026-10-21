@@ -2,13 +2,13 @@
 
 The Rights repository is currently licensed under Apache-2.0. Its existing `LICENSE` and contribution history remain governed by that license. `legal-candidates/MNCS-Permissive-0.1.md` is a working draft for future legal review only; it is not approved, adopted, or applied retroactively.
 
-The candidate keeps a short MIT/BSD-style copyright permission and notice condition, then adds an explicit patent grant limited to claims the contributor can license and that are necessarily infringed by that contribution. BSD-2-Clause-Patent is a useful reference for this narrow grant. The draft deliberately has no patent litigation retaliation clause, so the possible protection and tradeoff need counsel review.
+Version 0.1 is preserved as an incomplete historical draft. Version 0.2 is a separate unadopted proposal: it makes the copyright grant and notice conditions technology-neutral and adds a contribution-limited patent grant with an enumerated set of acts. BSD-2-Clause-Patent informs the patent scope and combination boundary; the draft has no patent-litigation retaliation clause. These choices need legal review before any adoption.
 
 | Reference | Relevant structure | Candidate decision |
 |---|---|---|
 | [MIT](https://opensource.org/license/mit) | Broad permission to use, modify, distribute, sublicense, and sell; preserve copyright and permission notices; warranty and liability disclaimer; no express patent grant in the text. | Use as a model for short, broad copyright permissions and familiar notice language. |
 | [BSD-2-Clause](https://spdx.org/licenses/BSD-2-Clause.html) | Source and binary redistribution conditions preserve or reproduce notices, conditions, and disclaimer. | Keep notice obligations clear for source and compiled forms. |
-| [BSD-2-Clause-Patent](https://spdx.org/licenses/BSD-2-Clause-Patent.html) | BSD-style notice conditions plus an express patent grant that names licensed acts, scope terms, and contribution/combination boundaries. | Use as a drafting reference only. The 0.1 patent paragraph is incomplete; leave retaliation absent pending deliberate review. |
+| [BSD-2-Clause-Patent](https://spdx.org/licenses/BSD-2-Clause-Patent.html) | BSD-style notice conditions plus an express patent grant that names licensed acts, scope terms, and contribution/combination boundaries. | Use as a drafting reference only. Version 0.2 proposes a similar contribution-limited shape; test its boundaries and no-retaliation choice in legal review. |
 | [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.html) | Explicit copyright and patent grants, contributor-linked scope, patent-litigation termination, modified-file notices, license-copy and conditional NOTICE obligations. | Keep as the current repository license. A new candidate should not recreate all of Apache-2.0's framework unless MNCS needs it. |
 
 The machine-readable summary identifies license text, a small set of notice conditions, and explicit patent scope where stated. It leaves cross-license compatibility and ownership unresolved. A declared license or contributor assertion does not prove authority to grant rights. Machine assistance or generation does not itself establish who owns copyright.
@@ -42,3 +42,5 @@ until a later draft records the decisions and receives legal review.
 
 The reviewed source observations and their limits are recorded in
 `evidence/license-candidate-patent-drafting-review-20261021.json`.
+The version 0.2 proposal and its unresolved choices are recorded in
+`evidence/license-candidate-v02-review-20261021.json`.

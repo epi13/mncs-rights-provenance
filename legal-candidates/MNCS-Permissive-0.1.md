@@ -20,4 +20,4 @@ The permission and notice structure is intentionally short. The patent clause is
 
 ### Drafting review note — 2026-10-21
 
-The patent paragraph is incomplete as a grant description. It does not enumerate the licensed patent acts, define the term and other scope attributes, or define `covered work`, `contributor`, and `contribution`. Its combination boundary also needs a deliberate rule. Do not infer that this paragraph grants a complete or verified patent license. A later candidate revision should resolve these points before legal review; this note does not amend or adopt the draft terms.
+The patent paragraph is incomplete as a grant description. It does not enumerate the licensed patent acts, define the term and other scope attributes, or define `covered work`, `contributor`, and `contribution`. Its combination boundary also needs a deliberate rule. Do not infer that this paragraph grants a complete or verified patent license. Version 0.2 is a separate draft addressing these topics; it does not amend or adopt the 0.1 terms.

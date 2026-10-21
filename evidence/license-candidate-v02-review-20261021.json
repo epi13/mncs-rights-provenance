@@ -1,0 +1,65 @@
+{
+  "schema_version": "mncs.rights-provenance.license-candidate-review-evidence/1",
+  "observed_at": "2026-10-21T16:45:01Z",
+  "candidate": {
+    "identifier": "LicenseRef-MNCS-Permissive-0.2",
+    "version": "0.2",
+    "status": "draft-for-legal-review",
+    "adoption_status": "not-adopted",
+    "effective_grant": false,
+    "retroactive_application": false,
+    "text_ref": "legal-candidates/MNCS-Permissive-0.2.md",
+    "repository_license_unchanged": "Apache-2.0"
+  },
+  "draft_choices": {
+    "covered_material": [
+      "source code",
+      "machine-native representations",
+      "intermediate forms",
+      "object code",
+      "compiled or generated artifacts",
+      "related documentation",
+      "other computational material"
+    ],
+    "copyright_permissions": [
+      "use",
+      "reproduce",
+      "make",
+      "modify",
+      "prepare derivative works",
+      "display",
+      "perform",
+      "distribute",
+      "sublicense",
+      "sell"
+    ],
+    "notice_preservation": "retain applicable copyright, patent, license, permission, and attribution notices in source redistributions; reproduce notices and include the license in other-form distribution materials",
+    "patent": {
+      "grant_attributes": ["perpetual", "worldwide", "non-exclusive", "no-charge", "royalty-free"],
+      "licensed_acts": ["make", "have made", "use", "offer to sell", "sell", "import", "otherwise transfer"],
+      "claim_boundary": "claims the contributor may license and that are necessarily infringed by its contribution alone or by its contribution with the Covered Work to which it was submitted, if the combination infringed when submitted",
+      "other_combinations": "excluded",
+      "breach_effect": "irrevocable except for failure to satisfy redistribution conditions",
+      "patent_litigation_retaliation": "none proposed"
+    },
+    "authority": "declarations and submissions do not establish ownership or grant authority; every grant is limited to rights the grantor can grant",
+    "machine_origin": "human authorship, machine assistance, machine generation, and ownership remain distinct facts"
+  },
+  "open_legal_review": [
+    "Confirm the definition and scope of Covered Work, Contributor, and Contribution.",
+    "Review whether the patent grant's acts, term, condition, territory, and combination boundary match MNCS intent.",
+    "Review the effect of terminating a patent grant for failure to satisfy redistribution conditions.",
+    "Decide whether to add any patent-litigation response term.",
+    "Review third-party material, trademark treatment, warranty, liability, jurisdiction, and enforceability."
+  ],
+  "source_references": [
+    "https://opensource.org/license/mit",
+    "https://spdx.org/licenses/BSD-2-Clause.html",
+    "https://spdx.org/licenses/BSD-2-Clause-Patent.html",
+    "https://www.apache.org/licenses/LICENSE-2.0.html"
+  ],
+  "limits": [
+    "This record is a drafting summary, not a legal opinion or compatibility determination.",
+    "The candidate remains unadopted, has no effective grant, and changes no repository license or contribution."
+  ]
+}
