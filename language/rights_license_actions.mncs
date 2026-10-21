@@ -22,6 +22,9 @@ enum IndexedCondition {
     PreserveSourceNotices,
     PreserveNoticeAttributions,
     NoEndorsement,
+    DoNotMisrepresentOrigin,
+    MarkAlteredSource,
+    PreserveZlibSourceNotice,
 }
 
 enum ActionRelation { OperationClassMatchesTrigger, OtherTriggerPreservedForReview }
@@ -45,5 +48,14 @@ fn action_relation(action: RedistributionAction, condition: IndexedCondition) ->
         },
         IndexedCondition.PreserveNoticeAttributions => ActionRelation.OperationClassMatchesTrigger,
         IndexedCondition.NoEndorsement => ActionRelation.OtherTriggerPreservedForReview,
+        IndexedCondition.DoNotMisrepresentOrigin => ActionRelation.OperationClassMatchesTrigger,
+        IndexedCondition.MarkAlteredSource => match action {
+            RedistributionAction.Source => ActionRelation.OperationClassMatchesTrigger,
+            RedistributionAction.Binary => ActionRelation.OtherTriggerPreservedForReview,
+        },
+        IndexedCondition.PreserveZlibSourceNotice => match action {
+            RedistributionAction.Source => ActionRelation.OperationClassMatchesTrigger,
+            RedistributionAction.Binary => ActionRelation.OtherTriggerPreservedForReview,
+        },
     };
 }

@@ -127,6 +127,38 @@ def test_context_action_guidance_preserves_spdx_branches_and_unknown_terms() -> 
     assert guidance["legal_conclusion"] == "NOT_MADE"
 
 
+def test_context_projects_isc_zerobsd_and_zlib_without_losing_branch_triggers() -> None:
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = "ISC AND (Zlib OR 0BSD)"
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    guidance = context["rights"]["action_guidance"]
+    tree = guidance["expression_tree"]
+    source = guidance["actions"]["redistribute-source"]
+    binary = guidance["actions"]["redistribute-binary"]
+    schema = json.loads(
+        (ROOT / "schemas/v0.1/agent-context.schema.json").read_text()
+    )
+
+    assert guidance["status"] == "reference-summary"
+    assert tree["operator"] == "AND"
+    assert tree["terms"][0]["license"] == "ISC"
+    assert tree["terms"][0]["conditions"][0]["when"] == "all copies"
+    assert tree["terms"][1]["operator"] == "OR"
+    zlib, zerobsd = tree["terms"][1]["terms"]
+    assert zlib["license"] == "Zlib"
+    assert zerobsd["license"] == "0BSD"
+    assert zerobsd["conditions"] == []
+    zlib_conditions = {item["id"]: item for item in zlib["conditions"]}
+    assert zlib_conditions["mark-altered-source"]["action_relations"] == {
+        "redistribute-source": "operation-class-matches-trigger",
+        "redistribute-binary": "other-trigger-preserved-for-review",
+    }
+    assert source["status"] == binary["status"] == "reference-summary"
+    assert any("OR branch" in note for note in guidance["decision_notes"])
+    assert list(Draft202012Validator(schema).iter_errors(context)) == []
+
+
 def test_action_ruleset_revision_invalidates_agent_context(monkeypatch) -> None:
     original = build_agent_context(_manifest(), _governance(), binding=_binding())
     source = license_action_ruleset_identity

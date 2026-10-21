@@ -22,6 +22,9 @@ CONDITIONS = (
     "PreserveSourceNotices",
     "PreserveNoticeAttributions",
     "NoEndorsement",
+    "DoNotMisrepresentOrigin",
+    "MarkAlteredSource",
+    "PreserveZlibSourceNotice",
 )
 RELATIONS = ("OperationClassMatchesTrigger", "OtherTriggerPreservedForReview")
 
@@ -54,7 +57,10 @@ def request(action: str, condition: str) -> dict:
 def expected(action: str, condition: str) -> str:
     if condition == "NoEndorsement":
         return "OtherTriggerPreservedForReview"
-    if condition in {"RetainSourceNotice", "PreserveSourceNotices"}:
+    if condition in {
+        "RetainSourceNotice", "PreserveSourceNotices",
+        "MarkAlteredSource", "PreserveZlibSourceNotice",
+    }:
         return (
             "OperationClassMatchesTrigger"
             if action == "Source"

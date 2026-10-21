@@ -38,6 +38,9 @@ CONDITION_BINDINGS = {
         "Apache-2.0", "preserve-notice-attributions",
     ),
     "NoEndorsement": ("BSD-3-Clause", "no-endorsement-without-permission"),
+    "DoNotMisrepresentOrigin": ("Zlib", "do-not-misrepresent-origin"),
+    "MarkAlteredSource": ("Zlib", "mark-altered-source"),
+    "PreserveZlibSourceNotice": ("Zlib", "preserve-zlib-source-notice"),
 }
 HOST_RELATION_TO_CORE = {
     "operation-class-matches-trigger": "OperationClassMatchesTrigger",
@@ -99,7 +102,7 @@ def test_corpus_and_golden_vectors_are_complete_and_deterministic() -> None:
     assert corpus["schema_version"] == "0.1"
     assert corpus["name"] == "license-action-guidance-v1"
     assert golden["source_module"] == "mncs.rights.license_actions.v01"
-    assert len(corpus["cases"]) == len(golden["cases"]) == 16
+    assert len(corpus["cases"]) == len(golden["cases"]) == 22
     assert json.dumps(corpus["cases"], indent=1) == json.dumps(regenerated_corpus, indent=1)
     assert json.dumps(golden["cases"], indent=1) == json.dumps(regenerated_golden, indent=1)
 
@@ -122,5 +125,5 @@ def test_host_action_projection_matches_every_language_vector() -> None:
 def test_native_core_executes_every_action_condition_pair(backend: str) -> None:
     results = run_cases(load_corpus()["cases"], backend)
 
-    assert len(results) == 16
+    assert len(results) == 22
     assert all(case.get("expectation_met") for case in results)

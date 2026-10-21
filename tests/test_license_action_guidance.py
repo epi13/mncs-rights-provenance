@@ -8,7 +8,10 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 
 from mncs_rights_provenance.cli import main
-from mncs_rights_provenance.license_resolution import license_action_guidance
+from mncs_rights_provenance.license_resolution import (
+    license_action_guidance,
+    resolve_license_expression,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -89,6 +92,70 @@ def test_apache_conditions_keep_their_triggers_instead_of_becoming_flags() -> No
         "the work includes a NOTICE file and the attribution applies"
     )
     assert result["status"] == "reference-summary"
+
+
+def test_isc_and_zerobsd_preserve_their_distinct_notice_semantics() -> None:
+    isc_terms = resolve_license_expression("ISC")["expression_tree"]
+    isc_source = license_action_guidance("ISC", "redistribute-source")
+    isc_binary = license_action_guidance("ISC", "redistribute-binary")
+    zerobsd_terms = resolve_license_expression("0BSD")["expression_tree"]
+    zerobsd = license_action_guidance("0BSD", "redistribute-binary")
+
+    assert isc_terms["status"] == zerobsd_terms["status"] == "reference-summary"
+    assert isc_terms["conditions"] == [{
+        "id": "retain-copyright-and-permission-notice",
+        "when": "all copies",
+    }]
+    assert "any-purpose-with-or-without-fee" in isc_terms["permissions"]
+    assert isc_source["expression_tree"]["conditions"][0]["action_relation"] == (
+        "operation-class-matches-trigger"
+    )
+    assert isc_binary["expression_tree"]["conditions"][0]["action_relation"] == (
+        "operation-class-matches-trigger"
+    )
+    assert zerobsd_terms["conditions"] == []
+    assert zerobsd["status"] == "reference-summary"
+    assert zerobsd["expression_tree"]["conditions"] == []
+    assert zerobsd["expression_tree"]["coverage"] == "indexed-conditions-only"
+    assert zerobsd_terms["patent"]["status"] == (
+        "no-express-patent-grant-in-identified-text"
+    )
+
+
+def test_zlib_conditions_keep_origin_source_and_binary_triggers_separate() -> None:
+    source = license_action_guidance("Zlib", "redistribute-source")
+    binary = license_action_guidance("Zlib", "redistribute-binary")
+    terms = resolve_license_expression("Zlib")["expression_tree"]
+
+    source_conditions = {
+        item["id"]: item for item in source["expression_tree"]["conditions"]
+    }
+    binary_conditions = {
+        item["id"]: item for item in binary["expression_tree"]["conditions"]
+    }
+
+    assert source["status"] == binary["status"] == "reference-summary"
+    assert terms["permissions"] == ["use", "commercial-use", "alter", "redistribute"]
+    assert source_conditions["do-not-misrepresent-origin"]["action_relation"] == (
+        "operation-class-matches-trigger"
+    )
+    assert binary_conditions["do-not-misrepresent-origin"]["action_relation"] == (
+        "operation-class-matches-trigger"
+    )
+    assert source_conditions["mark-altered-source"]["when"] == "altered source versions"
+    assert source_conditions["mark-altered-source"]["action_relation"] == (
+        "operation-class-matches-trigger"
+    )
+    assert binary_conditions["mark-altered-source"]["action_relation"] == (
+        "other-trigger-preserved-for-review"
+    )
+    assert source_conditions["preserve-zlib-source-notice"]["when"] == (
+        "source distribution"
+    )
+    assert binary_conditions["preserve-zlib-source-notice"]["action_relation"] == (
+        "other-trigger-preserved-for-review"
+    )
+    assert terms["patent"]["status"] == "no-express-patent-grant-in-identified-text"
 
 
 def test_unknown_license_and_exception_remain_unresolved() -> None:

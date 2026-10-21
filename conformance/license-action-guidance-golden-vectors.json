@@ -70,6 +70,30 @@
   {
    "function": "action_relation",
    "inputs": {
+    "action": "Source",
+    "condition": "DoNotMisrepresentOrigin"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "MarkAlteredSource"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "PreserveZlibSourceNotice"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
     "action": "Binary",
     "condition": "RetainCopyNotice"
    },
@@ -128,6 +152,30 @@
    "inputs": {
     "action": "Binary",
     "condition": "NoEndorsement"
+   },
+   "output": "OtherTriggerPreservedForReview"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "DoNotMisrepresentOrigin"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "MarkAlteredSource"
+   },
+   "output": "OtherTriggerPreservedForReview"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "PreserveZlibSourceNotice"
    },
    "output": "OtherTriggerPreservedForReview"
   }

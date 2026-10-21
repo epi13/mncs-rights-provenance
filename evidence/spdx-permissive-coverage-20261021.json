@@ -1,0 +1,268 @@
+{
+  "coordination": {
+    "agent_context_test_claim_id": "claim:mncs-rights-provenance:paths:2fa260d8849a",
+    "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "environment_session_id": "ses_973d1b67eb66857e",
+    "other_live_claim": {
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "scope_overlap": false
+    },
+    "path_claim_id": "claim:mncs-rights-provenance:paths:96df59569a0a",
+    "worktree": ".worktrees/luna-max-spdx-permissive-coverage-20261021",
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:98cad8263e7c"
+  },
+  "demonstration": {
+    "actions": {
+      "redistribute-binary": {
+        "legal_conclusion": "NOT_MADE",
+        "status": "reference-summary",
+        "terms": [
+          {
+            "conditions": [
+              {
+                "action_relation": "operation-class-matches-trigger",
+                "id": "retain-copyright-and-permission-notice",
+                "when": "all copies"
+              }
+            ],
+            "license": "ISC",
+            "status": "reference-summary"
+          },
+          {
+            "conditions": [
+              {
+                "action_relation": "operation-class-matches-trigger",
+                "id": "do-not-misrepresent-origin",
+                "when": "any use"
+              },
+              {
+                "action_relation": "other-trigger-preserved-for-review",
+                "id": "mark-altered-source",
+                "when": "altered source versions"
+              },
+              {
+                "action_relation": "other-trigger-preserved-for-review",
+                "id": "preserve-zlib-source-notice",
+                "when": "source distribution"
+              }
+            ],
+            "license": "Zlib",
+            "status": "reference-summary"
+          },
+          {
+            "conditions": [],
+            "license": "0BSD",
+            "status": "reference-summary"
+          }
+        ],
+        "tree_operators": [
+          "AND",
+          "OR"
+        ],
+        "unresolved_identifiers": []
+      },
+      "redistribute-source": {
+        "legal_conclusion": "NOT_MADE",
+        "status": "reference-summary",
+        "terms": [
+          {
+            "conditions": [
+              {
+                "action_relation": "operation-class-matches-trigger",
+                "id": "retain-copyright-and-permission-notice",
+                "when": "all copies"
+              }
+            ],
+            "license": "ISC",
+            "status": "reference-summary"
+          },
+          {
+            "conditions": [
+              {
+                "action_relation": "operation-class-matches-trigger",
+                "id": "do-not-misrepresent-origin",
+                "when": "any use"
+              },
+              {
+                "action_relation": "operation-class-matches-trigger",
+                "id": "mark-altered-source",
+                "when": "altered source versions"
+              },
+              {
+                "action_relation": "operation-class-matches-trigger",
+                "id": "preserve-zlib-source-notice",
+                "when": "source distribution"
+              }
+            ],
+            "license": "Zlib",
+            "status": "reference-summary"
+          },
+          {
+            "conditions": [],
+            "license": "0BSD",
+            "status": "reference-summary"
+          }
+        ],
+        "tree_operators": [
+          "AND",
+          "OR"
+        ],
+        "unresolved_identifiers": []
+      }
+    },
+    "agent_context": {
+      "action_ruleset_identity": "sha256:d350e873870264b07d45cc854242a8d43ed4ec68a056f0228ab6d330fc9c4463",
+      "governance_status": "authorized",
+      "identity": "sha256:fa1dc722f3efa2dce7dd4cba0d49025bf62d4999b1e64b32a113a55589b17161",
+      "legal_conclusion": "NOT_MADE",
+      "license_resolver_identity": "sha256:9a0f3a99fb036e3c0f8f6b41029dd3cf50ea4e2a7e846ed862e1216db70757fd",
+      "rights_context_action_status": "reference-summary",
+      "status": "review"
+    },
+    "evidence_state": "caller-supplied-declaration-unverified",
+    "expression": "ISC AND (Zlib OR 0BSD)"
+  },
+  "implementation": {
+    "base_commit": "a42041f4f45bbeaecbad9d77ba76f156e1da1eb2",
+    "branch": "campaign/luna-max-spdx-permissive-coverage-20261021",
+    "files_sha256": {
+      "conformance/license-action-guidance-golden-vectors.json": "sha256:75701cf1b1f2830561c8e6f99245c25525e55d4194f7eb52fb47dc2a9f903c0c",
+      "docs/license-action-guidance.md": "sha256:628ff8515df67f3c2a4af3a38971a538d163291f4dde6606fa7e15ea2a55b5b1",
+      "language/corpora/license-action-guidance-corpus.json": "sha256:ec50271a26616669125055e3b41ff2432705faa664e9d620ccca4feb88d8d37a",
+      "language/rights_license_actions.mncs": "sha256:eb56103d80cb160b398a6054a55eabb23d4128531725aa85d22706fd5b82f849",
+      "language/tools/gen_action_guidance_corpus.py": "sha256:2bad13d4c6ee417b7b672be0b476d255fbe7731e7757d8f4db5bac2977b60996",
+      "src/mncs_rights_provenance/license_resolution.py": "sha256:283de3ec7020605d7f001e168351e5fe9a6ed222ea9bda52cc298f30fde1914b",
+      "tests/test_agent_context_projection.py": "sha256:7001ed65ee5b2ad64bccbf792620daac66d19c2b19876594e7b0570327426369",
+      "tests/test_license_action_core.py": "sha256:5d7c39144cb795ca55e76e7e0c9195893c10b3e5d546cf5bd32a56cab4ef681d",
+      "tests/test_license_action_guidance.py": "sha256:78fba4717f9c59c50947f02dde5ac8010d4750bbd0bce699b6658a8ce52aef76"
+    },
+    "native_module": "mncs.rights.license_actions.v01"
+  },
+  "limits": [
+    "These summaries are source-referenced indices, not independent grants or legal compatibility determinations.",
+    "License declarations remain unverified and do not establish grantor authority or complete input coverage.",
+    "Unknown identifiers and exceptions remain unresolved.",
+    "The MNCS permissive-license candidate and operative Apache-2.0 license are unchanged.",
+    "Live Environment context delivery and artifact-binding integration remain separate outstanding work."
+  ],
+  "observed_at": "2026-10-21T22:45:20Z",
+  "schema_version": "mncs.rights-provenance.spdx-permissive-coverage-evidence/1",
+  "sources": [
+    {
+      "indexed_facts": [
+        "permission covers use, copy, modification, and distribution for any purpose with or without fee",
+        "copyright and permission notice must appear in all copies",
+        "identified text includes as-is warranty and liability disclaimer",
+        "no express patent grant is stated in the identified text"
+      ],
+      "license": "ISC",
+      "reference": "https://spdx.org/licenses/ISC.html"
+    },
+    {
+      "indexed_facts": [
+        "permission covers use, copy, modification, and distribution for any purpose with or without fee",
+        "no redistribution condition is stated in the identified text",
+        "identified text includes as-is warranty and liability disclaimer",
+        "no express patent grant is stated in the identified text"
+      ],
+      "license": "0BSD",
+      "reference": "https://spdx.org/licenses/0BSD.html"
+    },
+    {
+      "indexed_facts": [
+        "permission includes commercial use, alteration, and redistribution",
+        "origin must not be misrepresented",
+        "altered source versions must be marked and not presented as original",
+        "notice must not be removed or altered from source distributions",
+        "product-documentation acknowledgment is optional, not a condition",
+        "identified text includes an as-is warranty and liability disclaimer",
+        "no express patent grant is stated in the identified text"
+      ],
+      "license": "Zlib",
+      "reference": "https://spdx.org/licenses/Zlib.html"
+    }
+  ],
+  "term_summaries": {
+    "0BSD": {
+      "conditions": [],
+      "license": "0BSD",
+      "patent": {
+        "status": "no-express-patent-grant-in-identified-text"
+      },
+      "permissions": [
+        "use",
+        "copy",
+        "modify",
+        "distribute",
+        "any-purpose-with-or-without-fee"
+      ],
+      "source": "https://spdx.org/licenses/0BSD.html",
+      "status": "reference-summary",
+      "warranty": "as-is-and-liability-disclaimer"
+    },
+    "ISC": {
+      "conditions": [
+        {
+          "id": "retain-copyright-and-permission-notice",
+          "when": "all copies"
+        }
+      ],
+      "license": "ISC",
+      "patent": {
+        "status": "no-express-patent-grant-in-identified-text"
+      },
+      "permissions": [
+        "use",
+        "copy",
+        "modify",
+        "distribute",
+        "any-purpose-with-or-without-fee"
+      ],
+      "source": "https://spdx.org/licenses/ISC.html",
+      "status": "reference-summary",
+      "warranty": "as-is-and-liability-disclaimer"
+    },
+    "Zlib": {
+      "conditions": [
+        {
+          "id": "do-not-misrepresent-origin",
+          "when": "any use"
+        },
+        {
+          "id": "mark-altered-source",
+          "when": "altered source versions"
+        },
+        {
+          "id": "preserve-zlib-source-notice",
+          "when": "source distribution"
+        }
+      ],
+      "license": "Zlib",
+      "patent": {
+        "status": "no-express-patent-grant-in-identified-text"
+      },
+      "permissions": [
+        "use",
+        "commercial-use",
+        "alter",
+        "redistribute"
+      ],
+      "source": "https://spdx.org/licenses/Zlib.html",
+      "status": "reference-summary",
+      "warranty": "as-is-and-liability-disclaimer"
+    }
+  },
+  "verification": {
+    "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_license_action_core.py tests/test_license_action_guidance.py tests/test_agent_context_projection.py tests/test_manifest.py tests/test_agent_contract.py",
+    "diff_check": "passed",
+    "native_action_vectors_per_backend": 22,
+    "native_backends": [
+      "research-bytecode",
+      "portable-wasm"
+    ],
+    "passed": 71,
+    "ruff": "passed",
+    "schema_and_json_parse": "passed"
+  }
+}

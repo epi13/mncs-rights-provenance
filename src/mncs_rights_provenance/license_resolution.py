@@ -41,6 +41,26 @@ _TERMS: dict[str, dict[str, Any]] = {
         "patent": {"status": "no-express-patent-grant-in-identified-text"},
         "warranty": "as-is-and-liability-disclaimer",
     },
+    "ISC": {
+        "source": "https://spdx.org/licenses/ISC.html",
+        "permissions": [
+            "use", "copy", "modify", "distribute", "any-purpose-with-or-without-fee",
+        ],
+        "conditions": [
+            {"id": "retain-copyright-and-permission-notice", "when": "all copies"}
+        ],
+        "patent": {"status": "no-express-patent-grant-in-identified-text"},
+        "warranty": "as-is-and-liability-disclaimer",
+    },
+    "0BSD": {
+        "source": "https://spdx.org/licenses/0BSD.html",
+        "permissions": [
+            "use", "copy", "modify", "distribute", "any-purpose-with-or-without-fee",
+        ],
+        "conditions": [],
+        "patent": {"status": "no-express-patent-grant-in-identified-text"},
+        "warranty": "as-is-and-liability-disclaimer",
+    },
     "BSD-2-Clause": {
         "source": "https://spdx.org/licenses/BSD-2-Clause.html",
         "permissions": ["use", "redistribute-source", "redistribute-binary", "modify"],
@@ -92,6 +112,17 @@ _TERMS: dict[str, dict[str, Any]] = {
         },
         "warranty": "as-is-and-liability-disclaimer",
     },
+    "Zlib": {
+        "source": "https://spdx.org/licenses/Zlib.html",
+        "permissions": ["use", "commercial-use", "alter", "redistribute"],
+        "conditions": [
+            {"id": "do-not-misrepresent-origin", "when": "any use"},
+            {"id": "mark-altered-source", "when": "altered source versions"},
+            {"id": "preserve-zlib-source-notice", "when": "source distribution"},
+        ],
+        "patent": {"status": "no-express-patent-grant-in-identified-text"},
+        "warranty": "as-is-and-liability-disclaimer",
+    },
 }
 
 # These labels associate indexed license conditions with the narrow
@@ -130,6 +161,18 @@ _ACTION_CONDITION_RULES: dict[str, dict[str, Any]] = {
     "no-endorsement-without-permission": {
         "actions": [],
         "guidance": "Do not use contributor names to endorse or promote without permission.",
+    },
+    "do-not-misrepresent-origin": {
+        "actions": ["redistribute-source", "redistribute-binary"],
+        "guidance": "Do not misrepresent the origin of the software or claim you wrote the original.",
+    },
+    "mark-altered-source": {
+        "actions": ["redistribute-source"],
+        "guidance": "Mark altered source versions plainly and do not present them as original.",
+    },
+    "preserve-zlib-source-notice": {
+        "actions": ["redistribute-source"],
+        "guidance": "Do not remove or alter this notice in source distributions.",
     },
 }
 _ACTION_RULESET_IDENTITY = "sha256:" + hashlib.sha256(

@@ -34,9 +34,19 @@ the diagnostic instead of treating it as a tool crash.
 This query complements the compact agent context: agents can inspect the
 conditions for a concrete source or binary redistribution when preparing an
 operation, without placing license texts or a full rights graph in every
-admission context. The helper currently indexes MIT, BSD-2-Clause,
-BSD-2-Clause-Patent, BSD-3-Clause, and Apache-2.0. Other SPDX identifiers and
-local license references remain unresolved.
+admission context. The helper currently indexes MIT, ISC, 0BSD, BSD-2-Clause,
+BSD-2-Clause-Patent, BSD-3-Clause, Apache-2.0, and Zlib. Other SPDX identifiers
+and local license references remain unresolved. ISC's copyright and permission
+notice condition applies to all copies; 0BSD has no indexed redistribution
+condition; and Zlib's origin rule applies to use while its altered-source and
+notice rules retain their source-specific triggers. Zlib's suggested product
+documentation acknowledgment is optional and is not represented as a condition.
+
+An empty indexed condition list is a statement about the narrow condition
+index, not proof of authority, compatibility, or completeness for another
+artifact or use. The indexed text references are the SPDX License List pages:
+[ISC](https://spdx.org/licenses/ISC.html), [0BSD](https://spdx.org/licenses/0BSD.html),
+and [Zlib](https://spdx.org/licenses/Zlib.html).
 
 Validate outputs with
 `schemas/v0.1/license-action-guidance.schema.json`. The result is not legal
