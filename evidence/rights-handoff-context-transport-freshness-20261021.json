@@ -1,0 +1,43 @@
+{
+  "schema_version": "mncs.rights-provenance.context-transport-freshness-evidence/1",
+  "observed_at": "2026-10-21T13:44:09Z",
+  "project": "mncs-rights-provenance",
+  "session_id": "ses_de553dd5fd5d1178",
+  "connected_tool_observation": {
+    "operation": "context",
+    "rights_context_present": false,
+    "session_id": "ses_de553dd5fd5d1178",
+    "campaign_id": "cmp_4f473a19a08745c9"
+  },
+  "fresh_bridge_observation": {
+    "control_repository": "mncs-control-mcp",
+    "control_main_commit": "f1cc2437fcc8b0ff92bb2adad875aa9ddf677131",
+    "projection_change_commit": "a37aa686",
+    "projection_change_time_utc": "2026-10-21T10:09:41Z",
+    "interface": "LocalEnvironmentMCP.invoke(context)",
+    "same_environment_rpc": true,
+    "rights_context_present": true,
+    "rights_context_identity": "sha256:40b482ba2b76f8aba72df8d47031d0a36e7b67d4c50c81ba9b7996bb2d729576",
+    "rights_context_status": "review"
+  },
+  "bridge_process_freshness": {
+    "enumerated_process_count": 3,
+    "process_start_times_utc": [
+      "2026-10-16T02:10:46.900Z",
+      "2026-10-19T13:01:09.030Z",
+      "2026-10-21T04:22:17.100Z"
+    ],
+    "all_enumerated_processes_started_before_projection_change": true,
+    "connected_tool_process_pid_mapped": false
+  },
+  "assessment": {
+    "state": "strong-inference",
+    "summary": "The connected MCP omits a rights context that the same Environment RPC returns to a fresh bridge using current Control source. Every enumerated bridge process predates the pass-through change, consistent with stale service code.",
+    "limits": [
+      "The PID serving the connected tool request was not identified among the enumerated processes.",
+      "A fresh local bridge invocation verifies current source and RPC behavior, not a refreshed connected MCP service.",
+      "No shared MCP process was restarted."
+    ],
+    "next_check": "Repeat the read-only context operation after the normal MCP lifecycle refresh; confirm that the connected result includes the bounded rights_context projection."
+  }
+}

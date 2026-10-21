@@ -116,10 +116,20 @@ and returned a bounded review context with identity `sha256:40b482ba…`, the
 expected governance profile, and review diagnostics. The separate evidence
 record preserves that observation apart from the missing session projection.
 A separate Environment worktree contains project-scoped admission and
-cache-invalidation work. A fresh live entry after the binding-reference
-correction also omitted `rights_context`; Environment MCP transport remains an
-open integration defect. The current v1 binding resolves paths from the
-workspace root, so the Rights definition points at the canonical workspace
-checkout. The separate Environment worktree adds selected-checkout scope; until
-that contract is integrated, rights changes that exist only in another
-worktree do not update this project's admission context.
+cache-invalidation work. On 2026-10-21, the connected MCP `context` operation
+still omitted `rights_context` for session `ses_de553dd5fd5d1178`. A fresh
+`LocalEnvironmentMCP` from Control main called the same configured Environment
+RPC and returned the context with identity `sha256:40b482ba…` and status
+`review`; the current compactor preserves that provider projection. All three
+enumerated bridge processes started before the Control source change that added
+this pass-through. This strongly indicates stale code in the connected MCP
+service, although the process serving that tool call was not mapped to a
+specific PID. No shared service was restarted. The observation and its limits
+are recorded in
+`evidence/rights-handoff-context-transport-freshness-20261021.json`; repeat the
+read-only context request after the normal MCP lifecycle refresh. The current
+v1 binding resolves paths from the workspace root, so the Rights definition
+points at the canonical workspace checkout. The separate Environment worktree
+adds selected-checkout scope; until that contract is integrated, rights changes
+that exist only in another worktree do not update this project's admission
+context.
