@@ -19,7 +19,8 @@
     "Resolver output confirms the bounded Environment projection from the current binding and source files, not delivery through this live session context response.",
     "The declared Apache-2.0 license does not establish ownership, contributor authority, or compatibility.",
     "The candidate MNCS permissive license remains unadopted.",
-    "The v1 rights-context binding resolves paths from the authorized workspace root and therefore reads the canonical mncs-rights-provenance checkout; selected-worktree-specific policy requires the separately developed Environment binding scope contract."
+    "The v1 rights-context binding resolves paths from the authorized workspace root and therefore reads the canonical mncs-rights-provenance checkout; selected-worktree-specific policy requires the separately developed Environment binding scope contract.",
+    "The project selector created two newer sessions for the same intent, while the original claim-owning session remained held but was absent from the continuation listing; this prevents exact-session claim cleanup through the current selected context."
   ],
   "live_session_projection": {
     "limitation": "The live Environment MCP admission and context projections omit rights_context despite the resolver returning it when called directly with the same binding and workspace root.",
@@ -40,7 +41,7 @@
       }
     ]
   },
-  "observed_at": "2026-10-21T13:25:04.312168+00:00",
+  "observed_at": "2026-10-21T13:34:45.045887+00:00",
   "resolver_observation": {
     "binding_path_scope": "workspace-root; source paths resolve under /home/epi13/Documents/Projects",
     "context_budget_bytes": 8192,
@@ -76,5 +77,38 @@
     },
     "status": "available"
   },
-  "schema_version": "mncs.rights-provenance.environment-context-handoff-evidence/1"
+  "schema_version": "mncs.rights-provenance.environment-context-handoff-evidence/1",
+  "session_selection_observation": {
+    "continuation_listing": {
+      "campaigns": [
+        {
+          "campaign_id": "cmp_4f473a19a08745c9",
+          "session_id": "ses_de553dd5fd5d1178"
+        },
+        {
+          "campaign_id": "cmp_9ed5502e3e130df8",
+          "session_id": "ses_f146f65b4c071ea6"
+        }
+      ],
+      "campaigns_count": 2,
+      "original_claim_session_listed": false
+    },
+    "impact": "The selected project context could not continue the original lease-owning session. The lease was not released or transferred; it remains attached to its original session as the expiry backstop.",
+    "observed_at": "2026-10-21T13:34:45.045895+00:00",
+    "original_worktree_claim": {
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "expires_at": "2026-10-22T12:17:38+00:00",
+      "live": true,
+      "repository": "mncs-rights-provenance",
+      "session_id": "ses_a6a27331d7d348b9",
+      "status": "held"
+    },
+    "selection_error": {
+      "code": "ENVIRONMENT_SESSION_SELECTION_REQUIRED",
+      "continuations_at_error": [],
+      "requested_session_id": "ses_a6a27331d7d348b9",
+      "selected_session_id_at_error": "ses_f146f65b4c071ea6"
+    }
+  }
 }
