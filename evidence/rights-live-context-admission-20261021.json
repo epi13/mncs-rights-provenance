@@ -1,0 +1,107 @@
+{
+  "schema_version": "mncs.rights-provenance.live-context-admission-evidence/1",
+  "observed_at": "2026-10-21T15:39:01Z",
+  "rights_campaign": {
+    "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "session_id": "ses_973d1b67eb66857e",
+    "checkpoint_id": "chk_1f42d22a186ac8b5",
+    "rights_main": "acc9c3a91257f5cfe98ba2a5596d8d439d3c16ca"
+  },
+  "live_environment_observations": {
+    "resume_existing_rights_session": {
+      "session_id": "ses_973d1b67eb66857e",
+      "operation": "resume",
+      "result": "active",
+      "context_contains_rights_context": false
+    },
+    "fresh_rights_entry": {
+      "operation": "enter",
+      "selected_campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+      "selected_task_identity": "int_6d92f9eaecf1908c",
+      "returned_session_id": "ses_0ffb5932b8629304",
+      "context_contains_rights_context": false,
+      "context_keys": [
+        "schema_version",
+        "session_id",
+        "lifecycle",
+        "environment_id",
+        "work_intent",
+        "workspace_root",
+        "persistence",
+        "toolchain",
+        "writable_repositories",
+        "protected_repositories",
+        "authority",
+        "readiness",
+        "doctor",
+        "projects",
+        "capabilities"
+      ],
+      "session_reselection": {
+        "operation": "context",
+        "session_id": "ses_0ffb5932b8629304",
+        "result": "ENVIRONMENT_SESSION_SELECTION_REQUIRED",
+        "detail": "ambiguous-campaigns"
+      }
+    },
+    "bounded_local_provider_probe": {
+      "binding_source": "mncs-rights-provenance/.mncs/environment.json#/rights_context",
+      "provider": "mncs_env.rights.load_agent_context",
+      "inputs_status": "available",
+      "context_status": "review",
+      "context_identity": "sha256:40b482ba2b76f8aba72df8d47031d0a36e7b67d4c50c81ba9b7996bb2d729576",
+      "governance_status": "authorized",
+      "review_diagnostic_count": 6,
+      "limitations": [
+        "This direct function invocation verifies the configured provider and local bound sources, not Environment admission or connected MCP delivery."
+      ]
+    }
+  },
+  "bridge_verification": {
+    "control_main": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
+    "rights_context_projection_commit": "a37aa686b4c40c2bab3a5bc009e61e27cedacdca",
+    "rights_runtime_provider_commit": "9b505c6772d34ffe6fb08d17c97847566547b44c",
+    "both_commits_are_ancestors_of_control_main": true,
+    "focused_tests": [
+      "tests/test_local_environment_mcp.py::test_compact_context_preserves_the_environment_rights_projection",
+      "tests/test_environment_rpc.py::test_environment_pythonpath_includes_only_a_present_configured_rights_package",
+      "tests/test_security_and_config.py::test_rights_provider_path_has_a_configurable_workspace_default"
+    ],
+    "focused_test_result": "passed (3 tests)"
+  },
+  "environment_integration_ownership": {
+    "environment_main": "28132dd3a1ffb7014163b27a828e09d6f7a42412",
+    "active_rights_cache_invalidation": {
+      "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+      "session_id": "ses_f13d176c86a23e69",
+      "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+      "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/luna-max-rights-cache-invalidation-20261021",
+      "head": "9f68b0f3efd14288ebcbf6de8371cc2bf69e47cc",
+      "reason": "Pushed Rights resolver and selected-checkout extension; live MCP Rights-context verification remains pending."
+    },
+    "active_environment_main_integration": {
+      "claim_id": "claim:mncs-environment:worktree:5053f3907a1c",
+      "session_id": "ses_f13d176c86a23e69",
+      "branch": "main",
+      "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/merge-main-authority-20261020"
+    },
+    "active_environment_root_checkout": {
+      "claim_id": "claim:mncs-environment:worktree:f2655c1e1c4e",
+      "session_id": "ses_fb57424feb72607c",
+      "branch": "campaign/scoped-merge-publish-authority-20261020",
+      "checkout": "/home/epi13/Documents/Projects/mncs-environment"
+    },
+    "action": "No Environment source, checkout, or claim was modified."
+  },
+  "concurrent_rights_scope": {
+    "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "session_id": "ses_a6a27331d7d348b9",
+    "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+    "action": "No files in the peer worktree or branch were modified."
+  },
+  "assessment": {
+    "state": "live-admission-unverified",
+    "summary": "The Rights binding and local provider resolve to an authorized compact context, but both an existing resumed session and a fresh Environment entry omit rights_context. Control main contains the pass-through and provider-path changes; Environment integration and live delivery remain under active claims.",
+    "next_check": "After the current Environment owner releases or integrates the claimed work, re-enter a Rights-bound session through the normal Environment path and verify rights_context, resolver identity, and diagnostics through the connected MCP."
+  }
+}
