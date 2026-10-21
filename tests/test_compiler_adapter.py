@@ -7,6 +7,7 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from mncs_rights_provenance import build_agent_context, build_compiler_application_artifact_binding
+from mncs_rights_provenance.artifact_binding import diagnose_native_artifact_binding
 from mncs_rights_provenance.cli import MAX_COMPILER_BINDING_REQUEST_BYTES, main
 from mncs_rights_provenance.compiler_adapter import (
     APPLICATION_BUILD_SCHEMA,
@@ -161,6 +162,10 @@ def test_candidate_context_flows_into_compiler_artifact_binding_with_uncertainty
     assert artifact_binding["rights"]["context_identity"] == context["identity"]
     assert artifact_binding["rights"]["compatibility"] == "unknown"
     assert artifact_binding["legal_conclusion"] == "NOT_MADE"
+    diagnostic_report = diagnose_native_artifact_binding(artifact_binding)
+    assert diagnostic_report["status"] == "review"
+    assert diagnostic_report["diagnostics"][0]["code"] == "artifact-rights-unresolved"
+    assert diagnostic_report["legal_conclusion"] == "NOT_MADE"
 
 
 def test_compiler_adapter_rejects_unverified_or_inconsistent_build_results() -> None:

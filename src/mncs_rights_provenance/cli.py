@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .artifact_binding import diagnose_native_artifact_binding
 from .canonical import canonical_bytes
 from .compiler_adapter import (
     COMPILER_BINDING_REQUEST_SCHEMA,
@@ -44,6 +45,7 @@ from .validation import (
 
 MAX_FORGE_BINDING_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_COMPILER_BINDING_REQUEST_BYTES = 2 * 1024 * 1024
+MAX_ARTIFACT_BINDING_DIAGNOSTIC_BYTES = 2 * 1024 * 1024
 
 
 def _emit(value: Any, *, human: bool = False) -> None:
@@ -422,6 +424,24 @@ def cmd_compiler_build_binding(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_artifact_binding_diagnose(args: argparse.Namespace) -> int:
+    """Explain unresolved rights or lineage in a bounded native binding."""
+    try:
+        with Path(args.binding).open("rb") as binding_file:
+            raw = binding_file.read(MAX_ARTIFACT_BINDING_DIAGNOSTIC_BYTES + 1)
+        if len(raw) > MAX_ARTIFACT_BINDING_DIAGNOSTIC_BYTES:
+            raise ValueError("Artifact binding exceeds the 2 MiB input bound")
+        binding = json.loads(raw.decode("utf-8"))
+        if not isinstance(binding, dict):
+            raise TypeError("Artifact binding must be an object")
+        report = diagnose_native_artifact_binding(binding)
+    except (OSError, UnicodeError, ValueError, TypeError) as exc:
+        _emit({"ok": False, "error": str(exc), "legal_conclusion": "NOT_MADE"})
+        return 2
+    _emit(report, human=args.human)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="mncs-rp", description="MNCS Rights & Provenance tooling")
     parser.add_argument("--version", action="version", version=f"mncs-rp {__version__}")
@@ -546,6 +566,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     compiler_build.add_argument("--human", action="store_true")
     compiler_build.set_defaults(func=cmd_compiler_build_binding)
+
+    diagnose = artifact_binding_sub.add_parser(
+        "diagnose", help="explain unresolved rights or lineage in a native binding"
+    )
+    diagnose.add_argument("binding", help="native artifact binding JSON document")
+    diagnose.add_argument("--human", action="store_true")
+    diagnose.set_defaults(func=cmd_artifact_binding_diagnose)
 
     return parser
 

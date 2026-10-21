@@ -11,6 +11,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 SCHEMA_VERSION = "mncs.rights-provenance.native-artifact-binding/0.1.0"
+DIAGNOSTIC_SCHEMA_VERSION = "mncs.rights-provenance.artifact-binding-diagnostic/0.1.0"
 _RIGHTS_STATES = {"declared", "unresolved", "unknown"}
 _EVIDENCE_STATES = {
     "directly-observed",
@@ -275,4 +276,216 @@ def build_native_artifact_binding(
     }
 
 
-__all__ = ["SCHEMA_VERSION", "build_native_artifact_binding"]
+def diagnose_native_artifact_binding(binding: Mapping[str, Any]) -> dict[str, Any]:
+    """Explain unresolved rights or lineage in one native artifact binding.
+
+    This bounded report diagnoses declared record state only. It does not
+    fetch referenced manifests, infer license compatibility, or make a legal
+    conclusion. A no-findings report means this check found no listed issue;
+    it is not a compliance result.
+    """
+    if not isinstance(binding, Mapping):
+        raise TypeError("binding must be an object")
+    if set(binding) != {"schema_version", "artifact", "rights", "lineage", "legal_conclusion"}:
+        raise ValueError("binding fields do not match the native artifact binding contract")
+    if binding.get("schema_version") != SCHEMA_VERSION:
+        raise ValueError(f"binding.schema_version must be {SCHEMA_VERSION}")
+    if binding.get("legal_conclusion") != "NOT_MADE":
+        raise ValueError("binding.legal_conclusion must be NOT_MADE")
+
+    artifact = binding.get("artifact")
+    rights = binding.get("rights")
+    lineage = binding.get("lineage")
+    if not isinstance(artifact, Mapping) or not isinstance(rights, Mapping):
+        raise TypeError("binding must contain artifact and rights objects")
+    if not isinstance(lineage, Mapping):
+        raise TypeError("binding must contain a lineage object")
+    if set(artifact) != {"producer", "producer_contract", "identity", "content_digest"}:
+        raise ValueError("binding.artifact fields do not match the producer identity contract")
+    _text(artifact.get("producer"), "artifact.producer", 160)
+    _text(artifact.get("producer_contract"), "artifact.producer_contract", 160)
+    artifact_identity = _text(artifact.get("identity"), "artifact.identity", 512)
+    _digest(artifact.get("content_digest"), "artifact.content_digest")
+    if set(rights) - {"state", "context_identity", "contributing_manifests", "compatibility"}:
+        raise ValueError("binding.rights contains unsupported fields")
+    rights_state = rights.get("state")
+    if not isinstance(rights_state, str) or rights_state not in {"declared", "review", "unknown"}:
+        raise ValueError("binding.rights.state is unsupported")
+    if "context_identity" in rights:
+        _digest(rights.get("context_identity"), "rights.context_identity")
+    manifests = rights.get("contributing_manifests")
+    if not isinstance(manifests, Sequence) or isinstance(manifests, (str, bytes)):
+        raise TypeError("binding.rights.contributing_manifests must be a list")
+    if len(manifests) > 64 or any(not isinstance(item, Mapping) for item in manifests):
+        raise ValueError("binding rights manifests exceed the supported shape")
+    if rights.get("compatibility") != "unknown":
+        raise ValueError("binding.rights.compatibility must remain unknown")
+    clean_manifests = [
+        _contributing_manifest(item, index) for index, item in enumerate(manifests)
+    ]
+    manifest_states = [item["rights_state"] for item in clean_manifests]
+
+    if set(lineage) != {"state", "source_snapshot_identity", "transformation", "relationships"}:
+        raise ValueError("binding.lineage fields do not match the native artifact binding contract")
+    lineage_state = lineage.get("state")
+    if not isinstance(lineage_state, str) or lineage_state not in {"complete", "partial", "unknown"}:
+        raise ValueError("binding.lineage.state is unsupported")
+    relationships = lineage.get("relationships")
+    transformation = lineage.get("transformation")
+    if (
+        not isinstance(relationships, Sequence)
+        or isinstance(relationships, (str, bytes))
+        or len(relationships) > 128
+        or any(not isinstance(item, Mapping) for item in relationships)
+    ):
+        raise ValueError("binding.lineage.relationships must be a bounded list of objects")
+    if not isinstance(transformation, Mapping):
+        raise TypeError("binding.lineage.transformation must be an object")
+    transform_required = {
+        "kind", "toolchain_identity", "event_ref", "evidence_state", "evidence",
+    }
+    if set(transformation) != transform_required:
+        raise ValueError("binding transformation fields do not match the producer event contract")
+    if not isinstance(transformation.get("kind"), str) or transformation["kind"] not in _TRANSFORMATIONS:
+        raise ValueError("binding.lineage.transformation.kind is unsupported")
+    _optional_text(transformation.get("toolchain_identity"), "transformation.toolchain_identity", 512)
+    _optional_text(transformation.get("event_ref"), "transformation.event_ref", 1024)
+    transformation_evidence = transformation.get("evidence")
+    transformation_state = transformation.get("evidence_state")
+    if not isinstance(transformation_state, str) or transformation_state not in {
+        "directly-observed", "declared", "inferred", "unavailable",
+    }:
+        raise ValueError("binding.lineage.transformation.evidence_state is unsupported")
+    clean_transformation_evidence = _evidence_list(
+        transformation_evidence,
+        "binding.lineage.transformation.evidence",
+        required=transformation_state != "unavailable",
+    )
+    clean_relationships = [
+        _relationship(item, index) for index, item in enumerate(relationships)
+    ]
+    relationship_states = [item["evidence_state"] for item in clean_relationships]
+    source_snapshot_identity = _optional_text(
+        lineage.get("source_snapshot_identity"), "lineage.source_snapshot_identity", 512
+    )
+
+    diagnostics: list[dict[str, str]] = []
+    rights_state_consistent = (
+        (rights_state == "declared" and bool(manifests) and all(
+            state == "declared" for state in manifest_states
+        ))
+        or (rights_state == "review" and "unresolved" in manifest_states and "unknown" not in manifest_states)
+        or (rights_state == "unknown" and (not manifests or "unknown" in manifest_states))
+    )
+    if not rights_state_consistent:
+        diagnostics.append({
+            "code": "artifact-rights-state-conflict",
+            "severity": "review",
+            "summary": "Aggregate rights state conflicts with the contributing manifest states.",
+            "evidence_ref": "#/rights",
+            "remedy": "reconcile-aggregate-rights-state-from-contributing-manifests",
+        })
+    if not manifests:
+        diagnostics.append({
+            "code": "artifact-rights-manifests-missing",
+            "severity": "review",
+            "summary": "No contributing Rights manifests were supplied.",
+            "evidence_ref": "#/rights/contributing_manifests",
+            "remedy": "attach-contributing-rights-manifests",
+        })
+    if "unknown" in manifest_states:
+        diagnostics.append({
+            "code": "artifact-rights-unknown",
+            "severity": "review",
+            "summary": "At least one contributing rights declaration remains unknown.",
+            "evidence_ref": "#/rights/contributing_manifests",
+            "remedy": "investigate-unknown-rights-declarations",
+        })
+    if "unresolved" in manifest_states:
+        diagnostics.append({
+            "code": "artifact-rights-unresolved",
+            "severity": "review",
+            "summary": "At least one contributing rights declaration remains unresolved.",
+            "evidence_ref": "#/rights/contributing_manifests",
+            "remedy": "resolve-rights-evidence-or-preserve-unresolved-state",
+        })
+    if len(manifests) > 1:
+        diagnostics.append({
+            "code": "artifact-rights-compatibility-unknown",
+            "severity": "review",
+            "summary": (
+                "Multiple rights manifests are present, but compatibility has not been established."
+            ),
+            "evidence_ref": "#/rights/compatibility",
+            "remedy": "evaluate-compatibility-from-authoritative-license-terms",
+        })
+
+    source_snapshot_identity = lineage.get("source_snapshot_identity")
+    has_lineage_evidence = (
+        bool(clean_transformation_evidence) and transformation_state != "unavailable"
+    ) or any(state != "unavailable" for state in relationship_states)
+    if lineage_state == "complete":
+        diagnostics.append({
+            "code": "artifact-lineage-completeness-unsubstantiated",
+            "severity": "review",
+            "summary": "This binding contract contains no authoritative lineage-completeness attestation.",
+            "evidence_ref": "#/lineage/state",
+            "remedy": "attach-authoritative-completeness-attestation-or-mark-partial",
+        })
+    elif lineage_state == "unknown" and (
+        source_snapshot_identity or clean_relationships or has_lineage_evidence
+    ):
+        diagnostics.append({
+            "code": "artifact-lineage-state-conflict",
+            "severity": "review",
+            "summary": "Lineage is marked unknown even though source or transformation evidence is present.",
+            "evidence_ref": "#/lineage",
+            "remedy": "recompute-lineage-state-from-recorded-evidence",
+        })
+    elif lineage_state == "unknown":
+        diagnostics.append({
+            "code": "artifact-lineage-missing",
+            "severity": "review",
+            "summary": "No source snapshot, transformation evidence, or lineage relationship is available.",
+            "evidence_ref": "#/lineage",
+            "remedy": "retrieve-or-recover-producer-lineage-records",
+        })
+    elif lineage_state == "partial" and not (
+        source_snapshot_identity or clean_relationships or clean_transformation_evidence
+    ):
+        diagnostics.append({
+            "code": "artifact-lineage-state-conflict",
+            "severity": "review",
+            "summary": "Lineage is marked partial but contains no source, transformation, or relationship evidence.",
+            "evidence_ref": "#/lineage",
+            "remedy": "reconcile-lineage-state-or-restore-producer-evidence",
+        })
+    else:
+        if transformation_state == "unavailable" or "unavailable" in relationship_states:
+            diagnostics.append({
+                "code": "artifact-lineage-evidence-unavailable",
+                "severity": "review",
+                "summary": "Some producer lineage evidence is explicitly unavailable.",
+                "evidence_ref": (
+                    "#/lineage/relationships"
+                    if "unavailable" in relationship_states
+                    else "#/lineage/transformation/evidence"
+                ),
+                "remedy": "reconcile-producer-records-or-record-evidence-unavailable",
+            })
+
+    return {
+        "schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+        "status": "review" if diagnostics else "no-findings",
+        "artifact_identity": artifact_identity,
+        "diagnostics": diagnostics[:12],
+        "legal_conclusion": "NOT_MADE",
+    }
+
+
+__all__ = [
+    "DIAGNOSTIC_SCHEMA_VERSION",
+    "SCHEMA_VERSION",
+    "build_native_artifact_binding",
+    "diagnose_native_artifact_binding",
+]

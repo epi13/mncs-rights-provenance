@@ -10,7 +10,7 @@ The projection keeps legal terms, unresolved claims, provenance state, and agent
 
 ## Incremental identity
 
-The context identity binds the exact manifest digest, governance profile digest, Environment binding, and compact projection. Environment includes the binding and source digests in its resolution inputs, so a changed profile produces a new resolved environment identity. Revalidation hashes the bounded source files and reuses the existing projection when the binding and both input digests are unchanged. The admission view includes stable references and bounded relationship counts; the detailed manifest and lineage remain on demand.
+The context identity binds the exact manifest digest, governance profile digest, Environment binding, and compact projection. When the MNCS candidate license is referenced, the projection also exposes the exact candidate-registry digest in `sources`; a recomputed context therefore changes identity when that registry changes. Environment currently reuses a prior projection based on the bound manifest and governance file digests. It still needs to include the Rights provider or candidate-registry revision in that reuse key so packaged policy changes cannot reuse a stale persisted context. The admission view includes stable references and bounded relationship counts; the detailed manifest and lineage remain on demand.
 
 The persisted context projection records its own bounded lineage: each observed input has a `generated-from` relationship bound to its content digest, and the Rights projection function has a `transformed-by` relationship to the context artifact. A missing input is retained as a `referenced` unavailable source rather than claimed as an observed input.
 
@@ -80,6 +80,14 @@ Without explicit manifest references rights remain unknown; supplied manifests
 can change the declared rights summary to `declared` or `review`, while cross
 license compatibility remains unknown. The bounded request schema and
 `mncs-rp artifact-binding compiler-build REQUEST.json` expose this path.
+
+`diagnose_native_artifact_binding` and
+`mncs-rp artifact-binding diagnose BINDING.json` produce bounded, evidence-linked
+findings for absent or unresolved rights, unknown compatibility across multiple
+declared inputs, and missing or explicitly unavailable lineage. They do not
+fetch or reinterpret referenced manifests. A single declared input with
+declared partial lineage produces no repeated finding; `no-findings` is not a
+compliance result, and the report always makes no legal conclusion.
 
 The live Environment vertical slice emits admission context and its own
 artifact lineage. Compiler and Language have active concurrent worktrees, so

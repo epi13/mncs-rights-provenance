@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
+import mncs_rights_provenance.license_resolution as license_resolution_module
 from mncs_rights_provenance.agent_context import build_agent_context
 from mncs_rights_provenance.license_resolution import resolve_license_expression
 from mncs_rights_provenance.validation import validate_manifest_structure
@@ -269,6 +271,13 @@ def test_candidate_license_reference_never_becomes_an_effective_term_summary() -
     assert leaf["declared_rights_prove_authority"] is False
     assert "permissions" not in leaf
     assert leaf["source_ref"] == "legal-candidates/MNCS-Permissive-0.1.md"
+    registry_bytes = (
+        ROOT / "src/mncs_rights_provenance/resources/license-candidates.json"
+    ).read_bytes()
+    assert leaf["registry_sha256"] == "sha256:" + hashlib.sha256(registry_bytes).hexdigest()
+    assert result["candidate_registry"]["reference"] == (
+        "mncs_rights_provenance/resources/license-candidates.json"
+    )
     assert result["compatibility"]["status"] == "unknown"
 
     combined = resolve_license_expression(f"{identifier} AND MIT")
@@ -293,6 +302,33 @@ def test_agent_context_explains_candidate_status_without_treating_it_as_rights()
     assert "license-terms-unresolved" not in codes
     assert "rights-manifest-invalid" not in codes
     assert context["rights"]["compatibility"]["status"] == "unknown"
+    assert context["sources"]["license_candidate_registry"] == (
+        context["rights"]["license_terms"]["candidate_registry"]
+    )
+    registry_edge = next(
+        edge for edge in context["provenance"]["projection"]["relationships"]
+        if edge["from"] == "mncs_rights_provenance/resources/license-candidates.json"
+    )
+    assert registry_edge["relation"] == "generated-from"
+    assert registry_edge["content_digest"] == context["sources"]["license_candidate_registry"]["sha256"]
+
+
+def test_candidate_registry_revision_invalidates_agent_context(monkeypatch) -> None:
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = "LicenseRef-MNCS-Permissive-0.1"
+    original = build_agent_context(manifest, _governance(), binding=_binding())
+
+    monkeypatch.setattr(
+        license_resolution_module,
+        "_CANDIDATE_REGISTRY_DIGEST",
+        "sha256:" + "f" * 64,
+    )
+    revised = build_agent_context(manifest, _governance(), binding=_binding())
+
+    assert original["sources"]["license_candidate_registry"]["sha256"] != (
+        revised["sources"]["license_candidate_registry"]["sha256"]
+    )
+    assert original["identity"] != revised["identity"]
 
 
 def test_spdx_or_and_expression_keeps_branch_obligations_and_unknown_compatibility() -> None:

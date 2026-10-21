@@ -8,6 +8,7 @@ unknown instead of being reduced to permission flags.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from importlib.resources import files
@@ -16,6 +17,7 @@ from typing import Any
 from .spdx import is_valid_spdx_expression
 
 RESOLUTION_SCHEMA = "mncs.rights.license-resolution/1"
+_CANDIDATE_REGISTRY_REF = "mncs_rights_provenance/resources/license-candidates.json"
 
 _TOKENS = re.compile(r"\s*(\(|\)|AND\b|OR\b|[A-Za-z0-9][A-Za-z0-9.+-]*)")
 
@@ -85,11 +87,12 @@ _TERMS: dict[str, dict[str, Any]] = {
 }
 
 
-def _load_license_candidates() -> dict[str, dict[str, Any]]:
+def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
     resource = files("mncs_rights_provenance").joinpath(
         "resources", "license-candidates.json"
     )
-    value = json.loads(resource.read_text(encoding="utf-8"))
+    registry_bytes = resource.read_bytes()
+    value = json.loads(registry_bytes)
     if (
         not isinstance(value, dict)
         or value.get("schema_version") != "mncs.rights.license-candidates/1"
@@ -119,10 +122,10 @@ def _load_license_candidates() -> dict[str, dict[str, Any]]:
         candidates[entry["identifier"]] = entry
     if not candidates:
         raise RuntimeError("packaged license candidate registry is empty")
-    return candidates
+    return candidates, "sha256:" + hashlib.sha256(registry_bytes).hexdigest()
 
 
-_CANDIDATES = _load_license_candidates()
+_CANDIDATES, _CANDIDATE_REGISTRY_DIGEST = _load_license_candidates()
 
 
 class _ExpressionParser:
@@ -235,7 +238,8 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
                     "adoption_status": candidate["adoption_status"],
                     "declared_rights_prove_authority": False,
                     "source_ref": candidate["text_ref"],
-                    "registry_ref": "mncs_rights_provenance/resources/license-candidates.json",
+                    "registry_ref": _CANDIDATE_REGISTRY_REF,
+                    "registry_sha256": _CANDIDATE_REGISTRY_DIGEST,
                 }
             terms = _TERMS.get(identifier)
             if terms is None:
@@ -249,7 +253,7 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
 
     expanded = expand(tree)
     status = "partial" if unresolved else "reference-summary"
-    return {
+    result: dict[str, Any] = {
         "schema_version": RESOLUTION_SCHEMA,
         "expression": expression,
         "status": status,
@@ -261,3 +265,9 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
             "reason": "license terms are summarized per expression branch; compatibility is not inferred",
         },
     }
+    if candidate_references:
+        result["candidate_registry"] = {
+            "reference": _CANDIDATE_REGISTRY_REF,
+            "sha256": _CANDIDATE_REGISTRY_DIGEST,
+        }
+    return result

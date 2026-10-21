@@ -10,7 +10,20 @@
     "context_budget_bytes": {"type": "integer", "minimum": 4096, "maximum": 8192},
     "identity": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
     "status": {"enum": ["declared", "review"]},
-    "sources": {"type": "object"},
+    "sources": {
+      "type": "object",
+      "properties": {
+        "license_candidate_registry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reference", "sha256"],
+          "properties": {
+            "reference": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+          }
+        }
+      }
+    },
     "rights": {"type": "object"},
     "provenance": {
       "type": "object",
@@ -22,7 +35,7 @@
             "schema_version": {"const": "mncs.rights-provenance.context-lineage/1"},
             "output_ref": {"type": "string"},
             "relationships": {
-              "type": "array", "maxItems": 3,
+              "type": "array", "maxItems": 4,
               "items": {
                 "type": "object", "additionalProperties": false,
                 "required": ["from", "to", "relation", "content_digest", "evidence_state"],

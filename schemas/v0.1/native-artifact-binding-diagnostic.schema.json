@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/native-artifact-binding-diagnostic/v0.1.0.schema.json",
+  "title": "MNCS native artifact binding diagnostic 0.1.0",
+  "description": "Bounded findings about declared rights or lineage state. No findings is not a compliance result and no legal conclusion is made.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "artifact_identity", "diagnostics", "legal_conclusion"],
+  "properties": {
+    "schema_version": {
+      "const": "mncs.rights-provenance.artifact-binding-diagnostic/0.1.0"
+    },
+    "status": {"enum": ["review", "no-findings"]},
+    "artifact_identity": {"type": "string", "minLength": 1, "maxLength": 512},
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "severity", "summary", "evidence_ref", "remedy"],
+        "properties": {
+          "code": {
+            "enum": [
+              "artifact-rights-manifests-missing",
+              "artifact-rights-unknown",
+              "artifact-rights-unresolved",
+              "artifact-rights-state-conflict",
+              "artifact-rights-compatibility-unknown",
+              "artifact-lineage-missing",
+              "artifact-lineage-evidence-unavailable",
+              "artifact-lineage-state-conflict",
+              "artifact-lineage-completeness-unsubstantiated"
+            ]
+          },
+          "severity": {"const": "review"},
+          "summary": {"type": "string", "minLength": 1, "maxLength": 512},
+          "evidence_ref": {"type": "string", "minLength": 1, "maxLength": 1024},
+          "remedy": {"type": "string", "minLength": 1, "maxLength": 128}
+        }
+      }
+    },
+    "legal_conclusion": {"const": "NOT_MADE"}
+  }
+}

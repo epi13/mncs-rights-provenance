@@ -173,15 +173,31 @@ def build_agent_context(
             "remedy": "recompute-identity-from-authoritative-content",
         })
 
-    rights = manifest.get("rights") if isinstance(manifest.get("rights"), Mapping) else {}
+    rights_value = manifest.get("rights")
+    rights: Mapping[str, Any] = (
+        rights_value if isinstance(rights_value, Mapping) else {}
+    )
     expression = rights.get("distribution_license")
-    license_resolution = resolve_license_expression(expression) if isinstance(expression, str) else {
+    license_resolution: dict[str, Any] = resolve_license_expression(expression) if isinstance(expression, str) else {
         "schema_version": "mncs.rights.license-resolution/1",
         "expression": None,
         "status": "unresolved",
         "reason": "distribution license is absent",
         "compatibility": {"status": "unknown", "reason": "license is absent"},
     }
+    candidate_registry = license_resolution.get("candidate_registry")
+    candidate_registry_source = (
+        {
+            "reference": candidate_registry["reference"],
+            "sha256": candidate_registry["sha256"],
+        }
+        if (
+            isinstance(candidate_registry, Mapping)
+            and isinstance(candidate_registry.get("reference"), str)
+            and isinstance(candidate_registry.get("sha256"), str)
+        )
+        else None
+    )
 
     for field, code, remedy in (
         ("copyright_status", "copyright-status-unresolved", "review-copyright-basis"),
@@ -204,7 +220,12 @@ def build_agent_context(
                 "evidence_ref": f"{manifest_ref}#/rights/{field}",
                 "remedy": remedy,
             })
-    candidate_references = license_resolution.get("candidate_references", [])
+    raw_candidate_references = license_resolution.get("candidate_references", [])
+    candidate_references: list[str] = (
+        [item for item in raw_candidate_references if isinstance(item, str)]
+        if isinstance(raw_candidate_references, list)
+        else []
+    )
     for candidate_reference in candidate_references:
         diagnostics.append({
             "code": "license-candidate-not-effective",
@@ -212,10 +233,19 @@ def build_agent_context(
             "summary": (
                 f"{candidate_reference} is an unadopted draft and grants no rights here."
             ),
-            "evidence_ref": "mncs_rights_provenance/resources/license-candidates.json",
+            "evidence_ref": (
+                candidate_registry_source["reference"]
+                if candidate_registry_source is not None
+                else "mncs_rights_provenance/resources/license-candidates.json"
+            ),
             "remedy": "identify-effective-license-declaration",
         })
-    unresolved_identifiers = set(license_resolution.get("unresolved_identifiers", []))
+    raw_unresolved_identifiers = license_resolution.get("unresolved_identifiers", [])
+    unresolved_identifiers: set[str] = (
+        {item for item in raw_unresolved_identifiers if isinstance(item, str)}
+        if isinstance(raw_unresolved_identifiers, list)
+        else set()
+    )
     unresolved_identifiers.difference_update(candidate_references)
     if (
         license_resolution.get("status") in {"unresolved", "partial"}
@@ -229,10 +259,16 @@ def build_agent_context(
             "remedy": "inspect-license-reference",
         })
 
-    provenance = manifest.get("provenance") if isinstance(manifest.get("provenance"), Mapping) else {}
-    graph = provenance.get("graph") if isinstance(provenance.get("graph"), Mapping) else {}
-    edges = graph.get("edges") if isinstance(graph.get("edges"), list) else []
-    participants = provenance.get("participants") if isinstance(provenance.get("participants"), list) else []
+    provenance_value = manifest.get("provenance")
+    provenance: Mapping[str, Any] = (
+        provenance_value if isinstance(provenance_value, Mapping) else {}
+    )
+    graph_value = provenance.get("graph")
+    graph: Mapping[str, Any] = graph_value if isinstance(graph_value, Mapping) else {}
+    raw_edges = graph.get("edges")
+    edges: list[Any] = raw_edges if isinstance(raw_edges, list) else []
+    raw_participants = provenance.get("participants")
+    participants: list[Any] = raw_participants if isinstance(raw_participants, list) else []
     origin = _bounded_label(provenance.get("origin_classification"), "origin-uncertain")
     if origin == "origin-uncertain":
         diagnostics.append({
@@ -244,7 +280,10 @@ def build_agent_context(
         })
 
     source_summaries: list[dict[str, Any]] = []
-    raw_sources = rights.get("sources") if isinstance(rights.get("sources"), list) else []
+    raw_rights_sources = rights.get("sources")
+    raw_sources: list[Any] = (
+        raw_rights_sources if isinstance(raw_rights_sources, list) else []
+    )
     for index, source in enumerate(raw_sources[:4]):
         if not isinstance(source, Mapping):
             continue
@@ -281,6 +320,11 @@ def build_agent_context(
         expected_profile = None
     authority_value = binding_value.get("authority")
     authority_scope = authority_value.get("scope") if isinstance(authority_value, Mapping) else None
+    clean_authority_scope: list[str] = (
+        [item for item in authority_scope if isinstance(item, str)]
+        if isinstance(authority_scope, list)
+        else []
+    )
     authorized = (
         binding_value.get("authorized") is True
         and isinstance(expected_profile, str)
@@ -323,6 +367,55 @@ def build_agent_context(
         })
 
     source_manifest_identity = observed_identity
+    context_sources: dict[str, Any] = {
+        "rights_manifest": {
+            "reference": manifest_ref,
+            "sha256": manifest_digest,
+            "manifest_identity": source_manifest_identity,
+            "identity_state": (
+                "verified-content-digest"
+                if declared_identity is not None and declared_identity == observed_identity
+                else "computed-from-observed-content"
+            ),
+        },
+        "governance_profile": {
+            "reference": governance_ref,
+            "sha256": governance_digest,
+        },
+    }
+    if candidate_registry_source is not None:
+        context_sources["license_candidate_registry"] = candidate_registry_source
+    context_lineage_relationships = [
+        {
+            "from": manifest_ref,
+            "to": "agent-context",
+            "relation": "generated-from" if manifest_digest else "referenced",
+            "content_digest": manifest_digest,
+            "evidence_state": "observed-input" if manifest_digest else "unavailable",
+        },
+        {
+            "from": governance_ref,
+            "to": "agent-context",
+            "relation": "generated-from" if governance_digest else "referenced",
+            "content_digest": governance_digest,
+            "evidence_state": "observed-input" if governance_digest else "unavailable",
+        },
+    ]
+    if candidate_registry_source is not None:
+        context_lineage_relationships.append({
+            "from": candidate_registry_source["reference"],
+            "to": "agent-context",
+            "relation": "generated-from",
+            "content_digest": candidate_registry_source["sha256"],
+            "evidence_state": "observed-input",
+        })
+    context_lineage_relationships.append({
+        "from": "mncs_rights_provenance.agent_context.build_agent_context",
+        "to": "agent-context",
+        "relation": "transformed-by",
+        "content_digest": None,
+        "evidence_state": "observed-execution",
+    })
     context: dict[str, Any] = {
         "schema_version": CONTEXT_SCHEMA,
         "context_budget_bytes": (
@@ -332,22 +425,7 @@ def build_agent_context(
             else 8192
         ),
         "status": "review" if diagnostics else "declared",
-        "sources": {
-            "rights_manifest": {
-                "reference": manifest_ref,
-                "sha256": manifest_digest,
-                "manifest_identity": source_manifest_identity,
-                "identity_state": (
-                    "verified-content-digest"
-                    if declared_identity is not None and declared_identity == observed_identity
-                    else "computed-from-observed-content"
-                ),
-            },
-            "governance_profile": {
-                "reference": governance_ref,
-                "sha256": governance_digest,
-            },
-        },
+        "sources": context_sources,
         "rights": {
             "distribution_license": expression[:256] if isinstance(expression, str) else None,
             "declaration_state": "declared" if isinstance(expression, str) else "unknown",
@@ -376,29 +454,7 @@ def build_agent_context(
             "projection": {
                 "schema_version": "mncs.rights-provenance.context-lineage/1",
                 "output_ref": "#/identity",
-                "relationships": [
-                    {
-                        "from": manifest_ref,
-                        "to": "agent-context",
-                        "relation": "generated-from" if manifest_digest else "referenced",
-                        "content_digest": manifest_digest,
-                        "evidence_state": "observed-input" if manifest_digest else "unavailable",
-                    },
-                    {
-                        "from": governance_ref,
-                        "to": "agent-context",
-                        "relation": "generated-from" if governance_digest else "referenced",
-                        "content_digest": governance_digest,
-                        "evidence_state": "observed-input" if governance_digest else "unavailable",
-                    },
-                    {
-                        "from": "mncs_rights_provenance.agent_context.build_agent_context",
-                        "to": "agent-context",
-                        "relation": "transformed-by",
-                        "content_digest": None,
-                        "evidence_state": "observed-execution",
-                    },
-                ],
+                "relationships": context_lineage_relationships,
             },
         },
         "governance": {
@@ -409,7 +465,7 @@ def build_agent_context(
                 "issuer": authority_value.get("issuer"),
                 "basis": authority_value.get("basis"),
                 "source_ref": authority_value.get("source_ref"),
-                "scope": list(authority_scope),
+                "scope": clean_authority_scope,
             } if governance_active and isinstance(authority_value, Mapping) else None),
             "rules": ({
                 "rights": clean_governance["rights"],

@@ -12,7 +12,7 @@ import hashlib
 import json
 import re
 from collections.abc import Mapping, Sequence
-from typing import Any, cast
+from typing import Any
 
 from .artifact_binding import build_native_artifact_binding
 
@@ -237,7 +237,7 @@ def build_compiler_application_artifact_binding(
         source_snapshot_identity=source_snapshot_identity,
         context_identity=context_identity,
     )
-    return cast(dict[str, Any], binding)
+    return binding
 
 
 __all__ = [
