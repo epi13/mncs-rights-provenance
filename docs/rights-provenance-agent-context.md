@@ -42,9 +42,14 @@ claim about a specification relationship; it does not prove independent
 origin. Missing receipts stay unavailable, compatibility stays unknown, and
 the record explicitly makes no legal conclusion.
 
-The contract is implemented and schema-tested in Rights, but Compiler and
-Forge do not yet emit it. This campaign's live vertical slice instead emits
-the Environment admission-context artifact lineage. Compiler and Language
-have active concurrent worktrees, so integration at their build boundary is a
-follow-up that should bind their existing identities and receipts without
-changing their active implementation.
+`build_native_artifact_binding` constructs this contract from producer-owned
+artifact, event, source snapshot, and manifest references. It bounds every
+collection, retains declaration/evidence states, leaves compatibility
+unknown, and never claims complete lineage: that requires an authoritative
+completeness attestation contract. Its tests exercise multi-input builds,
+agent-generated origin claims, unresolved rights, and missing verification.
+Compiler and Forge do not yet emit the binding. The live Environment vertical
+slice emits admission context and its own artifact lineage; Compiler and
+Language have active concurrent worktrees, so integration at their build
+boundary remains a follow-up that must bind their existing identities and
+receipts without changing their active implementation.
