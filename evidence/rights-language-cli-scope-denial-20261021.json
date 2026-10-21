@@ -1,0 +1,45 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-scope-denial-evidence/1",
+  "recorded_at": "2026-10-21T19:17:49Z",
+  "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+  "project": "mncs-rights-provenance",
+  "requested_context": {
+    "operation": "context",
+    "cwd": ".worktrees/luna-max-rights-language-toolchain-20261021",
+    "outcome": "denied-before-session-selection",
+    "error": {
+      "code": "ENVIRONMENT_AUTHORITY_DENIED",
+      "message": "project continuation definition must remain limited to its granted repository",
+      "repository": "mncs-rights-provenance"
+    }
+  },
+  "project_declaration": {
+    "workspace_scope_repositories": [
+      "mncs-rights-provenance",
+      "mncs-language"
+    ],
+    "intent_repositories": ["mncs-rights-provenance"],
+    "protected_repositories": ["mncs-language"],
+    "test_toolchain": {
+      "repository": "mncs-language",
+      "path": "target/release/mncs",
+      "environment_variable": "MNCS_BIN"
+    }
+  },
+  "control_source_observation": {
+    "repository": "mncs-control-mcp",
+    "commit": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
+    "path": "src/mncs_control_mcp/environment_rpc.py",
+    "symbol": "_project_entry_scope_is_authorized",
+    "finding": "The current gate collects protected toolchains from provided contract invocation declarations; it does not inspect contracts.tests[].command.toolchain."
+  },
+  "assessment": {
+    "status": "authorization-gap",
+    "limits": [
+      "This records an Environment authorization result, not a legal-rights or license-compatibility conclusion.",
+      "No Control or Environment files were modified by the denied context request.",
+      "No tests were run by the denied request."
+    ],
+    "next": "Retry the declared Environment verification after the active Control authorization owner integrates support for protected test-command toolchains."
+  }
+}
