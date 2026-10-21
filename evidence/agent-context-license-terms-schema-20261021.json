@@ -1,0 +1,55 @@
+{
+  "coordination": {
+    "active_other_agent_claim": {
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "scope_overlap": false,
+      "session_id": "ses_a6a27331d7d348b9",
+      "status": "held"
+    },
+    "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "environment_session_id": "ses_973d1b67eb66857e",
+    "store_generation_before_integration_claim": 68184,
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:9424aa0dacdc"
+  },
+  "files_sha256": {
+    "docs/rights-provenance-agent-context.md": "sha256:535acdf88e02d773280e529d28f18dfaaf616a60c693b8ecb3f03d57f24b6170",
+    "schemas/v0.1/agent-context.schema.json": "sha256:3a98b574ba1ccf41485717be2c56a07674571952226742d50b5f4b8217cdfeb5",
+    "src/mncs_rights_provenance/agent_context.py": "sha256:46da53a8e5aef34ffaafec06a7355f786d4adc8c5d91de7267001b818bd5d12b",
+    "tests/test_agent_context_projection.py": "sha256:8006f9aeec7e061126affba4b5945111c322e1e5effe47a87155832c56d6b90c",
+    "tests/test_license_resolution_cli.py": "sha256:74d9d7ec399a59c6a716dc0462f4836e94f08c26bae6a78336c9c38a678546a8"
+  },
+  "identity": "ev_rights_agent_context_license_terms_schema_20261021",
+  "implementation": {
+    "base_commit": "7a07ec4756ce12163ab00c275bc49f1e73f146f8",
+    "branch": "campaign/luna-max-license-context-schema-20261021",
+    "candidate_license_status": "not adopted; no operative LICENSE file changed",
+    "context_expression_limit": 4096,
+    "context_schema_types": "full and budget-compacted mncs.rights.license-resolution/4 projections, candidate evidence, unknown status, and recursive SPDX expression trees",
+    "oversized_source_expression": "context marks expression_truncated and references RIGHTS.json#/rights/distribution_license; resolver /4 output schema remains unchanged",
+    "shortened_distribution_license": "context marks distribution_license_truncated and retains the full bounded expression or a detail reference"
+  },
+  "limits": [
+    "License declarations remain caller-declared and unverified; compatibility stays unknown unless the resolver has recognized evidence, and this context schema makes no legal conclusion.",
+    "This change types the Rights provider projection. Environment-side admission delivery and incremental invalidation remain separate integration work.",
+    "The candidate MNCS permissive license remains unadopted, and repository licensing is unchanged."
+  ],
+  "recorded_at": "2026-10-21T23:25:34Z",
+  "repository": "mncs-rights-provenance",
+  "schema_version": "mncs.rights-provenance.agent-context-license-terms-evidence/1",
+  "verification": {
+    "focused_command": "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_agent_context_projection.py tests/test_license_resolution_cli.py tests/test_license_action_guidance.py tests/test_manifest.py tests/test_agent_contract.py",
+    "focused_exit_code": 0,
+    "focused_result": "74 passed",
+    "ruff": "passed",
+    "schema_json_parse": "passed",
+    "schema_validation_cases": [
+      "absent declaration",
+      "candidate and candidate-review references",
+      "long unknown identifier",
+      "oversized expression with authoritative detail reference",
+      "agent-context budget compaction"
+    ],
+    "working_tree_diff_check": "passed"
+  }
+}

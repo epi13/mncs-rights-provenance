@@ -98,6 +98,8 @@ def test_context_respects_a_smaller_configured_budget_with_detail_references() -
 
     assert len(json.dumps(context, sort_keys=True, separators=(",", ":")).encode()) <= 4096
     assert context["rights"]["license_terms"].get("detail_ref") == "RIGHTS.json#/rights/distribution_license"
+    schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
+    assert list(Draft202012Validator(schema).iter_errors(context)) == []
     guidance = context["rights"]["action_guidance"]
     if "expression_tree" not in guidance:
         assert guidance["expression_tree_ref"] == guidance["expression_ref"]
@@ -207,6 +209,28 @@ def test_absent_distribution_license_keeps_action_guidance_unknown() -> None:
             context["rights"]["license_terms"]
         )
     ) == []
+    context_schema = json.loads(
+        (ROOT / "schemas/v0.1/agent-context.schema.json").read_text()
+    )
+    assert list(Draft202012Validator(context_schema).iter_errors(context)) == []
+
+
+def test_oversized_license_expression_keeps_its_authoritative_detail_reference() -> None:
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = "X" * 4097
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    terms = context["rights"]["license_terms"]
+    context_schema = json.loads(
+        (ROOT / "schemas/v0.1/agent-context.schema.json").read_text()
+    )
+
+    assert terms["status"] == "unresolved"
+    assert terms["expression_truncated"] is True
+    assert terms["expression"] == "X" * 256
+    assert terms["detail_ref"] == "RIGHTS.json#/rights/distribution_license"
+    assert context["rights"]["distribution_license_truncated"] is True
+    assert list(Draft202012Validator(context_schema).iter_errors(context)) == []
 
 
 def test_long_unknown_license_identifier_is_bounded_and_referenced() -> None:
@@ -224,6 +248,20 @@ def test_long_unknown_license_identifier_is_bounded_and_referenced() -> None:
     assert context["rights"]["license_terms"]["unresolved_identifiers"] == [expression]
     assert guidance["unresolved_action_counts"]["redistribute-source"]["identifiers"] == 1
     assert guidance["expression_ref"].endswith("#/rights/distribution_license")
+    assert list(Draft202012Validator(schema).iter_errors(context)) == []
+
+
+def test_context_marks_a_truncated_license_field_while_retaining_the_expression() -> None:
+    manifest = _manifest()
+    expression = "LicenseRef-" + ("A" * 300)
+    manifest["rights"]["distribution_license"] = expression
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
+
+    assert context["rights"]["distribution_license"] == expression[:256]
+    assert context["rights"]["distribution_license_truncated"] is True
+    assert context["rights"]["license_terms"]["expression"] == expression
     assert list(Draft202012Validator(schema).iter_errors(context)) == []
 
 
@@ -568,6 +606,8 @@ def test_agent_context_explains_candidate_status_without_treating_it_as_rights()
     )
     assert registry_edge["relation"] == "generated-from"
     assert registry_edge["content_digest"] == context["sources"]["license_candidate_registry"]["sha256"]
+    schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
+    assert list(Draft202012Validator(schema).iter_errors(context)) == []
 
 
 def test_candidate_review_reference_survives_expression_detail_compaction(monkeypatch) -> None:
@@ -593,6 +633,8 @@ def test_candidate_review_reference_survives_expression_detail_compaction(monkey
     assert license_terms["candidate_review_details"][0]["decisions_ref"].endswith(
         "#/candidates/1/legal_review_decisions"
     )
+    schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
+    assert list(Draft202012Validator(schema).iter_errors(context)) == []
 
 
 def test_candidate_registry_revision_invalidates_agent_context(monkeypatch) -> None:

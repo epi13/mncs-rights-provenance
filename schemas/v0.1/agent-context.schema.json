@@ -45,6 +45,8 @@
     "rights": {
       "type": "object",
       "properties": {
+        "license_terms": {"$ref": "#/$defs/license_terms_projection"},
+        "distribution_license_truncated": {"type": "boolean"},
         "license_terms_access": {
           "type": "object",
           "additionalProperties": false,
@@ -144,6 +146,193 @@
     "diagnostics": {"type": "array", "maxItems": 12, "items": {"type": "object"}}
   },
   "$defs": {
+    "license_terms_projection": {
+      "type": "object",
+      "required": ["schema_version", "expression_evidence", "status", "compatibility"],
+      "properties": {
+        "schema_version": {"const": "mncs.rights.license-resolution/4"},
+        "expression_evidence": {
+          "enum": ["caller-supplied-declaration-unverified", "no-usable-declaration"]
+        },
+        "expression": {"type": ["string", "null"], "maxLength": 4096},
+        "status": {"enum": ["unresolved", "partial", "reference-summary"]},
+        "reason": {"type": "string", "minLength": 1},
+        "expression_tree": {"$ref": "#/$defs/license_terms_expression_node"},
+        "unresolved_identifiers": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 4096},
+          "uniqueItems": true,
+          "maxItems": 256
+        },
+        "candidate_references": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true,
+          "maxItems": 128
+        },
+        "candidate_registry": {"$ref": "#/$defs/license_terms_content_reference"},
+        "candidate_review_details": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/license_terms_candidate_review_detail"},
+          "uniqueItems": true,
+          "maxItems": 128
+        },
+        "compatibility": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": {"const": "unknown"},
+            "reason": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "detail_ref": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "expression_truncated": {"type": "boolean"},
+        "unresolved_identifier_count": {"type": "integer", "minimum": 0},
+        "unresolved_identifiers_ref": {"type": "string", "minLength": 1, "maxLength": 1024}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "unresolved"}}, "required": ["status"]},
+          "then": {"required": ["reason"]}
+        },
+        {
+          "if": {
+            "properties": {"status": {"enum": ["partial", "reference-summary"]}},
+            "required": ["status"]
+          },
+          "then": {
+            "required": ["candidate_references"],
+            "allOf": [
+              {
+                "anyOf": [
+                  {"required": ["unresolved_identifiers"]},
+                  {"required": ["unresolved_identifier_count", "unresolved_identifiers_ref"]}
+                ]
+              },
+              {
+                "anyOf": [
+                  {"required": ["expression_tree"]},
+                  {"required": ["detail_ref"]}
+                ]
+              }
+            ],
+            "not": {"required": ["reason"]}
+          }
+        },
+        {
+          "if": {
+            "properties": {"expression_evidence": {"const": "no-usable-declaration"}},
+            "required": ["expression_evidence"]
+          },
+          "then": {
+            "properties": {
+              "expression": {"type": "null"},
+              "status": {"const": "unresolved"}
+            },
+            "required": ["expression", "status"]
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "license_terms_content_reference": {
+      "type": "object",
+      "required": ["reference", "sha256"],
+      "properties": {
+        "reference": {"type": "string", "minLength": 1, "maxLength": 512},
+        "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "license_terms_candidate_review_detail": {
+      "type": "object",
+      "required": ["license", "status", "decision_count", "decisions_ref"],
+      "properties": {
+        "license": {"type": "string", "minLength": 1, "maxLength": 512},
+        "status": {"type": "string", "minLength": 1, "maxLength": 128},
+        "decision_count": {"type": "integer", "minimum": 0},
+        "decisions_ref": {"type": "string", "minLength": 1, "maxLength": 1024}
+      },
+      "additionalProperties": false
+    },
+    "license_terms_expression_node": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["operator", "terms"],
+          "properties": {
+            "operator": {"enum": ["AND", "OR"]},
+            "terms": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 256,
+              "items": {"$ref": "#/$defs/license_terms_expression_node"}
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["license", "status"],
+          "properties": {
+            "license": {"type": "string", "minLength": 1, "maxLength": 4096},
+            "status": {
+              "enum": [
+                "reference-summary",
+                "candidate-unapproved",
+                "unresolved-license-reference",
+                "unknown-license-terms",
+                "unknown-license-exception-terms"
+              ]
+            },
+            "exception": {"type": "string", "minLength": 1, "maxLength": 256},
+            "reason": {"type": "string", "minLength": 1, "maxLength": 512},
+            "reference_kind": {"type": "string", "minLength": 1, "maxLength": 128},
+            "candidate_status": {"type": "string", "minLength": 1, "maxLength": 128},
+            "candidate_version": {"type": "string", "minLength": 1, "maxLength": 128},
+            "effective_grant": {"type": "boolean"},
+            "adoption_status": {"type": "string", "minLength": 1, "maxLength": 128},
+            "declared_rights_prove_authority": {"type": "boolean"},
+            "source_ref": {"type": "string", "minLength": 1, "maxLength": 1024},
+            "registry_ref": {"type": "string", "minLength": 1, "maxLength": 1024},
+            "registry_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+            "permissions": {
+              "type": "array",
+              "items": {"type": "string", "minLength": 1, "maxLength": 256},
+              "uniqueItems": true,
+              "maxItems": 64
+            },
+            "conditions": {
+              "type": "array",
+              "maxItems": 64,
+              "items": {
+                "type": "object",
+                "required": ["id", "when"],
+                "properties": {
+                  "id": {"type": "string", "minLength": 1, "maxLength": 256},
+                  "when": {"type": "string", "minLength": 1, "maxLength": 512}
+                },
+                "additionalProperties": false
+              }
+            },
+            "patent": {
+              "type": "object",
+              "required": ["status"],
+              "properties": {
+                "status": {"type": "string", "minLength": 1, "maxLength": 256},
+                "scope": {"type": "string", "maxLength": 1024},
+                "termination": {"type": "string", "maxLength": 512}
+              },
+              "additionalProperties": false
+            },
+            "source": {"type": "string", "minLength": 1, "maxLength": 1024},
+            "warranty": {"type": "string", "minLength": 1, "maxLength": 512}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
     "action_result": {
       "type": "object",
       "additionalProperties": false,

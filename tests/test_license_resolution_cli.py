@@ -49,6 +49,10 @@ def test_unknown_and_unresolved_expressions_are_successful_machine_results(
     assert list(Draft202012Validator(schema).iter_errors(result)) == []
     assert result["status"] in {"partial", "unresolved"}
     assert result["compatibility"]["status"] == "unknown"
+    if len(expression) > 4096:
+        assert result["status"] == "unresolved"
+        assert result["expression"] == expression[:256]
+        assert "exceeds the bounded resolver input size" in result["reason"]
 
 
 def test_candidate_expression_remains_non_effective_and_unverified(capsys) -> None:

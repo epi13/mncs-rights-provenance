@@ -102,6 +102,11 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
         if isinstance(expression, str) and len(expression) > 128:
             terms["expression"] = expression[:128]
             terms["expression_truncated"] = True
+            terms.setdefault(
+                "detail_ref",
+                context["sources"]["rights_manifest"]["reference"]
+                + "#/rights/distribution_license",
+            )
     encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     if len(encoded) > target:
         unresolved = terms.get("unresolved_identifiers")
@@ -413,14 +418,22 @@ def build_agent_context(
         rights_value if isinstance(rights_value, Mapping) else {}
     )
     expression = rights.get("distribution_license")
-    license_resolution: dict[str, Any] = resolve_license_expression(expression) if isinstance(expression, str) else {
-        "schema_version": RESOLUTION_SCHEMA,
-        "expression_evidence": "no-usable-declaration",
-        "expression": None,
-        "status": "unresolved",
-        "reason": "distribution license is absent",
-        "compatibility": {"status": "unknown", "reason": "license is absent"},
-    }
+    if isinstance(expression, str):
+        license_resolution = resolve_license_expression(expression)
+        if len(expression) > 4096:
+            license_resolution["expression_truncated"] = True
+            license_resolution["detail_ref"] = (
+                f"{manifest_ref}#/rights/distribution_license"
+            )
+    else:
+        license_resolution = {
+            "schema_version": RESOLUTION_SCHEMA,
+            "expression_evidence": "no-usable-declaration",
+            "expression": None,
+            "status": "unresolved",
+            "reason": "distribution license is absent",
+            "compatibility": {"status": "unknown", "reason": "license is absent"},
+        }
     candidate_registry = license_resolution.get("candidate_registry")
     candidate_registry_source = (
         {
@@ -760,6 +773,8 @@ def build_agent_context(
         },
         "diagnostics": diagnostics[:12],
     }
+    if isinstance(expression, str) and len(expression) > 256:
+        context["rights"]["distribution_license_truncated"] = True
     _fit_context(context, context["context_budget_bytes"])
     # Context identity deliberately binds policy authority, evidence digests,
     # and the compact projection, so edits invalidate admission context.

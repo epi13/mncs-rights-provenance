@@ -12,10 +12,12 @@ Agents can request the full bounded term summary with
 `mncs-rp license-resolve '<SPDX expression>'`. The admission context carries
 `rights.license_terms_access.query_ref` is available on admission. Agents use
 the declared expression in `rights.distribution_license` as its argument. If
-that expression was truncated in compact detail, `rights.license_terms.detail_ref`
-points to the authoritative manifest field. Unknown and malformed expressions
-return structured results without a process error; compatibility remains
-`unknown` for all branches.
+`rights.distribution_license_truncated` is true, the full expression remains
+in `rights.license_terms.expression` when present; otherwise
+`rights.license_terms.detail_ref` points to the authoritative manifest field.
+The agent-context schema describes both full and budget-compacted term records.
+Unknown and malformed expressions return structured results without a process
+error; compatibility remains `unknown` for all branches.
 
 The `rights.action_guidance` projection applies the native-backed, versioned
 `mncs.rights.license_actions.v01` rules to source and binary redistribution.
