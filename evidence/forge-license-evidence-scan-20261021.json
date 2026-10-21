@@ -1,0 +1,49 @@
+{
+  "schema_version": "mncs.rights-provenance.integration-evidence/1",
+  "identity": "ev_forge_license_evidence_scan_20261021",
+  "collected_at": "2026-10-21T19:26:47Z",
+  "repository": "mncs-forge",
+  "ownership_observation": {
+    "source": "MNCS Environment claims",
+    "live_claims_at_observation": 0,
+    "scope": "mncs-forge repository"
+  },
+  "execution": {
+    "service_operation": "mncs_forge_license_evidence_scan",
+    "native_operation_status": "unavailable",
+    "native_operation_error": "resource policy execution did not return through retained: program validation failed",
+    "control_health_status": "probe_timed_out",
+    "control_health_diagnostic": "Forge MCP health probe timed out after 30 seconds",
+    "bounded_fallback": {
+      "entrypoint": "mncs_forge.application.license_evidence.scan_license_evidence",
+      "runtime": "mncs-forge/.venv/bin/python",
+      "sandbox": "bwrap",
+      "network": false,
+      "exit_code": 0,
+      "duration_seconds": 0.222,
+      "writes_performed": false
+    }
+  },
+  "evidence": {
+    "evidence_id": "mncs-forge://license-evidence/f7aff5b372a7812c63c7b6508566e40b",
+    "schema_version": "0.3.0",
+    "content_digest": "sha256:0119b583936f7e1f7a295fe70ceaf158f825df02afb91ef3599173691baf42ce",
+    "subject": "project:mncs-forge-development-v3",
+    "observed_source": {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "byte_length": 11357
+    },
+    "license_candidate": {
+      "spdx_expression": "Apache-2.0",
+      "confidence": "heuristic",
+      "claim_type": "license-identification"
+    },
+    "limitations": [
+      "Keyword heuristics identify candidates, not verified license terms.",
+      "Metadata declarations are evidence supplied to Forge, not independent legal review.",
+      "Forge does not validate SPDX expression syntax or determine copyrightability, ownership, or compatibility."
+    ]
+  },
+  "interpretation": "The scan provides inspectable source-linked license evidence for the configured Forge project. It does not establish legal ownership, license compatibility, or compliance. The Apache-2.0 repository license remains the observed existing declaration; this campaign's MNCS permissive candidate remains separate and unapproved."
+}
