@@ -1,0 +1,42 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-binding-check/1",
+  "identity": "rights-language-toolchain-binding-20261021",
+  "observed_at": "2026-10-21T18:03:08Z",
+  "rights_repository": "mncs-rights-provenance",
+  "rights_branch": "campaign/luna-max-rights-language-toolchain-20261021",
+  "rights_commit": "d699a5c5f8d09b172552e3ece28096b9b93f6999",
+  "manifest_sha256": "cb7021d12512857d982a253551b43e0ffdf6727a3923229b8978410afe40db09",
+  "environment_definition_sha256": "bd4e273b6b3dc564c2bc98cb568252782694f6d1eda0e80c53a6f0acf719157b",
+  "resolution": {
+    "method": "mncs_env.capabilities._manifest_test_bindings",
+    "environment_repository_commit": "28132dd3a1ffb7014163b27a828e09d6f7a42412",
+    "implementation_sha256": "074d117e0153777ea5cfc18db7ce0550e68b4efb84c48d21f9182c4b45c731e5",
+    "status": "pass",
+    "binding_id": "cap_2531729bcfcd9d7c",
+    "capability": "mncs-rights-provenance:test/rights-provenance-tests",
+    "toolchain_repository": "mncs-language",
+    "toolchain_path": "target/release/mncs",
+    "toolchain_environment_variable": "MNCS_BIN",
+    "resolved_toolchain_path": "/home/epi13/Documents/Projects/mncs-language/target/release/mncs",
+    "fixed_arguments": ["-m", "pytest", "tests", "-q"],
+    "working_directory": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-language-toolchain-20261021"
+  },
+  "live_environment_entry": {
+    "status": "denied",
+    "error_code": "ENVIRONMENT_AUTHORITY_DENIED",
+    "message": "project-scoped Environment entry may select only its granted repository and declared protected toolchains",
+    "control_repository_main": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
+    "active_control_branch": "campaign/luna-max-rights-control-gate-20261021",
+    "active_control_claim": "claim:mncs-control-mcp:worktree:9478a2d0206f"
+  },
+  "coordination": {
+    "rights_manifest_owner_claim": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "shared_file_overlap": ".mncs/project.json",
+    "decision": "keep worktree changes isolated until the active Rights artifact-handoff work is ready for a coordinated merge"
+  },
+  "limits": [
+    "The direct Environment binding resolution does not exercise Control project-entry authorization or the normal Environment verify operation.",
+    "The authorization denial remains unresolved on the observed Control main branch.",
+    "This evidence records toolchain selection and coordination state; it does not establish legal compliance."
+  ]
+}
