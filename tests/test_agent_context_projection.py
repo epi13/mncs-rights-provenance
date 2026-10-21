@@ -383,6 +383,35 @@ def test_license_term_index_revision_invalidates_agent_context(monkeypatch) -> N
     assert original["identity"] != revised["identity"]
 
 
+def test_governance_policy_revision_invalidates_agent_context() -> None:
+    manifest = _manifest()
+    original = build_agent_context(
+        manifest,
+        _governance(),
+        binding=_binding(),
+        governance_digest="sha256:" + "b" * 64,
+    )
+    revised_governance = _governance()
+    revised_governance["profile_version"] = 2
+    revised_governance["provenance"]["lineage"] = "best-effort"
+
+    revised = build_agent_context(
+        manifest,
+        revised_governance,
+        binding=_binding(),
+        governance_digest="sha256:" + "c" * 64,
+    )
+
+    assert original["sources"]["governance_profile"]["sha256"] != (
+        revised["sources"]["governance_profile"]["sha256"]
+    )
+    assert original["identity"] != revised["identity"]
+    assert original["governance"]["profile_version"] == 1
+    assert original["governance"]["rules"]["provenance"]["lineage"] == "preserve"
+    assert revised["governance"]["profile_version"] == 2
+    assert revised["governance"]["rules"]["provenance"]["lineage"] == "best-effort"
+
+
 def test_spdx_or_and_expression_keeps_branch_obligations_and_unknown_compatibility() -> None:
     result = resolve_license_expression("MIT OR (BSD-2-Clause AND LicenseRef-Local)")
 
