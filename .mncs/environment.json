@@ -43,8 +43,8 @@
   },
   "rights_context": {
     "schema_version": "mncs.environment.rights-context-binding/1",
-    "manifest": "RIGHTS.json",
-    "governance_profile": "governance/agent-governance.json",
+    "manifest": "mncs-rights-provenance/RIGHTS.json",
+    "governance_profile": "mncs-rights-provenance/governance/agent-governance.json",
     "profile_id": "mncs-rights-provenance/native-open@0.1.0",
     "authority": {
       "identity": "workspace-owner/luna-max-goal/2026-10-20",

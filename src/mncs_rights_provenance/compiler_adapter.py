@@ -17,7 +17,13 @@ from typing import Any
 from .artifact_binding import build_native_artifact_binding
 
 APPLICATION_BUILD_SCHEMA = "mncs.compiler.application-build/11"
-COMPILER_BINDING_REQUEST_SCHEMA = "mncs.rights-provenance.compiler-build-binding-request/0.1.0"
+APPLICATION_BUILD_SCHEMAS = frozenset({
+    "mncs.compiler.application-build/4",
+    "mncs.compiler.application-build/7",
+    APPLICATION_BUILD_SCHEMA,
+})
+COMPILER_BINDING_REQUEST_SCHEMA = "mncs.rights-provenance.compiler-build-binding-request/0.2.0"
+LEGACY_COMPILER_BINDING_REQUEST_SCHEMA = "mncs.rights-provenance.compiler-build-binding-request/0.1.0"
 _DIGEST_RE = re.compile(r"^sha256:([0-9a-f]{64})$")
 _CLOSURE_RE = re.compile(r"^application-ssa-closure/1:([0-9a-f]{64})$")
 _MAX_SOURCE_FILES = 65
@@ -93,17 +99,22 @@ def build_compiler_application_artifact_binding(
     contributing_manifests: Sequence[Mapping[str, Any]] = (),
     *,
     context_identity: str | None = None,
+    store_ref: str | None = None,
 ) -> dict[str, Any]:
-    """Bind a verified Compiler application-build/11 response to Rights data.
+    """Bind a verified Compiler application-build response to Rights data.
 
     The adapter retains compiler-declared source hashes, snapshot and graph
     identities, the application SSA closure reference, and toolchain identity.
-    It requires a materialized artifact response, but does not elevate any
-    response field to verified-attestation evidence.
+    An optional canonical Environment Store reference is retained as directly
+    observed evidence for the exact response record. Compiler response facts
+    remain declared, and no response field is elevated to verified-attestation
+    evidence.
     """
     response = _mapping(application_build, "application_build")
-    if response.get("schema_version") != APPLICATION_BUILD_SCHEMA:
-        raise ValueError(f"application_build.schema_version must be {APPLICATION_BUILD_SCHEMA}")
+    response_schema = response.get("schema_version")
+    if response_schema not in APPLICATION_BUILD_SCHEMAS:
+        supported = ", ".join(sorted(APPLICATION_BUILD_SCHEMAS))
+        raise ValueError(f"application_build.schema_version must be one of: {supported}")
     if response.get("status") != "verified":
         raise ValueError("only a Compiler response with status 'verified' can bind an artifact")
 
@@ -169,7 +180,7 @@ def build_compiler_application_artifact_binding(
         )
 
     build_ref = (
-        "mncs-compiler:application-build-result/11/"
+        f"mncs-compiler:application-build-result/{response_schema.rsplit('/', 1)[-1]}/"
         f"{source_snapshot_identity}/{dependency_graph_identity}/{artifact_identity}"
     )
     source_snapshot_ref = f"mncs-compiler:source-snapshot/{source_snapshot_identity}"
@@ -190,6 +201,14 @@ def build_compiler_application_artifact_binding(
         {"reference": closure_ref_evidence, "state": "declared"},
         *toolchain_evidence,
     ]
+    if store_ref is not None:
+        store_ref = _text(store_ref, "store_ref", 1024)
+        if any(ord(character) < 0x20 for character in store_ref):
+            raise ValueError("store_ref must not contain control characters")
+        transformation_evidence.append({
+            "reference": store_ref,
+            "state": "directly-observed",
+        })
     if isinstance(selected_ssa_identity, str):
         transformation_evidence.append({
             "reference": f"mncs-compiler:selected-ssa/{selected_ssa_identity}",
@@ -221,7 +240,7 @@ def build_compiler_application_artifact_binding(
     binding = build_native_artifact_binding(
         {
             "producer": "mncs-compiler",
-            "producer_contract": APPLICATION_BUILD_SCHEMA,
+        "producer_contract": response_schema,
             "identity": artifact_identity,
             "content_digest": f"sha256:{artifact_hex}",
         },
@@ -242,6 +261,8 @@ def build_compiler_application_artifact_binding(
 
 __all__ = [
     "APPLICATION_BUILD_SCHEMA",
+    "APPLICATION_BUILD_SCHEMAS",
     "COMPILER_BINDING_REQUEST_SCHEMA",
+    "LEGACY_COMPILER_BINDING_REQUEST_SCHEMA",
     "build_compiler_application_artifact_binding",
 ]

@@ -1,0 +1,80 @@
+{
+  "definition": {
+    "authority": {
+      "basis": "explicit-user-authorized-campaign",
+      "identity": "workspace-owner/luna-max-goal/2026-10-20",
+      "scope": [
+        "mncs-rights-provenance"
+      ],
+      "source_ref": ".mncs/environment.json#/rights_context"
+    },
+    "binding_schema": "mncs.environment.rights-context-binding/1",
+    "governance_profile": "mncs-rights-provenance/governance/agent-governance.json",
+    "manifest": "mncs-rights-provenance/RIGHTS.json",
+    "reference": "mncs-rights-provenance/.worktrees/luna-max-rights-artifact-handoff-20261021/.mncs/environment.json#/rights_context",
+    "sha256": "sha256:27409459c461dd0834caaa4570da20a4dd5882da1761a9720a71b7fdecb4de5f"
+  },
+  "legal_conclusion": "NOT_MADE",
+  "limitations": [
+    "Resolver output confirms the bounded Environment projection from the current binding and source files, not delivery through this live session context response.",
+    "The declared Apache-2.0 license does not establish ownership, contributor authority, or compatibility.",
+    "The candidate MNCS permissive license remains unadopted.",
+    "The v1 rights-context binding resolves paths from the authorized workspace root and therefore reads the canonical mncs-rights-provenance checkout; selected-worktree-specific policy requires the separately developed Environment binding scope contract."
+  ],
+  "live_session_projection": {
+    "limitation": "The live Environment MCP admission and context projections omit rights_context despite the resolver returning it when called directly with the same binding and workspace root.",
+    "observations": [
+      {
+        "binding_reference_state": "before-workspace-qualified-reference-correction",
+        "environment_id": "renv_a5826d14a1d540b8",
+        "operation": "context",
+        "rights_context_present": false,
+        "session_id": "ses_f146f65b4c071ea6"
+      },
+      {
+        "binding_reference_state": "corrected-definition-was-read; fresh entry still omitted rights_context",
+        "environment_id": "renv_1fccb0f588f3f493",
+        "operation": "enter with new_session=true after the binding-reference correction",
+        "rights_context_present": false,
+        "session_id": "ses_de553dd5fd5d1178"
+      }
+    ]
+  },
+  "observed_at": "2026-10-21T13:25:04.312168+00:00",
+  "resolver_observation": {
+    "binding_path_scope": "workspace-root; source paths resolve under /home/epi13/Documents/Projects",
+    "context_budget_bytes": 8192,
+    "context_identity": "sha256:40b482ba2b76f8aba72df8d47031d0a36e7b67d4c50c81ba9b7996bb2d729576",
+    "context_present": true,
+    "diagnostic_codes": [
+      "copyright-status-unresolved",
+      "rights-basis-unknown",
+      "third-party-material-unknown",
+      "provenance-origin-uncertain",
+      "source-license-unknown",
+      "lineage-reference-missing"
+    ],
+    "distribution_license": "Apache-2.0",
+    "governance_profile_id": "mncs-rights-provenance/native-open@0.1.0",
+    "governance_status": "authorized",
+    "interface": "mncs_env.rights.load_agent_context",
+    "sources": {
+      "governance_profile": {
+        "reference": "mncs-rights-provenance/governance/agent-governance.json",
+        "sha256": "sha256:bf7a1444d17f31e74edc204fa11c9a17917697cb93633ab92a1e68059d6e1666"
+      },
+      "license_resolver": {
+        "reference": "mncs_rights_provenance.license_resolution/1",
+        "sha256": "sha256:631113dee6aac437a087538993b14defcb34c46bafadb569c6b02d2b2cd7cb29"
+      },
+      "rights_manifest": {
+        "identity_state": "computed-from-observed-content",
+        "manifest_identity": "af07987e68a6250324b6593067b66042ab28cbbb802033db75ad52cf374c3a46",
+        "reference": "mncs-rights-provenance/RIGHTS.json",
+        "sha256": "sha256:8f2870edba5f7d026d993115bf83b9136e6462c84e67269d9ad404a7f9e8a7a7"
+      }
+    },
+    "status": "available"
+  },
+  "schema_version": "mncs.rights-provenance.environment-context-handoff-evidence/1"
+}

@@ -19,6 +19,7 @@ from .artifact_binding import diagnose_native_artifact_binding
 from .canonical import canonical_bytes
 from .compiler_adapter import (
     COMPILER_BINDING_REQUEST_SCHEMA,
+    LEGACY_COMPILER_BINDING_REQUEST_SCHEMA,
     build_compiler_application_artifact_binding,
 )
 from .evidence import evidence_record_from_dict, seal_evidence_record, verify_evidence_digest
@@ -401,12 +402,23 @@ def cmd_compiler_build_binding(args: argparse.Namespace) -> int:
         request = json.loads(raw.decode("utf-8"))
         if not isinstance(request, dict):
             raise TypeError("Compiler binding request must be an object")
-        if set(request) - {
-            "schema_version", "application_build", "contributing_manifests", "context_identity"
-        }:
+        request_schema = request.get("schema_version")
+        if request_schema == LEGACY_COMPILER_BINDING_REQUEST_SCHEMA:
+            allowed_fields = {
+                "schema_version", "application_build", "contributing_manifests", "context_identity"
+            }
+        elif request_schema == COMPILER_BINDING_REQUEST_SCHEMA:
+            allowed_fields = {
+                "schema_version", "application_build", "contributing_manifests",
+                "context_identity", "store_ref",
+            }
+        else:
+            raise ValueError(
+                "schema_version must be "
+                f"{LEGACY_COMPILER_BINDING_REQUEST_SCHEMA} or {COMPILER_BINDING_REQUEST_SCHEMA}"
+            )
+        if set(request) - allowed_fields:
             raise ValueError("Compiler binding request contains unsupported fields")
-        if request.get("schema_version") != COMPILER_BINDING_REQUEST_SCHEMA:
-            raise ValueError(f"schema_version must be {COMPILER_BINDING_REQUEST_SCHEMA}")
         if "application_build" not in request:
             raise ValueError("Compiler binding request requires application_build")
         manifests = request.get("contributing_manifests", [])
@@ -416,6 +428,7 @@ def cmd_compiler_build_binding(args: argparse.Namespace) -> int:
             request["application_build"],
             manifests,
             context_identity=request.get("context_identity"),
+            store_ref=request.get("store_ref"),
         )
     except (OSError, UnicodeError, ValueError, TypeError) as exc:
         _emit({"ok": False, "error": str(exc), "legal_conclusion": "NOT_MADE"})
@@ -559,7 +572,7 @@ def build_parser() -> argparse.ArgumentParser:
     forge_build.set_defaults(func=cmd_forge_build_binding)
 
     compiler_build = artifact_binding_sub.add_parser(
-        "compiler-build", help="bind one Compiler application-build/11 response"
+        "compiler-build", help="bind one supported Compiler application-build response"
     )
     compiler_build.add_argument(
         "request", help="versioned JSON request containing a Compiler application build"

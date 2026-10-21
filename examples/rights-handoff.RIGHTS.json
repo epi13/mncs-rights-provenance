@@ -1,0 +1,55 @@
+{
+  "schema_version": "0.3.0",
+  "artifact": {
+    "id": "mncs-rights-provenance:examples/rights-handoff.mncs",
+    "class": "source-code",
+    "repository": "mncs-rights-provenance",
+    "paths": ["examples/rights-handoff.mncs"],
+    "hashes": [
+      {
+        "algorithm": "sha256",
+        "scope": "file",
+        "value": "9fb8d218ab699f314e6e872f94322bb329b9529945f9b3fc69bbf61af281da5a"
+      }
+    ]
+  },
+  "provenance": {
+    "origin_classification": "human-directed-machine-generated",
+    "participants": [
+      {"type": "agent", "role": "generator", "name": "local-agent"}
+    ],
+    "process_evidence": [
+      {
+        "kind": "other",
+        "reference": "mncs-environment-campaign:cmp_luna_max_rights_artifact_handoff_20261021"
+      }
+    ],
+    "notes": "Agent-generated for a user-directed artifact handoff. This declaration records the process and does not establish copyright ownership or authority."
+  },
+  "rights": {
+    "distribution_license": "Apache-2.0",
+    "copyright_status": "machine-originated-unresolved",
+    "rights_basis": "unknown-needs-review",
+    "third_party_material": "none-known",
+    "sources": [
+      {
+        "kind": "file",
+        "reference": "mncs-rights-provenance:LICENSE",
+        "license_status": "unknown",
+        "license": "Apache-2.0",
+        "confidence": "observed-declaration",
+        "notes": "The repository LICENSE declares Apache-2.0; that declaration does not establish who owns or can license this machine-generated sample.",
+        "evidence": [
+          {"kind": "external-record", "reference": "mncs-rights-provenance:LICENSE"}
+        ]
+      }
+    ],
+    "notes": "The existing repository license is recorded as an observed declaration. Rights in the agent-generated output remain unresolved."
+  },
+  "review": {
+    "technical_validation": "not-run",
+    "provenance_validation": "incomplete",
+    "human_acceptance": "not-reviewed",
+    "notes": "No legal ownership or compatibility conclusion has been made."
+  }
+}

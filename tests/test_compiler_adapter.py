@@ -12,15 +12,21 @@ from mncs_rights_provenance.cli import MAX_COMPILER_BINDING_REQUEST_BYTES, main
 from mncs_rights_provenance.compiler_adapter import (
     APPLICATION_BUILD_SCHEMA,
     COMPILER_BINDING_REQUEST_SCHEMA,
+    LEGACY_COMPILER_BINDING_REQUEST_SCHEMA,
 )
+from mncs_rights_provenance.manifest import compute_manifest_identity
 
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE_SCHEMA = json.loads((ROOT / "schemas/v0.1/native-artifact-binding.schema.json").read_text())
 NATIVE_VALIDATOR = Draft202012Validator(NATIVE_SCHEMA)
 REQUEST_SCHEMA = json.loads(
-    (ROOT / "schemas/v0.1/compiler-build-binding-request.schema.json").read_text()
+    (ROOT / "schemas/v0.2/compiler-build-binding-request.schema.json").read_text()
 )
 REQUEST_VALIDATOR = Draft202012Validator(REQUEST_SCHEMA)
+LEGACY_REQUEST_SCHEMA = json.loads(
+    (ROOT / "schemas/v0.1/compiler-build-binding-request.schema.json").read_text()
+)
+LEGACY_REQUEST_VALIDATOR = Draft202012Validator(LEGACY_REQUEST_SCHEMA)
 
 
 def _digest(character: str) -> str:
@@ -120,6 +126,42 @@ def test_compiler_application_build_projects_source_lineage_and_ir_references() 
     assert binding["legal_conclusion"] == "NOT_MADE"
 
 
+@pytest.mark.parametrize("response_version", ["4", "7", "11"])
+def test_supported_compiler_response_versions_keep_their_own_contract_identity(
+    response_version: str,
+) -> None:
+    response = _application_build()
+    response["schema_version"] = f"mncs.compiler.application-build/{response_version}"
+    request = {
+        "schema_version": COMPILER_BINDING_REQUEST_SCHEMA,
+        "application_build": response,
+    }
+    assert list(REQUEST_VALIDATOR.iter_errors(request)) == []
+    binding = build_compiler_application_artifact_binding(response)
+
+    assert binding["artifact"]["producer_contract"] == response["schema_version"]
+    assert f"application-build-result/{response_version}/" in binding["lineage"]["transformation"]["event_ref"]
+    assert binding["legal_conclusion"] == "NOT_MADE"
+
+
+def test_canonical_store_reference_is_direct_observation_of_the_response_record() -> None:
+    store_ref = "mncs-store:ses_example:capability-invocation-artifacts:" + "a" * 64
+    binding = build_compiler_application_artifact_binding(
+        _application_build(), store_ref=store_ref,
+    )
+
+    evidence_by_ref = {
+        item["reference"]: item
+        for item in binding["lineage"]["transformation"]["evidence"]
+    }
+    assert evidence_by_ref[store_ref]["state"] == "directly-observed"
+    assert binding["lineage"]["transformation"]["evidence_state"] == "declared"
+    assert binding["legal_conclusion"] == "NOT_MADE"
+
+    with pytest.raises(ValueError, match="control characters"):
+        build_compiler_application_artifact_binding(_application_build(), store_ref="mncs-store:\n")
+
+
 def test_missing_rights_remain_unknown_even_when_compiler_metadata_mentions_a_license() -> None:
     binding = build_compiler_application_artifact_binding(_application_build())
 
@@ -188,11 +230,13 @@ def test_compiler_adapter_rejects_unverified_or_inconsistent_build_results() -> 
 def test_compiler_binding_request_schema_and_bounded_cli(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    store_ref = "mncs-store:ses_example:capability-invocation-artifacts:" + "b" * 64
     request = {
         "schema_version": COMPILER_BINDING_REQUEST_SCHEMA,
         "application_build": _application_build(),
         "contributing_manifests": [_manifest("project/RIGHTS.json")],
         "context_identity": _digest("6"),
+        "store_ref": store_ref,
     }
     Draft202012Validator.check_schema(REQUEST_SCHEMA)
     assert list(REQUEST_VALIDATOR.iter_errors(request)) == []
@@ -206,6 +250,23 @@ def test_compiler_binding_request_schema_and_bounded_cli(
     assert result.value.code == 0
     assert list(NATIVE_VALIDATOR.iter_errors(output)) == []
     assert output["artifact"]["producer"] == "mncs-compiler"
+    assert any(
+        item["reference"] == store_ref and item["state"] == "directly-observed"
+        for item in output["lineage"]["transformation"]["evidence"]
+    )
+
+    legacy_request = {
+        "schema_version": LEGACY_COMPILER_BINDING_REQUEST_SCHEMA,
+        "application_build": _application_build(),
+    }
+    assert list(LEGACY_REQUEST_VALIDATOR.iter_errors(legacy_request)) == []
+    legacy_path = tmp_path / "legacy-compiler-binding-request.json"
+    legacy_path.write_text(json.dumps(legacy_request))
+    with pytest.raises(SystemExit) as legacy_result:
+        main(["artifact-binding", "compiler-build", str(legacy_path)])
+    legacy_output = json.loads(capsys.readouterr().out)
+    assert legacy_result.value.code == 0
+    assert list(NATIVE_VALIDATOR.iter_errors(legacy_output)) == []
 
     oversized_path = tmp_path / "oversized-request.json"
     oversized_path.write_bytes(b" " * (MAX_COMPILER_BINDING_REQUEST_BYTES + 1))
@@ -215,3 +276,17 @@ def test_compiler_binding_request_schema_and_bounded_cli(
     assert oversized_result.value.code == 2
     assert error["legal_conclusion"] == "NOT_MADE"
     assert "2 MiB" in error["error"]
+
+
+def test_actual_handoff_manifest_has_stable_declared_identity() -> None:
+    manifest = json.loads((ROOT / "examples/rights-handoff.RIGHTS.json").read_text())
+    identity = compute_manifest_identity(manifest)
+    request = json.loads(
+        (ROOT / "evidence/rights-handoff-binding-request-20261021.json").read_text()
+    )
+
+    assert len(identity) == 64
+    assert request["contributing_manifests"][0]["manifest_identity"] == identity
+    assert request["contributing_manifests"][0]["rights_state"] == "unresolved"
+    assert manifest["rights"]["rights_basis"] == "unknown-needs-review"
+    assert manifest["provenance"]["origin_classification"] == "human-directed-machine-generated"

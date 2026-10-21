@@ -1,0 +1,10 @@
+mncs 0.18;
+module rights.handoff;
+
+record HandoffResult {
+    value: u64
+}
+
+fn run() -> (result: HandoffResult) {
+    return HandoffResult { value: 42 };
+}

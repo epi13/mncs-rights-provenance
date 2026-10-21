@@ -68,14 +68,19 @@ external license file as an authoritative instruction.
 
 Compiler continues to own its application-build result. The Rights-only
 `build_compiler_application_artifact_binding` adapter consumes the existing
-`mncs.compiler.application-build/11` response without changing or rerunning
-Compiler. It requires a `verified` response with a materialized artifact,
-retains the source-snapshot file hashes, dependency-graph identity, selected
-SSA identity, `application-ssa-closure/1` reference, and available toolchain
-identity, then records source-to-artifact `compiled-from` edges and the build
-result as a `transformed-by` reference. Every Compiler-supplied fact remains
-declared evidence; the adapter checks the outer and nested artifact identities
-agree but does not rehash the VM artifact or authenticate the producer.
+`mncs.compiler.application-build/4`, `/7`, or `/11` response without changing
+or rerunning Compiler. The current request contract is
+`mncs.rights-provenance.compiler-build-binding-request/0.2.0`; `/0.1.0` remains
+accepted for existing callers. The adapter requires a `verified` response with
+a materialized artifact, retains the source-snapshot file hashes,
+dependency-graph identity, selected SSA identity,
+`application-ssa-closure/1` reference, and available toolchain identity, then
+records source-to-artifact `compiled-from` edges and the build result as a
+`transformed-by` reference. Every Compiler-supplied fact remains declared
+evidence; an optional canonical Environment Store reference is separately
+recorded as directly observed evidence of the response record. The adapter
+checks that the outer and nested artifact identities agree but does not
+re-hash the VM artifact or authenticate the producer.
 Without explicit manifest references rights remain unknown; supplied manifests
 can change the declared rights summary to `declared` or `review`, while cross
 license compatibility remains unknown. The bounded request schema and
@@ -89,7 +94,32 @@ fetch or reinterpret referenced manifests. A single declared input with
 declared partial lineage produces no repeated finding; `no-findings` is not a
 compliance result, and the report always makes no legal conclusion.
 
-The live Environment vertical slice emits admission context and its own
-artifact lineage. Compiler and Language have active concurrent worktrees, so
-this adapter stays within the Rights repository and consumes their published
-versioned contract without modifying those worktrees.
+Environment has an admission-context capability and a selected-checkout
+invalidation path covered by Environment tests. This Rights slice consumes the
+published Compiler contract and canonical Environment Store record without
+changing Compiler or Environment implementation worktrees.
+
+The bounded handoff evidence in `evidence/rights-handoff-*20261021.json`
+records a live `application-build/4` response retrieved through Environment's
+canonical artifact store. Its source snapshot hash matches
+`examples/rights-handoff.mncs`; the binding retains the Store reference as
+directly observed and the Compiler transformation as declared. The contributing
+Rights manifest records the repository license declaration while keeping
+machine-originated copyright unresolved. The Rights artifact diagnostic
+returns `review` with `artifact-rights-unresolved`, compatibility remains
+unknown, lineage is partial, and the legal conclusion remains `NOT_MADE`. The
+binding's `context_identity` is null because the live Environment context
+operation did not project `rights_context` for this session; the request does
+not substitute a locally computed or unrelated context. The Environment resolver was invoked
+against the corrected binding, resolved both sources (`inputs.status=available`),
+and returned a bounded review context with identity `sha256:40b482ba…`, the
+expected governance profile, and review diagnostics. The separate evidence
+record preserves that observation apart from the missing session projection.
+A separate Environment worktree contains project-scoped admission and
+cache-invalidation work. A fresh live entry after the binding-reference
+correction also omitted `rights_context`; Environment MCP transport remains an
+open integration defect. The current v1 binding resolves paths from the
+workspace root, so the Rights definition points at the canonical workspace
+checkout. The separate Environment worktree adds selected-checkout scope; until
+that contract is integrated, rights changes that exist only in another
+worktree do not update this project's admission context.
