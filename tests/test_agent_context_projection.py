@@ -58,7 +58,7 @@ def test_context_is_compact_and_keeps_declaration_separate_from_verification() -
     projection = context["provenance"]["projection"]
     assert projection["schema_version"] == "mncs.rights-provenance.context-lineage/1"
     assert [item["relation"] for item in projection["relationships"]] == [
-        "generated-from", "generated-from", "transformed-by",
+        "generated-from", "generated-from", "referenced", "transformed-by",
     ]
     assert context["governance"]["status"] == "authorized"
     assert context["governance"]["rules"]["agent_governance"]["copying_external_implementations"] == "authorization-required"
@@ -305,6 +305,13 @@ def test_agent_context_explains_candidate_status_without_treating_it_as_rights()
     assert context["sources"]["license_candidate_registry"] == (
         context["rights"]["license_terms"]["candidate_registry"]
     )
+    assert context["sources"]["license_resolver"]["sha256"].startswith("sha256:")
+    resolver_edge = next(
+        edge for edge in context["provenance"]["projection"]["relationships"]
+        if edge["from"] == "mncs_rights_provenance.license_resolution/1"
+    )
+    assert resolver_edge["relation"] == "referenced"
+    assert resolver_edge["content_digest"] == context["sources"]["license_resolver"]["sha256"]
     registry_edge = next(
         edge for edge in context["provenance"]["projection"]["relationships"]
         if edge["from"] == "mncs_rights_provenance/resources/license-candidates.json"
@@ -327,6 +334,25 @@ def test_candidate_registry_revision_invalidates_agent_context(monkeypatch) -> N
 
     assert original["sources"]["license_candidate_registry"]["sha256"] != (
         revised["sources"]["license_candidate_registry"]["sha256"]
+    )
+    assert original["sources"]["license_resolver"]["sha256"] != (
+        revised["sources"]["license_resolver"]["sha256"]
+    )
+    assert original["identity"] != revised["identity"]
+
+
+def test_license_term_index_revision_invalidates_agent_context(monkeypatch) -> None:
+    original = build_agent_context(_manifest(), _governance(), binding=_binding())
+
+    monkeypatch.setitem(
+        license_resolution_module._TERMS["Apache-2.0"],
+        "warranty",
+        "revised-reference-summary",
+    )
+    revised = build_agent_context(_manifest(), _governance(), binding=_binding())
+
+    assert original["sources"]["license_resolver"]["sha256"] != (
+        revised["sources"]["license_resolver"]["sha256"]
     )
     assert original["identity"] != revised["identity"]
 

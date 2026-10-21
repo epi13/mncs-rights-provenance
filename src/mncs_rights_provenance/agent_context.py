@@ -8,7 +8,7 @@ from collections import Counter
 from collections.abc import Mapping
 from typing import Any
 
-from .license_resolution import resolve_license_expression
+from .license_resolution import license_resolver_identity, resolve_license_expression
 from .manifest import compute_manifest_identity
 from .validation import validate_manifest_structure
 
@@ -385,6 +385,11 @@ def build_agent_context(
     }
     if candidate_registry_source is not None:
         context_sources["license_candidate_registry"] = candidate_registry_source
+    license_resolver_source = {
+        "reference": "mncs_rights_provenance.license_resolution/1",
+        "sha256": license_resolver_identity(),
+    }
+    context_sources["license_resolver"] = license_resolver_source
     context_lineage_relationships = [
         {
             "from": manifest_ref,
@@ -401,6 +406,13 @@ def build_agent_context(
             "evidence_state": "observed-input" if governance_digest else "unavailable",
         },
     ]
+    context_lineage_relationships.append({
+        "from": license_resolver_source["reference"],
+        "to": "agent-context",
+        "relation": "referenced",
+        "content_digest": license_resolver_source["sha256"],
+        "evidence_state": "observed-input",
+    })
     if candidate_registry_source is not None:
         context_lineage_relationships.append({
             "from": candidate_registry_source["reference"],

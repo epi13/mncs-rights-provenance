@@ -21,6 +21,15 @@
             "reference": {"type": "string", "minLength": 1},
             "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
           }
+        },
+        "license_resolver": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reference", "sha256"],
+          "properties": {
+            "reference": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+          }
         }
       }
     },
@@ -35,7 +44,7 @@
             "schema_version": {"const": "mncs.rights-provenance.context-lineage/1"},
             "output_ref": {"type": "string"},
             "relationships": {
-              "type": "array", "maxItems": 4,
+              "type": "array", "maxItems": 5,
               "items": {
                 "type": "object", "additionalProperties": false,
                 "required": ["from", "to", "relation", "content_digest", "evidence_state"],

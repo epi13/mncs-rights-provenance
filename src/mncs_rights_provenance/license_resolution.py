@@ -128,6 +128,19 @@ def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
 _CANDIDATES, _CANDIDATE_REGISTRY_DIGEST = _load_license_candidates()
 
 
+def license_resolver_identity() -> str:
+    """Return the content identity of the bounded license term index."""
+    value = {
+        "schema_version": RESOLUTION_SCHEMA,
+        "terms": _TERMS,
+        "candidate_registry_sha256": _CANDIDATE_REGISTRY_DIGEST,
+    }
+    encoded = json.dumps(
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    return "sha256:" + hashlib.sha256(encoded).hexdigest()
+
+
 class _ExpressionParser:
     def __init__(self, expression: str) -> None:
         tokens: list[str] = []

@@ -39,7 +39,7 @@ from .evidence import (
 )
 from .forge_adapter import build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
-from .license_resolution import resolve_license_expression
+from .license_resolution import license_resolver_identity, resolve_license_expression
 from .lineage import (
     LineageRecord,
     compute_lineage_digest,
@@ -134,6 +134,7 @@ __all__ = [
     "evaluate_policy",
     "evidence_record_from_dict",
     "evidence_record_to_dict",
+    "license_resolver_identity",
     "lineage_record_from_dict",
     "lineage_verdict",
     "load_manifest_file",
