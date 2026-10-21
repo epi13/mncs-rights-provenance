@@ -51,6 +51,16 @@ this file.
 - Unsupported schema versions refuse to guess; supersession uses standard
   Commons relations/lifecycle.
 
+## SPDX 2.3 — license evidence interchange
+
+- Import preserves `licenseDeclared` as `observed-declaration` evidence and
+  `licenseConcluded` as analysis evidence when no declaration is present.
+  Both retain `license_status=unknown`: SPDX metadata alone does not resolve
+  compatibility with the receiving artifact's distribution license.
+- `NOASSERTION` and `NONE` remain unknown evidence. A known SPDX identifier
+  still does not establish the declarant's authority or prove that the source
+  actually contains only material under that license.
+
 ## mncs-control-mcp / mncs-harness — context across boundaries
 
 - Control experiments accept a `rights_evidence` producer-reference relation;

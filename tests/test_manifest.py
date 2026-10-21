@@ -226,4 +226,47 @@ def test_spdx_export_import_round_trip() -> None:
     assert licenses == {"Apache-2.0", "BSD-3-Clause"}
     dependency = next(s for s in sources if s["license"] == "BSD-3-Clause")
     assert dependency["kind"] == "package"
+    assert dependency["license_status"] == "unknown"
     assert dependency["confidence"] == "observed-declaration"
+
+
+def test_spdx_import_preserves_evidence_kind_without_inventing_compatibility() -> None:
+    sources = import_spdx_sources(
+        {
+            "packages": [
+                {
+                    "name": "declared-package",
+                    "licenseDeclared": "MIT OR Apache-2.0",
+                    "licenseConcluded": "BSD-3-Clause",
+                },
+                {
+                    "name": "concluded-package",
+                    "licenseConcluded": "BSD-2-Clause",
+                },
+                {
+                    "name": "unasserted-package",
+                    "licenseDeclared": "NOASSERTION",
+                },
+                {
+                    "name": "missing-license",
+                },
+            ]
+        }
+    )
+
+    by_reference = {source["reference"]: source for source in sources}
+    assert set(by_reference) == {
+        "declared-package",
+        "concluded-package",
+        "unasserted-package",
+    }
+    assert by_reference["declared-package"]["license"] == "MIT OR Apache-2.0"
+    assert by_reference["declared-package"]["confidence"] == "observed-declaration"
+    assert by_reference["concluded-package"]["confidence"] == "analysis"
+    assert by_reference["unasserted-package"]["confidence"] == "unknown"
+    assert all(source["license_status"] == "unknown" for source in sources)
+    assert all("compatibility remains unresolved" in source["notes"] for source in sources[:2])
+
+    manifest = sample_manifest()
+    manifest["rights"]["sources"] = sources
+    assert validate_manifest_structure(manifest) == []

@@ -193,7 +193,7 @@ def export_spdx(
 
 
 def import_spdx_sources(spdx_document: Mapping[str, Any]) -> list[dict[str, Any]]:
-    """Map SPDX packages into manifest source entries (license evidence only)."""
+    """Map SPDX package metadata into source evidence, without resolving compatibility."""
     sources: list[dict[str, Any]] = []
     packages = spdx_document.get("packages")
     if not isinstance(packages, list):
@@ -201,20 +201,41 @@ def import_spdx_sources(spdx_document: Mapping[str, Any]) -> list[dict[str, Any]
     for package in packages:
         if not isinstance(package, Mapping):
             continue
-        license_value = package.get("licenseDeclared") or package.get("licenseConcluded")
-        if not isinstance(license_value, str) or not license_value:
+        declared = package.get("licenseDeclared")
+        concluded = package.get("licenseConcluded")
+        if isinstance(declared, str) and declared:
+            license_value = declared
+            confidence = "unknown" if declared in {"NOASSERTION", "NONE"} else "observed-declaration"
+            note = (
+                "Imported from SPDX licenseDeclared; the license identity is evidence, "
+                "not verification, and compatibility remains unresolved."
+                if confidence == "observed-declaration"
+                else "SPDX licenseDeclared is " + declared + "; rights and compatibility remain unknown."
+            )
+        elif isinstance(concluded, str) and concluded:
+            license_value = concluded
+            confidence = "unknown" if concluded in {"NOASSERTION", "NONE"} else "analysis"
+            note = (
+                "Imported from SPDX licenseConcluded; the analyzer conclusion is evidence, "
+                "not verification, and compatibility remains unresolved."
+                if confidence == "analysis"
+                else "SPDX licenseConcluded is " + concluded + "; rights and compatibility remain unknown."
+            )
+        else:
             continue
-        status = "unknown" if license_value in {"NOASSERTION", "NONE"} else "compatible"
         sources.append(
             {
                 "kind": "package",
                 "reference": str(
                     package.get("downloadLocation") or package.get("name", "spdx-package")
                 ),
-                "license_status": status,
+                # SPDX identifies a declaration or analysis result, but this
+                # importer has no target license or rule set with which to
+                # decide compatibility.
+                "license_status": "unknown",
                 "license": license_value,
-                "confidence": "observed-declaration" if status == "compatible" else "unknown",
-                "notes": "Imported from SPDX declaration; declaration is evidence, not verification.",
+                "confidence": confidence,
+                "notes": note,
             }
         )
     return sources
