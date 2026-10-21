@@ -22,6 +22,9 @@ defined once in MNCS-language and mirrored in host code, never the reverse:
   `mncs.rights.claims.v01`), mirrored in host code by
   `src/mncs_rights_provenance/claims.py` (scalar mirror plus set-level
   query layer, pinned by `tests/test_claims_host.py`).
+- `language/rights_license_actions.mncs` — source/binary redistribution
+  trigger classification for indexed license conditions, pinned by its
+  bounded cross-backend corpus and host-projection checks.
 - `language/corpora/` plus `language/run_backend_tests.sh` — execution
   corpora with cross-backend agreement checks.
 

@@ -25,6 +25,7 @@ from .compiler_adapter import (
 from .evidence import evidence_record_from_dict, seal_evidence_record, verify_evidence_digest
 from .forge_adapter import BUILD_BINDING_REQUEST_SCHEMA, build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
+from .license_resolution import license_action_guidance
 from .lineage import (
     lineage_record_from_artifact_binding,
     lineage_record_from_dict,
@@ -244,6 +245,17 @@ def cmd_export_spdx(args: argparse.Namespace) -> int:
     document = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
     spdx_document = export_spdx(document)
     _emit(spdx_document)
+    return 0
+
+
+def cmd_action_guidance(args: argparse.Namespace) -> int:
+    try:
+        report = license_action_guidance(args.expression, args.action)
+    except (TypeError, ValueError) as exc:
+        _emit({"ok": False, "error": str(exc), "legal_conclusion": "NOT_MADE"})
+        return 2
+    _emit(report, human=args.human)
+    # Unknown terms are a useful diagnostic result, not a command failure.
     return 0
 
 
@@ -525,6 +537,19 @@ def build_parser() -> argparse.ArgumentParser:
     spdx_parser = subparsers.add_parser("export-spdx", help="export an SPDX 2.3 document")
     spdx_parser.add_argument("manifest")
     spdx_parser.set_defaults(func=cmd_export_spdx)
+
+    action_parser = subparsers.add_parser(
+        "action-guidance",
+        help="show indexed notice conditions for one declared SPDX redistribution expression",
+    )
+    action_parser.add_argument("expression", help="quoted SPDX expression to inspect")
+    action_parser.add_argument(
+        "--action",
+        required=True,
+        choices=("redistribute-source", "redistribute-binary"),
+    )
+    action_parser.add_argument("--human", action="store_true")
+    action_parser.set_defaults(func=cmd_action_guidance)
 
     evidence_parser = subparsers.add_parser("evidence", help="evidence-record operations")
     evidence_sub = evidence_parser.add_subparsers(dest="evidence_command", required=True)

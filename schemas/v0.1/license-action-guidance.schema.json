@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/v0.1/license-action-guidance.schema.json",
+  "title": "MNCS SPDX license action guidance",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "action",
+    "expression",
+    "expression_evidence",
+    "expression_tree",
+    "unresolved_identifiers",
+    "unresolved_conditions",
+    "decision_notes",
+    "license_resolver",
+    "ruleset",
+    "not_assessed",
+    "legal_conclusion"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs.rights.license-action-guidance/1"},
+    "status": {"enum": ["unresolved", "partial", "reference-summary"]},
+    "action": {"enum": ["redistribute-source", "redistribute-binary"]},
+    "expression": {"type": "string", "maxLength": 4096},
+    "expression_evidence": {"const": "caller-supplied-declaration-unverified"},
+    "expression_tree": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/expression_node"}]},
+    "unresolved_identifiers": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "unresolved_conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["license", "reason"],
+        "properties": {
+          "license": {"type": "string"},
+          "condition": {"type": "string"},
+          "reason": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "decision_notes": {"type": "array", "items": {"type": "string"}},
+    "license_resolver": {
+      "type": "object",
+      "required": ["version", "identity"],
+      "properties": {
+        "version": {"const": "mncs.rights.license-resolution/3"},
+        "identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "ruleset": {
+      "type": "object",
+      "required": ["version", "module", "module_ref", "identity"],
+      "properties": {
+        "version": {"const": "mncs.rights.license-action-rules/1"},
+        "module": {"const": "mncs.rights.license_actions.v01"},
+        "module_ref": {"const": "language/rights_license_actions.mncs"},
+        "identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "not_assessed": {"type": "array", "items": {"type": "string"}},
+    "legal_conclusion": {"const": "NOT_MADE"},
+    "reason": {"type": "string"},
+    "ok": {"type": "boolean"},
+    "error": {"type": "string"}
+  },
+  "$defs": {
+    "expression_node": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["operator", "terms"],
+          "properties": {
+            "operator": {"enum": ["AND", "OR"]},
+            "terms": {
+              "type": "array",
+              "minItems": 2,
+              "items": {"$ref": "#/$defs/expression_node"}
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["license", "status"],
+          "properties": {
+            "license": {"type": "string"},
+            "status": {"type": "string"},
+            "exception": {"type": "string"},
+            "reason": {"type": "string"},
+            "reference_kind": {"type": "string"},
+            "candidate_status": {"type": "string"},
+            "candidate_version": {"type": "string"},
+            "effective_grant": {"type": "boolean"},
+            "adoption_status": {"type": "string"},
+            "source_ref": {"type": "string"},
+            "registry_ref": {"type": "string"},
+            "registry_sha256": {"type": "string"},
+            "conditions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "when", "action_relation", "guidance"],
+                "properties": {
+                  "id": {"type": "string"},
+                  "when": {"type": "string"},
+                  "action_relation": {
+                    "enum": [
+                      "operation-class-matches-trigger",
+                      "other-trigger-preserved-for-review",
+                      "unclassified-condition"
+                    ]
+                  },
+                  "guidance": {"type": "string"}
+                },
+                "additionalProperties": false
+              }
+            },
+            "coverage": {"const": "indexed-conditions-only"}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

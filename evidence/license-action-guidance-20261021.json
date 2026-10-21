@@ -1,0 +1,136 @@
+{
+  "coordination": {
+    "environment_session_id": "ses_973d1b67eb66857e",
+    "native_core_path_claim_id": "claim:mncs-rights-provenance:paths:5fbb072200b0",
+    "other_live_claim": {
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "checkout": ".worktrees/luna-max-rights-artifact-handoff-20261021",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "reason": "Own the canonical isolated Rights worktree while implementing the live artifact handoff.",
+      "scope_overlap": false
+    },
+    "path_claim_id": "claim:mncs-rights-provenance:paths:1b6ef2a79a9e",
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:638b2b5f81b2",
+    "worktree_path_retry": {
+      "corrected_request_path": ".worktrees/luna-max-license-action-guidance-20261021",
+      "first_request_result": "rejected before claim publication because the project root was duplicated in the resolved checkout path",
+      "result": "claim acquired through Environment"
+    }
+  },
+  "demonstration": {
+    "action": "redistribute-binary",
+    "canonical_report_sha256": "5bda5321ba364266b708bc965d6d6ed72a4f32f425b4282cccad9fc197f04749",
+    "command": "mncs-rp action-guidance 'MIT OR (BSD-2-Clause AND LicenseRef-External)' --action redistribute-binary",
+    "expression": "MIT OR (BSD-2-Clause AND LicenseRef-External)",
+    "expression_evidence": "caller-supplied-declaration-unverified",
+    "indexed_conditions": [
+      {
+        "action_relation": "operation-class-matches-trigger",
+        "condition": "retain-copyright-and-permission-notice",
+        "license": "MIT",
+        "when": "all copies or substantial portions"
+      },
+      {
+        "action_relation": "operation-class-matches-trigger",
+        "condition": "reproduce-notice-conditions-and-disclaimer",
+        "license": "BSD-2-Clause",
+        "when": "binary redistribution"
+      }
+    ],
+    "legal_conclusion": "NOT_MADE",
+    "license_resolver": {
+      "identity": "sha256:a1836e9f0941cecb413b45be3d22617bb2368631dcfbf89ba0c37a59fe7bf428",
+      "version": "mncs.rights.license-resolution/3"
+    },
+    "not_assessed": [
+      "license authority or ownership",
+      "cross-license compatibility",
+      "completeness of the artifact input set"
+    ],
+    "ruleset": {
+      "identity": "sha256:2550e53da06ec3a0c0236be900c795172ec19394eeaef3ba7b7d1ab66606f22c",
+      "module": "mncs.rights.license_actions.v01",
+      "module_ref": "language/rights_license_actions.mncs",
+      "version": "mncs.rights.license-action-rules/1"
+    },
+    "status": "partial",
+    "tree_operators": [
+      "OR",
+      "AND"
+    ],
+    "unresolved_identifiers": [
+      "LicenseRef-External"
+    ]
+  },
+  "implementation": {
+    "base_commit": "41f960e94111a8a6a7a0490f774fbeb7915c9331",
+    "branch": "campaign/luna-max-license-action-guidance-20261021",
+    "files": {
+      "agent_contract": "AGENTS.md",
+      "backend_runner": "language/run_backend_tests.sh",
+      "cli": "src/mncs_rights_provenance/cli.py",
+      "corpus": "language/corpora/license-action-guidance-corpus.json",
+      "corpus_generator": "language/tools/gen_action_guidance_corpus.py",
+      "golden_vectors": "conformance/license-action-guidance-golden-vectors.json",
+      "native_tests": "tests/test_license_action_core.py",
+      "normative_core": "language/rights_license_actions.mncs",
+      "resolver": "src/mncs_rights_provenance/license_resolution.py",
+      "schema": "schemas/v0.1/license-action-guidance.schema.json",
+      "tests": "tests/test_license_action_guidance.py"
+    }
+  },
+  "limits": [
+    "The expression is caller supplied and unverified.",
+    "The output preserves expression branches and known notice triggers; it does not assess ownership, authority, compatibility, complete input coverage, or legal compliance.",
+    "Existing repository licensing and all operative LICENSE files are unchanged."
+  ],
+  "normative_core": {
+    "backend_results": {
+      "portable-wasm": "16/16 expectations met",
+      "research-bytecode": "16/16 expectations met"
+    },
+    "case_count": 16,
+    "corpus_ref": "language/corpora/license-action-guidance-corpus.json",
+    "golden_vectors_ref": "conformance/license-action-guidance-golden-vectors.json",
+    "host_mirror": "all 16 vectors agree with the Python action projection",
+    "module": "mncs.rights.license_actions.v01",
+    "source_ref": "language/rights_license_actions.mncs"
+  },
+  "observed_at": "2026-10-21T21:57:12Z",
+  "schema_version": "mncs.rights-provenance.license-action-guidance-evidence/1",
+  "source_references": [
+    "https://opensource.org/license/mit",
+    "https://spdx.org/licenses/BSD-2-Clause.html",
+    "https://www.apache.org/licenses/LICENSE-2.0.html"
+  ],
+  "tooling_observation": {
+    "environment_change": "No global package installation or service restart was performed.",
+    "unqualified_source_module": "The default Python module resolution exposed an installed CLI version without the new subcommand.",
+    "verified_source_invocation": "PYTHONPATH=src python -m mncs_rights_provenance.cli action-guidance ... exited 0 and returned the versioned report."
+  },
+  "verification": {
+    "backend_script_syntax": {
+      "command": "bash -n language/run_backend_tests.sh",
+      "result": "passed"
+    },
+    "cli_probe": {
+      "command": "PYTHONPATH=src python -m mncs_rights_provenance.cli action-guidance 'MIT OR (BSD-2-Clause AND LicenseRef-External)' --action redistribute-binary",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    "development_iteration": {
+      "correction": "Generator now emits the canonical finite-variant identity and discriminant; regenerated 16 cases.",
+      "initial_failure": "Native corpus requests were rejected because the generator used the finite type identity as the enum variant identity.",
+      "recheck": "Both native backends and the host mirror passed all vectors."
+    },
+    "ruff": {
+      "command": "ruff check src/mncs_rights_provenance/license_resolution.py src/mncs_rights_provenance/cli.py tests/test_license_action_guidance.py tests/test_license_action_core.py tests/test_agent_contract.py language/tools/gen_action_guidance_corpus.py",
+      "result": "passed"
+    },
+    "tests": {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python -m pytest -o addopts='' -q tests/test_license_action_core.py tests/test_license_action_guidance.py tests/test_agent_context_projection.py tests/test_manifest.py tests/test_agent_contract.py",
+      "passed": 63,
+      "result": "passed"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+mncs 0.18;
+
+// MNCS Rights & Provenance - normative redistribution action-class rules.
+//
+// This core classifies whether an indexed notice-condition trigger matches a
+// requested source or binary redistribution operation. It does not decide
+// whether a license declaration is accurate, whether a condition's additional
+// facts hold, who has authority to grant rights, or whether licenses are
+// compatible. Host projections preserve the original license trigger and
+// agree with these finite classifications through the executable corpus.
+
+module mncs.rights.license_actions.v01;
+
+enum RedistributionAction { Source, Binary }
+
+enum IndexedCondition {
+    RetainCopyNotice,
+    RetainSourceNotice,
+    ReproduceBinaryNotice,
+    ProvideLicenseCopy,
+    MarkModifiedFiles,
+    PreserveSourceNotices,
+    PreserveNoticeAttributions,
+    NoEndorsement,
+}
+
+enum ActionRelation { OperationClassMatchesTrigger, OtherTriggerPreservedForReview }
+
+fn action_relation(action: RedistributionAction, condition: IndexedCondition) -> (result: ActionRelation) {
+    return match condition {
+        IndexedCondition.RetainCopyNotice => ActionRelation.OperationClassMatchesTrigger,
+        IndexedCondition.RetainSourceNotice => match action {
+            RedistributionAction.Source => ActionRelation.OperationClassMatchesTrigger,
+            RedistributionAction.Binary => ActionRelation.OtherTriggerPreservedForReview,
+        },
+        IndexedCondition.ReproduceBinaryNotice => match action {
+            RedistributionAction.Source => ActionRelation.OtherTriggerPreservedForReview,
+            RedistributionAction.Binary => ActionRelation.OperationClassMatchesTrigger,
+        },
+        IndexedCondition.ProvideLicenseCopy => ActionRelation.OperationClassMatchesTrigger,
+        IndexedCondition.MarkModifiedFiles => ActionRelation.OperationClassMatchesTrigger,
+        IndexedCondition.PreserveSourceNotices => match action {
+            RedistributionAction.Source => ActionRelation.OperationClassMatchesTrigger,
+            RedistributionAction.Binary => ActionRelation.OtherTriggerPreservedForReview,
+        },
+        IndexedCondition.PreserveNoticeAttributions => ActionRelation.OperationClassMatchesTrigger,
+        IndexedCondition.NoEndorsement => ActionRelation.OtherTriggerPreservedForReview,
+    };
+}

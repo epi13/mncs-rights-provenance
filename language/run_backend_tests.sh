@@ -16,6 +16,8 @@
 # - rights-claims corpus runs on research-bytecode AND portable-wasm
 #   with agreement: its entry functions return bare enums/u64 (never
 #   records-of-enums), dodging finding LF-1 by construction.
+# - license-action-guidance corpus runs on research-bytecode AND portable-wasm
+#   and compares the finite source/binary condition classifications.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -48,6 +50,7 @@ for backend in research-bytecode portable-wasm; do
   done
   if ! run "$ROOT/language/pressure_provenance.mncs" "$backend" "$ROOT/language/corpora/pressure-verdict-corpus.json" "$OUT/$backend-pressure"; then STATUS=1; fi
   if ! run "$ROOT/language/rights_claims.mncs" "$backend" "$ROOT/language/corpora/claims-corpus.json" "$OUT/$backend-claims"; then STATUS=1; fi
+  if ! run "$ROOT/language/rights_license_actions.mncs" "$backend" "$ROOT/language/corpora/license-action-guidance-corpus.json" "$OUT/$backend-license-actions"; then STATUS=1; fi
   if [ "$backend" = "research-bytecode" ]; then
     if ! run "$ROOT/language/rights_policy.mncs" "$backend" "$ROOT/language/corpora/gate-severities-corpus.json" "$OUT/$backend"; then STATUS=1; fi
   fi
@@ -101,6 +104,22 @@ def outcomes(result):
 left, right = outcomes(rb), outcomes(pw)
 mismatch = [k for k in left if left[k] != right.get(k)]
 print("   claims agreement:", f"{len(left)-len(mismatch)}/{len(left)}")
+if mismatch:
+    print("   MISMATCH:", mismatch)
+    raise SystemExit(1)
+PY
+
+echo "== cross-backend compare (license action guidance)"
+python3 - <<PY || STATUS=1
+import json
+OUT = "$OUT"
+rb = json.load(open(f"{OUT}/research-bytecode-license-actions/result.json"))
+pw = json.load(open(f"{OUT}/portable-wasm-license-actions/result.json"))
+def outcomes(result):
+    return {c["case_id"]: json.dumps(c.get("returned"), sort_keys=True) for c in result["cases"]}
+left, right = outcomes(rb), outcomes(pw)
+mismatch = [k for k in left if left[k] != right.get(k)]
+print("   action classification agreement:", f"{len(left)-len(mismatch)}/{len(left)}")
 if mismatch:
     print("   MISMATCH:", mismatch)
     raise SystemExit(1)

@@ -1,0 +1,135 @@
+{
+ "schema_version": "0.1",
+ "source_module": "mncs.rights.license_actions.v01",
+ "description": "Executable finite rules for relating indexed notice conditions to source or binary redistribution action classes.",
+ "cases": [
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "RetainCopyNotice"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "RetainSourceNotice"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "ReproduceBinaryNotice"
+   },
+   "output": "OtherTriggerPreservedForReview"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "ProvideLicenseCopy"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "MarkModifiedFiles"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "PreserveSourceNotices"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "PreserveNoticeAttributions"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Source",
+    "condition": "NoEndorsement"
+   },
+   "output": "OtherTriggerPreservedForReview"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "RetainCopyNotice"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "RetainSourceNotice"
+   },
+   "output": "OtherTriggerPreservedForReview"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "ReproduceBinaryNotice"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "ProvideLicenseCopy"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "MarkModifiedFiles"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "PreserveSourceNotices"
+   },
+   "output": "OtherTriggerPreservedForReview"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "PreserveNoticeAttributions"
+   },
+   "output": "OperationClassMatchesTrigger"
+  },
+  {
+   "function": "action_relation",
+   "inputs": {
+    "action": "Binary",
+    "condition": "NoEndorsement"
+   },
+   "output": "OtherTriggerPreservedForReview"
+  }
+ ]
+}

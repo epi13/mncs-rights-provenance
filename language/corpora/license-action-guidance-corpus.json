@@ -1,0 +1,582 @@
+{
+ "schema_version": "0.1",
+ "name": "license-action-guidance-v1",
+ "cases": [
+  {
+   "id": "source-retain-copy-notice",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Source",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::RetainCopyNotice",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "source-retain-source-notice",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Source",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::RetainSourceNotice",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "source-reproduce-binary-notice",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Source",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::ReproduceBinaryNotice",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OtherTriggerPreservedForReview",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "source-provide-license-copy",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Source",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::ProvideLicenseCopy",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "source-mark-modified-files",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Source",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::MarkModifiedFiles",
+       "discriminant": 4
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "source-preserve-source-notices",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Source",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::PreserveSourceNotices",
+       "discriminant": 5
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "source-preserve-notice-attributions",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Source",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::PreserveNoticeAttributions",
+       "discriminant": 6
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "source-no-endorsement",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Source",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::NoEndorsement",
+       "discriminant": 7
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OtherTriggerPreservedForReview",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "binary-retain-copy-notice",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Binary",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::RetainCopyNotice",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "binary-retain-source-notice",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Binary",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::RetainSourceNotice",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OtherTriggerPreservedForReview",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "binary-reproduce-binary-notice",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Binary",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::ReproduceBinaryNotice",
+       "discriminant": 2
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "binary-provide-license-copy",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Binary",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::ProvideLicenseCopy",
+       "discriminant": 3
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "binary-mark-modified-files",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Binary",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::MarkModifiedFiles",
+       "discriminant": 4
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "binary-preserve-source-notices",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Binary",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::PreserveSourceNotices",
+       "discriminant": 5
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OtherTriggerPreservedForReview",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "binary-preserve-notice-attributions",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Binary",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::PreserveNoticeAttributions",
+       "discriminant": 6
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OperationClassMatchesTrigger",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "binary-no-endorsement",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.license_actions.v01",
+     "function": "action_relation"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::RedistributionAction",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::RedistributionAction::Binary",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::IndexedCondition",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::IndexedCondition::NoEndorsement",
+       "discriminant": 7
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.license_actions.v01::ActionRelation",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.license_actions.v01::ActionRelation::OtherTriggerPreservedForReview",
+      "discriminant": 1
+     }
+    }
+   ]
+  }
+ ]
+}

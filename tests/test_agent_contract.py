@@ -9,6 +9,7 @@ CORES = (
     "language/rights_policy.mncs",
     "language/pressure_provenance.mncs",
     "language/check_projection.mncs",
+    "language/rights_license_actions.mncs",
     "language/corpora/",
     "language/run_backend_tests.sh",
     "scripts/rp_to_check.py",

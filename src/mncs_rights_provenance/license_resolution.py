@@ -17,6 +17,10 @@ from typing import Any
 from .spdx import parse_spdx_expression
 
 RESOLUTION_SCHEMA = "mncs.rights.license-resolution/3"
+ACTION_GUIDANCE_SCHEMA = "mncs.rights.license-action-guidance/1"
+ACTION_RULESET_VERSION = "mncs.rights.license-action-rules/1"
+ACTION_RULESET_MODULE = "mncs.rights.license_actions.v01"
+ACTION_RULESET_REF = "language/rights_license_actions.mncs"
 _CANDIDATE_REGISTRY_REF = "mncs_rights_provenance/resources/license-candidates.json"
 
 _LOCAL_LICENSE_REF = re.compile(r"^LicenseRef-[A-Za-z0-9.-]+$", re.IGNORECASE)
@@ -89,6 +93,57 @@ _TERMS: dict[str, dict[str, Any]] = {
         "warranty": "as-is-and-liability-disclaimer",
     },
 }
+
+# These labels associate indexed license conditions with the narrow
+# redistribution operation for which agents commonly need a preflight. The
+# original condition and its trigger remain in the output; these labels do not
+# turn the trigger into a legal conclusion.
+_ACTION_CONDITION_RULES: dict[str, dict[str, Any]] = {
+    "retain-copyright-and-permission-notice": {
+        "actions": ["redistribute-source", "redistribute-binary"],
+        "guidance": "Retain the applicable copyright and permission notice.",
+    },
+    "retain-notice-conditions-and-disclaimer": {
+        "actions": ["redistribute-source"],
+        "guidance": "Retain the notice, conditions, and disclaimer in source redistribution.",
+    },
+    "reproduce-notice-conditions-and-disclaimer": {
+        "actions": ["redistribute-binary"],
+        "guidance": "Reproduce the notice, conditions, and disclaimer in binary redistribution.",
+    },
+    "provide-license-copy": {
+        "actions": ["redistribute-source", "redistribute-binary"],
+        "guidance": "Provide a copy of the license with redistribution.",
+    },
+    "mark-modified-files": {
+        "actions": ["redistribute-source", "redistribute-binary"],
+        "guidance": "Mark modified files with prominent notices describing the changes.",
+    },
+    "preserve-applicable-source-notices": {
+        "actions": ["redistribute-source"],
+        "guidance": "Preserve applicable source notices in source-form derivative works.",
+    },
+    "preserve-notice-attributions": {
+        "actions": ["redistribute-source", "redistribute-binary"],
+        "guidance": "Preserve applicable attributions from a supplied NOTICE file.",
+    },
+    "no-endorsement-without-permission": {
+        "actions": [],
+        "guidance": "Do not use contributor names to endorse or promote without permission.",
+    },
+}
+_ACTION_RULESET_IDENTITY = "sha256:" + hashlib.sha256(
+    json.dumps(
+        {
+            "version": ACTION_RULESET_VERSION,
+            "module": ACTION_RULESET_MODULE,
+            "conditions": _ACTION_CONDITION_RULES,
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+).hexdigest()
 
 
 def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
@@ -278,3 +333,176 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
             for identifier in sorted(candidate_references)
         ]
     return result
+
+
+def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
+    """Project indexed notice conditions for one redistribution operation.
+
+    SPDX AND/OR structure is retained so callers can see conjunctive terms and
+    alternatives without flattening them into permission flags. Each result is
+    a reference summary of the caller-supplied expression. It does not verify
+    that declaration, decide authority, or establish compatibility.
+    """
+    if not isinstance(expression, str) or not expression:
+        raise ValueError("expression must be non-empty text")
+    if not isinstance(action, str) or action not in {
+        "redistribute-source", "redistribute-binary"
+    }:
+        raise ValueError("action must be redistribute-source or redistribute-binary")
+
+    resolved = resolve_license_expression(expression)
+    source_tree = resolved.get("expression_tree")
+    if not isinstance(source_tree, dict):
+        return {
+            "schema_version": ACTION_GUIDANCE_SCHEMA,
+            "status": "unresolved",
+            "action": action,
+            "expression": resolved.get("expression", expression[:256]),
+            "expression_evidence": "caller-supplied-declaration-unverified",
+            "expression_tree": None,
+            "unresolved_identifiers": list(resolved.get("unresolved_identifiers", [])),
+            "unresolved_conditions": [],
+            "decision_notes": [resolved.get("reason", "expression terms are unresolved")],
+            "license_resolver": {
+                "version": RESOLUTION_SCHEMA,
+                "identity": license_resolver_identity(),
+            },
+            "ruleset": {
+                "version": ACTION_RULESET_VERSION,
+                "module": ACTION_RULESET_MODULE,
+                "module_ref": ACTION_RULESET_REF,
+                "identity": _ACTION_RULESET_IDENTITY,
+            },
+            "not_assessed": [
+                "license authority or ownership",
+                "cross-license compatibility",
+                "completeness of the artifact input set",
+            ],
+            "legal_conclusion": "NOT_MADE",
+        }
+
+    unresolved: set[str] = set(resolved.get("unresolved_identifiers", []))
+    unresolved_conditions: list[dict[str, str]] = []
+    decision_notes: list[str] = []
+
+    def project(node: dict[str, Any]) -> dict[str, Any]:
+        operator = node.get("operator")
+        terms = node.get("terms")
+        if operator in {"AND", "OR"} and isinstance(terms, list):
+            if operator == "OR":
+                decision_notes.append(
+                    "Choose the applicable OR branch from the governing rights evidence; all branches are preserved here."
+                )
+            return {
+                "operator": operator,
+                "terms": [project(child) for child in terms if isinstance(child, dict)],
+            }
+
+        identifier = str(node.get("license", ""))
+        status = node.get("status")
+        if status != "reference-summary":
+            if identifier:
+                unresolved.add(identifier)
+            return {
+                key: node[key]
+                for key in (
+                    "license", "exception", "status", "reason", "reference_kind",
+                    "candidate_status", "candidate_version", "effective_grant",
+                    "adoption_status", "source_ref", "registry_ref", "registry_sha256",
+                )
+                if key in node
+            }
+
+        conditions = node.get("conditions", [])
+        projected_conditions: list[dict[str, Any]] = []
+        if not isinstance(conditions, list):
+            unresolved.add(identifier)
+            unresolved_conditions.append({
+                "license": identifier,
+                "reason": "condition index is malformed",
+            })
+            decision_notes.append(f"Condition index for {identifier} is malformed.")
+            conditions = []
+        for condition in conditions:
+            if not isinstance(condition, dict) or not isinstance(condition.get("id"), str):
+                unresolved.add(identifier)
+                unresolved_conditions.append({
+                    "license": identifier,
+                    "reason": "condition record is unsupported",
+                })
+                decision_notes.append(f"Condition index for {identifier} contains an unsupported record.")
+                continue
+            condition_id = condition["id"]
+            rule = _ACTION_CONDITION_RULES.get(condition_id)
+            if rule is None:
+                unresolved.add(identifier)
+                unresolved_conditions.append({
+                    "license": identifier,
+                    "condition": condition_id,
+                    "reason": "condition has no action rule",
+                })
+                decision_notes.append(
+                    f"The action ruleset has no interpretation for condition {condition_id} on {identifier}."
+                )
+                projected_conditions.append({
+                    "id": condition_id,
+                    "when": (
+                        condition["when"]
+                        if isinstance(condition.get("when"), str)
+                        else "trigger unavailable from the term index"
+                    ),
+                    "action_relation": "unclassified-condition",
+                    "guidance": "Review this condition in the referenced license text.",
+                })
+                continue
+            projected_conditions.append({
+                "id": condition_id,
+                "when": (
+                    condition["when"]
+                    if isinstance(condition.get("when"), str)
+                    else "trigger unavailable from the term index"
+                ),
+                "action_relation": (
+                    "operation-class-matches-trigger"
+                    if action in rule["actions"]
+                    else "other-trigger-preserved-for-review"
+                ),
+                "guidance": rule["guidance"],
+            })
+        return {
+            "license": identifier,
+            "status": "reference-summary",
+            "source_ref": node.get("source"),
+            "conditions": projected_conditions,
+            "coverage": "indexed-conditions-only",
+        }
+
+    expression_tree = project(source_tree)
+    status = "partial" if unresolved else "reference-summary"
+    return {
+        "schema_version": ACTION_GUIDANCE_SCHEMA,
+        "status": status,
+        "action": action,
+        "expression": expression,
+        "expression_evidence": "caller-supplied-declaration-unverified",
+        "expression_tree": expression_tree,
+        "unresolved_identifiers": sorted(unresolved),
+        "unresolved_conditions": unresolved_conditions,
+        "decision_notes": decision_notes,
+        "license_resolver": {
+            "version": RESOLUTION_SCHEMA,
+            "identity": license_resolver_identity(),
+        },
+        "ruleset": {
+            "version": ACTION_RULESET_VERSION,
+            "module": ACTION_RULESET_MODULE,
+            "module_ref": ACTION_RULESET_REF,
+            "identity": _ACTION_RULESET_IDENTITY,
+        },
+        "not_assessed": [
+            "license authority or ownership",
+            "cross-license compatibility",
+            "completeness of the artifact input set",
+        ],
+        "legal_conclusion": "NOT_MADE",
+    }
