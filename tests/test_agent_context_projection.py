@@ -11,7 +11,10 @@ from jsonschema import Draft202012Validator
 import mncs_rights_provenance.agent_context as agent_context_module
 import mncs_rights_provenance.license_resolution as license_resolution_module
 from mncs_rights_provenance.agent_context import build_agent_context
-from mncs_rights_provenance.license_resolution import resolve_license_expression
+from mncs_rights_provenance.license_resolution import (
+    license_action_ruleset_identity,
+    resolve_license_expression,
+)
 from mncs_rights_provenance.validation import validate_manifest_structure
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,11 +58,30 @@ def test_context_is_compact_and_keeps_declaration_separate_from_verification() -
     assert context["rights"]["declaration_state"] == "declared"
     assert context["rights"]["copyright_status"] == "unresolved"
     assert context["rights"]["compatibility"]["status"] == "unknown"
+    action_guidance = context["rights"]["action_guidance"]
+    assert action_guidance["schema_version"] == "mncs.rights.license-action-context/1"
+    assert action_guidance["status"] == "reference-summary"
+    assert action_guidance["expression_evidence"] == "declared-unverified"
+    assert action_guidance["legal_conclusion"] == "NOT_MADE"
+    conditions = action_guidance["expression_tree"]["conditions"]
+    assert {
+        item["id"] for item in conditions
+        if item["action_relations"]["redistribute-source"] == "operation-class-matches-trigger"
+    } == {
+        "provide-license-copy", "mark-modified-files", "preserve-applicable-source-notices",
+        "preserve-notice-attributions",
+    }
+    assert next(
+        item for item in conditions if item["id"] == "preserve-applicable-source-notices"
+    )["action_relations"]["redistribute-binary"] == "other-trigger-preserved-for-review"
+    assert context["sources"]["license_action_ruleset"]["reference"] == (
+        license_action_ruleset_identity()["module_ref"]
+    )
     assert context["provenance"]["evidence_state"] == "declared-unverified"
     projection = context["provenance"]["projection"]
     assert projection["schema_version"] == "mncs.rights-provenance.context-lineage/1"
     assert [item["relation"] for item in projection["relationships"]] == [
-        "generated-from", "generated-from", "referenced", "transformed-by",
+        "generated-from", "generated-from", "referenced", "referenced", "transformed-by",
     ]
     assert context["governance"]["status"] == "authorized"
     assert context["governance"]["rules"]["agent_governance"]["copying_external_implementations"] == "authorization-required"
@@ -76,6 +98,107 @@ def test_context_respects_a_smaller_configured_budget_with_detail_references() -
 
     assert len(json.dumps(context, sort_keys=True, separators=(",", ":")).encode()) <= 4096
     assert context["rights"]["license_terms"].get("detail_ref") == "RIGHTS.json#/rights/distribution_license"
+    guidance = context["rights"]["action_guidance"]
+    if "expression_tree" not in guidance:
+        assert guidance["expression_tree_ref"] == guidance["expression_ref"]
+
+
+def test_context_action_guidance_preserves_spdx_branches_and_unknown_terms() -> None:
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = (
+        "MIT OR (BSD-2-Clause AND LicenseRef-External)"
+    )
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    guidance = context["rights"]["action_guidance"]
+    source = guidance["actions"]["redistribute-source"]
+    tree = guidance["expression_tree"]
+
+    assert guidance["status"] == "partial"
+    assert source["status"] == "partial"
+    assert tree["operator"] == "OR"
+    assert tree["terms"][1]["operator"] == "AND"
+    assert context["rights"]["license_terms"]["unresolved_identifiers"] == [
+        "LicenseRef-External"
+    ]
+    assert guidance["unresolved_action_counts"]["redistribute-source"]["identifiers"] == 1
+    assert guidance["expression_ref"].endswith("#/rights/distribution_license")
+    assert "cross-license compatibility" in guidance["not_assessed"]
+    assert guidance["legal_conclusion"] == "NOT_MADE"
+
+
+def test_action_ruleset_revision_invalidates_agent_context(monkeypatch) -> None:
+    original = build_agent_context(_manifest(), _governance(), binding=_binding())
+    source = license_action_ruleset_identity
+
+    def revised_ruleset_identity():
+        value = source()
+        value["identity"] = "sha256:" + "f" * 64
+        return value
+
+    monkeypatch.setattr(
+        agent_context_module, "license_action_ruleset_identity", revised_ruleset_identity
+    )
+    revised = build_agent_context(_manifest(), _governance(), binding=_binding())
+
+    assert original["sources"]["license_action_ruleset"]["sha256"] != (
+        revised["sources"]["license_action_ruleset"]["sha256"]
+    )
+    assert original["identity"] != revised["identity"]
+
+
+def test_absent_distribution_license_keeps_action_guidance_unknown() -> None:
+    manifest = _manifest()
+    manifest["rights"].pop("distribution_license")
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    guidance = context["rights"]["action_guidance"]
+
+    assert guidance["status"] == "unresolved"
+    assert guidance["expression_evidence"] == "no-usable-declaration"
+    assert all(item["status"] == "unresolved" for item in guidance["actions"].values())
+    assert guidance["expression_tree"] is None
+
+
+def test_long_unknown_license_identifier_is_bounded_and_referenced() -> None:
+    manifest = _manifest()
+    expression = "LicenseRef-" + ("A" * 180)
+    manifest["rights"]["distribution_license"] = expression
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    guidance = context["rights"]["action_guidance"]
+    leaf = guidance["expression_tree"]
+    schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
+
+    assert leaf["license"] == expression[:128]
+    assert leaf["license_truncated"] is True
+    assert context["rights"]["license_terms"]["unresolved_identifiers"] == [expression]
+    assert guidance["unresolved_action_counts"]["redistribute-source"]["identifiers"] == 1
+    assert guidance["expression_ref"].endswith("#/rights/distribution_license")
+    assert list(Draft202012Validator(schema).iter_errors(context)) == []
+
+
+def test_large_action_guidance_falls_back_to_on_demand_reference() -> None:
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = " OR ".join(
+        f"LicenseRef-External{index}" for index in range(10)
+    )
+
+    context = build_agent_context(
+        manifest, _governance(), binding=_binding(context_budget_bytes=4096)
+    )
+    guidance = context["rights"]["action_guidance"]
+
+    assert len(json.dumps(context, sort_keys=True, separators=(",", ":")).encode()) <= 4096
+    assert "expression_tree" not in guidance
+    assert guidance["expression_tree_ref"] == guidance["expression_ref"]
+    assert guidance["status"] == "partial"
+    assert guidance["unresolved_action_counts"]["redistribute-source"]["identifiers"] == 10
+    assert "unresolved_identifiers" not in context["rights"]["license_terms"]
+    assert "unresolved_identifiers_ref" in context["rights"]["license_terms"]
+    assert guidance["query_ref"] == "mncs-rp action-guidance"
+    schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
+    assert list(Draft202012Validator(schema).iter_errors(context)) == []
 
 
 def test_context_projection_matches_its_versioned_schema() -> None:

@@ -8,6 +8,19 @@ MNCS Rights & Provenance v0.3 already owns rights manifests, typed provenance, c
 
 The projection keeps legal terms, unresolved claims, provenance state, and agent guidance in separate fields. A declared license is resolved to a reference summary of known notice and patent terms only for a small allow-listed set of SPDX identifiers. The versioned `mncs.rights.license-resolution/3` output uses the SPDX 2.3 expression parser, which preserves `AND`/`OR` precedence and local or external `LicenseRef` identity; known identifiers are matched case-insensitively while their declared spelling remains in the expression tree. A reference whose extracted terms were not supplied remains explicitly unresolved. Malformed operator sequences are rejected. The expression tree is retained when it fits the configured context budget; larger detail remains available through the manifest reference. Unknown identifiers and `AND`/`OR` combinations do not receive an invented compatibility result. An unadopted MNCS permissive-license candidate remains non-effective and cannot establish contributor authority. The compact context includes a per-candidate count and stable reference to its unresolved legal-review decisions in the versioned candidate registry; it does not embed or activate the draft terms. The summary links to the identified license text and is not a legal opinion.
 
+The `rights.action_guidance` projection applies the native-backed, versioned
+`mncs.rights.license_actions.v01` rules to source and binary redistribution.
+It keeps one SPDX `AND`/`OR` expression tree, the original trigger text, and
+both operation-class relations for each indexed condition. This avoids
+duplicating the tree while preserving which branch contains a condition and
+whether the source or binary operation matches its trigger. Unknown terms
+remain unresolved, declarations remain unverified, and the projection makes
+no ownership, compatibility, or legal conclusion. The context carries the
+ruleset identity and a manifest reference. If the action tree exceeds the
+configured context budget, it becomes an on-demand reference through
+`mncs-rp action-guidance`; the action statuses and bounded unresolved counts
+remain in the compact context.
+
 When a source records a usable license expression but leaves `license_status`
 unknown, its diagnostic names the unresolved compatibility and source
 verification. Missing expressions and SPDX `NOASSERTION`/`NONE` remain a
@@ -15,7 +28,7 @@ separate unknown state.
 
 ## Incremental identity
 
-The context identity binds the exact manifest digest, governance profile digest, Environment binding, and compact projection. `sources.license_resolver` exposes a content identity for the SPDX 2.3 parser contract, bounded term index, and candidate registry, and the provenance projection records it as an input. A recomputed context therefore changes identity when parser behavior or packaged summaries change; a referenced MNCS candidate also retains its exact registry source digest. Environment reuses a prior projection only when the binding, manifest digest, governance digest, and `license_resolver_identity()` all still match. A change to any of these inputs invalidates the persisted context. A Rights regression test changes the governance version and lineage rule, then checks that the profile source digest, projected rule, and context identity all change. When a projection is reused for a selected working checkout, Environment refreshes the recorded manifest source root so its provenance points to the checkout currently selected by the authoritative session. The admission view includes stable references and bounded relationship counts; the detailed manifest and lineage remain on demand.
+The context identity binds the exact manifest digest, governance profile digest, Environment binding, and compact projection. `sources.license_resolver` exposes a content identity for the SPDX 2.3 parser contract, bounded term index, and candidate registry; `sources.license_action_ruleset` separately identifies the operation guidance mapping. The provenance projection records both as inputs. A recomputed context therefore changes identity when parser behavior, packaged summaries, or action guidance changes; a referenced MNCS candidate also retains its exact registry source digest. An Environment consumer must include both source identities along with the binding, manifest digest, and governance digest in its reuse check before retaining a prior projection. A change to any of these inputs changes the Rights projection identity. A Rights regression test changes the governance version and lineage rule, then checks that the profile source digest, projected rule, and context identity all change. When a projection is reused for a selected working checkout, Environment refreshes the recorded manifest source root so its provenance points to the checkout currently selected by the authoritative session. The admission view includes stable references and bounded relationship counts; the detailed manifest and lineage remain on demand.
 
 The persisted context projection records its own bounded lineage: each observed input has a `generated-from` relationship bound to its content digest, and the Rights projection function has a `transformed-by` relationship to the context artifact. A missing input is retained as a `referenced` unavailable source rather than claimed as an observed input.
 

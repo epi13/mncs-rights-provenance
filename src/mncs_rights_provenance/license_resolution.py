@@ -146,6 +146,16 @@ _ACTION_RULESET_IDENTITY = "sha256:" + hashlib.sha256(
 ).hexdigest()
 
 
+def license_action_ruleset_identity() -> dict[str, str]:
+    """Return the identity of the bounded, native-backed action ruleset."""
+    return {
+        "version": ACTION_RULESET_VERSION,
+        "module": ACTION_RULESET_MODULE,
+        "module_ref": ACTION_RULESET_REF,
+        "identity": _ACTION_RULESET_IDENTITY,
+    }
+
+
 def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
     resource = files("mncs_rights_provenance").joinpath(
         "resources", "license-candidates.json"
@@ -367,12 +377,7 @@ def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
                 "version": RESOLUTION_SCHEMA,
                 "identity": license_resolver_identity(),
             },
-            "ruleset": {
-                "version": ACTION_RULESET_VERSION,
-                "module": ACTION_RULESET_MODULE,
-                "module_ref": ACTION_RULESET_REF,
-                "identity": _ACTION_RULESET_IDENTITY,
-            },
+            "ruleset": license_action_ruleset_identity(),
             "not_assessed": [
                 "license authority or ownership",
                 "cross-license compatibility",
@@ -493,12 +498,7 @@ def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
             "version": RESOLUTION_SCHEMA,
             "identity": license_resolver_identity(),
         },
-        "ruleset": {
-            "version": ACTION_RULESET_VERSION,
-            "module": ACTION_RULESET_MODULE,
-            "module_ref": ACTION_RULESET_REF,
-            "identity": _ACTION_RULESET_IDENTITY,
-        },
+        "ruleset": license_action_ruleset_identity(),
         "not_assessed": [
             "license authority or ownership",
             "cross-license compatibility",

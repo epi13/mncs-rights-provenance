@@ -1,0 +1,135 @@
+{
+  "bounded_context_case": {
+    "action_status": "partial",
+    "action_tree_deferred": true,
+    "context_budget_bytes": 4096,
+    "context_bytes": 3973,
+    "on_demand_query": "mncs-rp action-guidance",
+    "unresolved_identifier_count_for_source": 10
+  },
+  "coordination": {
+    "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "environment_session_id": "ses_973d1b67eb66857e",
+    "other_live_agent_claim": {
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "checkout": ".worktrees/luna-max-rights-artifact-handoff-20261021",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "scope_overlap": false
+    },
+    "path_claim_ids": [
+      "claim:mncs-rights-provenance:paths:255bc857d104",
+      "claim:mncs-rights-provenance:paths:4ea9547cdd62"
+    ],
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:99a7b0720e46"
+  },
+  "environment_observation": {
+    "operation": "context",
+    "readiness": "ready",
+    "returned_keys": [
+      "schema_version",
+      "session_id",
+      "lifecycle",
+      "environment_id",
+      "work_intent",
+      "workspace_root",
+      "persistence",
+      "toolchain",
+      "writable_repositories",
+      "protected_repositories",
+      "authority",
+      "readiness",
+      "doctor",
+      "projects",
+      "capabilities"
+    ],
+    "rights_context_present": false,
+    "session_id": "ses_973d1b67eb66857e",
+    "writable_repositories": [
+      "mncs-rights-provenance"
+    ]
+  },
+  "identity": "ev_rights_context_action_guidance_20261021",
+  "implementation": {
+    "base_commit": "9ad6b095ee4e1d11fb0afc475768c02a162380c4",
+    "branch": "campaign/luna-max-action-guidance-context-20261021",
+    "files": {
+      "docs/rights-provenance-agent-context.md": "sha256:fa368966d46366bcb97c89a71ce55136e1eeadbcb77ac2f08105e7e5b2db1041",
+      "schemas/v0.1/agent-context.schema.json": "sha256:b415f52db1f64159104ccf783b589dcc8e08acb3210845a6b1e9f14f11309109",
+      "src/mncs_rights_provenance/agent_context.py": "sha256:f0fbf957096fba24ebc17a29ea922b00a71d1b59a17d7b18d49fa525a5079037",
+      "src/mncs_rights_provenance/license_resolution.py": "sha256:44a4c4bcff243a4298515de4c85de70e6c19c6c2903a0c066d2b9eb1badf0af6",
+      "tests/test_agent_context_projection.py": "sha256:c47a3762233eea97655510a01f6c6326fd8acddf01d6ba638642ab12d0111dcb"
+    }
+  },
+  "limits": [
+    "License expressions remain caller-declared and unverified; the action view covers indexed notice conditions only and makes no ownership, authority, compatibility, input-completeness, or legal conclusion.",
+    "The Environment MCP context response still omits rights_context; this commit extends the Rights projection provider but does not change the consumer service or prove admission delivery.",
+    "Environment-side reuse invalidation for the new action-ruleset source identity remains an integration requirement outside this session's writable repository scope.",
+    "The operative Apache-2.0 declaration and all LICENSE files remain unchanged; the MNCS permissive-license candidate remains unadopted."
+  ],
+  "observed_at": "2026-10-21T22:22:11.105292Z",
+  "projection": {
+    "action_guidance_status": "reference-summary",
+    "apache_condition_relations": [
+      {
+        "binary": "operation-class-matches-trigger",
+        "id": "provide-license-copy",
+        "source": "operation-class-matches-trigger",
+        "when": "redistribution"
+      },
+      {
+        "binary": "operation-class-matches-trigger",
+        "id": "mark-modified-files",
+        "source": "operation-class-matches-trigger",
+        "when": "redistributed modified files"
+      },
+      {
+        "binary": "other-trigger-preserved-for-review",
+        "id": "preserve-applicable-source-notices",
+        "source": "operation-class-matches-trigger",
+        "when": "source-form derivative works"
+      },
+      {
+        "binary": "operation-class-matches-trigger",
+        "id": "preserve-notice-attributions",
+        "source": "operation-class-matches-trigger",
+        "when": "the work includes a NOTICE file and the attribution applies"
+      }
+    ],
+    "context_bytes_at_8192_budget": 8044,
+    "declaration_evidence": "declared-unverified",
+    "legal_conclusion": "NOT_MADE",
+    "license_declaration": "Apache-2.0",
+    "ruleset_source": {
+      "reference": "language/rights_license_actions.mncs",
+      "sha256": "sha256:2550e53da06ec3a0c0236be900c795172ec19394eeaef3ba7b7d1ab66606f22c"
+    },
+    "schema_version": "mncs.rights-provenance.agent-context/1"
+  },
+  "schema_version": "mncs.rights-provenance.agent-context-action-guidance-evidence/1",
+  "unresolved_expression_case": {
+    "binary_action_status": "partial",
+    "expression": "MIT OR (BSD-2-Clause AND LicenseRef-External)",
+    "legal_conclusion": "NOT_MADE",
+    "source_action_status": "partial",
+    "status": "partial",
+    "tree_operators": [
+      "OR",
+      "AND"
+    ],
+    "unresolved_license_identifiers": [
+      "LicenseRef-External"
+    ]
+  },
+  "verification": {
+    "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_license_action_core.py tests/test_license_action_guidance.py tests/test_agent_context_projection.py tests/test_manifest.py tests/test_agent_contract.py",
+    "native_backends": [
+      "research-bytecode",
+      "portable-wasm"
+    ],
+    "native_core_cases_per_backend": 16,
+    "passed": 68,
+    "result": "passed",
+    "ruff": "passed",
+    "schema_json_and_diff_check": "passed"
+  }
+}

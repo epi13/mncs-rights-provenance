@@ -30,10 +30,81 @@
             "reference": {"type": "string", "minLength": 1},
             "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
           }
+        },
+        "license_action_ruleset": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reference", "sha256"],
+          "properties": {
+            "reference": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+          }
         }
       }
     },
-    "rights": {"type": "object"},
+    "rights": {
+      "type": "object",
+      "properties": {
+        "action_guidance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schema_version", "status", "expression_ref", "expression_evidence", "query_ref", "ruleset", "actions", "legal_conclusion"],
+          "anyOf": [
+            {"required": ["expression_tree"]},
+            {"required": ["expression_tree_ref"]}
+          ],
+          "properties": {
+            "schema_version": {"const": "mncs.rights.license-action-context/1"},
+            "status": {"enum": ["reference-summary", "partial", "unresolved"]},
+            "expression_ref": {"type": "string", "minLength": 1, "maxLength": 256},
+            "expression_evidence": {"enum": ["declared-unverified", "no-usable-declaration"]},
+            "query_ref": {"const": "mncs-rp action-guidance"},
+            "ruleset": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["version"],
+              "properties": {
+                "version": {"const": "mncs.rights.license-action-rules/1"},
+                "module": {"const": "mncs.rights.license_actions.v01"},
+                "module_ref": {"type": "string", "minLength": 1},
+                "identity": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+                "source": {"const": "#/sources/license_action_ruleset"}
+              }
+            },
+            "expression_tree": {
+              "oneOf": [
+                {"type": "null"},
+                {"$ref": "#/$defs/action_tree"}
+              ]
+            },
+            "expression_tree_ref": {"type": "string", "minLength": 1, "maxLength": 256},
+            "actions": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["redistribute-source", "redistribute-binary"],
+              "properties": {
+                "redistribute-source": {"$ref": "#/$defs/action_result"},
+                "redistribute-binary": {"$ref": "#/$defs/action_result"}
+              }
+            },
+            "unresolved_action_counts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["redistribute-source", "redistribute-binary"],
+              "properties": {
+                "redistribute-source": {"$ref": "#/$defs/unresolved_counts"},
+                "redistribute-binary": {"$ref": "#/$defs/unresolved_counts"}
+              }
+            },
+            "decision_notes": {"type": "array", "items": {"type": "string", "maxLength": 256}, "maxItems": 4},
+            "decision_note_count": {"type": "integer", "minimum": 0},
+            "decision_notes_truncated": {"type": "boolean"},
+            "not_assessed": {"type": "array", "items": {"type": "string", "maxLength": 128}, "maxItems": 4},
+            "legal_conclusion": {"const": "NOT_MADE"}
+          }
+        }
+      }
+    },
     "provenance": {
       "type": "object",
       "properties": {
@@ -44,7 +115,7 @@
             "schema_version": {"const": "mncs.rights-provenance.context-lineage/1"},
             "output_ref": {"type": "string"},
             "relationships": {
-              "type": "array", "maxItems": 5,
+              "type": "array", "maxItems": 6,
               "items": {
                 "type": "object", "additionalProperties": false,
                 "required": ["from", "to", "relation", "content_digest", "evidence_state"],
@@ -63,5 +134,90 @@
     },
     "governance": {"type": "object"},
     "diagnostics": {"type": "array", "maxItems": 12, "items": {"type": "object"}}
+  },
+  "$defs": {
+    "action_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["reference-summary", "partial", "unresolved"]},
+        "unresolved_identifiers": {"type": "array", "items": {"type": "string", "maxLength": 128}, "maxItems": 8},
+        "unresolved_identifier_count": {"type": "integer", "minimum": 0},
+        "unresolved_conditions": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "license": {"type": "string", "maxLength": 128},
+              "condition": {"type": "string", "maxLength": 128},
+              "reason": {"type": "string", "maxLength": 128}
+            }
+          }
+        },
+        "unresolved_condition_count": {"type": "integer", "minimum": 0},
+        "decision_notes": {"type": "array", "items": {"type": "string", "maxLength": 256}, "maxItems": 4},
+        "decision_note_count": {"type": "integer", "minimum": 0},
+        "unresolved_identifiers_truncated": {"type": "boolean"},
+        "unresolved_conditions_truncated": {"type": "boolean"},
+        "decision_notes_truncated": {"type": "boolean"}
+      }
+    },
+    "unresolved_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identifiers", "conditions"],
+      "properties": {
+        "identifiers": {"type": "integer", "minimum": 0},
+        "conditions": {"type": "integer", "minimum": 0}
+      }
+    },
+    "action_tree": {
+      "type": "object",
+      "additionalProperties": false,
+      "anyOf": [
+        {"required": ["operator", "terms"]},
+        {"required": ["license", "status"]}
+      ],
+      "properties": {
+        "operator": {"enum": ["AND", "OR"]},
+        "terms": {"type": "array", "items": {"$ref": "#/$defs/action_tree"}, "maxItems": 256},
+        "license": {"type": "string", "maxLength": 128},
+        "license_truncated": {"type": "boolean"},
+        "exception": {"type": "string", "maxLength": 128},
+        "status": {"type": "string", "maxLength": 64},
+        "reason": {"type": "string", "maxLength": 256},
+        "reference_kind": {"type": "string", "maxLength": 64},
+        "candidate_status": {"type": "string", "maxLength": 64},
+        "candidate_version": {"type": "string", "maxLength": 64},
+        "effective_grant": {"type": ["boolean", "null"]},
+        "adoption_status": {"type": "string", "maxLength": 64},
+        "conditions": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "when", "guidance", "action_relations"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1, "maxLength": 128},
+              "when": {"type": "string", "maxLength": 256},
+              "guidance": {"type": "string", "maxLength": 256},
+              "action_relations": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["redistribute-source", "redistribute-binary"],
+                "properties": {
+                  "redistribute-source": {"enum": ["operation-class-matches-trigger", "other-trigger-preserved-for-review", "unclassified-condition"]},
+                  "redistribute-binary": {"enum": ["operation-class-matches-trigger", "other-trigger-preserved-for-review", "unclassified-condition"]}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

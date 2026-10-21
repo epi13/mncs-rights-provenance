@@ -8,7 +8,12 @@ from collections import Counter
 from collections.abc import Mapping
 from typing import Any
 
-from .license_resolution import license_resolver_identity, resolve_license_expression
+from .license_resolution import (
+    license_action_guidance,
+    license_action_ruleset_identity,
+    license_resolver_identity,
+    resolve_license_expression,
+)
 from .manifest import compute_manifest_identity
 from .validation import validate_manifest_structure
 
@@ -49,6 +54,8 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
     if "expression_tree" in terms:
         terms.pop("expression_tree")
         terms["detail_ref"] = context["sources"]["rights_manifest"]["reference"] + "#/rights/distribution_license"
+    if len(json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")) <= target:
+        return
     provenance = context["provenance"]
     provenance["relationship_kinds"] = dict(list(provenance["relationship_kinds"].items())[:8])
     for limit in (8, 4, 2, 0):
@@ -67,6 +74,57 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
         governance = context["governance"]
         governance["rules_ref"] = governance.pop("detail_ref", None)
         governance.pop("rules", None)
+    action_guidance = rights.get("action_guidance")
+    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if (
+        len(encoded) > target
+        and isinstance(action_guidance, dict)
+        and action_guidance.get("expression_tree") is not None
+    ):
+        action_guidance.pop("expression_tree")
+        action_guidance["expression_tree_ref"] = action_guidance.get("expression_ref")
+    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if len(encoded) > target and isinstance(action_guidance, dict):
+        action_guidance.pop("not_assessed", None)
+        action_guidance.pop("decision_notes", None)
+        action_guidance.pop("decision_note_count", None)
+        action_guidance.pop("decision_notes_truncated", None)
+        ruleset = action_guidance.get("ruleset")
+        if isinstance(ruleset, Mapping):
+            action_guidance["ruleset"] = {
+                "version": ruleset.get("version"),
+                "source": "#/sources/license_action_ruleset",
+            }
+    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if len(encoded) > target:
+        expression = terms.get("expression")
+        if isinstance(expression, str) and len(expression) > 128:
+            terms["expression"] = expression[:128]
+            terms["expression_truncated"] = True
+    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if len(encoded) > target:
+        unresolved = terms.get("unresolved_identifiers")
+        if isinstance(unresolved, list) and unresolved:
+            terms["unresolved_identifier_count"] = len(unresolved)
+            terms["unresolved_identifiers_ref"] = (
+                context["sources"]["rights_manifest"]["reference"]
+                + "#/rights/distribution_license"
+            )
+            terms.pop("unresolved_identifiers")
+    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if len(encoded) > target:
+        declaration = rights.get("distribution_license")
+        if isinstance(declaration, str) and len(declaration) > 128:
+            rights["distribution_license"] = declaration[:128]
+            rights["distribution_license_truncated"] = True
+    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if len(encoded) > target:
+        compatibility = rights.get("compatibility")
+        if isinstance(compatibility, dict):
+            compatibility.pop("reason", None)
+        license_compatibility = terms.get("compatibility")
+        if isinstance(license_compatibility, dict):
+            license_compatibility.pop("reason", None)
 
 
 def _validate_governance(value: Any) -> tuple[dict[str, Any] | None, list[str]]:
@@ -112,6 +170,177 @@ def _validate_governance(value: Any) -> tuple[dict[str, Any] | None, list[str]]:
             else:
                 clean[section][key] = raw[key]
     return (clean if not errors else None), errors
+
+
+def _combine_action_trees(source: Any, binary: Any) -> dict[str, Any] | None:
+    if not isinstance(source, Mapping) or not isinstance(binary, Mapping):
+        return None
+    operator = source.get("operator")
+    if operator in {"AND", "OR"} or binary.get("operator") in {"AND", "OR"}:
+        source_terms = source.get("terms")
+        binary_terms = binary.get("terms")
+        if (
+            operator != binary.get("operator")
+            or not isinstance(source_terms, list)
+            or not isinstance(binary_terms, list)
+            or len(source_terms) != len(binary_terms)
+        ):
+            return None
+        terms: list[dict[str, Any]] = []
+        for source_term, binary_term in zip(source_terms, binary_terms, strict=True):
+            combined = _combine_action_trees(source_term, binary_term)
+            if combined is None:
+                return None
+            terms.append(combined)
+        return {"operator": operator, "terms": terms}
+
+    if source.get("license") != binary.get("license") or source.get("status") != binary.get("status"):
+        return None
+    status = source.get("status")
+    if status != "reference-summary":
+        fields = (
+            "license", "exception", "status", "reason", "reference_kind",
+            "candidate_status", "candidate_version", "effective_grant",
+            "adoption_status",
+        )
+        limits = {
+            "license": 128,
+            "exception": 128,
+            "status": 64,
+            "reason": 256,
+            "reference_kind": 64,
+            "candidate_status": 64,
+            "candidate_version": 64,
+            "adoption_status": 64,
+        }
+        if any(source.get(field) != binary.get(field) for field in fields):
+            return None
+        result: dict[str, Any] = {}
+        license_value = source.get("license")
+        for field in fields:
+            value = source.get(field)
+            if isinstance(value, str):
+                result[field] = value[:limits[field]]
+            elif isinstance(value, (bool, int)):
+                result[field] = value
+        if isinstance(license_value, str) and len(license_value) > limits["license"]:
+            result["license_truncated"] = True
+        return result
+
+    source_conditions = source.get("conditions")
+    binary_conditions = binary.get("conditions")
+    if not isinstance(source_conditions, list) or not isinstance(binary_conditions, list):
+        return None
+    binary_by_id = {
+        condition.get("id"): condition
+        for condition in binary_conditions
+        if isinstance(condition, Mapping) and isinstance(condition.get("id"), str)
+    }
+    if len(binary_by_id) != len(binary_conditions):
+        return None
+    conditions: list[dict[str, Any]] = []
+    for condition in source_conditions:
+        if not isinstance(condition, Mapping) or not isinstance(condition.get("id"), str):
+            return None
+        other = binary_by_id.get(condition["id"])
+        if not isinstance(other, Mapping):
+            return None
+        if (
+            condition.get("when") != other.get("when")
+            or condition.get("guidance") != other.get("guidance")
+        ):
+            return None
+        relations = {
+            "redistribute-source": condition.get("action_relation"),
+            "redistribute-binary": other.get("action_relation"),
+        }
+        if any(not isinstance(value, str) for value in relations.values()):
+            return None
+        conditions.append({
+            "id": condition["id"][:128],
+            "when": str(condition.get("when", "trigger unavailable"))[:256],
+            "guidance": str(condition.get("guidance", "Review this condition."))[:256],
+            "action_relations": relations,
+        })
+    return {
+        "license": str(source.get("license", ""))[:128],
+        "status": status,
+        "conditions": conditions,
+    }
+
+
+def _action_guidance_context(expression: Any, expression_ref: str) -> dict[str, Any]:
+    ruleset = license_action_ruleset_identity()
+    action_names = ("redistribute-source", "redistribute-binary")
+    results: dict[str, Any] = {}
+    reports: list[dict[str, Any]] = []
+    all_notes: list[str] = []
+    identifier_counts: dict[str, int] = {}
+    condition_counts: dict[str, int] = {}
+    for action in action_names:
+        if isinstance(expression, str) and expression:
+            report = license_action_guidance(expression, action)
+            reports.append(report)
+            identifiers = report.get("unresolved_identifiers", [])
+            conditions = report.get("unresolved_conditions", [])
+            notes = report.get("decision_notes", [])
+            identifier_values = identifiers if isinstance(identifiers, list) else []
+            condition_values = conditions if isinstance(conditions, list) else []
+            note_values = notes if isinstance(notes, list) else []
+            all_notes.extend(item for item in note_values if isinstance(item, str))
+            identifier_counts[action] = len(identifier_values)
+            condition_counts[action] = len(condition_values)
+            result: dict[str, Any] = {"status": report.get("status", "unresolved")}
+        else:
+            result = {"status": "unresolved"}
+            all_notes.append("No declared distribution license expression is available.")
+        results[action] = result
+
+    statuses = {result["status"] for result in results.values()}
+    status = (
+        "unresolved" if not isinstance(expression, str) or not expression or "unresolved" in statuses
+        else "partial" if "partial" in statuses
+        else "reference-summary"
+    )
+    expression_evidence = "declared-unverified" if reports else "no-usable-declaration"
+    combined_tree = (
+        _combine_action_trees(
+            reports[0].get("expression_tree"), reports[1].get("expression_tree")
+        )
+        if len(reports) == 2 else None
+    )
+    context = {
+        "schema_version": "mncs.rights.license-action-context/1",
+        "status": status,
+        "expression_ref": expression_ref,
+        "expression_evidence": expression_evidence,
+        "query_ref": "mncs-rp action-guidance",
+        "ruleset": ruleset,
+        "expression_tree": combined_tree,
+        "actions": results,
+        "not_assessed": [
+            "license authority or ownership",
+            "cross-license compatibility",
+            "completeness of the artifact input set",
+        ],
+        "legal_conclusion": "NOT_MADE",
+    }
+    if any(identifier_counts.values()) or any(condition_counts.values()):
+        context["unresolved_action_counts"] = {
+            action: {
+                "identifiers": identifier_counts.get(action, 0),
+                "conditions": condition_counts.get(action, 0),
+            }
+            for action in action_names
+        }
+    unique_notes = list(dict.fromkeys(all_notes))
+    if unique_notes:
+        context.update({
+            "decision_notes": unique_notes[:4],
+            "decision_note_count": len(unique_notes),
+            "decision_notes_truncated": len(unique_notes) > 4,
+        })
+    return context
 
 
 def build_agent_context(
@@ -404,6 +633,12 @@ def build_agent_context(
         "sha256": license_resolver_identity(),
     }
     context_sources["license_resolver"] = license_resolver_source
+    action_ruleset = license_action_ruleset_identity()
+    action_rules_source = {
+        "reference": action_ruleset["module_ref"],
+        "sha256": action_ruleset["identity"],
+    }
+    context_sources["license_action_ruleset"] = action_rules_source
     context_lineage_relationships = [
         {
             "from": manifest_ref,
@@ -425,6 +660,13 @@ def build_agent_context(
         "to": "agent-context",
         "relation": "referenced",
         "content_digest": license_resolver_source["sha256"],
+        "evidence_state": "observed-input",
+    })
+    context_lineage_relationships.append({
+        "from": action_rules_source["reference"],
+        "to": "agent-context",
+        "relation": "referenced",
+        "content_digest": action_rules_source["sha256"],
         "evidence_state": "observed-input",
     })
     if candidate_registry_source is not None:
@@ -462,6 +704,9 @@ def build_agent_context(
             "source_count": len(raw_sources),
             "sources_truncated": len(raw_sources) > 4,
             "license_terms": license_resolution,
+            "action_guidance": _action_guidance_context(
+                expression, f"{manifest_ref}#/rights/distribution_license"
+            ),
             "compatibility": {"status": "unknown", "reason": "no cross-artifact compatibility conclusion was established"},
         },
         "provenance": {
