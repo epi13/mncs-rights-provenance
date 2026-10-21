@@ -1,12 +1,35 @@
 {
   "schema_version": "mncs-family.repository-manifest/v0alpha1",
   "repository": "mncs-rights-provenance",
-  "revision": 1,
+  "revision": 2,
   "manifest_location": "in-repository",
   "authority": {"note": "Rights-provenance owns provenance evidence, rights manifests, contribution attestations, release-policy evaluation, and SPDX interoperability. Uncertainty is first-class (unknown/unresolved/insufficient-evidence); the system records evidence and never fabricates legal conclusions. Not legal advice."},
   "contracts": {
     "provides": [
-      {"contract": "rights-provenance", "version": "0.3.0", "kind": "mncs-library", "stability": "experimental", "fingerprint_sources": ["language/", "src/mncs_rights_provenance/", "schemas/v0.3/"]}
+      {
+        "contract": "rights-provenance",
+        "version": "0.3.0",
+        "kind": "mncs-library",
+        "stability": "experimental",
+        "effects": ["read"],
+        "fingerprint_sources": [
+          "language/",
+          "src/mncs_rights_provenance/",
+          "schemas/v0.3/",
+          "RIGHTS.json",
+          "scripts/environment_rights_validate.py"
+        ],
+        "invocation": {
+          "kind": "python",
+          "path": "scripts/environment_rights_validate.py",
+          "fixed_argv": [
+            "validate",
+            "RIGHTS.json",
+            "--findings-are-not-failures"
+          ],
+          "timeout_seconds": 30
+        }
+      }
     ],
     "consumes": [],
     "tests": [{"test": "rights-provenance-tests", "covers": ["rights-provenance"], "obligation": "self", "command": {"argv": ["python3", "-m", "pytest", "tests", "-q"], "timeout_seconds": 900}}]
