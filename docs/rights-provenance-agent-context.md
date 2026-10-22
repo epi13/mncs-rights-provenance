@@ -51,12 +51,13 @@ authoritative. Unrecognized profile values leave governance unavailable.
 The Rights project also publishes the bounded Environment test capability
 `mncs-rights-provenance:test/rights-agent-context-provenance`. It runs focused
 agent-context, governance, SPDX parsing, native license-action, license
-resolution, v0.4 lineage, artifact-diagnostic, and `mncs.check-result/1`
-projection tests. Environment supplies the selected MNCS-Language toolchain to
-the native-core tests, and the capability has a 300-second ceiling. Agents can
-use Environment `verify` for this cross-layer contract set without launching
-the full repository suite; the existing full-suite capability remains
-available for broader verification.
+resolution, v0.4 lineage and artifact-binding, implementation-lineage core
+and projection, artifact-diagnostic, and `mncs.check-result/1` projection
+tests. Environment supplies the selected MNCS-Language toolchain to the native
+core tests, and the capability has a 300-second ceiling. Agents can use
+Environment `verify` for this cross-layer contract set without launching the
+full repository suite; the existing full-suite capability remains available
+for broader verification.
 
 The `rights.action_guidance` projection applies the native-backed, versioned
 `mncs.rights.license_actions.v01` rules to source and binary redistribution.
