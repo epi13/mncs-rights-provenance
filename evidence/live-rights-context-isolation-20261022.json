@@ -1,0 +1,102 @@
+{
+  "schema_version": "mncs.rights-provenance.live-context-isolation/1",
+  "identity": "ev_live_rights_context_isolation_20261022",
+  "observed_at": "2026-10-22T08:33:08Z",
+  "purpose": "Narrow the live Rights-context omission to a cross-service boundary using the connected Environment result and focused Environment and Control tests.",
+  "rights_project": {
+    "repository": "mncs-rights-provenance",
+    "branch": "main",
+    "revision": "f8c0a54d83469cf5a207f694cdabc7ea87bfc69c",
+    "working_tree_clean_before_this_evidence": true,
+    "binding": {
+      "source": ".mncs/environment.json#/rights_context",
+      "schema_version": "mncs.environment.rights-context-binding/1",
+      "profile_id": "mncs-rights-provenance/native-open@0.1.0",
+      "manifest": "mncs-rights-provenance/RIGHTS.json",
+      "governance_profile": "mncs-rights-provenance/governance/agent-governance.json",
+      "external_metadata_authoritative": false,
+      "context_budget_bytes": 8192
+    }
+  },
+  "live_environment_observation": {
+    "interface": "mcp__mncs_environment__mncs_environment",
+    "project": "mncs-rights-provenance",
+    "campaign_id": "cmp_ff3f91cb1a6badbf",
+    "session_id": "ses_dff1822e90820cf4",
+    "session_lifecycle": "active",
+    "observation_kind": "resumed existing session; not a fresh admission",
+    "operations": [
+      {
+        "operation": "inspect",
+        "result_keys": ["session_id", "lifecycle", "environment_id", "toolchain", "authority", "readiness"],
+        "rights_context_present": false
+      },
+      {
+        "operation": "context",
+        "result_keys": ["schema_version", "session_id", "lifecycle", "environment_id", "work_intent", "workspace_root", "persistence", "toolchain", "writable_repositories", "protected_repositories", "authority", "readiness", "doctor", "projects", "capabilities"],
+        "rights_context_present": false
+      }
+    ],
+    "interpretation": "The connected Environment context and inspect results for this resumed session omit the Rights projection. This observation alone does not establish which live process or boundary dropped the field."
+  },
+  "source_and_test_isolation": {
+    "environment_checkout": {
+      "repository": "mncs-environment",
+      "branch": "campaign/scoped-merge-publish-authority-20261020",
+      "revision": "c8f35ee128b689907b3a413e6b723e82d9b9b7b9",
+      "working_tree": "clean",
+      "authority": "read-only source inspection and focused existing test execution; no Environment files changed"
+    },
+    "control_checkout": {
+      "repository": "mncs-control-mcp",
+      "branch": "main",
+      "revision": "dd2e77f9365327392a5326e6db339c0b9807a174",
+      "working_tree": "clean apart from the pre-existing untracked .worktrees/ directory",
+      "authority": "read-only source inspection and focused existing test execution; no Control files changed"
+    },
+    "source_observations": [
+      "Environment sessions.py resolves the explicitly bound rights_context and includes it in session context and inspection when present.",
+      "Control local_environment_mcp.py::_compact_context copies a dictionary-valued rights_context from its input payload.",
+      "The active Environment project checkout is on campaign/scoped-merge-publish-authority-20261020; no inference is made that its source revision matches the live owner process."
+    ],
+    "tests": [
+      {
+        "repository": "mncs-environment",
+        "command": "python3 -m pytest -q tests/test_rights_context.py",
+        "result": "failed",
+        "summary": "6 passed, 1 failed. The failure first confirms the context projection fields and then finds a provenance relationship-count expectation mismatch: expected four relationships; the current Rights provider returned five, including an additional referenced relationship.",
+        "failed_test": "RightsContextTests.test_environment_admission_projects_compact_authorized_context",
+        "scope_note": "Test ran against the existing Environment feature checkout listed above, not an isolated main checkout. The failure is not evidence that Rights authorization or the Control transport is incorrect."
+      },
+      {
+        "repository": "mncs-control-mcp",
+        "command": "python3 -m pytest -q tests/test_local_environment_mcp.py -k compact_context_preserves_the_environment_rights_projection",
+        "result": "passed",
+        "summary": "1 passed. The adapter helper preserves a supplied Rights projection."
+      }
+    ]
+  },
+  "coordination": {
+    "rights_campaign_id": "cmp_ff3f91cb1a6badbf",
+    "rights_evidence_path_claim": "claim:mncs-rights-provenance:paths:af33fc674b08",
+    "environment_campaigns_observed": 5,
+    "environment_scope": "Environment continuation showed separate Rights context/cache-invalidation work and an active main-owner reconciliation pressure. Those scopes were left untouched.",
+    "interaction": "No Environment or Control claim was acquired. No peer worktree, branch, service, or lease was changed."
+  },
+  "assessment": {
+    "confirmed": [
+      "The Rights project has an explicit Environment rights_context binding.",
+      "The connected Environment context and inspect results for the resumed session do not expose rights_context.",
+      "The tested Control adapter helper preserves a Rights projection when it receives one.",
+      "Environment's focused test suite currently has one relationship-count expectation mismatch in the observed checkout."
+    ],
+    "inference": "Given the observed source paths and Control helper test, the missing projection is not explained by _compact_context dropping a dictionary it receives; the upstream live payload or running-service/source state remains unobserved.",
+    "legal_conclusion": "NOT_MADE"
+  },
+  "limits": [
+    "No fresh Environment session was created for this observation; prior fresh-admission evidence is recorded separately.",
+    "Repository source inspection does not prove which revision the live Environment or Control process is executing.",
+    "The focused Environment test failure is an integration expectation mismatch, not a legal-rights or compatibility finding.",
+    "No Environment or Control code was modified and no broader repository test suite was run."
+  ]
+}
