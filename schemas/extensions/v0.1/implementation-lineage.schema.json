@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/extensions/implementation-lineage/0.1.0.schema.json",
+  "title": "MNCS Rights implementation-lineage extension 0.1.0",
+  "description": "Evidence-labeled component classifications. The list is an unverified subset and establishes no authorship, ownership, compatibility, or legal conclusion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifact_ref", "status", "coverage", "components", "legal_conclusion"],
+  "properties": {
+    "schema_version": { "const": "mncs.rights-provenance.implementation-lineage/0.1.0" },
+    "artifact_ref": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "status": {
+      "enum": ["partial", "unknown"],
+      "description": "partial means at least one listed component has a known classification; unknown means no listed component does. This field never claims completeness."
+    },
+    "coverage": { "const": "unverified-subset", "description": "The listed components are an unverified subset; completeness has not been attested." },
+    "components": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "legal_conclusion": { "const": "NOT_MADE" }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "state"],
+      "properties": {
+        "reference": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "state": {
+          "enum": ["directly-observed", "declared", "inferred", "verified-attestation", "unverified-attestation", "unavailable"]
+        },
+        "sha256": { "type": ["string", "null"], "pattern": "^[a-fA-F0-9]{64}$" },
+        "verifier_ref": { "type": "string", "minLength": 1, "maxLength": 512 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "verified-attestation" } }, "required": ["state"] },
+          "then": { "required": ["verifier_ref"] }
+        }
+      ]
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_ref", "representation", "origin", "evidence_state", "evidence"],
+      "properties": {
+        "component_ref": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "representation": { "enum": ["machine-native", "host-language", "mixed", "other", "unknown"] },
+        "origin": { "enum": ["new-local", "migrated", "inherited-external", "generated", "mixed", "unknown"] },
+        "evidence_state": { "enum": ["directly-observed", "declared", "inferred", "verified-attestation", "unverified-attestation", "unavailable"] },
+        "evidence": { "type": "array", "maxItems": 16, "items": { "$ref": "#/$defs/evidence" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "evidence_state": { "const": "unavailable" } }, "required": ["evidence_state"] },
+          "then": {
+            "properties": {
+              "representation": { "const": "unknown" },
+              "origin": { "const": "unknown" },
+              "evidence": { "maxItems": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "evidence_state": { "const": "verified-attestation" } }, "required": ["evidence_state"] },
+          "then": {
+            "properties": {
+              "evidence": {
+                "contains": {
+                  "properties": {
+                    "state": { "const": "verified-attestation" },
+                    "verifier_ref": { "type": "string", "minLength": 1 }
+                  },
+                  "required": ["state", "verifier_ref"]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "evidence_state": { "enum": ["directly-observed", "declared", "inferred", "verified-attestation", "unverified-attestation"] } }, "required": ["evidence_state"] },
+          "then": { "properties": { "evidence": { "minItems": 1 } } }
+        }
+      ]
+    }
+  }
+}

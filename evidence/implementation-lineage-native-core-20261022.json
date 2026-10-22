@@ -1,0 +1,83 @@
+{
+  "campaign_id": "cmp_ff3f91cb1a6badbf",
+  "coordination": {
+    "concurrent_live_claims_observed": [
+      {
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "scope_overlap": false,
+        "worktree": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-artifact-handoff-20261021"
+      }
+    ],
+    "coordination_method": "Environment continuation reselected the campaign; the authenticated Environment claim API established the isolated feature worktree; claim inventory confirmed a separate live artifact-handoff worktree claim. No active Environment or Compiler worktree was changed.",
+    "environment_campaign_session": "ses_dff1822e90820cf4",
+    "other_worktree_modified": false,
+    "worktree": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-implementation-lineage-v02-20261022",
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:a0be242989e4"
+  },
+  "identity": "ev_implementation_lineage_native_core_20261022",
+  "implementation": {
+    "artifact_identity": "sha256:8e554bca6e1c00781d1ee15cac2b4644c656e1a7becd13617eb4d46382e7096d",
+    "base_commit": "f7428b4782801a355072b17c4a1cf27c0b8a773c",
+    "binding_input": "evidence/rights-handoff-native-artifact-binding-20261021.json",
+    "branch": "campaign/luna-max-implementation-lineage-v02-20261022",
+    "example_output": "examples/v0.4/lineage-from-live-compiler-binding-with-implementation-lineage.json",
+    "extension_schema": "mncs.rights-provenance.implementation-lineage/0.1.0",
+    "files_sha256": {
+      "AGENTS.md": "sha256:db9781a3e5a82e4d981f6a7d4bab4554b7b7314ed39c15c7db5d29c48de7f2c3",
+      "conformance/implementation-lineage-golden-vectors.json": "sha256:f29e0a268fd90480d8cc683692fac671ecd11b3bc33db3fd6ec77afd90ce8965",
+      "docs/rights-provenance-agent-context.md": "sha256:11e6c4f8ee9cc692ce51467b58359b0ca9041457c676afbe1a517a3b1818fa04",
+      "examples/v0.4/implementation-lineage-rights-handoff.json": "sha256:7646be8e2cdb2673edbf048a8fb9164fa0eb722be89ad38248c6adb3e153ab6c",
+      "examples/v0.4/lineage-from-live-compiler-binding-with-implementation-lineage.json": "sha256:df3fbdf5bf5c5282c7d413d3b60ff8dc13214d8408fe39428f4851ff71f6e118",
+      "language/corpora/implementation-lineage-corpus.json": "sha256:96327f4c66d657a4af0ea6ec8f4ae55688cc167928fcf28573802a3f2dc99249",
+      "language/implementation_lineage.mncs": "sha256:e8f51aefa7f59875ad2b311c6784deff2d28e123658ecb36970483d560971749",
+      "language/run_backend_tests.sh": "sha256:bc8a3c7b1c89438e4fbd166167457250a3e691395ded189175ea3a44ae94f7af",
+      "language/tools/gen_implementation_lineage_corpus.py": "sha256:1eac7441ad2a5e142e4bd6672011bc33118718f9f4d8ffd016c96d1fef5fcce9",
+      "schemas/extensions/v0.1/implementation-lineage.schema.json": "sha256:58ac6efd406d67a29e364fa26d60ee72e60b82ba940732b3ef3eab0f71a96251",
+      "src/mncs_rights_provenance/__init__.py": "sha256:0c1bbe14f7372f264de224fc5d19cac5c6508003a9bb019930df29ec71289d76",
+      "src/mncs_rights_provenance/cli.py": "sha256:6dfd69aee8abd4f5889339d646f7c570815b0c02e83ac3edb5bc4a3701e9ad3b",
+      "src/mncs_rights_provenance/implementation_lineage.py": "sha256:485947250f1602d935bece1e4a190ad17bed478051715cde38dcafbc0434dd58",
+      "src/mncs_rights_provenance/lineage.py": "sha256:cbed263426044c3c11f691f16dbdbda7c3b421fb38fa9ccbc254102a04bcb0d3",
+      "src/mncs_rights_provenance/validation.py": "sha256:33ceeb9dd43e2ea9d7eb9790cba06259866767235852ad1edbaa7b5c47c9bd25",
+      "tests/test_agent_contract.py": "sha256:d90be6c5aba8c66ec83d7dbd93145951c929ad019f156fd3b1872d6204ed87ba",
+      "tests/test_implementation_lineage_core.py": "sha256:846f639495193b3f072b1361e07d6f5ff59704470807cf1ed57a47a78e46f860",
+      "tests/test_implementation_lineage_extension.py": "sha256:7f8f343a66d8dc895a9b9e28578380737bc8585e4562c83f6d9e6da6dc7705a9"
+    },
+    "host_mirror": "src/mncs_rights_provenance/implementation_lineage.py",
+    "native_core": "language/implementation_lineage.mncs"
+  },
+  "limits": [
+    "Machine-native representation and implementation-origin classifications retain evidence state and do not prove complete origin, authorship, copyright ownership, or legal independence.",
+    "Unknown rights compatibility remains unresolved and legal_conclusion remains NOT_MADE.",
+    "Only the bounded 18-case implementation-lineage corpus and focused Rights tests were run; the repository-wide and broader Language backend suites were not run."
+  ],
+  "recorded_at": "2026-10-22T05:22:09Z",
+  "repository": "mncs-rights-provenance",
+  "schema_version": "mncs.rights-provenance.implementation-lineage-native-evidence/1",
+  "verification": {
+    "backend_script_syntax": "passed",
+    "git_diff_check": "passed",
+    "host_mirror": {
+      "golden_vectors": 18,
+      "result": "passed"
+    },
+    "native_corpus": {
+      "binary": "/home/epi13/Documents/Projects/mncs-language/target/debug/mncs",
+      "case_count": 18,
+      "corpus": "language/corpora/implementation-lineage-corpus.json",
+      "cross_backend_agreement": "18/18",
+      "portable_wasm": {
+        "failed": 0,
+        "passed": 18,
+        "status": "PASS"
+      },
+      "research_bytecode": {
+        "failed": 0,
+        "passed": 18,
+        "status": "PASS"
+      }
+    },
+    "pytest_command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/debug/mncs PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -o addopts='' -q -p no:cacheprovider tests/test_implementation_lineage_core.py tests/test_implementation_lineage_extension.py tests/test_lineage_v04.py tests/test_artifact_binding.py tests/test_agent_contract.py",
+    "pytest_result": "24 passed"
+  }
+}

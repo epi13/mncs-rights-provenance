@@ -19,6 +19,10 @@ from .authority import (
     authority_claim_from_dict,
 )
 from .canonical import digest_prefixed
+from .implementation_lineage import (
+    EXTENSION_KEY as IMPLEMENTATION_LINEAGE_EXTENSION_KEY,
+    normalize_implementation_lineage,
+)
 from .promotion import (
     VERDICT_FAIL,
     VERDICT_PASS,
@@ -249,6 +253,26 @@ def lineage_record_from_dict(value: Mapping[str, Any]) -> LineageRecord:
                     f"artifact_relationships[{index}].relation is unsupported: "
                     f"{edge.get('relation')!r}"
                 )
+    extensions_value = value.get("extensions")
+    if extensions_value is not None and not isinstance(extensions_value, Mapping):
+        raise TypeError("lineage extensions must be an object")
+    extensions = dict(extensions_value or {})
+    has_implementation_lineage = IMPLEMENTATION_LINEAGE_EXTENSION_KEY in extensions
+    implementation_lineage = extensions.get(IMPLEMENTATION_LINEAGE_EXTENSION_KEY)
+    if has_implementation_lineage:
+        if schema_version != SCHEMA_VERSION:
+            raise ValueError("implementation-lineage extension requires lineage schema v0.4.0")
+        implementation_lineage = normalize_implementation_lineage(implementation_lineage)
+        subject_artifact_refs = subject.get("artifact_refs", [])
+        if not isinstance(subject_artifact_refs, list):
+            subject_artifact_refs = []
+        subject_refs = {
+            item.get("id") for item in subject_artifact_refs
+            if isinstance(item, Mapping)
+        }
+        if implementation_lineage["artifact_ref"] not in subject_refs:
+            raise ValueError("implementation-lineage artifact_ref is not present in lineage subject")
+        extensions[IMPLEMENTATION_LINEAGE_EXTENSION_KEY] = implementation_lineage
     return LineageRecord(
         lineage_id=str(value.get("lineage_id", "")),
         subject=dict(subject),
@@ -286,9 +310,7 @@ def lineage_record_from_dict(value: Mapping[str, Any]) -> LineageRecord:
         if isinstance(value.get("rights_summary"), Mapping)
         else None,
         unresolved=[str(item) for item in value.get("unresolved") or ()],
-        extensions=dict(value["extensions"])
-        if isinstance(value.get("extensions"), Mapping)
-        else {},
+        extensions=extensions,
         content_digest=value.get("content_digest")
         if isinstance(value.get("content_digest"), str)
         else None,
@@ -329,13 +351,16 @@ def lineage_record_from_artifact_binding(
     *,
     lineage_id: str,
     binding_reference: str,
+    implementation_lineage: Mapping[str, Any] | None = None,
 ) -> LineageRecord:
     """Create a v0.4 lineage record that retains one native artifact binding.
 
     The binding itself remains an on-demand referenced record. This bounded
     projection copies only its typed artifact relationships and transformation
     record, preserving their evidence states and binding them to the exact
-    canonical digest of the supplied binding value.
+    canonical digest of the supplied binding value. When supplied, the
+    independently versioned implementation-lineage extension is retained as
+    evidence-labeled detail and remains explicitly non-exhaustive.
     """
     if not isinstance(binding, Mapping):
         raise TypeError("artifact binding must be an object")
@@ -373,6 +398,14 @@ def lineage_record_from_artifact_binding(
         raise ValueError("artifact binding lineage.state is unsupported")
 
     binding_digest = digest_prefixed(dict(binding))
+    extensions: dict[str, Any] = {}
+    if implementation_lineage is not None:
+        extensions[IMPLEMENTATION_LINEAGE_EXTENSION_KEY] = (
+            normalize_implementation_lineage(
+                implementation_lineage,
+                expected_artifact_ref=artifact_identity,
+            )
+        )
     relationships = lineage.get("relationships")
     if not isinstance(relationships, list) or len(relationships) > 128:
         raise ValueError("artifact binding relationships must be a bounded list")
@@ -439,6 +472,7 @@ def lineage_record_from_artifact_binding(
             "binding_digest": binding_digest,
         },
         unresolved=["rights.compatibility"],
+        extensions=extensions,
     )
 
 

@@ -1,0 +1,247 @@
+{
+  "schema_version": "0.1",
+  "name": "rights-implementation-lineage-v1",
+  "source_module": "mncs.rights.implementation_lineage.v01",
+  "cases": [
+    {
+      "case_id": "component:native-new-local-declared",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ]
+      },
+      "output": "Known"
+    },
+    {
+      "case_id": "component:native-migrated-inferred",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          0,
+          1,
+          2,
+          1,
+          0
+        ]
+      },
+      "output": "Known"
+    },
+    {
+      "case_id": "component:host-inherited-external",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          1,
+          2,
+          1,
+          1,
+          0
+        ]
+      },
+      "output": "Known"
+    },
+    {
+      "case_id": "component:generated-inferred",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          0,
+          3,
+          2,
+          1,
+          0
+        ]
+      },
+      "output": "Known"
+    },
+    {
+      "case_id": "component:mixed-representation",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          2,
+          5,
+          0,
+          1,
+          0
+        ]
+      },
+      "output": "Known"
+    },
+    {
+      "case_id": "component:both-classifications-unknown",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          4,
+          5,
+          1,
+          1,
+          0
+        ]
+      },
+      "output": "Unknown"
+    },
+    {
+      "case_id": "component:unavailable-preserves-unknown",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          4,
+          5,
+          5,
+          0,
+          0
+        ]
+      },
+      "output": "Unknown"
+    },
+    {
+      "case_id": "component:unavailable-cannot-claim-classification",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          0,
+          5,
+          5,
+          0,
+          0
+        ]
+      },
+      "output": "Invalid"
+    },
+    {
+      "case_id": "component:unavailable-cannot-carry-evidence",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          4,
+          5,
+          5,
+          1,
+          0
+        ]
+      },
+      "output": "Invalid"
+    },
+    {
+      "case_id": "component:declared-requires-evidence",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      "output": "Invalid"
+    },
+    {
+      "case_id": "component:verified-attestation-has-verifier-reference",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          0,
+          1,
+          3,
+          1,
+          1
+        ]
+      },
+      "output": "Known"
+    },
+    {
+      "case_id": "component:verified-attestation-needs-verifier-reference",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          0,
+          1,
+          3,
+          1,
+          0
+        ]
+      },
+      "output": "Invalid"
+    },
+    {
+      "case_id": "component:unverified-attestation-remains-known-claim",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          1,
+          2,
+          4,
+          1,
+          0
+        ]
+      },
+      "output": "Known"
+    },
+    {
+      "case_id": "component:binary-flags-are-validated",
+      "function": "implementation_component_status",
+      "inputs": {
+        "args": [
+          0,
+          1,
+          1,
+          2,
+          0
+        ]
+      },
+      "output": "Invalid"
+    },
+    {
+      "case_id": "lineage:known-subset-is-partial",
+      "function": "implementation_lineage_status",
+      "inputs": {
+        "args": [
+          1,
+          3
+        ]
+      },
+      "output": "Partial"
+    },
+    {
+      "case_id": "lineage:no-known-components-is-unknown",
+      "function": "implementation_lineage_status",
+      "inputs": {
+        "args": [
+          0,
+          3
+        ]
+      },
+      "output": "Unknown"
+    },
+    {
+      "case_id": "lineage:empty-is-unknown",
+      "function": "implementation_lineage_status",
+      "inputs": {
+        "args": [
+          0,
+          0
+        ]
+      },
+      "output": "Unknown"
+    },
+    {
+      "case_id": "lineage:known-count-cannot-exceed-total",
+      "function": "implementation_lineage_status",
+      "inputs": {
+        "args": [
+          2,
+          1
+        ]
+      },
+      "output": "Invalid"
+    }
+  ]
+}

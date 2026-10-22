@@ -1,0 +1,26 @@
+{
+  "schema_version": "mncs.rights-provenance.implementation-lineage/0.1.0",
+  "artifact_ref": "sha256:8e554bca6e1c00781d1ee15cac2b4644c656e1a7becd13617eb4d46382e7096d",
+  "status": "partial",
+  "coverage": "unverified-subset",
+  "components": [
+    {
+      "component_ref": "mncs-compiler:source-snapshot/sha256:868d4d753a3e1b6194434ea11765440ebbd67cb07ea24280754c751c80d6a55c/file/0",
+      "representation": "machine-native",
+      "origin": "unknown",
+      "evidence_state": "declared",
+      "evidence": [
+        {
+          "reference": "mncs-compiler:source-snapshot/sha256:868d4d753a3e1b6194434ea11765440ebbd67cb07ea24280754c751c80d6a55c/file/0",
+          "sha256": "9fb8d218ab699f314e6e872f94322bb329b9529945f9b3fc69bbf61af281da5a",
+          "state": "declared"
+        },
+        {
+          "reference": "mncs-compiler:source/root/mncs-rights-provenance:examples/rights-handoff.mncs",
+          "state": "declared"
+        }
+      ]
+    }
+  ],
+  "legal_conclusion": "NOT_MADE"
+}

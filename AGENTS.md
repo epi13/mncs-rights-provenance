@@ -25,6 +25,12 @@ defined once in MNCS-language and mirrored in host code, never the reverse:
 - `language/rights_license_actions.mncs` — source/binary redistribution
   trigger classification for indexed license conditions, pinned by its
   bounded cross-backend corpus and host-projection checks.
+- `language/implementation_lineage.mncs` — evidence-aware component and
+  aggregate classification for machine-native, host-language, migrated,
+  inherited-external, generated, mixed, and unknown implementation origins;
+  pinned by `language/corpora/implementation-lineage-corpus.json` and
+  `tests/test_implementation_lineage_core.py`. This core does not determine
+  authorship, ownership, completeness, or legal independence.
 - `language/rights_agent_governance.mncs` — versioned profile guidance
   vocabulary and supported field/value pairs; it grants no legal rights and
   is pinned against the host context mirror by

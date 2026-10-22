@@ -1,0 +1,1020 @@
+{
+  "schema_version": "0.1",
+  "name": "rights-implementation-lineage-v1",
+  "cases": [
+    {
+      "id": "component:native-new-local-declared",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::MachineNative",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::NewLocal",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Declared",
+              "discriminant": 1
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Known",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:native-migrated-inferred",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::MachineNative",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Migrated",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Inferred",
+              "discriminant": 2
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Known",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:host-inherited-external",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::HostLanguage",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::InheritedExternal",
+              "discriminant": 2
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Declared",
+              "discriminant": 1
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Known",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:generated-inferred",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::MachineNative",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Generated",
+              "discriminant": 3
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Inferred",
+              "discriminant": 2
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Known",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:mixed-representation",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::Mixed",
+              "discriminant": 2
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Unknown",
+              "discriminant": 5
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::DirectlyObserved",
+              "discriminant": 0
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Known",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:both-classifications-unknown",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::Unknown",
+              "discriminant": 4
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Unknown",
+              "discriminant": 5
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Declared",
+              "discriminant": 1
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Unknown",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:unavailable-preserves-unknown",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::Unknown",
+              "discriminant": 4
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Unknown",
+              "discriminant": 5
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Unavailable",
+              "discriminant": 5
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Unknown",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:unavailable-cannot-claim-classification",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::MachineNative",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Unknown",
+              "discriminant": 5
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Unavailable",
+              "discriminant": 5
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Invalid",
+            "discriminant": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:unavailable-cannot-carry-evidence",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::Unknown",
+              "discriminant": 4
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Unknown",
+              "discriminant": 5
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Unavailable",
+              "discriminant": 5
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Invalid",
+            "discriminant": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:declared-requires-evidence",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::MachineNative",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Migrated",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Declared",
+              "discriminant": 1
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Invalid",
+            "discriminant": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:verified-attestation-has-verifier-reference",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::MachineNative",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Migrated",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::VerifiedAttestation",
+              "discriminant": 3
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Known",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:verified-attestation-needs-verifier-reference",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::MachineNative",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Migrated",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::VerifiedAttestation",
+              "discriminant": 3
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Invalid",
+            "discriminant": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:unverified-attestation-remains-known-claim",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::HostLanguage",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::InheritedExternal",
+              "discriminant": 2
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::UnverifiedAttestation",
+              "discriminant": 4
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Known",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "component:binary-flags-are-validated",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_component_status"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Representation",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Representation::MachineNative",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::Origin",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::Origin::Migrated",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::EvidenceState",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::EvidenceState::Declared",
+              "discriminant": 1
+            }
+          },
+          {
+            "integer": {
+              "value": 2,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::ClassificationStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::ClassificationStatus::Invalid",
+            "discriminant": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "lineage:known-subset-is-partial",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_lineage_status"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 3,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::LineageStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::LineageStatus::Partial",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "lineage:no-known-components-is-unknown",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_lineage_status"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 3,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::LineageStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::LineageStatus::Unknown",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lineage:empty-is-unknown",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_lineage_status"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::LineageStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::LineageStatus::Unknown",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lineage:known-count-cannot-exceed-total",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.implementation_lineage.v01",
+          "function": "implementation_lineage_status"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 2,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.implementation_lineage.v01::LineageStatus",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.implementation_lineage.v01::LineageStatus::Invalid",
+            "discriminant": 2
+          }
+        }
+      ]
+    }
+  ]
+}

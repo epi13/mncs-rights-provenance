@@ -55,6 +55,7 @@ from .validation import (
 MAX_FORGE_BINDING_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_COMPILER_BINDING_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_ARTIFACT_BINDING_DIAGNOSTIC_BYTES = 2 * 1024 * 1024
+MAX_IMPLEMENTATION_LINEAGE_BYTES = 256 * 1024
 
 
 def _emit(value: Any, *, human: bool = False) -> None:
@@ -431,10 +432,17 @@ def cmd_lineage_verify(args: argparse.Namespace) -> int:
 def cmd_lineage_from_artifact_binding(args: argparse.Namespace) -> int:
     try:
         binding = json.loads(Path(args.binding).read_text(encoding="utf-8"))
+        implementation_lineage = None
+        if args.implementation_lineage:
+            raw_extension = Path(args.implementation_lineage).read_bytes()
+            if len(raw_extension) > MAX_IMPLEMENTATION_LINEAGE_BYTES:
+                raise ValueError("implementation-lineage extension exceeds the 256 KiB bound")
+            implementation_lineage = json.loads(raw_extension.decode("utf-8"))
         record = lineage_record_from_artifact_binding(
             binding,
             lineage_id=args.lineage_id,
             binding_reference=args.reference,
+            implementation_lineage=implementation_lineage,
         )
         seal_lineage_record(record)
         document = record.to_dict()
@@ -693,6 +701,10 @@ def build_parser() -> argparse.ArgumentParser:
     lineage_from_binding.add_argument("--lineage-id", required=True)
     lineage_from_binding.add_argument(
         "--reference", required=True, help="stable reference for the input artifact binding"
+    )
+    lineage_from_binding.add_argument(
+        "--implementation-lineage",
+        help="optional versioned implementation-lineage extension JSON (at most 256 KiB)",
     )
     lineage_from_binding.set_defaults(func=cmd_lineage_from_artifact_binding)
 

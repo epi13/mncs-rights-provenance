@@ -122,6 +122,24 @@ collection, retains declaration/evidence states, leaves compatibility
 unknown, and never claims complete lineage: that requires an authoritative
 completeness attestation contract. Its tests exercise multi-input builds,
 agent-generated origin claims, unresolved rights, and missing verification.
+
+For source migrations and mixed native/host builds, a v0.4 lineage record may
+carry the independently versioned
+`mncs.rights-provenance.implementation-lineage/0.1.0` extension under
+`extensions["mncs-rights:implementation-lineage"]`. Its component records
+separate representation (`machine-native`, `host-language`, or unknown) from
+origin (`new-local`, `migrated`, `inherited-external`, `generated`, mixed, or
+unknown), and preserve evidence state plus bounded evidence references. Its
+status is `partial` when an evidence-backed classification is present and
+`unknown` otherwise. The extension is bound by the containing lineage digest and can be supplied to
+`lineage_record_from_artifact_binding` or the CLI's `--implementation-lineage`
+input. The coverage marker is always `unverified-subset`; an empty or unknown
+list remains unknown, and unavailable evidence cannot carry a known
+classification. A declared migration or generation classification does not
+verify independent origin, authorship, ownership, or legal rights.
+The schema is
+`schemas/extensions/v0.1/implementation-lineage.schema.json`.
+
 `build_forge_provider_artifact_binding` adapts Forge's
 `mncs.provider-build-receipt/1` into that binding after checking the receipt's
 core identity. Forge remains the receipt authority. Because the receipt is not
@@ -233,3 +251,20 @@ no projection bytes were written. Control does not expose the `projections`
 operation through its operation contract. Repairing that requires the active
 Environment integration or an explicitly authorized provider scope, so this
 campaign left its Environment and Doctor worktrees untouched.
+
+The v0.4 implementation-lineage extension adds a bounded, versioned view of
+which components are machine-native, host-language, migrated, inherited from
+external sources, generated, or unknown. It is separate from copyright and
+ownership claims. `coverage: unverified-subset` and `legal_conclusion:
+NOT_MADE` are fixed by its schema and validator. The extension is digest-bound
+inside a v0.4 lineage record and can be attached to a Compiler artifact binding
+with `mncs-rp lineage from-artifact-binding --implementation-lineage FILE`.
+The status rules live in `language/implementation_lineage.mncs`, execute
+against the bounded corpus on research-bytecode and portable-wasm, and are
+mirrored by the host normalizer.
+The worked example
+`examples/v0.4/lineage-from-live-compiler-binding-with-implementation-lineage.json`
+uses the recorded Compiler build binding: it labels the source representation
+machine-native while leaving its implementation origin unknown and its
+evidence declared. That classification records what the existing build
+evidence supports without asserting a complete history or independent origin.

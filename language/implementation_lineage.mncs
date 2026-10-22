@@ -1,0 +1,108 @@
+mncs 0.18;
+
+// MNCS Rights & Provenance - normative implementation-lineage status core.
+//
+// This is a bounded classifier for implementation representation and origin
+// evidence. It does not establish authorship, copyright ownership, legal
+// independence, license compatibility, or completeness. The host validator
+// resolves evidence references, then mirrors these classification decisions.
+
+module mncs.rights.implementation_lineage.v01;
+
+enum Representation { MachineNative, HostLanguage, Mixed, Other, Unknown }
+enum Origin { NewLocal, Migrated, InheritedExternal, Generated, Mixed, Unknown }
+enum EvidenceState { DirectlyObserved, Declared, Inferred, VerifiedAttestation, UnverifiedAttestation, Unavailable }
+enum ClassificationStatus { Known, Unknown, Invalid }
+enum LineageStatus { Partial, Unknown, Invalid }
+
+// Discriminants are pinned by implementation-lineage-corpus.json:
+// Representation: MachineNative 0, HostLanguage 1, Mixed 2, Other 3, Unknown 4.
+// Origin: NewLocal 0, Migrated 1, InheritedExternal 2, Generated 3,
+// Mixed 4, Unknown 5.
+// EvidenceState: DirectlyObserved 0, Declared 1, Inferred 2,
+// VerifiedAttestation 3, UnverifiedAttestation 4, Unavailable 5.
+// has_evidence and has_verified_verifier are host-resolved 0/1 inputs. A
+// verifier reference is not itself proof of the verifier's authority.
+fn implementation_component_status(
+    representation: Representation,
+    origin: Origin,
+    evidence_state: EvidenceState,
+    has_evidence: u64,
+    has_verified_verifier: u64
+) -> (result: ClassificationStatus) {
+    if has_evidence > 1 || has_verified_verifier > 1 {
+        return ClassificationStatus.Invalid;
+    }
+    return match evidence_state {
+        EvidenceState.DirectlyObserved => evidence_backed_status(representation, origin, has_evidence),
+        EvidenceState.Declared => evidence_backed_status(representation, origin, has_evidence),
+        EvidenceState.Inferred => evidence_backed_status(representation, origin, has_evidence),
+        EvidenceState.VerifiedAttestation => verified_attestation_status(representation, origin, has_evidence, has_verified_verifier),
+        EvidenceState.UnverifiedAttestation => evidence_backed_status(representation, origin, has_evidence),
+        EvidenceState.Unavailable => unavailable_status(representation, origin, has_evidence),
+    };
+}
+
+fn evidence_backed_status(representation: Representation, origin: Origin, has_evidence: u64) -> (result: ClassificationStatus) {
+    if has_evidence == 0 {
+        return ClassificationStatus.Invalid;
+    }
+    return classification_status(representation, origin);
+}
+
+fn verified_attestation_status(representation: Representation, origin: Origin, has_evidence: u64, has_verified_verifier: u64) -> (result: ClassificationStatus) {
+    if has_evidence == 0 || has_verified_verifier == 0 {
+        return ClassificationStatus.Invalid;
+    }
+    return classification_status(representation, origin);
+}
+
+fn unavailable_status(representation: Representation, origin: Origin, has_evidence: u64) -> (result: ClassificationStatus) {
+    if has_evidence != 0 {
+        return ClassificationStatus.Invalid;
+    }
+    return match representation {
+        Representation.MachineNative => ClassificationStatus.Invalid,
+        Representation.HostLanguage => ClassificationStatus.Invalid,
+        Representation.Mixed => ClassificationStatus.Invalid,
+        Representation.Other => ClassificationStatus.Invalid,
+        Representation.Unknown => match origin {
+            Origin.NewLocal => ClassificationStatus.Invalid,
+            Origin.Migrated => ClassificationStatus.Invalid,
+            Origin.InheritedExternal => ClassificationStatus.Invalid,
+            Origin.Generated => ClassificationStatus.Invalid,
+            Origin.Mixed => ClassificationStatus.Invalid,
+            Origin.Unknown => ClassificationStatus.Unknown,
+        },
+    };
+}
+
+fn classification_status(representation: Representation, origin: Origin) -> (result: ClassificationStatus) {
+    return match representation {
+        Representation.MachineNative => ClassificationStatus.Known,
+        Representation.HostLanguage => ClassificationStatus.Known,
+        Representation.Mixed => ClassificationStatus.Known,
+        Representation.Other => ClassificationStatus.Known,
+        Representation.Unknown => match origin {
+            Origin.NewLocal => ClassificationStatus.Known,
+            Origin.Migrated => ClassificationStatus.Known,
+            Origin.InheritedExternal => ClassificationStatus.Known,
+            Origin.Generated => ClassificationStatus.Known,
+            Origin.Mixed => ClassificationStatus.Known,
+            Origin.Unknown => ClassificationStatus.Unknown,
+        },
+    };
+}
+
+// `Partial` means at least one listed component has a supported classification.
+// It never means that the listed subset is complete. Empty and all-unknown
+// inputs remain Unknown; impossible counts are Invalid.
+fn implementation_lineage_status(known_components: u64, total_components: u64) -> (result: LineageStatus) {
+    if known_components > total_components {
+        return LineageStatus.Invalid;
+    }
+    if known_components == 0 {
+        return LineageStatus.Unknown;
+    }
+    return LineageStatus.Partial;
+}

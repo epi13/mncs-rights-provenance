@@ -41,6 +41,13 @@ from .evidence import (
 )
 from .forge_adapter import build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
+from .implementation_lineage import (
+    EXTENSION_KEY as IMPLEMENTATION_LINEAGE_EXTENSION_KEY,
+    SCHEMA_VERSION as IMPLEMENTATION_LINEAGE_SCHEMA_VERSION,
+    implementation_component_status,
+    implementation_lineage_status,
+    normalize_implementation_lineage,
+)
 from .license_resolution import license_resolver_identity, resolve_license_expression
 from .lineage import (
     ARTIFACT_EVIDENCE_STATES,
@@ -119,6 +126,10 @@ __all__ = [
     "GraphEdge",
     "GraphNode",
     "LineageRecord",
+    "IMPLEMENTATION_LINEAGE_EXTENSION_KEY",
+    "IMPLEMENTATION_LINEAGE_SCHEMA_VERSION",
+    "implementation_component_status",
+    "implementation_lineage_status",
     "Manifest",
     "Participant",
     "PolicyOutcome",
@@ -153,6 +164,7 @@ __all__ = [
     "manifest_to_dict",
     "migrate_lineage_record_03_to_04",
     "migrate_manifest_02_to_03",
+    "normalize_implementation_lineage",
     "parse_spdx_expression",
     "profile_from_dict",
     "promotion_combined",

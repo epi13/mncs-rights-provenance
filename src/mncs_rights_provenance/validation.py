@@ -13,6 +13,10 @@ from collections.abc import Mapping
 from typing import Any
 
 from .model import ARTIFACT_CLASSES
+from .implementation_lineage import (
+    EXTENSION_KEY as IMPLEMENTATION_LINEAGE_EXTENSION_KEY,
+    normalize_implementation_lineage,
+)
 
 SCHEMA_VERSION = "0.2.0"
 LINEAGE_SCHEMA_VERSION = "0.4.0"
@@ -693,6 +697,13 @@ def validate_lineage_structure(document: Mapping[str, Any]) -> list[str]:
     }
     if not is_v04 and any(field in document for field in v04_fields):
         issues.append("v0.3 lineage records cannot contain v0.4 artifact fields")
+    extension_value = document.get("extensions")
+    if (
+        not is_v04
+        and isinstance(extension_value, Mapping)
+        and IMPLEMENTATION_LINEAGE_EXTENSION_KEY in extension_value
+    ):
+        issues.append("implementation-lineage extension requires lineage schema v0.4.0")
     if not isinstance(document.get("lineage_id"), str) or not document["lineage_id"]:
         issues.append("lineage_id must be a non-empty string")
     subject = document.get("subject")
@@ -765,6 +776,25 @@ def validate_lineage_structure(document: Mapping[str, Any]) -> list[str]:
         if not isinstance(entry.get("gap_ref"), str) or not entry["gap_ref"]:
             issues.append(f"capability_gap_links[{index}].gap_ref must be non-empty")
     if is_v04:
+        extensions = document.get("extensions")
+        if extensions is not None and not isinstance(extensions, Mapping):
+            issues.append("extensions must be an object")
+        elif isinstance(extensions, Mapping) and IMPLEMENTATION_LINEAGE_EXTENSION_KEY in extensions:
+            try:
+                implementation_lineage = normalize_implementation_lineage(
+                    extensions[IMPLEMENTATION_LINEAGE_EXTENSION_KEY]
+                )
+                subject_value = document.get("subject")
+                refs = subject_value.get("artifact_refs", []) if isinstance(subject_value, Mapping) else []
+                subject_refs = {
+                    item.get("id") for item in refs if isinstance(item, Mapping)
+                } if isinstance(refs, list) else set()
+                if implementation_lineage["artifact_ref"] not in subject_refs:
+                    issues.append(
+                        "implementation-lineage artifact_ref is not present in lineage subject"
+                    )
+            except (TypeError, ValueError) as error:
+                issues.append(f"implementation-lineage extension is invalid: {error}")
         artifact_state = document.get("artifact_lineage_state")
         if artifact_state is not None:
             if not isinstance(artifact_state, Mapping):
