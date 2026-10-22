@@ -14,6 +14,7 @@ import pytest
 from mncs_rights_provenance.policy import evaluate_policy
 from mncs_rights_provenance.policy_input import (
     _classify_source_license_status,
+    count_license_contradictions,
     policy_input_from_manifest,
 )
 
@@ -138,3 +139,62 @@ def test_verified_statuses_have_distinct_policy_classifications() -> None:
     assert _classify_source_license_status(
         "not-applicable", evidence_verified=True
     ) == "verified-not-applicable"
+
+
+def test_conflicting_statuses_require_review_without_claiming_incompatibility() -> None:
+    rights = {"sources": [
+        {
+            "reference": "external:package/1",
+            "license_status": "compatible",
+            "license": "MIT",
+        },
+        {
+            "reference": "external:package/1",
+            "license_status": "incompatible",
+            "license": "MIT",
+        },
+        {
+            "reference": "external:package/1",
+            "license_status": "unknown",
+        },
+    ]}
+    document = {
+        "provenance": {"origin_classification": "origin-uncertain"},
+        "rights": rights,
+        "review": {},
+    }
+
+    assert count_license_contradictions(rights) == 1
+    normalized = policy_input_from_manifest(document)
+    assert normalized.incompatible_source_count == 0
+    assert normalized.unknown_source_count == 3
+    assert normalized.contradiction_count == 1
+
+    outcome = evaluate_policy(normalized)
+    by_gate = {item.gate: item.severity for item in outcome.gate_results}
+    assert by_gate["no_incompatible_third_party_license"] == 0
+    assert by_gate["no_contradictory_license_evidence"] == 2
+    assert by_gate["unknown_source_license"] == 2
+    assert outcome.outcome != "blocked"
+
+
+def test_unknown_status_does_not_contradict_a_single_determinate_status() -> None:
+    assert count_license_contradictions({"sources": [
+        {"reference": "external:package/1", "license_status": "compatible"},
+        {"reference": "external:package/1", "license_status": "unknown"},
+    ]}) == 0
+
+
+def test_different_license_expressions_for_one_source_are_still_reviewed() -> None:
+    assert count_license_contradictions({"sources": [
+        {
+            "reference": "external:package/1",
+            "license_status": "unknown",
+            "license": "MIT",
+        },
+        {
+            "reference": "external:package/1",
+            "license_status": "unknown",
+            "license": "BSD-3-Clause",
+        },
+    ]}) == 1
