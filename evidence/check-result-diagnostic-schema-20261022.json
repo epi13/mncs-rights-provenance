@@ -1,0 +1,47 @@
+{
+  "schema_version": "mncs.rights-provenance.check-result-diagnostic-schema-evidence/1",
+  "identity": "ev_rights_check_result_diagnostic_schema_20261022",
+  "recorded_at": "2026-10-22T07:40:21Z",
+  "campaign_identity": "cmp_ff3f91cb1a6badbf",
+  "environment_session_id": "ses_dff1822e90820cf4",
+  "implementation": {
+    "repository": "mncs-rights-provenance",
+    "feature_branch": "campaign/luna-max-rights-diagnostic-schema-20261022",
+    "feature_commit": "a1c3e10aebff72f2220cfed521de92130b1d02e0",
+    "integrated_branch": "main",
+    "integrated_head": "a1c3e10aebff72f2220cfed521de92130b1d02e0",
+    "schema": "schemas/v0.1/check-result-rights-diagnostics.schema.json",
+    "schema_revision": 11,
+    "source_schema": "schemas/v0.1/policy-diagnostic.schema.json"
+  },
+  "contract": {
+    "check_result_schema": "mncs.check-result/1",
+    "diagnostic_schema": "mncs.rights.policy-diagnostic/1",
+    "maximum_diagnostics": 8,
+    "validation": "The extension schema references the existing versioned policy-diagnostic schema; tests validate source-license status and declaration-conflict records and reject an over-limit array."
+  },
+  "verification": {
+    "focused_command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python -m pytest -q tests/test_check_projection.py tests/test_policy_diagnostics.py tests/test_agent_contract.py",
+    "focused_result": "passed",
+    "ruff": "passed for changed test module",
+    "schema_json": "parsed successfully",
+    "project_manifest_json": "parsed successfully",
+    "git_diff_check": "passed",
+    "environment_capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "environment_binding": "cap_70235fcf6a421964",
+    "environment_result": "ok",
+    "environment_returncode": 0
+  },
+  "coordination": {
+    "feature_worktree": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-diagnostic-schema-20261022",
+    "feature_worktree_claim": "claim:mncs-rights-provenance:worktree:e3d58f94aefa",
+    "main_worktree_claim": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "peer_worktree_claim": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "peer_worktree_modified": false,
+    "scope_conflict": false
+  },
+  "limits": {
+    "mncs_actions_adapter": "The separate adapters/rights_adapter.py was not changed; it does not emit the extension. The Rights repository CI path uses scripts/rp_to_check.py, and downstream preservation through all check transformations remains unverified.",
+    "cross_repository_integration": "No Validator, Doctor, Environment, Compiler, or Forge repository was modified by this slice."
+  }
+}
