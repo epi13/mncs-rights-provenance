@@ -1,0 +1,100 @@
+{
+  "schema_version": "mncs.rights-provenance.context-transport-implementation-probe/1",
+  "identity": "ev_rights_context_control_compact_probe_20261022",
+  "observed_at": "2026-10-22T02:57:31Z",
+  "purpose": "Compare the same persisted Rights context through the connected Environment MCP and the current local Control adapter presentation path.",
+  "session": {
+    "session_id": "ses_dff1822e90820cf4",
+    "lifecycle": "active",
+    "canonical_cli_context": {
+      "command": "mncs-env context ses_dff1822e90820cf4",
+      "rights_context_present": true,
+      "rights_context_identity": "sha256:b2fab9bcafc6c3940bc35c9f6620e75cfc12195fb842204cb491c3641491239c",
+      "rights_context_status": "review"
+    },
+    "connected_mcp_context": {
+      "operation": "context",
+      "project": "mncs-rights-provenance",
+      "cwd": ".",
+      "session_id": "ses_dff1822e90820cf4",
+      "rights_context_present": false,
+      "returned_keys": [
+        "schema_version",
+        "session_id",
+        "lifecycle",
+        "environment_id",
+        "work_intent",
+        "workspace_root",
+        "persistence",
+        "toolchain",
+        "writable_repositories",
+        "protected_repositories",
+        "authority",
+        "readiness",
+        "doctor",
+        "projects",
+        "capabilities"
+      ]
+    }
+  },
+  "local_control_adapter": {
+    "repository": "mncs-control-mcp",
+    "branch": "main",
+    "revision": "613ac6151142bda0be64cf75618c8ef68c3109c1",
+    "focused_test": {
+      "command": "python3 -m pytest -q tests/test_local_environment_mcp.py::test_compact_context_preserves_the_environment_rights_projection",
+      "result": "passed",
+      "passed": 1
+    },
+    "same_session_presentation_probe": {
+      "method": "LocalEnvironmentMCP._present('context', rpc_response_with_canonical_cli_stdout)",
+      "rights_context_present": true,
+      "rights_context_identity": "sha256:b2fab9bcafc6c3940bc35c9f6620e75cfc12195fb842204cb491c3641491239c",
+      "rights_context_status": "review",
+      "returned_keys": [
+        "authority",
+        "capabilities",
+        "doctor",
+        "environment_id",
+        "lifecycle",
+        "persistence",
+        "projects",
+        "protected_repositories",
+        "readiness",
+        "rights_context",
+        "schema_version",
+        "session_id",
+        "toolchain",
+        "work_intent",
+        "workspace_root",
+        "writable_repositories"
+      ]
+    }
+  },
+  "assessment": {
+    "confirmed": "The current local Control adapter presentation path preserves the exact canonical Rights context for this session, while the connected MCP result omits it.",
+    "loss_boundary": "The loss is outside the tested local adapter presentation path or the live tool is using a different runtime/input path. The connected service's loaded source revision and pre-compaction payload are not exposed, so the precise live component remains undetermined.",
+    "legal_conclusion": "NOT_MADE"
+  },
+  "coordination": {
+    "rights_scope_claim": {
+      "claim_id": "claim:mncs-rights-provenance:paths:d211fe0305d6",
+      "session_id": "ses_973d1b67eb66857e",
+      "branch": "campaign/luna-max-rights-mcp-control-compact-probe-20261022",
+      "paths": ["evidence/rights-context-control-compact-probe-20261022.json"],
+      "status_at_observation": "held"
+    },
+    "active_environment_worktree_left_untouched": {
+      "session_id": "ses_f13d176c86a23e69",
+      "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+      "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+      "head": "9f68b0f3efd14288ebcbf6de8371cc2bf69e47cc"
+    },
+    "control_source_files_modified": false
+  },
+  "limits": [
+    "The focused Control test and same-session local adapter probe validate local source behavior, not the connected service deployment.",
+    "No claim is made about which component or runtime revision dropped the field.",
+    "The Rights context remains review-only and establishes no ownership, compatibility, or legal compliance conclusion."
+  ]
+}
