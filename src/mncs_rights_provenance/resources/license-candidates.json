@@ -46,6 +46,31 @@
         "trademark-scope",
         "warranty-liability-and-jurisdiction"
       ]
+    },
+    {
+      "identifier": "LicenseRef-MNCS-Permissive-0.3",
+      "version": "0.3",
+      "status": "draft-for-legal-review",
+      "adoption_status": "not-adopted",
+      "effective_grant": false,
+      "retroactive_application": false,
+      "adoption_authority": null,
+      "text_ref": "legal-candidates/MNCS-Permissive-0.3.md",
+      "declared_rights_prove_authority": false,
+      "legal_review_decisions": [
+        "copyright-grant-scope-and-covered-work-definition",
+        "source-and-other-form-notice-obligations",
+        "patent-licensed-acts-and-grant-attributes",
+        "patent-grantor-scope-and-authority",
+        "patent-claim-scope-and-contributor-authority",
+        "patent-combination-boundary-and-timing",
+        "patent-breach-termination",
+        "patent-litigation-response",
+        "third-party-rights-and-license-boundaries",
+        "machine-generated-authorship-and-ownership",
+        "trademark-scope",
+        "warranty-liability-and-jurisdiction"
+      ]
     }
   ]
 }

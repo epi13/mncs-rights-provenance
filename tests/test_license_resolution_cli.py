@@ -31,6 +31,7 @@ def test_license_resolution_cli_outputs_schema_for_known_and_compound_terms(caps
         "GPL-2.0-only WITH Classpath-exception-2.0",
         "LicenseRef-External",
         "LicenseRef-MNCS-Permissive-0.1",
+        "LicenseRef-MNCS-Permissive-0.3",
     ):
         result = _resolve(expression, capsys)
         assert list(validator.iter_errors(result)) == []

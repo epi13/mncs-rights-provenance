@@ -663,6 +663,50 @@ def test_license_candidate_v02_remains_non_effective_and_points_to_draft() -> No
     }]
 
 
+def test_license_candidate_v03_names_initial_licensor_without_claiming_authority() -> None:
+    registry = json.loads(
+        (ROOT / "src/mncs_rights_provenance/resources/license-candidates.json").read_text()
+    )
+    candidate = next(
+        item for item in registry["candidates"]
+        if item["identifier"] == "LicenseRef-MNCS-Permissive-0.3"
+    )
+    draft = (ROOT / candidate["text_ref"]).read_text()
+
+    assert candidate["version"] == "0.3"
+    assert candidate["status"] == "draft-for-legal-review"
+    assert candidate["adoption_status"] == "not-adopted"
+    assert candidate["effective_grant"] is False
+    assert candidate["retroactive_application"] is False
+    assert candidate["declared_rights_prove_authority"] is False
+    assert "patent-grantor-scope-and-authority" in candidate["legal_review_decisions"]
+    assert "“Contributor” means the Licensor" in draft
+    assert "claims that the Contributor may license" in draft
+    assert "Each grant extends only to rights its grantor is authorized to grant." in draft
+    assert "no patent-litigation retaliation term" in draft
+
+    result = resolve_license_expression(candidate["identifier"])
+    leaf = result["expression_tree"]
+    assert result["status"] == "partial"
+    assert result["compatibility"]["status"] == "unknown"
+    assert leaf["status"] == "candidate-unapproved"
+    assert leaf["candidate_version"] == "0.3"
+    assert leaf["effective_grant"] is False
+    assert leaf["declared_rights_prove_authority"] is False
+    assert "permissions" not in leaf
+
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = candidate["identifier"]
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    assert context["rights"]["compatibility"]["status"] == "unknown"
+    assert context["rights"]["license_terms"]["candidate_review_details"][0][
+        "decisions_ref"
+    ].endswith("#/candidates/2/legal_review_decisions")
+    assert "license-candidate-not-effective" in {
+        item["code"] for item in context["diagnostics"]
+    }
+
+
 def test_candidate_license_reference_never_becomes_an_effective_term_summary() -> None:
     identifier = "LicenseRef-MNCS-Permissive-0.1"
     result = resolve_license_expression(identifier)

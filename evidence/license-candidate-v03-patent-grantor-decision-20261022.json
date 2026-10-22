@@ -1,0 +1,62 @@
+{
+  "schema_version": "mncs.rights-provenance.license-candidate-patent-grantor-decision/1",
+  "identity": "ev_rights_candidate_v03_patent_grantor_20261022",
+  "observed_at": "2026-10-22T03:13:44Z",
+  "candidate": {
+    "identifier": "LicenseRef-MNCS-Permissive-0.3",
+    "version": "0.3",
+    "status": "draft-for-legal-review",
+    "adoption_status": "not-adopted",
+    "effective_grant": false,
+    "retroactive_application": false,
+    "text_ref": "legal-candidates/MNCS-Permissive-0.3.md"
+  },
+  "source_digests": {
+    "candidate_text_sha256": "284a63b57fd05badac131fed3f31ff30c1f8accc7e0d0bbb740d8df143f09e92",
+    "candidate_registry_sha256": "db52a40960697b6bf45442320d7cee7fb242ec74243017019f1ff65214d4115c"
+  },
+  "prior_finding": {
+    "identity": "ev_rights_candidate_patent_grantor_coverage_20261022",
+    "path": "evidence/license-candidate-patent-grantor-coverage-20261022.json",
+    "finding": "Candidate 0.2 did not include an initial Licensor in its contribution-based Contributor definition."
+  },
+  "draft_position": {
+    "identifier": "patent-grantor-scope-and-authority",
+    "position": "Candidate 0.3 defines Contributor to include the Licensor, making the initial licensor an explicit intended patent grantor in the draft.",
+    "authority_limit": "The patent grant reaches only claims the Contributor may license; the text does not establish that any grantor owns or controls such rights.",
+    "patent_litigation_response": "No patent-litigation retaliation term is included in this candidate.",
+    "review_status": "unresolved-for-legal-review",
+    "legal_conclusion": "NOT_MADE"
+  },
+  "primary_source_observations": [
+    {
+      "identifier": "BSD-2-Clause-Patent",
+      "authority": "SPDX License List",
+      "url": "https://spdx.org/licenses/BSD-2-Clause-Patent.html",
+      "observation": "The patent grant names copyright holders and contributors, lists licensed acts, and limits scope to claims necessarily infringed by a contribution alone or a qualifying combination."
+    },
+    {
+      "identifier": "Apache-2.0",
+      "authority": "Apache Software Foundation",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+      "observation": "Contributor includes the Licensor; its patent grant is limited to licensable claims necessarily infringed by a contribution alone or the submitted work combination, and includes a patent-litigation termination provision."
+    },
+    {
+      "identifier": "MIT",
+      "authority": "Open Source Initiative",
+      "url": "https://opensource.org/license/mit",
+      "observation": "The text provides broad copyright permission, notice preservation, and warranty/liability language, without an express patent grant in the text."
+    }
+  ],
+  "verification": {
+    "command": "python3 -m pytest -q tests/test_agent_context_projection.py tests/test_license_resolution_cli.py",
+    "result": "47 passed",
+    "scope": "Candidate registry validation, candidate status projection, unapproved-license handling, context diagnostics, and CLI schema output."
+  },
+  "limits": [
+    "This is a bounded textual comparison and draft-position record, not legal advice or a legal conclusion.",
+    "The candidate remains unapproved, unadopted, and non-effective; no current repository license or contribution is changed.",
+    "A grantor declaration does not establish authority to license a patent claim.",
+    "Legal review must assess the Licensor definition, patent scope, breach consequence, and no-retaliation choice."
+  ]
+}
