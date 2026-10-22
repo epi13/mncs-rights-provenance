@@ -2,9 +2,10 @@
 # End-to-end MNCS Rights & Provenance demonstration.
 #
 # Fabric executes a real bounded job -> emits process evidence -> Forge scans
-# license declarations -> the rights manifest binds both evidence records into
-# one provenance graph -> the independent Rust validator evaluates release
-# policy -> Commons retains the finding -> SPDX is exported.
+# license declarations -> Rights verifies the Forge digest without interpreting
+# external claims -> the rights manifest binds both evidence records into one
+# provenance graph -> the independent Rust validator evaluates release policy
+# -> Commons retains the finding -> SPDX is exported.
 #
 # Each stage uses the real subsystem CLIs/APIs. Missing optional components are
 # skipped with an explicit marker rather than faked. Set KEEP_WORK=1 to inspect.
@@ -13,6 +14,7 @@ set -uo pipefail
 DEMO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 RP_SRC="$(cd "$DEMO_ROOT/../../src" && pwd)"
 PROJECTS_DIR="$(cd "$DEMO_ROOT/../../.." && pwd)"
+FORGE_SRC="${MNCS_FORGE_SRC:-$PROJECTS_DIR/mncs-forge/src}"
 
 WORK="$(mktemp -d /tmp/mncs-rp-e2e.XXXXXX)"
 cleanup() { [ "${KEEP_WORK:-0}" = "1" ] && echo "kept: $WORK" || rm -rf "$WORK"; }
@@ -118,7 +120,50 @@ PY
 mkdir -p "$WORK/project/src"
 printf '[project]\nname = "e2e-demo"\nversion = "0.1.0"\nlicense = "Apache-2.0"\n' > "$WORK/project/pyproject.toml"
 { printf 'Apache License\nVersion 2.0, January 2004\n'; } > "$WORK/project/LICENSE"
-python3 "$WORK/forge_scan.py" "$WORK"
+if [ -d "$FORGE_SRC/mncs_forge" ]; then
+  if ! PYTHONPATH="$FORGE_SRC${PYTHONPATH:+:$PYTHONPATH}" \
+      python3 "$WORK/forge_scan.py" "$WORK"; then
+    note "!! Forge license scan failed"
+    exit 1
+  fi
+else
+  if ! python3 "$WORK/forge_scan.py" "$WORK"; then
+    note "!! Forge license scan failed"
+    exit 1
+  fi
+fi
+
+# ------------------------------------------------------- Rights evidence ----
+FORGE_EVIDENCE="$WORK/evidence/forge-license-evidence.json"
+if [ -s "$FORGE_EVIDENCE" ]; then
+  if ! PYTHONPATH="$RP_SRC" python3 -m mncs_rights_provenance.cli evidence verify \
+      "$FORGE_EVIDENCE" > "$WORK/evidence/rights-evidence-verification.json"; then
+    note "!! Rights rejected the Forge evidence digest"
+    exit 1
+  fi
+  if ! python3 - "$WORK/evidence/rights-evidence-verification.json" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as stream:
+    report = json.load(stream)
+assert report.get("content_digest_matches") is True
+assert report.get("record_schema_version") == "0.3.0"
+assert report.get("declared_producer") == "mncs-forge"
+assert report.get("declared_producer_record_kind") == "LicenseEvidence"
+assert report.get("record_interpretation") == "uninterpreted-external-record"
+assert report.get("verification_scope") == "canonical-content-digest-only"
+assert report.get("legal_conclusion") == "NOT_MADE"
+assert "claims" not in report
+PY
+  then
+    note "!! Rights returned an unexpected Forge evidence verification result"
+    exit 1
+  fi
+  note "== 3b. Rights verified the Forge evidence digest without interpreting external claims"
+else
+  note "!! Rights evidence verification skipped because Forge evidence is unavailable"
+fi
 
 # ------------------------------------------------------- Rights manifest ----
 PYTHONPATH="$RP_SRC" python3 "$DEMO_ROOT/build_manifest.py" "$WORK" \

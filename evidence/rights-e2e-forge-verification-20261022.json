@@ -1,0 +1,621 @@
+{
+  "coordination": {
+    "branch": "campaign/luna-max-rp-e2e-forge-verify-20261022",
+    "campaign": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "claim_id": "claim:mncs-rights-provenance:paths:a3267d3cc94f",
+    "peer_artifact_handoff_worktree": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-artifact-handoff-20261021",
+    "peer_worktree_modified": false,
+    "session": "ses_973d1b67eb66857e"
+  },
+  "execution": {
+    "bounded_fabric_job_timeout_seconds": 10,
+    "captured_output": [
+      "== 1. Fabric executed a real bounded job",
+      "== 2. Fabric rights/provenance evidence emitted",
+      "== 3. Forge license evidence scanned: mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+      "== 3b. Rights verified the Forge evidence digest without interpreting external claims",
+      "== 4. Rights manifest built and sealed: 5bb72bda1eee110d ...",
+      "!! validator unavailable or blocked (rc=1)",
+      "== 5b. validation findings recorded (rc=4)",
+      "   outcome: review-required | identity matches: True",
+      "== 6. Commons retained rights observation: sha256:690377ca5d51",
+      "== 7. SPDX exported (1466 bytes)",
+      "== end-to-end complete"
+    ],
+    "command": "timeout 90s env KEEP_WORK=1 VALIDATOR_BIN=/usr/bin/false MNCS_FORGE_SRC=/home/epi13/Documents/Projects/mncs-forge/src bash examples/end-to-end/run_demo.sh",
+    "exit_code": 0,
+    "rust_validator": {
+      "reason": "VALIDATOR_BIN=/usr/bin/false intentionally avoided starting a cargo build; the independent Rights CLI validation still ran.",
+      "status": "not-run"
+    },
+    "stages": [
+      "Fabric executed a real bounded local job and emitted process evidence.",
+      "Forge source scanner inspected its bounded project-root declarations and notice filenames.",
+      "Rights evidence verify accepted the Forge 0.3.0 digest and reported canonical-content-digest-only without interpreting claims.",
+      "Rights built and sealed a manifest binding the Fabric and Forge evidence references.",
+      "Rights CLI artifact validation matched the manifest identity and returned review-required with unresolved rights findings.",
+      "Commons retained the Fabric observation and Rights exported SPDX 2.3."
+    ]
+  },
+  "fabric_evidence": {
+    "claims": [
+      {
+        "claim_type": "other",
+        "confidence": "insufficient-evidence",
+        "statement": "No origin classification asserted by Fabric; outputs are process evidence awaiting downstream rights evaluation."
+      }
+    ],
+    "content_digest": "sha256:46842ef4e36e5ff39748abc08ed2b2ccc6b9b43e42e60429d30f1cc4040b9bcc",
+    "context": {
+      "timestamp": "2026-10-22T02:28:02.602933Z"
+    },
+    "evidence_id": "mncs-fabric://execution/sha256:547636299cccfff0411410c760d0a02fd043aa17f117ac3247d644a354da6901/rights-evidence",
+    "kind": "fabric-execution",
+    "limitations": [
+      "Fabric does not determine copyrightability, authorship, ownership, or licensing.",
+      "Origin classifications supplied by callers are process-evidence claims, not conclusions."
+    ],
+    "observations": [
+      {
+        "name": "outcome",
+        "value": "PASS"
+      },
+      {
+        "name": "termination_reason",
+        "value": "COMPLETED"
+      },
+      {
+        "name": "exit_code",
+        "value": 0
+      },
+      {
+        "name": "job_identity",
+        "value": "sha256:e1c979d74dc7c8612346fc9897b7bf1ca01505a17bad3260f431359140c7f885"
+      },
+      {
+        "name": "candidate_identity",
+        "value": "sha256:4fc0562715874c884ef53b6435e9d0c77ef2ab7539421d7188ab7ddaabdbe6d4"
+      },
+      {
+        "name": "node_fingerprint",
+        "value": "sha256:aef2a057e6cacdc7c184cb9bc11c0a13ba998364db1f01fce5f26db8a7d60d38"
+      },
+      {
+        "name": "declared_argv_digest",
+        "value_digest": "sha256:8d1b67293d39f16d3229842a0367a2cb7162579a882c1be627729e39df2b2d50"
+      }
+    ],
+    "producer": {
+      "producer": "mncs-fabric",
+      "recordKind": "RightsProvenanceEvidence",
+      "schemaVersion": "0.2.0",
+      "stableId": "mncs-fabric://execution/sha256:547636299cccfff0411410c760d0a02fd043aa17f117ac3247d644a354da6901/rights-evidence"
+    },
+    "references": [
+      {
+        "kind": "fabric-execution-record",
+        "reference": "sha256:547636299cccfff0411410c760d0a02fd043aa17f117ac3247d644a354da6901",
+        "sha256": "827818358cb86af64bd5817cf59f5ac2ce3668e3284079a4f101c4bbd09dbc02"
+      }
+    ],
+    "schema_version": "0.2.0",
+    "subject": {
+      "artifact_refs": [
+        {
+          "id": "result.json",
+          "role": "output"
+        },
+        {
+          "id": "/usr/bin/python3.14",
+          "role": "input"
+        }
+      ],
+      "run_id": "demo-run-1"
+    }
+  },
+  "fabric_result": {
+    "byte_length": 56,
+    "path": "fabric/results/result.json",
+    "sha256": "92955ce6ae8d3fabd70a0d314958513a1d58ceb21991e235a36cb1bb7db00e31",
+    "utf8": "{\"greeting\": \"hello from a bounded fabric job\", \"n\": 42}"
+  },
+  "forge_evidence": {
+    "claims": [
+      {
+        "claim_type": "license-declaration",
+        "confidence": "observed-declaration",
+        "statement": "pyproject.toml declares license metadata (Apache-2.0). Forge records the declaration without validating its authority or legal effect.",
+        "supporting_observations": [
+          "pyproject.toml_license_declaration"
+        ],
+        "value": "Apache-2.0"
+      },
+      {
+        "claim_type": "license-identification",
+        "confidence": "heuristic",
+        "spdx_expression": "Apache-2.0",
+        "statement": "LICENSE matches Apache-2.0 by keyword heuristic; the exact source hash is recorded for re-inspection.",
+        "supporting_observations": [
+          "notice_file:LICENSE"
+        ]
+      }
+    ],
+    "content_digest": "sha256:46003558f3f2eb330a8b55ceeb11da9785b39ee85479d9476bbdf1093e3477ba",
+    "context": {
+      "timestamp": "2026-10-22T02:28:02Z"
+    },
+    "evidence_id": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+    "kind": "forge-analysis",
+    "limitations": [
+      "Keyword heuristics identify candidates, not verified license terms.",
+      "Metadata declarations are evidence supplied to Forge, not independent legal review.",
+      "Forge does not validate SPDX expression syntax or determine copyrightability, ownership, or compatibility."
+    ],
+    "observations": [
+      {
+        "name": "pyproject.toml_license_declaration",
+        "observed_at": "2026-10-22T02:28:02Z",
+        "source_ref": {
+          "byte_length": 69,
+          "path": "pyproject.toml",
+          "resolved_path": "pyproject.toml",
+          "selector": "/project/license",
+          "sha256": "f16abe79fd1a122491d841befd7f1264ab254e54e439af865a0542de6f975895"
+        },
+        "value": {
+          "raw": "Apache-2.0",
+          "truncated": false
+        }
+      },
+      {
+        "name": "notice_file:LICENSE",
+        "observed_at": "2026-10-22T02:28:02Z",
+        "source_ref": {
+          "byte_length": 41,
+          "path": "LICENSE",
+          "resolved_path": "LICENSE",
+          "selector": "/content",
+          "sha256": "da0a45ba8ade58d6156fe561dbaa8ea664725ab65ec9c9dfc0812b1a1c815b1d"
+        },
+        "value": {
+          "sha256": "da0a45ba8ade58d6156fe561dbaa8ea664725ab65ec9c9dfc0812b1a1c815b1d"
+        }
+      }
+    ],
+    "producer": {
+      "producer": "mncs-forge",
+      "recordKind": "LicenseEvidence",
+      "schemaVersion": "0.3.0",
+      "stableId": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8"
+    },
+    "scan_inputs": [
+      {
+        "byte_length": 69,
+        "path": "pyproject.toml",
+        "resolved_path": "pyproject.toml",
+        "sha256": "f16abe79fd1a122491d841befd7f1264ab254e54e439af865a0542de6f975895",
+        "status": "observed"
+      },
+      {
+        "path": "package.json",
+        "status": "absent"
+      },
+      {
+        "byte_length": 41,
+        "path": "LICENSE",
+        "resolved_path": "LICENSE",
+        "sha256": "da0a45ba8ade58d6156fe561dbaa8ea664725ab65ec9c9dfc0812b1a1c815b1d",
+        "status": "observed"
+      },
+      {
+        "path": "LICENSE.md",
+        "status": "absent"
+      },
+      {
+        "path": "LICENSE.txt",
+        "status": "absent"
+      },
+      {
+        "path": "COPYING",
+        "status": "absent"
+      },
+      {
+        "path": "COPYING.txt",
+        "status": "absent"
+      },
+      {
+        "path": "NOTICE",
+        "status": "absent"
+      }
+    ],
+    "schema_version": "0.3.0",
+    "subject": {
+      "artifact_refs": [
+        {
+          "id": "project:e2e-demo",
+          "role": "subject"
+        }
+      ]
+    }
+  },
+  "identity": "ev_rights_e2e_forge_digest_verification_20261022",
+  "limitations": [
+    "The project declares Apache-2.0 in its temporary pyproject fixture; the declaration and Forge heuristic do not prove grant authority or legal effect.",
+    "Forge scans only bounded root metadata and notice-file names; dependencies are not scanned.",
+    "Rights verified canonical digest only and did not validate Forge schema 0.3.0 or interpret its claims.",
+    "The Rights manifest correctly retains rights_basis=unknown-needs-review and third_party_material=unknown; validation is review-required and makes no legal conclusion.",
+    "The independent Rust validator was not run in this environment; the Python Rights validator returned review-required.",
+    "The Forge MCP service was not used; the Forge source API produced the scan record."
+  ],
+  "objective": "Exercise Fabric output, Forge LicenseEvidence/0.3.0, Rights digest verification and manifest binding, unresolved-rights diagnostics, Commons retention, and SPDX export in one bounded run.",
+  "observed_at": "2026-10-22T02:29:08Z",
+  "rights_evidence_verification": {
+    "content_digest_expected": "sha256:46003558f3f2eb330a8b55ceeb11da9785b39ee85479d9476bbdf1093e3477ba",
+    "content_digest_matches": true,
+    "declared_producer": "mncs-forge",
+    "declared_producer_record_kind": "LicenseEvidence",
+    "evidence_id": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+    "legal_conclusion": "NOT_MADE",
+    "ok": true,
+    "record_interpretation": "uninterpreted-external-record",
+    "record_kind": "forge-analysis",
+    "record_schema_version": "0.3.0",
+    "schema_version": "mncs.rights-provenance.evidence-verification/1",
+    "verification_scope": "canonical-content-digest-only"
+  },
+  "rights_manifest": {
+    "artifact": {
+      "class": "experiment-output",
+      "hashes": [
+        {
+          "algorithm": "sha256",
+          "scope": "file",
+          "value": "92955ce6ae8d3fabd70a0d314958513a1d58ceb21991e235a36cb1bb7db00e31"
+        }
+      ],
+      "id": "demo:e2e-artifact"
+    },
+    "manifest_identity": "5bb72bda1eee110d66ca5edcf36a74478571fdd384e8ac57b107e5273925a6b1",
+    "provenance": {
+      "graph": {
+        "edges": [
+          {
+            "from": "job",
+            "relation": "derived-from",
+            "to": "outputs"
+          },
+          {
+            "evidence": [
+              {
+                "kind": "rights-evidence-record",
+                "producer_reference": {
+                  "producer": "mncs-forge",
+                  "recordKind": "LicenseEvidence",
+                  "schemaVersion": "0.3.0",
+                  "stableId": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8"
+                },
+                "reference": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+                "sha256": "46003558f3f2eb330a8b55ceeb11da9785b39ee85479d9476bbdf1093e3477ba"
+              }
+            ],
+            "from": "outputs",
+            "relation": "referenced",
+            "to": "license-analysis"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "job",
+            "kind": "action",
+            "label": "bounded fabric execution"
+          },
+          {
+            "artifact_class": "experiment-output",
+            "hashes": [
+              {
+                "algorithm": "sha256",
+                "value": "92955ce6ae8d3fabd70a0d314958513a1d58ceb21991e235a36cb1bb7db00e31"
+              }
+            ],
+            "id": "outputs",
+            "kind": "artifact"
+          },
+          {
+            "evidence": [
+              {
+                "kind": "rights-evidence-record",
+                "producer_reference": {
+                  "producer": "mncs-forge",
+                  "recordKind": "LicenseEvidence",
+                  "schemaVersion": "0.3.0",
+                  "stableId": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8"
+                },
+                "reference": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+                "sha256": "46003558f3f2eb330a8b55ceeb11da9785b39ee85479d9476bbdf1093e3477ba"
+              }
+            ],
+            "external_ref": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+            "id": "license-analysis",
+            "kind": "external",
+            "label": "Forge license declaration scan"
+          }
+        ]
+      },
+      "origin_classification": "human-directed-machine-generated",
+      "participants": [
+        {
+          "name": "local-python-runtime",
+          "role": "executor",
+          "type": "tool"
+        }
+      ],
+      "process_evidence": [
+        {
+          "kind": "rights-evidence-record",
+          "producer_reference": {
+            "producer": "mncs-fabric",
+            "recordKind": "RightsProvenanceEvidence",
+            "schemaVersion": "0.2.0",
+            "stableId": "mncs-fabric://execution/sha256:547636299cccfff0411410c760d0a02fd043aa17f117ac3247d644a354da6901/rights-evidence"
+          },
+          "reference": "mncs-fabric://execution/sha256:547636299cccfff0411410c760d0a02fd043aa17f117ac3247d644a354da6901/rights-evidence",
+          "sha256": "46842ef4e36e5ff39748abc08ed2b2ccc6b9b43e42e60429d30f1cc4040b9bcc"
+        },
+        {
+          "kind": "rights-evidence-record",
+          "producer_reference": {
+            "producer": "mncs-forge",
+            "recordKind": "LicenseEvidence",
+            "schemaVersion": "0.3.0",
+            "stableId": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8"
+          },
+          "reference": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+          "sha256": "46003558f3f2eb330a8b55ceeb11da9785b39ee85479d9476bbdf1093e3477ba"
+        }
+      ]
+    },
+    "review": {
+      "human_acceptance": "not-reviewed",
+      "notes": "Manifest structure validation is not technical or provenance validation.",
+      "provenance_validation": "not-run",
+      "technical_validation": "not-run"
+    },
+    "rights": {
+      "copyright_status": "mixed-or-undetermined",
+      "distribution_license": "Apache-2.0",
+      "notes": "The distribution license is copied from the demo project's declaration. Forge scan observations do not establish contributor authority, third-party inventory completeness, or license compatibility.",
+      "rights_basis": "unknown-needs-review",
+      "sources": [],
+      "third_party_material": "unknown"
+    },
+    "schema_version": "0.2.0",
+    "spec_profile": "canonical-release"
+  },
+  "rights_validation": {
+    "findings": [
+      "human review state is unacceptable for release",
+      "provenance validation is incomplete or has not run",
+      "rights basis is explicitly unknown and needs review",
+      "third-party material state is unresolved"
+    ],
+    "gate_results": [
+      {
+        "effective_severity": "none",
+        "enforcement": "fatal",
+        "gate": "artifact_hash_correspondence",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "review",
+        "gate": "evidence_references_resolve",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "fatal",
+        "gate": "graph_integrity",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "fatal",
+        "gate": "no_incompatible_third_party_license",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "review",
+        "gate": "no_contradictory_license_evidence",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "review",
+        "enforcement": "review",
+        "gate": "rights_basis_resolved",
+        "severity": "review"
+      },
+      {
+        "effective_severity": "review",
+        "enforcement": "review",
+        "gate": "third_party_material_resolved",
+        "severity": "review"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "review",
+        "gate": "copyright_status_resolved",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "fatal",
+        "gate": "provenance_validation_passed",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "review",
+        "enforcement": "review",
+        "gate": "provenance_complete",
+        "severity": "review"
+      },
+      {
+        "effective_severity": "review",
+        "enforcement": "review",
+        "gate": "human_review_state_acceptable",
+        "severity": "review"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "review",
+        "gate": "unknown_source_license",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "review",
+        "gate": "attestation_integrity",
+        "severity": "none"
+      },
+      {
+        "effective_severity": "none",
+        "enforcement": "fatal",
+        "gate": "no_falsified_or_impossible_evidence",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "legal_conclusion": "NOT_MADE",
+    "manifest": "/tmp/mncs-rp-e2e.LBe8IQ/rights-manifest.json",
+    "manifest_identity_expected": "5bb72bda1eee110d66ca5edcf36a74478571fdd384e8ac57b107e5273925a6b1",
+    "manifest_identity_matches": true,
+    "note": "Passing means project evidence requirements were satisfied; this is not a legal warranty of title or non-infringement.",
+    "outcome": "review-required",
+    "policy_profile": "default-canonical-release",
+    "schema_version": "0.3.0",
+    "severity": "review",
+    "structural_valid": true
+  },
+  "schema_version": "mncs.rights-provenance.vertical-slice-evidence/2",
+  "source_repositories": {
+    "mncs-forge": {
+      "revision": "092619bec274a6132b7bfa0e08b1701f1b101c1c"
+    },
+    "mncs-rights-provenance": {
+      "feature_base": "8285dd2689d000af5f2b3f28256bea5d2d8db6ee",
+      "revision_under_test": "8285dd2689d000af5f2b3f28256bea5d2d8db6ee"
+    }
+  },
+  "spdx_export": {
+    "byte_count": 1466,
+    "document": {
+      "SPDXID": "SPDXRef-DOCUMENT",
+      "annotations": [
+        {
+          "annotationDate": "2026-10-22T02:28:03Z",
+          "annotationType": "REVIEW",
+          "annotator": "Organization: MNCS Rights & Provenance (mncs-rp export)",
+          "comment": "MNCS origin classification: human-directed-machine-generated. This describes process evidence only and is not a copyright conclusion."
+        }
+      ],
+      "creationInfo": {
+        "comment": "Generated by mncs-rights-provenance from an MNCS v0.2 rights manifest. MNCS manifest identity: 5bb72bda1eee110d66ca5edcf36a74478571fdd384e8ac57b107e5273925a6b1",
+        "created": "2026-10-22T02:28:03Z",
+        "creators": [
+          "Organization: MNCS Rights & Provenance"
+        ],
+        "licenseListVersion": "3.25"
+      },
+      "dataLicense": "CC0-1.0",
+      "documentNamespace": "https://mncs.invalid/spdx/5bb72bda1eee110d66ca5edcf36a74478571fdd384e8ac57b107e5273925a6b1",
+      "name": "demo-e2e-artifact",
+      "packages": [
+        {
+          "SPDXID": "SPDXRef-Package-e3975e361561",
+          "copyrightText": "UNDETERMINED (MNCS copyright-status: mixed-or-undetermined)",
+          "downloadLocation": "NOASSERTION",
+          "externalRefs": [
+            {
+              "referenceCategory": "PACKAGE-MANAGER",
+              "referenceLocator": "pkg:mncs/demo-e2e-artifact@5bb72bda1eee",
+              "referenceType": "purl"
+            }
+          ],
+          "filesAnalyzed": false,
+          "licenseConcluded": "Apache-2.0",
+          "licenseDeclared": "Apache-2.0",
+          "name": "demo-e2e-artifact",
+          "versionInfo": "NOASSERTION"
+        }
+      ],
+      "relationships": [
+        {
+          "relatedSpdxElement": "SPDXRef-Package-e3975e361561",
+          "relationshipType": "DESCRIBES",
+          "spdxElementId": "SPDXRef-DOCUMENT"
+        }
+      ],
+      "spdxVersion": "SPDX-2.3"
+    },
+    "sha256": "a6f9ca49b3cc5df3fdcd18854a827b4060e71b7d57b8d01455ee32691d379fb5"
+  },
+  "summary": {
+    "commons_observation_digest_prefix": "sha256:690377ca5d51",
+    "copyright_status": "mixed-or-undetermined",
+    "diagnostic_findings": [
+      "human review state is unacceptable for release",
+      "provenance validation is incomplete or has not run",
+      "rights basis is explicitly unknown and needs review",
+      "third-party material state is unresolved"
+    ],
+    "diagnostic_outcome": "review-required",
+    "forge_claim_confidences": [
+      "heuristic",
+      "observed-declaration"
+    ],
+    "forge_scan_inputs": {
+      "absent": 6,
+      "observed": 2,
+      "unavailable": 0
+    },
+    "manifest_graph_edges": [
+      {
+        "from": "job",
+        "relation": "derived-from",
+        "to": "outputs"
+      },
+      {
+        "evidence": [
+          {
+            "kind": "rights-evidence-record",
+            "producer_reference": {
+              "producer": "mncs-forge",
+              "recordKind": "LicenseEvidence",
+              "schemaVersion": "0.3.0",
+              "stableId": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8"
+            },
+            "reference": "mncs-forge://license-evidence/9fab2f924ae1182a2aeb3f12b3688bd8",
+            "sha256": "46003558f3f2eb330a8b55ceeb11da9785b39ee85479d9476bbdf1093e3477ba"
+          }
+        ],
+        "from": "outputs",
+        "relation": "referenced",
+        "to": "license-analysis"
+      }
+    ],
+    "manifest_identity_matches": true,
+    "manifest_rights_basis": "unknown-needs-review",
+    "manifest_third_party_material": "unknown",
+    "origin_classification": "human-directed-machine-generated",
+    "rights_digest_match": true,
+    "rights_external_interpretation": "uninterpreted-external-record",
+    "spdx_version": "SPDX-2.3"
+  },
+  "verification": {
+    "command": "PYTHONPATH=src python3 -m pytest -q tests/test_evidence_verification.py tests/test_end_to_end_demo.py tests/test_agent_contract.py",
+    "result": "9 passed, including replay of the preserved Forge record through Rights digest verification and artifact-to-manifest validation.",
+    "ruff": "python3 -m ruff check tests/test_end_to_end_demo.py passed.",
+    "shell_syntax": "bash -n examples/end-to-end/run_demo.sh passed.",
+    "test_count": 9
+  }
+}
