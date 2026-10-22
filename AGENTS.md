@@ -47,6 +47,18 @@ defined once in MNCS-language and mirrored in host code, never the reverse:
 - `language/corpora/` plus `language/run_backend_tests.sh` — execution
   corpora with cross-backend agreement checks.
 
+Source-rights policy explanations are a bounded projection over manifest
+declarations, not a second policy engine. `src/mncs_rights_provenance/policy_diagnostics.py`
+projects the active unknown/unverified and contradictory-source gates into
+`mncs.rights.policy-diagnostic/1` records validated by
+`schemas/v0.1/policy-diagnostic.schema.json` and pinned by
+`tests/test_policy_diagnostics.py`. These records retain source and evidence
+references while marking them `declared-unverified`; they must not promote
+claims to verified facts, change gate severity, or replace
+`legal_conclusion=NOT_MADE`.
+The operational contract and output bounds are in
+`docs/source-rights-policy-diagnostics.md`.
+
 Changing host mirroring without changing (or deliberately confirming) the
 normative core is a defect. New semantics land in the `.mncs` core with
 corpus agreement before host code relies on them.

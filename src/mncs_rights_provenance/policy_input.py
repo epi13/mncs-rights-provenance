@@ -12,6 +12,8 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
+from .policy_diagnostics import collect_source_license_evidence
+
 ORIGIN_CODES = {
     "human-authored": 0,
     "human-ai-assisted": 1,
@@ -75,6 +77,11 @@ class PolicyInput:
     attestation_conflicts: int
     impossible_evidence: bool
     canonical_release_profile: bool
+    source_license_declarations: tuple[dict[str, Any], ...] = ()
+    source_license_count: int = 0
+    source_license_conflicts: tuple[dict[str, Any], ...] = ()
+    source_license_conflict_count: int = 0
+    omitted_source_license_conflicts: int = 0
 
 
 def policy_input_from_manifest(
@@ -115,8 +122,15 @@ def policy_input_from_manifest(
         elif assessment in {"unverified", "verified-unknown"}:
             unknown_sources += 1
 
+    (
+        source_declarations,
+        source_count,
+        source_conflicts,
+        detected_contradiction_count,
+        omitted_conflicts,
+    ) = collect_source_license_evidence(rights)
     if contradiction_count is None:
-        contradiction_count = count_license_contradictions(rights)
+        contradiction_count = detected_contradiction_count
 
     profile_value = document.get("spec_profile")
     canonical_release = profile_value != "development"
@@ -149,6 +163,11 @@ def policy_input_from_manifest(
         attestation_conflicts=attestation_conflicts,
         impossible_evidence=False,
         canonical_release_profile=canonical_release,
+        source_license_declarations=source_declarations,
+        source_license_count=source_count,
+        source_license_conflicts=source_conflicts,
+        source_license_conflict_count=detected_contradiction_count,
+        omitted_source_license_conflicts=omitted_conflicts,
     )
 
 
@@ -162,27 +181,7 @@ def count_license_contradictions(rights: Mapping[str, Any]) -> int:
     not determine legal compatibility.
     """
 
-    contradictions = 0
-    sources = [s for s in rights.get("sources") or () if isinstance(s, Mapping)]
-    seen_licenses: dict[str, set[str]] = {}
-    seen_statuses: dict[str, set[str]] = {}
-    for source in sources:
-        reference = source.get("reference")
-        if not isinstance(reference, str) or not reference:
-            continue
-        license_value = source.get("license")
-        if isinstance(license_value, str) and license_value:
-            seen_licenses.setdefault(reference, set()).add(license_value)
-        status = source.get("license_status")
-        if isinstance(status, str) and status in {"compatible", "incompatible", "not-applicable"}:
-            seen_statuses.setdefault(reference, set()).add(status)
-    references = set(seen_licenses) | set(seen_statuses)
-    for reference in references:
-        if (
-            len(seen_licenses.get(reference, ())) > 1
-            or len(seen_statuses.get(reference, ())) > 1
-        ):
-            contradictions += 1
+    *_, contradictions, _omitted = collect_source_license_evidence(rights)
     return contradictions
 
 

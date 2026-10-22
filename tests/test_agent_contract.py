@@ -27,6 +27,13 @@ CORES = (
     "specs/distributed-pressure.md",
 )
 
+SUPPORTING_CONTRACT_PATHS = (
+    "docs/source-rights-policy-diagnostics.md",
+    "schemas/v0.1/policy-diagnostic.schema.json",
+    "src/mncs_rights_provenance/policy_diagnostics.py",
+    "tests/test_policy_diagnostics.py",
+)
+
 
 def contract_text() -> str:
     assert CONTRACT.is_file(), "AGENTS.md (agent execution contract) is missing"
@@ -37,6 +44,13 @@ def test_contract_names_existing_paths():
     text = contract_text()
     assert CORES, "core list must not be empty"
     for ref in CORES:
+        assert ref in text, f"contract must mention {ref}"
+        assert (REPO / ref).exists(), f"contract names missing {ref}"
+
+
+def test_contract_names_existing_diagnostic_projection_paths():
+    text = contract_text()
+    for ref in SUPPORTING_CONTRACT_PATHS:
         assert ref in text, f"contract must mention {ref}"
         assert (REPO / ref).exists(), f"contract names missing {ref}"
 
