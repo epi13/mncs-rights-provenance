@@ -189,6 +189,18 @@ fetch or reinterpret referenced manifests. A single declared input with
 declared partial lineage produces no repeated finding; `no-findings` is not a
 compliance result, and the report always makes no legal conclusion.
 
+Diagnostic schema 0.2.0 also identifies when one manifest reference carries
+conflicting digest, identity, evidence-state, or rights metadata. It retains
+every contributing record and points to the exact first conflicting pair and
+the fields that differ so a producer can reconcile the source revision. The
+diagnostic also reports how many references were inconsistent. Repeated
+metadata-identical records at the same reference count once for the review cue;
+distinct declarations still produce an unknown compatibility finding. This
+comparison diagnoses record consistency only: it does not establish rights,
+compatibility, authority, or legal compliance. The artifact binding continues
+to state compatibility as unknown even when duplicate identical records do
+not need a redundant cross-manifest finding.
+
 Environment has an admission-context capability and a selected-checkout
 invalidation path covered by Environment tests. This Rights slice consumes the
 published Compiler contract and canonical Environment Store record without

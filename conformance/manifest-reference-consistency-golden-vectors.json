@@ -1,0 +1,191 @@
+{
+  "schema_version": "0.1",
+  "name": "rights-manifest-reference-consistency-v1",
+  "source_module": "mncs.rights.manifest_reference_consistency.v01",
+  "cases": [
+    {
+      "case_id": "reference:different-reference",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output": 0
+    },
+    {
+      "case_id": "reference:same-and-identical",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "output": 0
+    },
+    {
+      "case_id": "reference:same-digest-conflict",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "output": 1
+    },
+    {
+      "case_id": "reference:same-identity-conflict",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "output": 1
+    },
+    {
+      "case_id": "reference:same-evidence-state-conflict",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1
+        ]
+      },
+      "output": 1
+    },
+    {
+      "case_id": "reference:same-rights-state-conflict",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          1
+        ]
+      },
+      "output": 1
+    },
+    {
+      "case_id": "reference:same-license-ref-conflict",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1
+        ]
+      },
+      "output": 1
+    },
+    {
+      "case_id": "reference:same-obligations-ref-conflict",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0
+        ]
+      },
+      "output": 1
+    },
+    {
+      "case_id": "reference:invalid-flag",
+      "function": "repeated_reference_metadata_conflict",
+      "inputs": {
+        "args": [
+          1,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "output": 2
+    },
+    {
+      "case_id": "compatibility:no-declarations",
+      "function": "compatibility_review_required",
+      "inputs": {
+        "args": [
+          0
+        ]
+      },
+      "output": 0
+    },
+    {
+      "case_id": "compatibility:one-declaration",
+      "function": "compatibility_review_required",
+      "inputs": {
+        "args": [
+          1
+        ]
+      },
+      "output": 0
+    },
+    {
+      "case_id": "compatibility:two-declarations",
+      "function": "compatibility_review_required",
+      "inputs": {
+        "args": [
+          2
+        ]
+      },
+      "output": 1
+    },
+    {
+      "case_id": "compatibility:bounded-many-declarations",
+      "function": "compatibility_review_required",
+      "inputs": {
+        "args": [
+          64
+        ]
+      },
+      "output": 1
+    }
+  ]
+}

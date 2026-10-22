@@ -15,7 +15,7 @@ from mncs_rights_provenance.cli import MAX_ARTIFACT_BINDING_DIAGNOSTIC_BYTES, ma
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = json.loads(
-    (ROOT / "schemas/v0.1/native-artifact-binding-diagnostic.schema.json").read_text()
+    (ROOT / "schemas/v0.2/native-artifact-binding-diagnostic.schema.json").read_text()
 )
 
 
@@ -131,6 +131,50 @@ def test_multiple_declared_inputs_report_unknown_compatibility_without_inference
     finding = report["diagnostics"][0]
     assert finding["code"] == "artifact-rights-compatibility-unknown"
     assert finding["remedy"] == "evaluate-compatibility-from-authoritative-license-terms"
+    assert report["legal_conclusion"] == "NOT_MADE"
+
+
+def test_repeated_identical_manifest_reference_does_not_add_compatibility_noise() -> None:
+    manifest = _manifest("dependency/RIGHTS.json")
+    binding = _binding(manifests=[manifest, dict(manifest)])
+    report = diagnose_native_artifact_binding(
+        binding
+    )
+
+    assert report["status"] == "no-findings"
+    assert report["diagnostics"] == []
+    assert binding["rights"]["compatibility"] == "unknown"
+    assert report["legal_conclusion"] == "NOT_MADE"
+
+
+def test_repeated_manifest_reference_with_changed_metadata_is_actionable() -> None:
+    first = _manifest("dependency/RIGHTS.json")
+    second = dict(first)
+    second["manifest_digest"] = "sha256:" + "d" * 64
+    second["license_expression_ref"] = "#/rights/alternate_license"
+    binding = _binding(manifests=[first, second])
+
+    report = diagnose_native_artifact_binding(binding)
+    codes = {item["code"] for item in report["diagnostics"]}
+
+    assert "artifact-rights-manifest-reference-inconsistent" in codes
+    assert "artifact-rights-compatibility-unknown" in codes
+    assert len(binding["rights"]["contributing_manifests"]) == 2
+    finding = next(
+        item for item in report["diagnostics"]
+        if item["code"] == "artifact-rights-manifest-reference-inconsistent"
+    )
+    assert finding["evidence_ref"] == "#/rights/contributing_manifests"
+    assert finding["evidence_refs"] == [
+        "#/rights/contributing_manifests/0",
+        "#/rights/contributing_manifests/1",
+    ]
+    assert finding["conflicting_fields"] == [
+        "manifest_digest",
+        "license_expression_ref",
+    ]
+    assert finding["conflict_count"] == 1
+    assert finding["remedy"] == "reconcile-manifest-reference-evidence"
     assert report["legal_conclusion"] == "NOT_MADE"
 
 

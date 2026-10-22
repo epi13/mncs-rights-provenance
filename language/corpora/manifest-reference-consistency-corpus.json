@@ -1,0 +1,921 @@
+{
+  "schema_version": "0.1",
+  "name": "rights-manifest-reference-consistency-v1",
+  "cases": [
+    {
+      "id": "reference:different-reference",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 0,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference:same-and-identical",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 0,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference:same-digest-conflict",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference:same-identity-conflict",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference:same-evidence-state-conflict",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference:same-rights-state-conflict",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference:same-license-ref-conflict",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference:same-obligations-ref-conflict",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference:invalid-flag",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "repeated_reference_metadata_conflict"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 2,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          },
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 2,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "compatibility:no-declarations",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "compatibility_review_required"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 0,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 0,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "compatibility:one-declaration",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "compatibility_review_required"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 1,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 0,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "compatibility:two-declarations",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "compatibility_review_required"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 2,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "compatibility:bounded-many-declarations",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.manifest_reference_consistency.v01",
+          "function": "compatibility_review_required"
+        },
+        "arguments": [
+          {
+            "integer": {
+              "value": 64,
+              "type": {
+                "bits": 64,
+                "signed": false
+              }
+            }
+          }
+        ],
+        "step_budget": 4096
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1,
+            "type": {
+              "bits": 64,
+              "signed": false
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

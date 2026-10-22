@@ -10,8 +10,13 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from .manifest_reference_consistency import (
+    compatibility_review_required,
+    repeated_reference_metadata_conflict,
+)
+
 SCHEMA_VERSION = "mncs.rights-provenance.native-artifact-binding/0.1.0"
-DIAGNOSTIC_SCHEMA_VERSION = "mncs.rights-provenance.artifact-binding-diagnostic/0.1.0"
+DIAGNOSTIC_SCHEMA_VERSION = "mncs.rights-provenance.artifact-binding-diagnostic/0.2.0"
 _RIGHTS_STATES = {"declared", "unresolved", "unknown"}
 _EVIDENCE_STATES = {
     "directly-observed",
@@ -453,6 +458,50 @@ def diagnose_native_artifact_binding(binding: Mapping[str, Any]) -> dict[str, An
         _contributing_manifest(item, index) for index, item in enumerate(manifests)
     ]
     manifest_states = [item["rights_state"] for item in clean_manifests]
+    manifest_fields = (
+        "manifest_digest",
+        "manifest_identity",
+        "evidence_state",
+        "rights_state",
+        "license_expression_ref",
+        "obligations_ref",
+    )
+    by_reference: dict[str, tuple[int, dict[str, Any]]] = {}
+    reference_conflicts: set[str] = set()
+    first_reference_conflict: tuple[int, int, list[str]] | None = None
+    for index, manifest in enumerate(clean_manifests):
+        prior = by_reference.get(manifest["reference"])
+        if prior is None:
+            by_reference[manifest["reference"]] = (index, manifest)
+            continue
+        prior_index, prior_manifest = prior
+        conflicting_fields = [
+            field for field in manifest_fields
+            if prior_manifest[field] != manifest[field]
+        ]
+        result = repeated_reference_metadata_conflict(
+            1,
+            *(int(prior_manifest[field] == manifest[field]) for field in manifest_fields),
+        )
+        if result == 2:
+            raise AssertionError("validated manifest metadata produced invalid comparison flags")
+        if result == 1:
+            reference_conflicts.add(manifest["reference"])
+            if first_reference_conflict is None:
+                first_reference_conflict = (prior_index, index, conflicting_fields)
+
+    distinct_declarations = {
+        (
+            manifest["reference"],
+            manifest["manifest_digest"],
+            manifest["manifest_identity"],
+            manifest["evidence_state"],
+            manifest["rights_state"],
+            manifest["license_expression_ref"],
+            manifest["obligations_ref"],
+        )
+        for manifest in clean_manifests
+    }
 
     if set(lineage) != {"state", "source_snapshot_identity", "transformation", "relationships"}:
         raise ValueError("binding.lineage fields do not match the native artifact binding contract")
@@ -538,7 +587,28 @@ def diagnose_native_artifact_binding(binding: Mapping[str, Any]) -> dict[str, An
             "evidence_ref": "#/rights/contributing_manifests",
             "remedy": "resolve-rights-evidence-or-preserve-unresolved-state",
         })
-    if len(manifests) > 1:
+    if reference_conflicts:
+        if first_reference_conflict is None:
+            raise AssertionError("manifest reference conflict has no evidence pair")
+        first_index, second_index, conflicting_fields = first_reference_conflict
+        diagnostics.append({
+            "code": "artifact-rights-manifest-reference-inconsistent",
+            "severity": "review",
+            "summary": (
+                f"{len(reference_conflicts)} repeated manifest reference(s) carry inconsistent "
+                "metadata; the first conflicting pair differs in "
+                f"{', '.join(conflicting_fields)}."
+            ),
+            "evidence_ref": "#/rights/contributing_manifests",
+            "evidence_refs": [
+                f"#/rights/contributing_manifests/{first_index}",
+                f"#/rights/contributing_manifests/{second_index}",
+            ],
+            "conflicting_fields": conflicting_fields,
+            "conflict_count": len(reference_conflicts),
+            "remedy": "reconcile-manifest-reference-evidence",
+        })
+    if compatibility_review_required(len(distinct_declarations)) == 1:
         diagnostics.append({
             "code": "artifact-rights-compatibility-unknown",
             "severity": "review",

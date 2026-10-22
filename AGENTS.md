@@ -39,6 +39,14 @@ defined once in MNCS-language and mirrored in host code, never the reverse:
   pinned by `language/corpora/implementation-lineage-corpus.json` and
   `tests/test_implementation_lineage_core.py`. This core does not determine
   authorship, ownership, completeness, or legal independence.
+- `language/manifest_reference_consistency.mncs` — repeated manifest-reference
+  consistency and the bounded rule for when distinct declarations need a
+  compatibility review; it does not resolve license compatibility. Its host
+  mirror and cross-backend corpus are pinned by
+  `language/tools/gen_manifest_reference_consistency_corpus.py`,
+  `language/corpora/manifest-reference-consistency-corpus.json`,
+  `conformance/manifest-reference-consistency-golden-vectors.json`, and
+  `tests/test_manifest_reference_consistency_core.py`.
 - `language/rights_agent_governance.mncs` — versioned profile guidance
   vocabulary and supported field/value pairs; it grants no legal rights and
   is pinned against the host context mirror by

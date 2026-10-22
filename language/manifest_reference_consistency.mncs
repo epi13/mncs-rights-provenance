@@ -1,0 +1,45 @@
+mncs 0.18;
+
+// Normative, non-legal rules for comparing contributing manifest records.
+// Exact references and metadata equality are established by the host from
+// the supplied records; this core defines how those comparisons are used.
+module mncs.rights.manifest_reference_consistency.v01;
+
+// 0 = no repeated-reference disagreement, 1 = disagreement, 2 = malformed
+// comparison flags. A disagreement is a metadata diagnostic, not a legal
+// rights conclusion.
+fn repeated_reference_metadata_conflict(
+    same_reference: u64,
+    same_manifest_digest: u64,
+    same_manifest_identity: u64,
+    same_evidence_state: u64,
+    same_rights_state: u64,
+    same_license_expression_ref: u64,
+    same_obligations_ref: u64
+) -> (result: u64) {
+    if same_reference > 1 || same_manifest_digest > 1
+        || same_manifest_identity > 1 || same_evidence_state > 1
+        || same_rights_state > 1 || same_license_expression_ref > 1
+        || same_obligations_ref > 1 {
+        return 2;
+    }
+    if same_reference == 0 {
+        return 0;
+    }
+    if same_manifest_digest == 0 || same_manifest_identity == 0
+        || same_evidence_state == 0 || same_rights_state == 0
+        || same_license_expression_ref == 0 || same_obligations_ref == 0 {
+        return 1;
+    }
+    return 0;
+}
+
+// Repeated identical records are one declaration for deciding whether a
+// cross-manifest compatibility review is needed. Two or more distinct
+// declarations remain unresolved; this core never declares them compatible.
+fn compatibility_review_required(distinct_declaration_count: u64) -> (result: u64) {
+    if distinct_declaration_count > 1 {
+        return 1;
+    }
+    return 0;
+}

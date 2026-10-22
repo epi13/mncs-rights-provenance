@@ -1,7 +1,7 @@
 {
   "schema_version": "mncs-family.repository-manifest/v0alpha1",
   "repository": "mncs-rights-provenance",
-  "revision": 11,
+  "revision": 12,
   "manifest_location": "in-repository",
   "authority": {"note": "Rights-provenance owns provenance evidence, rights manifests, contribution attestations, release-policy evaluation, and SPDX interoperability. Uncertainty is first-class (unknown/unresolved/insufficient-evidence); the system records evidence and never fabricates legal conclusions. Not legal advice."},
   "contracts": {
@@ -21,6 +21,7 @@
           "RIGHTS.json",
           "tests/test_context_source_identity_contract.py",
           "tests/test_artifact_binding.py",
+          "tests/test_artifact_binding_diagnostics.py",
           "tests/test_implementation_lineage_core.py",
           "tests/test_implementation_lineage_extension.py",
           "tests/test_source_license_status.py",
@@ -30,6 +31,18 @@
           "src/mncs_rights_provenance/check_projection.py",
           "schemas/v0.1/check-result-rights-diagnostics.schema.json",
           "tests/test_check_projection.py",
+          "language/manifest_reference_consistency.mncs",
+          "language/tools/gen_manifest_reference_consistency_corpus.py",
+          "language/corpora/manifest-reference-consistency-corpus.json",
+          "conformance/manifest-reference-consistency-golden-vectors.json",
+          "src/mncs_rights_provenance/manifest_reference_consistency.py",
+          "tests/test_manifest_reference_consistency_core.py",
+          "schemas/v0.2/native-artifact-binding-diagnostic.schema.json",
+          "docs/rights-provenance-agent-context.md",
+          "AGENTS.md",
+          "tests/test_agent_contract.py",
+          "language/run_backend_tests.sh",
+          "src/mncs_rights_provenance/artifact_binding.py",
           "docs/mncs-actions-integration.md",
           "conformance/source-license-status-golden-vectors.json",
           "scripts/environment_rights_validate.py"
@@ -72,11 +85,13 @@
             "tests/test_lineage_v04.py",
             "tests/test_artifact_binding.py",
             "tests/test_artifact_binding_diagnostics.py",
+            "tests/test_manifest_reference_consistency_core.py",
             "tests/test_implementation_lineage_core.py",
             "tests/test_source_license_status.py",
             "tests/test_policy_diagnostics.py",
             "tests/test_implementation_lineage_extension.py",
-            "tests/test_check_projection.py"
+            "tests/test_check_projection.py",
+            "tests/test_agent_contract.py"
           ],
           "toolchain": {
             "repository": "mncs-language",
