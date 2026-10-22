@@ -1,0 +1,71 @@
+{
+  "schema_version": "mncs.rights-provenance.coordination-observation/2",
+  "observed_at": "2026-10-22T03:24:30Z",
+  "campaign_identity": "cmp_ff3f91cb1a6badbf",
+  "session_id": "ses_dff1822e90820cf4",
+  "observation_method": "MNCS Environment Store-backed campaign, claim, inspect, resume, and context reads plus read-only Git worktree inspection",
+  "coordination": {
+    "rights_scope": {
+      "repository": "mncs-rights-provenance",
+      "branch": "campaign/luna-max-license-candidate-v03-20261022",
+      "integrated_head": "3fb46feeab48eaa43208cf69efe8c124e51a825a",
+      "remote_ref": "origin/main",
+      "status": "pushed",
+      "evidence_path_claim": "claim:mncs-rights-provenance:paths:22dfc2532feb"
+    },
+    "environment_owner": {
+      "campaign_identity": "cmp_luna_max_rights_env_worktree_20261020",
+      "session_id": "ses_f13d176c86a23e69",
+      "lifecycle": "active",
+      "repository": "mncs-environment",
+      "worktree_claims": [
+        {
+          "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+          "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+          "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/luna-max-rights-cache-invalidation-20261021",
+          "observed_head": "9f68b0f3efd14288ebcbf6de8371cc2bf69e47cc",
+          "observed_worktree_clean": true
+        },
+        {
+          "claim_id": "claim:mncs-environment:worktree:a76c547054b5",
+          "branch": "campaign/luna-max-rights-context-20261020",
+          "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/luna-max-rights-context-20261020"
+        }
+      ],
+      "read_only_source_observation": {
+        "path": "mncs_env/rights.py",
+        "behavior": "cached rights context reuse now requires the previous license_resolver identity to equal the current resolver identity",
+        "test_path": "tests/test_rights_context.py",
+        "test_name": "test_license_resolver_change_invalidates_cached_context",
+        "test_behavior": "changes the candidate registry digest, then checks resolver and context identities change and exactly one rights.context.changed event is recorded",
+        "test_execution_by_observer": "not-run; source inspected only"
+      }
+    },
+    "separation": {
+      "environment_worktree_modified": false,
+      "environment_branch_or_shared_main_mutated": false,
+      "candidate_rights_registry_commit_claimed_as_environment_test_evidence": false,
+      "coordination_result": "independent Rights work was integrated on main while the Environment owner retained its claimed worktrees; the Environment invalidation implementation remains owned by that session"
+    }
+  },
+  "cache_observation": {
+    "environment_session_id": "ses_dff1822e90820cf4",
+    "resume_readiness": "ready",
+    "context_operation_returned_rights_context": false,
+    "inspect_context_identity": "sha256:b2fab9bcafc6c3940bc35c9f6620e75cfc12195fb842204cb491c3641491239c",
+    "resolution_reused": true,
+    "bound_inputs": [
+      "mncs-rights-provenance/RIGHTS.json",
+      "mncs-rights-provenance/governance/agent-governance.json"
+    ],
+    "candidate_registry_digest_after_rights_commit": "sha256:db52a40960697b6bf45442320d7cee7fb242ec74243017019f1ff65214d4115c",
+    "candidate_references_in_bound_context": [],
+    "interpretation": "The v0.3 candidate registry change is not referenced by this session's bound manifest or governance profile; unchanged context identity and reuse for this candidate-only change are not evidence of stale policy. The Environment branch's resolver-identity check addresses implementation or registry changes that affect resolved context."
+  },
+  "evidence_limits": [
+    "The Environment branch and focused test were inspected at the recorded commit and were not executed by this observer.",
+    "The Environment owner's lease state is time-bounded and may have changed after observation.",
+    "The connected MCP context omission and canonical inspect projection are separate observations; this record does not identify the transport boundary responsible for that omission.",
+    "No legal ownership, compatibility, or compliance conclusion is made by this coordination record."
+  ]
+}
