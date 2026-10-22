@@ -1,0 +1,32 @@
+{
+  "schema_version": "mncs.rights-provenance.verification-evidence/1",
+  "identity": "ev_rights_vertical_slice_compiler_forge_tests_20261022",
+  "observed_at": "2026-10-22T04:39:18Z",
+  "repository": "mncs-rights-provenance",
+  "commit_under_test": "34f260c17e7b8ee18b83f2359b1d29ffc5b05f46",
+  "verification": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -o addopts='' -q -p no:cacheprovider tests/test_end_to_end_demo.py tests/test_forge_adapter.py tests/test_compiler_adapter.py tests/test_artifact_binding_diagnostics.py",
+    "result": "passed",
+    "passed": 29,
+    "failed": 0,
+    "elapsed_seconds": 0.33,
+    "coverage": [
+      "End-to-end manifest construction links observed Forge and Fabric evidence while preserving unknown rights.",
+      "Forge build receipts retain declared input lineage and unresolved rights state.",
+      "Compiler application-build responses retain source, IR, toolchain, and transformation references.",
+      "Artifact diagnostics remain actionable and make no legal conclusion."
+    ]
+  },
+  "coordination": {
+    "rights_worktree_claim": "claim:mncs-rights-provenance:worktree:4353f14b08e7",
+    "environment_peer_claims_observed_at_2026_10_22T04_33Z": [
+      "claim:mncs-environment:worktree:3174feea3a68",
+      "claim:mncs-environment:worktree:a76c547054b5"
+    ],
+    "peer_scopes_modified": false
+  },
+  "evidence_limits": [
+    "These bounded tests validate the Rights adapters and local vertical-slice fixtures; they do not verify the connected Environment admission projection.",
+    "Passing tests do not establish legal ownership, compatibility, or broader legal compliance."
+  ]
+}
