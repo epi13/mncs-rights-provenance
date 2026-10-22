@@ -572,6 +572,32 @@ def test_declared_license_with_unknown_compatibility_explains_what_remains_unres
     assert context["rights"]["compatibility"]["status"] == "unknown"
 
 
+def test_heuristic_external_compatible_metadata_stays_unverified() -> None:
+    manifest = _manifest()
+    manifest["rights"]["sources"] = [{
+        "kind": "package",
+        "reference": "external-package",
+        "license_status": "compatible",
+        "license": "DocumentRef-vendor:LicenseRef-Restricted-terms",
+        "confidence": "heuristic",
+        "evidence": [{
+            "kind": "external-record",
+            "reference": "package metadata claims compatibility",
+        }],
+    }]
+
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+
+    source = context["rights"]["sources"][0]
+    assert source["license_status_declared"] == "compatible"
+    assert source["verification_state"] == "unverified"
+    assert source["license_terms_status"] == "partial"
+    assert context["rights"]["compatibility"]["status"] == "unknown"
+    assert "source-license-incompatible" not in {
+        item["code"] for item in context["diagnostics"]
+    }
+
+
 def test_machine_generated_origin_does_not_assert_copyright_ownership() -> None:
     manifest = _manifest()
     manifest["provenance"]["origin_classification"] = "autonomous-machine-generated"

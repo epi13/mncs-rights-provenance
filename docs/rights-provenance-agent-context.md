@@ -78,8 +78,10 @@ duplicate `detail_ref`, that same expression reference identifies the source.
 
 When a source records a usable license expression but leaves `license_status`
 unknown, its diagnostic names the unresolved compatibility and source
-verification. Missing expressions and SPDX `NOASSERTION`/`NONE` remain a
-separate unknown state.
+verification. A `compatible` value from external metadata also remains a
+declared, unverified claim; an unresolved external `DocumentRef` cannot turn it
+into a compatibility result. Missing expressions and SPDX `NOASSERTION`/`NONE`
+remain a separate unknown state.
 
 ## Incremental identity
 
