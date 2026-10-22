@@ -255,6 +255,12 @@ On 2026-10-21, the Rights provider was declared as a bounded, read-only
 Environment invocation. Live readiness now reports `ready` with zero unknown
 capabilities, and the provider and targeted test capability are available.
 The connected Environment MCP context operation still omits `rights_context`.
+A fresh read on 2026-10-22 after Rights `main` reached `b8e9fe4` confirmed
+that the field remains absent. Environment cache-invalidation and
+main-integration worktree claims and a separate Rights artifact-handoff
+claim were live; this campaign wrote only to its authorized Rights
+worktree. The bounded context and claim observation is recorded in
+`evidence/rights-environment-context-recheck-20261022.json`.
 A canonical `mncs-env context` read of the persisted session does contain the
 field, but returns `review`: its stored binding still uses checkout-relative
 `RIGHTS.json` and `governance/agent-governance.json` references, which resolve

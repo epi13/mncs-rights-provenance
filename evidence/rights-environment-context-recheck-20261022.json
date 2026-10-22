@@ -1,0 +1,111 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-context-recheck/1",
+  "identity": "ev_rights_environment_context_recheck_20261022",
+  "observed_at": "2026-10-22T09:13:30+00:00",
+  "campaign_id": "cmp_ff3f91cb1a6badbf",
+  "session_id": "ses_dff1822e90820cf4",
+  "rights_repository": {
+    "name": "mncs-rights-provenance",
+    "branch": "main",
+    "head": "b8e9fe4799966a7a102983b42b8e1cc81d625f11",
+    "remote_head": "b8e9fe4799966a7a102983b42b8e1cc81d625f11"
+  },
+  "environment_context_read": {
+    "interface": "MNCS Environment context operation",
+    "project": "mncs-rights-provenance",
+    "rights_context_present": false,
+    "context_keys": [
+      "schema_version",
+      "session_id",
+      "lifecycle",
+      "environment_id",
+      "work_intent",
+      "workspace_root",
+      "persistence",
+      "toolchain",
+      "writable_repositories",
+      "protected_repositories",
+      "authority",
+      "readiness",
+      "doctor",
+      "projects",
+      "capabilities"
+    ],
+    "interpretation": "The live operation returned successfully but did not project rights_context. No substitute local context was used."
+  },
+  "live_claim_snapshot": {
+    "mncs-environment": [
+      {
+        "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+        "session_id": "ses_f13d176c86a23e69",
+        "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+        "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/luna-max-rights-cache-invalidation-20261021",
+        "expires_at": "2026-10-22T09:47:37+00:00",
+        "status": "held"
+      },
+      {
+        "claim_id": "claim:mncs-environment:worktree:5053f3907a1c",
+        "session_id": "ses_c5e448bcaa06efbf",
+        "branch": "main",
+        "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/merge-main-authority-20261020",
+        "expires_at": "2026-10-22T18:17:09+00:00",
+        "status": "held"
+      },
+      {
+        "claim_id": "claim:mncs-environment:worktree:d211c5747211",
+        "session_id": "ses_164edc158d9b1637",
+        "branch": "campaign/compiler-environment-scope-20261022",
+        "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/compiler-environment-scope-20261022/mncs-environment",
+        "expires_at": "2026-10-23T04:51:37+00:00",
+        "status": "held"
+      },
+      {
+        "claim_id": "claim:mncs-environment:worktree:f6712552f069",
+        "session_id": "ses_c5e448bcaa06efbf",
+        "branch": "campaign/luna-max-continuity-20261021",
+        "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/luna-max-continuity-20261021/mncs-environment",
+        "expires_at": "2026-10-22T17:46:42+00:00",
+        "status": "held"
+      }
+    ],
+    "mncs-doctor": {
+      "live_claim_count": 0
+    },
+    "mncs-rights-provenance": [
+      {
+        "claim_id": "claim:mncs-rights-provenance:worktree:6aaa3269ae7e",
+        "session_id": "ses_dff1822e90820cf4",
+        "branch": "campaign/luna-max-license-text-digest-20261022",
+        "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-license-text-digest-20261022",
+        "expires_at": "2026-10-22T20:57:53+00:00",
+        "status": "held"
+      },
+      {
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "session_id": "ses_a6a27331d7d348b9",
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+        "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-artifact-handoff-20261021",
+        "expires_at": "2026-10-22T12:17:38+00:00",
+        "status": "held"
+      }
+    ]
+  },
+  "coordination": {
+    "own_claim_and_peer_claim_are_distinct_worktrees": true,
+    "peer_artifact_handoff_worktree_modified": false,
+    "environment_worktrees_modified": false,
+    "doctor_worktrees_modified": false,
+    "coordination_result": "The context boundary was confirmed with normal Environment reads while Environment owner and separate Rights artifact-handoff leases remained live. Work continued in the claimed Rights worktree only."
+  },
+  "integration_status": "OPEN",
+  "legal_conclusion": "NOT_MADE",
+  "limits": [
+    "This is a timestamped read and claim snapshot; it does not infer or attest to changes inside other agents' worktrees.",
+    "Environment claims are leases and may expire or be renewed after this observation.",
+    "Rights context omission remains an Environment admission integration gap; existing Rights projection tests do not substitute for live Environment delivery."
+  ],
+  "source_sha256": {
+    ".mncs/project.json": "ac595caff9ed57696fdad5a54b1bb8d88882192836fdffb31d00bf6fd5944d0b",
+    "docs/rights-provenance-agent-context.md": "cbe820fbbe2ecc36c5f56cf92be627ffcd9c07c4b12e4450064cb27e997a32a6"
+  }
+}
