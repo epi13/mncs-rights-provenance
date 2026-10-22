@@ -44,7 +44,7 @@ where Disabled maps everything to None and Fatal preserves raw severity.
 | 0 | hash_correspondence | artifact_hash_correspondence | artifact/hash mismatch | fatal |
 | 1 | evidence_refs | evidence_references_resolve | any broken evidence reference | review |
 | 2 | graph_integrity | graph_integrity | DAG integrity violation | fatal |
-| 3 | incompatible_license | no_incompatible_third_party_license | >=1 incompatible source | fatal |
+| 3 | incompatible_license | no_incompatible_third_party_license | >=1 verified incompatible source assessment | fatal |
 | 4 | contradictory_license | no_contradictory_license_evidence | >=1 license-evidence contradiction | review |
 | 5 | rights_basis_resolved | rights_basis_resolved | basis unknown-needs-review | review |
 | 6 | third_party_resolved | third_party_material_resolved | possible/unknown (canonical profile: review; development: finding) | review |
@@ -52,7 +52,7 @@ where Disabled maps everything to None and Fatal preserves raw severity.
 | 8 | provenance_passed | provenance_validation_passed | provenance validation failed | fatal |
 | 9 | provenance_complete | provenance_complete | incomplete/not-run | review |
 | 10 | human_review_ok | human_review_state_acceptable | rejected -> blocking; not-reviewed (canonical: review; dev: finding) | review |
-| 11 | unknown_source_license | unknown_source_license | >=1 unknown-status source (canonical: review; dev: finding) | review |
+| 11 | unknown_source_license | unknown_source_license | >=1 unknown or unverified assessment (canonical: review; dev: finding) | review |
 | 12 | attestation_integrity | attestation_integrity | conflicting attestations | review |
 | 13 | impossible_evidence_gate | no_falsified_or_impossible_evidence | falsified/impossible evidence | fatal |
 
@@ -69,6 +69,25 @@ Structurally invalid manifests are `invalid` before gates run. A passing
 outcome records that project evidence requirements were met. It is never a
 legal warranty of title or non-infringement, and never a determination of
 copyright status.
+
+## Source-license evidence classification
+
+`language/source_license_status.mncs` classifies the declared source status
+and its evidence state before the release-policy adapter builds gate counts.
+Only a verified incompatible assessment contributes to the fatal
+`incompatible_source_count`. Explicitly unknown and unverified assessments
+contribute to `unknown_source_count` and remain reviewable; verified compatible
+and verified not-applicable assessments add neither source-status finding.
+
+The v0.3 rights manifest has declared status, confidence, and evidence
+reference fields, but no authenticated assessment state. Its adapter therefore
+classifies every `license_status` as unverified. A confidence value or the
+presence of an evidence reference cannot promote a declaration to verified.
+The agent context continues to expose the declared status and its unverified
+state separately. A passing gate outcome is not a legal compatibility
+determination. Every host adapter that maps source records into `GateInput`
+must use this classifier or a conforming mirror; a raw `incompatible` label
+must not be counted as a verified incompatible assessment.
 
 ## Cross-implementation conformance
 

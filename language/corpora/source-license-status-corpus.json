@@ -1,0 +1,294 @@
+{
+ "schema_version": "0.1",
+ "name": "source-license-status-evidence-v1",
+ "cases": [
+  {
+   "id": "unverified-compatible",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.source_license_status.v01",
+     "function": "classify_source_license_status"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::LicenseStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::LicenseStatus::Compatible",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::EvidenceState",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::EvidenceState::Unverified",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::Assessment",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::Assessment::Unverified",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "unverified-incompatible",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.source_license_status.v01",
+     "function": "classify_source_license_status"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::LicenseStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::LicenseStatus::Incompatible",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::EvidenceState",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::EvidenceState::Unverified",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::Assessment",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::Assessment::Unverified",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "unverified-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.source_license_status.v01",
+     "function": "classify_source_license_status"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::LicenseStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::LicenseStatus::Unknown",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::EvidenceState",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::EvidenceState::Unverified",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::Assessment",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::Assessment::Unverified",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "unverified-notapplicable",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.source_license_status.v01",
+     "function": "classify_source_license_status"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::LicenseStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::LicenseStatus::NotApplicable",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::EvidenceState",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::EvidenceState::Unverified",
+       "discriminant": 0
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::Assessment",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::Assessment::Unverified",
+      "discriminant": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "verified-compatible",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.source_license_status.v01",
+     "function": "classify_source_license_status"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::LicenseStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::LicenseStatus::Compatible",
+       "discriminant": 0
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::EvidenceState",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::EvidenceState::Verified",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::Assessment",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::Assessment::VerifiedCompatible",
+      "discriminant": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "verified-incompatible",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.source_license_status.v01",
+     "function": "classify_source_license_status"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::LicenseStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::LicenseStatus::Incompatible",
+       "discriminant": 1
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::EvidenceState",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::EvidenceState::Verified",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::Assessment",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::Assessment::VerifiedIncompatible",
+      "discriminant": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "verified-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.source_license_status.v01",
+     "function": "classify_source_license_status"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::LicenseStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::LicenseStatus::Unknown",
+       "discriminant": 2
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::EvidenceState",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::EvidenceState::Verified",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::Assessment",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::Assessment::VerifiedUnknown",
+      "discriminant": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "verified-notapplicable",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.rights.source_license_status.v01",
+     "function": "classify_source_license_status"
+    },
+    "arguments": [
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::LicenseStatus",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::LicenseStatus::NotApplicable",
+       "discriminant": 3
+      }
+     },
+     {
+      "finite": {
+       "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::EvidenceState",
+       "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::EvidenceState::Verified",
+       "discriminant": 1
+      }
+     }
+    ],
+    "step_budget": 256
+   },
+   "expected": [
+    {
+     "finite": {
+      "type_identity": "mncs:0.2:finite-type:mncs.rights.source_license_status.v01::Assessment",
+      "variant_identity": "mncs:0.2:finite-variant:mncs.rights.source_license_status.v01::Assessment::VerifiedNotApplicable",
+      "discriminant": 4
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": "mncs-family.repository-manifest/v0alpha1",
   "repository": "mncs-rights-provenance",
-  "revision": 6,
+  "revision": 7,
   "manifest_location": "in-repository",
   "authority": {"note": "Rights-provenance owns provenance evidence, rights manifests, contribution attestations, release-policy evaluation, and SPDX interoperability. Uncertainty is first-class (unknown/unresolved/insufficient-evidence); the system records evidence and never fabricates legal conclusions. Not legal advice."},
   "contracts": {
@@ -23,6 +23,8 @@
           "tests/test_artifact_binding.py",
           "tests/test_implementation_lineage_core.py",
           "tests/test_implementation_lineage_extension.py",
+          "tests/test_source_license_status.py",
+          "conformance/source-license-status-golden-vectors.json",
           "scripts/environment_rights_validate.py"
         ],
         "invocation": {
@@ -64,6 +66,7 @@
             "tests/test_artifact_binding.py",
             "tests/test_artifact_binding_diagnostics.py",
             "tests/test_implementation_lineage_core.py",
+            "tests/test_source_license_status.py",
             "tests/test_implementation_lineage_extension.py",
             "tests/test_check_projection.py"
           ],

@@ -1,0 +1,30 @@
+mncs 0.6;
+
+// Normative classification of source license status evidence.
+// A manifest declaration is not itself a verified compatibility assessment.
+module mncs.rights.source_license_status.v01;
+
+enum LicenseStatus { Compatible, Incompatible, Unknown, NotApplicable }
+enum EvidenceState { Unverified, Verified }
+enum Assessment {
+  Unverified,
+  VerifiedCompatible,
+  VerifiedIncompatible,
+  VerifiedUnknown,
+  VerifiedNotApplicable,
+}
+
+fn classify_source_license_status(
+  status: LicenseStatus,
+  evidence: EvidenceState,
+) -> (result: Assessment) {
+  return match evidence {
+    EvidenceState.Unverified => Assessment.Unverified,
+    EvidenceState.Verified => match status {
+      LicenseStatus.Compatible => Assessment.VerifiedCompatible,
+      LicenseStatus.Incompatible => Assessment.VerifiedIncompatible,
+      LicenseStatus.Unknown => Assessment.VerifiedUnknown,
+      LicenseStatus.NotApplicable => Assessment.VerifiedNotApplicable,
+    },
+  };
+}
