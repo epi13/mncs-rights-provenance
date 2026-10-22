@@ -1,0 +1,58 @@
+{
+  "schema_version": "mncs.rights-provenance.source-policy-diagnostic-evidence/1",
+  "recorded_at": "2026-10-22T07:09:49Z",
+  "campaign_id": "cmp_ff3f91cb1a6badbf",
+  "environment_session": "ses_dff1822e90820cf4",
+  "coordination": {
+    "repository": "mncs-rights-provenance",
+    "feature_branch": "campaign/luna-max-policy-diagnostics-20261022",
+    "feature_claim": "claim:mncs-rights-provenance:worktree:5893375cfdf6",
+    "main_claim": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "peer_claim_observed": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "peer_branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+    "peer_worktree_preserved": true,
+    "conflict_observed": false,
+    "resolution": "Implemented in a separate claimed worktree. The peer artifact-handoff claim remained live. Main was claimed through Environment before merge and bound verification."
+  },
+  "delivery": {
+    "feature_commit": "71e96dc2d77f0f642fe4a54666fc0dcac1cd831d",
+    "merge_commit": "0432578458b6e5df33c8cc6a7b230619fa78d6c7",
+    "main_remote": "origin/main",
+    "pushed_head_before_evidence_commit": "0432578458b6e5df33c8cc6a7b230619fa78d6c7"
+  },
+  "change": {
+    "diagnostic_schema": "mncs.rights.policy-diagnostic/1",
+    "unverified_source_status": "Preserves manifest-declared labels, source references, confidence, and bounded evidence references as declared-unverified with an actionable remedy.",
+    "contradictory_source_declarations": "Groups conflicting declarations by source reference and reports their labels and evidence references as review; unknown alone is not a contradiction.",
+    "bounds": {
+      "source_declarations_or_conflict_groups_per_diagnostic": 16,
+      "evidence_references_per_source_or_conflict": 8,
+      "text_characters": 256,
+      "omitted_entries_reported": true
+    },
+    "policy_severity_changed": false,
+    "legal_conclusion": "NOT_MADE"
+  },
+  "verification": {
+    "focused_suite": "63 focused rights and policy tests passed with the MNCS binary configured; both source-status native backends ran.",
+    "environment_capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "environment_binding": "cap_b01965136e3311a2",
+    "environment_main_head": "0432578458b6e5df33c8cc6a7b230619fa78d6c7",
+    "environment_status": "ok",
+    "environment_returncode": 0,
+    "ruff": "passed",
+    "json_schema_and_project_manifest": "passed",
+    "git_diff_check": "passed",
+    "feature_checkout_attempt": {
+      "status": "pending-escalation",
+      "tests_executed": false,
+      "reported_reason": "escalation required, nothing executed: mncs-rights-provenance is not owned scope (dirty/foreign/off-branch); claim it first"
+    },
+    "resolution": "Re-selected the root checkout with cwd '.', acquired its exact main worktree claim, revalidated, and passed the bound test capability on main."
+  },
+  "limits": {
+    "evidence_authentication": "Referenced source metadata remains declared-unverified; this projection does not authenticate the referenced records.",
+    "legal_effect": "Diagnostics explain policy evidence and do not establish ownership, compatibility, or infringement.",
+    "integration_scope": "No changes were made to validator or Doctor repositories, which remain outside this session's writable authority."
+  }
+}
