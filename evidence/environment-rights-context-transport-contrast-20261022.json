@@ -1,0 +1,104 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-context-transport-contrast/1",
+  "identity": "ev_rights_environment_context_transport_contrast_20261022",
+  "recorded_at": "2026-10-22T01:17:22Z",
+  "repository": "mncs-rights-provenance",
+  "published_main": {
+    "branch": "main",
+    "head": "d5eaae3ac2a0d878950a05582b34c251e7496cc6",
+    "remote_ref": "origin/main",
+    "remote_head": "d5eaae3ac2a0d878950a05582b34c251e7496cc6"
+  },
+  "prior_fresh_admission_evidence": {
+    "identity": "ev_rights_environment_fresh_admission_20261022",
+    "path": "evidence/environment-fresh-rights-context-admission-20261022.json",
+    "mcp_context_rights_context_key_present": false
+  },
+  "canonical_session_context": {
+    "session_id": "ses_f6c2278a14074514",
+    "campaign_id": "cmp_task_f016c0de8abbc97dd5a2a1cc4b9ba91fab0345a97874fcff4eb975df6247908b",
+    "environment_id": "renv_7d8a29246271bc68",
+    "lifecycle_at_read": "handed_off",
+    "read_interface": "mncs-env context",
+    "context_schema": "mncs.environment.entry-context/1",
+    "rights_context_present": true,
+    "rights_context": {
+      "schema_version": "mncs.rights-provenance.agent-context/1",
+      "identity": "sha256:79f6f7c26905f98882b77340abfe0c7ec7a86629b80255fc9bea36cdf12647ab",
+      "status": "review",
+      "license": {
+        "expression": "Apache-2.0",
+        "declaration_state": "declared",
+        "expression_evidence": "caller-supplied-declaration-unverified",
+        "compatibility": "unknown",
+        "copyright_status": "unresolved",
+        "legal_conclusion": "NOT_MADE"
+      },
+      "governance": {
+        "status": "authorized",
+        "profile_id": "mncs-rights-provenance/native-open@0.1.0"
+      },
+      "diagnostics": [
+        {
+          "code": "copyright-status-unresolved",
+          "remedy": "review-copyright-basis",
+          "evidence_ref": "mncs-rights-provenance/RIGHTS.json#/rights/copyright_status"
+        },
+        {
+          "code": "rights-basis-unknown",
+          "remedy": "record-rights-evidence",
+          "evidence_ref": "mncs-rights-provenance/RIGHTS.json#/rights/rights_basis"
+        },
+        {
+          "code": "third-party-material-unknown",
+          "remedy": "identify-external-material",
+          "evidence_ref": "mncs-rights-provenance/RIGHTS.json#/rights/third_party_material"
+        },
+        {
+          "code": "provenance-origin-uncertain",
+          "remedy": "add-evidence-or-preserve-uncertainty",
+          "evidence_ref": "mncs-rights-provenance/RIGHTS.json#/provenance"
+        },
+        {
+          "code": "source-license-unknown",
+          "remedy": "investigate-external-rights",
+          "evidence_ref": "mncs-rights-provenance/RIGHTS.json#/rights/sources/0"
+        },
+        {
+          "code": "lineage-reference-missing",
+          "remedy": "diagnose-and-recover-lineage",
+          "evidence_ref": "mncs-rights-provenance/RIGHTS.json#/provenance"
+        }
+      ]
+    }
+  },
+  "differential_finding": {
+    "same_session_compared": true,
+    "mcp_context_projection": "rights_context field absent at fresh admission; result keys and readiness are recorded in prior evidence",
+    "canonical_cli_context": "rights_context field present in the persisted Environment session",
+    "conclusion": "The Rights context is computed and persisted with actionable evidence. The connected MCP/Control context projection fails to carry it to the caller; the immediate integration target is the context transport boundary, not a duplicate Rights resolver.",
+    "uncertainty_preserved": [
+      "Apache-2.0 is a declared, unverified expression.",
+      "Copyright status and source verification remain unresolved.",
+      "Cross-license compatibility remains unknown.",
+      "The context makes no legal conclusion."
+    ]
+  },
+  "coordination": {
+    "handoff_identity": "hff_443db070caeb16b5",
+    "recipient_consumer": "luna-max-rights-provenance",
+    "handoff_created": true,
+    "acceptance_observed": false,
+    "continuation_state_after_handoff": "reconciliation-required",
+    "active_environment_claims_left_untouched": [
+      "claim:mncs-environment:worktree:a76c547054b5",
+      "claim:mncs-environment:worktree:3174feea3a68"
+    ],
+    "active_rights_artifact_handoff_claim_left_untouched": "claim:mncs-rights-provenance:worktree:6e82b2764bed"
+  },
+  "limits": [
+    "This is a same-session projection comparison, not proof that all consumers or later admissions receive the field.",
+    "A review status and actionable diagnostics do not establish ownership, compatibility, or legal compliance.",
+    "Environment handoff acceptance remains unobserved."
+  ]
+}
