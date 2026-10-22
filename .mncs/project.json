@@ -1,7 +1,7 @@
 {
   "schema_version": "mncs-family.repository-manifest/v0alpha1",
   "repository": "mncs-rights-provenance",
-  "revision": 14,
+  "revision": 15,
   "manifest_location": "in-repository",
   "authority": {"note": "Rights-provenance owns provenance evidence, rights manifests, contribution attestations, release-policy evaluation, and SPDX interoperability. Uncertainty is first-class (unknown/unresolved/insufficient-evidence); the system records evidence and never fabricates legal conclusions. Not legal advice."},
   "contracts": {
@@ -19,8 +19,10 @@
           "legal-candidates/MNCS-Permissive-0.4.md",
           "docs/license-candidate-review.md",
           "tests/test_agent_context_projection.py",
+          "tests/test_license_candidate_text_verification.py",
           "schemas/v0.1/context-source-identities.schema.json",
           "schemas/v0.2/license-candidate-registry.schema.json",
+          "schemas/v0.1/license-candidate-text-verification.schema.json",
           "schemas/v0.3/",
           "schemas/v0.4/",
           "RIGHTS.json",
@@ -81,6 +83,7 @@
           "argv": [
             "python3", "-m", "pytest", "-q",
             "tests/test_agent_context_projection.py",
+            "tests/test_license_candidate_text_verification.py",
             "tests/test_context_source_identity_contract.py",
             "tests/test_agent_governance.py",
             "tests/test_license_action_core.py",

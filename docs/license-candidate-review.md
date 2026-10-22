@@ -42,7 +42,13 @@ does not repeat the decision list or
 draft terms. The registry is metadata about the candidate, not a replacement
 for an effective repository license. The recorded digests and bounded
 resolver checks are in
-`evidence/license-candidate-text-digests-20261022.json`.
+`evidence/license-candidate-text-digests-20261022.json`. Agents can check
+the bytes at the declared reference with
+`mncs-rp license-candidate verify-text LicenseRef-MNCS-Permissive-0.4 --repository-root .`.
+The command reads at most 64 KiB, distinguishes a digest mismatch from
+missing, oversized, unsafe, or unknown inputs, and makes no legal
+conclusion. Its bounded CLI evidence is recorded in
+`evidence/license-candidate-text-verification-20261022.json`.
 
 ## Decisions still open
 

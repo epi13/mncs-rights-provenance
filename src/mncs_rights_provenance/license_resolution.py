@@ -12,6 +12,7 @@ import hashlib
 import json
 import re
 from importlib.resources import files
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from .spdx import parse_spdx_expression
@@ -23,6 +24,8 @@ ACTION_RULESET_MODULE = "mncs.rights.license_actions.v01"
 ACTION_RULESET_REF = "language/rights_license_actions.mncs"
 _CANDIDATE_REGISTRY_REF = "mncs_rights_provenance/resources/license-candidates.json"
 EXPRESSION_EVIDENCE = "caller-supplied-declaration-unverified"
+CANDIDATE_TEXT_VERIFICATION_SCHEMA = "mncs.rights.license-candidate-text-verification/1"
+MAX_CANDIDATE_TEXT_BYTES = 64 * 1024
 
 _LOCAL_LICENSE_REF = re.compile(r"^LicenseRef-[A-Za-z0-9.-]+$", re.IGNORECASE)
 _DOCUMENT_LICENSE_REF = re.compile(
@@ -230,6 +233,9 @@ def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
             or entry.get("adoption_authority") is not None
             or not isinstance(entry.get("text_ref"), str)
             or not entry["text_ref"]
+            or "\\" in entry["text_ref"]
+            or PurePosixPath(entry["text_ref"]).is_absolute()
+            or any(part in {"", ".", ".."} for part in entry["text_ref"].split("/"))
             or not isinstance(entry.get("text_sha256"), str)
             or not re.fullmatch(r"sha256:[0-9a-f]{64}", entry["text_sha256"])
             or entry.get("declared_rights_prove_authority") is not False
@@ -392,6 +398,81 @@ def resolve_license_expression(expression: str) -> dict[str, Any]:
             for identifier in sorted(candidate_references)
         ]
     return result
+
+
+def verify_license_candidate_text(
+    identifier: str, repository_root: str | Path = "."
+) -> dict[str, Any]:
+    """Compare one bounded local candidate-text file with its declared digest.
+
+    A match establishes byte identity with the registry declaration only. It
+    does not make the draft effective or establish ownership, authority, or
+    legal compatibility.
+    """
+    if not isinstance(identifier, str) or not identifier or len(identifier) > 256:
+        raise ValueError("candidate identifier must be non-empty text of at most 256 characters")
+    canonical = _CANDIDATE_IDENTIFIERS.get(identifier.casefold())
+    candidate = _CANDIDATES.get(canonical) if canonical else None
+    base: dict[str, Any] = {
+        "schema_version": CANDIDATE_TEXT_VERIFICATION_SCHEMA,
+        "license": canonical or identifier,
+        "candidate_status": candidate["status"] if candidate else "unknown",
+        "adoption_status": candidate["adoption_status"] if candidate else "unknown",
+        "effective_grant": candidate["effective_grant"] if candidate else None,
+        "source_ref": candidate["text_ref"] if candidate else None,
+        "expected_sha256": candidate["text_sha256"] if candidate else None,
+        "observed_sha256": None,
+        "content_evidence": "none",
+        "verification_scope": "file-byte-digest-equality-only",
+        "legal_conclusion": "NOT_MADE",
+    }
+
+    def result(status: str, *, observed_sha256: str | None = None) -> dict[str, Any]:
+        value = dict(base)
+        value["status"] = status
+        if observed_sha256 is not None:
+            value["observed_sha256"] = observed_sha256
+            value["content_evidence"] = "local-file-bytes"
+        return value
+
+    if candidate is None:
+        return result("unknown-candidate")
+
+    try:
+        root = Path(repository_root).resolve(strict=True)
+    except (OSError, RuntimeError, TypeError, ValueError):
+        return result("input-unavailable")
+    if not root.is_dir():
+        return result("input-unavailable")
+
+    reference = candidate["text_ref"]
+    relative = PurePosixPath(reference)
+    if ("\\" in reference or relative.is_absolute()
+            or any(part in {"", ".", ".."} for part in reference.split("/"))):
+        return result("unsafe-reference")
+    target = root.joinpath(*relative.parts)
+    if target.is_symlink():
+        return result("unsafe-reference")
+    try:
+        resolved = target.resolve(strict=True)
+        resolved.relative_to(root)
+    except ValueError:
+        return result("unsafe-reference")
+    except (OSError, RuntimeError):
+        return result("input-unavailable")
+    if not resolved.is_file():
+        return result("input-unavailable")
+    try:
+        with resolved.open("rb") as stream:
+            content = stream.read(MAX_CANDIDATE_TEXT_BYTES + 1)
+    except OSError:
+        return result("input-unavailable")
+    if len(content) > MAX_CANDIDATE_TEXT_BYTES:
+        return result("input-too-large")
+
+    observed = "sha256:" + hashlib.sha256(content).hexdigest()
+    status = "digest-match" if observed == candidate["text_sha256"] else "digest-mismatch"
+    return result(status, observed_sha256=observed)
 
 
 def license_action_guidance(expression: str, action: str) -> dict[str, Any]:

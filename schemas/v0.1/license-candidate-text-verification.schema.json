@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/rights-provenance/license-candidate-text-verification/v0.1.0.schema.json",
+  "title": "MNCS License Candidate Text Digest Verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "license",
+    "status",
+    "candidate_status",
+    "adoption_status",
+    "effective_grant",
+    "source_ref",
+    "expected_sha256",
+    "observed_sha256",
+    "content_evidence",
+    "verification_scope",
+    "legal_conclusion"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs.rights.license-candidate-text-verification/1"},
+    "license": {"type": "string", "minLength": 1, "maxLength": 256},
+    "status": {
+      "enum": [
+        "digest-match",
+        "digest-mismatch",
+        "input-unavailable",
+        "input-too-large",
+        "unsafe-reference",
+        "unknown-candidate"
+      ]
+    },
+    "candidate_status": {"enum": ["draft-for-legal-review", "unknown"]},
+    "adoption_status": {"enum": ["not-adopted", "unknown"]},
+    "effective_grant": {"type": ["boolean", "null"], "enum": [false, null]},
+    "source_ref": {"type": ["string", "null"], "maxLength": 256},
+    "expected_sha256": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      ]
+    },
+    "observed_sha256": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      ]
+    },
+    "content_evidence": {"enum": ["none", "local-file-bytes"]},
+    "verification_scope": {"const": "file-byte-digest-equality-only"},
+    "legal_conclusion": {"const": "NOT_MADE"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"enum": ["digest-match", "digest-mismatch"]}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "candidate_status": {"const": "draft-for-legal-review"},
+          "adoption_status": {"const": "not-adopted"},
+          "effective_grant": {"const": false},
+          "source_ref": {"type": "string"},
+          "expected_sha256": {"type": "string"},
+          "observed_sha256": {"type": "string"},
+          "content_evidence": {"const": "local-file-bytes"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "unknown-candidate"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "candidate_status": {"const": "unknown"},
+          "adoption_status": {"const": "unknown"},
+          "effective_grant": {"const": null},
+          "source_ref": {"const": null},
+          "expected_sha256": {"const": null},
+          "observed_sha256": {"const": null},
+          "content_evidence": {"const": "none"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"enum": ["input-unavailable", "input-too-large", "unsafe-reference"]}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "candidate_status": {"const": "draft-for-legal-review"},
+          "adoption_status": {"const": "not-adopted"},
+          "effective_grant": {"const": false},
+          "source_ref": {"type": "string"},
+          "expected_sha256": {"type": "string"},
+          "observed_sha256": {"const": null},
+          "content_evidence": {"const": "none"}
+        }
+      }
+    }
+  ]
+}

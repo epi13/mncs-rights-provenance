@@ -1,0 +1,100 @@
+{
+  "schema_version": "mncs.rights-provenance.license-candidate-text-verification-evidence/1",
+  "identity": "ev_rights_candidate_text_verification_cli_20261022",
+  "observed_at": "2026-10-22T09:08:33+00:00",
+  "repository": "mncs-rights-provenance",
+  "branch": "campaign/luna-max-license-text-digest-20261022",
+  "base_commit": "796a5798b512c913b39f58ef9e152a63a679e44a",
+  "command": "mncs-rp license-candidate verify-text LicenseRef-MNCS-Permissive-0.4 --repository-root .",
+  "verification_contract": {
+    "schema_version": "mncs.rights.license-candidate-text-verification/1",
+    "schema_ref": "schemas/v0.1/license-candidate-text-verification.schema.json",
+    "candidate_text_limit_bytes": 65536,
+    "reads_only_registry_text_ref": true,
+    "rejects_reference_escape_or_symlink_escape": true,
+    "result_states": [
+      "digest-match",
+      "digest-mismatch",
+      "input-unavailable",
+      "input-too-large",
+      "unsafe-reference",
+      "unknown-candidate"
+    ],
+    "exit_code": "0 for digest-match; 1 for all non-matching or unresolved states; 2 for malformed command input",
+    "verification_scope": "file-byte-digest-equality-only",
+    "legal_conclusion": "NOT_MADE"
+  },
+  "candidate_result": {
+    "identifier": "LicenseRef-MNCS-Permissive-0.4",
+    "candidate_status": "draft-for-legal-review",
+    "adoption_status": "not-adopted",
+    "effective_grant": false,
+    "expected_sha256": "sha256:bc3db39a524b9b14f135535e99fe51a1d0d3a3adb20f2db47c0e88ab52f81c29",
+    "observed_sha256": "sha256:bc3db39a524b9b14f135535e99fe51a1d0d3a3adb20f2db47c0e88ab52f81c29",
+    "status": "digest-match"
+  },
+  "edge_cases_tested": [
+    {
+      "state": "digest-mismatch",
+      "input": "different file bytes at declared path",
+      "result": "content mismatch with candidate still unadopted and non-effective"
+    },
+    {
+      "state": "input-unavailable",
+      "input": "missing local candidate text",
+      "result": "expected digest retained; observed digest unknown"
+    },
+    {
+      "state": "input-too-large",
+      "input": "65537 bytes",
+      "result": "read bounded to 65537 bytes; no observed digest emitted"
+    },
+    {
+      "state": "unsafe-reference",
+      "input": "symlinked candidate directory escaping repository root",
+      "result": "rejected without hashing external file bytes"
+    },
+    {
+      "state": "unknown-candidate",
+      "input": "unregistered LicenseRef",
+      "result": "unknown remains distinct from mismatch and no digest is invented"
+    }
+  ],
+  "verification": {
+    "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python3 -m pytest -o addopts= -q tests/test_agent_context_projection.py tests/test_license_resolution_cli.py tests/test_license_candidate_text_verification.py tests/test_license_action_core.py tests/test_license_action_guidance.py tests/test_agent_contract.py",
+    "result": "71 passed in 0.61s",
+    "toolchain": {
+      "repository": "mncs-language",
+      "head": "2ffc662087bfb91a331a73b5efefebf67b056a4d",
+      "read_only": true
+    },
+    "checks": {
+      "ruff": "passed",
+      "JSON schemas and project manifest": "passed",
+      "git diff check": "passed"
+    }
+  },
+  "existing_rights_preserved": {
+    "repository_license": "Apache-2.0",
+    "license_file_modified": false,
+    "candidate_effective": false,
+    "candidate_adopted": false
+  },
+  "limits": [
+    "A digest match proves only that bounded local file bytes match the candidate registry declaration.",
+    "The result does not verify copyright or patent ownership, grant authority, adoption, enforceability, or compatibility.",
+    "Candidate rights remain non-effective and text-digest verification makes no legal conclusion."
+  ],
+  "source_sha256": {
+    ".mncs/project.json": "7c7e118e18a87d25412eb3d2d71e312e8106c095fa8ef1215901ea799fdcc962",
+    "docs/license-candidate-review.md": "521e61fface4aaa69aea87e38542349a190e563de937fce071dab95c57ef9a43",
+    "docs/rights-provenance-agent-context.md": "89753fc35f0bd3cec7b60844defa1eeb441d11889e07fbc3abbf8f5c2072e14e",
+    "schemas/v0.1/license-candidate-text-verification.schema.json": "2c9d15491314c400a595f6cb7ae8463f42842e3607e919add6cf438bdf2a33ee",
+    "schemas/v0.2/license-candidate-registry.schema.json": "89bf63c994e0fe567b5936a6b2050fcc68f23cfc383866683a69363d73b34abc",
+    "src/mncs_rights_provenance/cli.py": "550a1845d32073a8ccc97a8a170166715d0f184f8949fb75cedb900a7a3a032a",
+    "src/mncs_rights_provenance/license_resolution.py": "bb1f300016bbe8373a4d8a8e2e9a20b9ff22c7aef6ca517f81ab0c9d8ea23fa5",
+    "src/mncs_rights_provenance/resources/license-candidates.json": "271c4cd5a131a2a6022954c6138fa05cee1942c8ad2a356deadbb5918a3d23c8",
+    "tests/test_license_candidate_text_verification.py": "5af61c8fc656508879d77ce63bb8e30f2ffbf7fe930cc88fe6aa422df7cc7f14",
+    "tests/test_agent_context_projection.py": "5cf286e0c7409964d308c89cb79e511cfa2671302d4e9007f3419e6d17c2760c"
+  }
+}

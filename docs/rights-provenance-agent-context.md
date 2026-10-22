@@ -9,8 +9,12 @@ MNCS Rights & Provenance v0.3 already owns rights manifests, typed provenance, c
 The projection keeps legal terms, unresolved claims, provenance state, and agent guidance in separate fields. A declared license is resolved to a reference summary of known notice and patent terms only for a small allow-listed set of SPDX identifiers. The versioned `mncs.rights.license-resolution/4` output uses the SPDX 2.3 expression parser, which preserves `AND`/`OR` precedence and local or external `LicenseRef` identity; known identifiers are matched case-insensitively while their declared spelling remains in the expression tree. Each result labels the supplied expression `caller-supplied-declaration-unverified`; this does not verify the declaration, ownership, authority, or compatibility. A reference whose extracted terms were not supplied remains explicitly unresolved. Malformed operator sequences are rejected. The expression tree is retained when it fits the configured context budget; larger detail remains available through the manifest reference. Unknown identifiers and `AND`/`OR` combinations do not receive an invented compatibility result. An unadopted MNCS permissive-license candidate remains non-effective and cannot establish contributor authority. The compact context includes a per-candidate count and stable reference to its unresolved legal-review decisions, together with the candidate registry content digest. Registry version 2 records each local draft text reference and its declared SHA-256 for on-demand lookup; the resolver does not verify the draft bytes or embed or activate draft terms. The summary links to the identified license text and is not a legal opinion.
 
 Agents can request the full bounded term summary with
-`mncs-rp license-resolve '<SPDX expression>'`. The admission context carries
-`rights.license_terms_access.query_ref` is available on admission. Agents use
+`mncs-rp license-resolve '<SPDX expression>'`. They can verify a local
+candidate text reference with `mncs-rp license-candidate verify-text
+LicenseRef-MNCS-Permissive-0.4 --repository-root .`; this compares bounded
+file bytes to the registry digest and makes no legal conclusion.
+Admission context exposes
+`rights.license_terms_access.query_ref` on join. Agents use
 the declared expression in `rights.distribution_license` as its argument. If
 `rights.distribution_license_truncated` is true, the full expression remains
 in `rights.license_terms.expression` when present; otherwise

@@ -30,7 +30,11 @@ from .evidence import (
 )
 from .forge_adapter import BUILD_BINDING_REQUEST_SCHEMA, build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
-from .license_resolution import license_action_guidance, resolve_license_expression
+from .license_resolution import (
+    license_action_guidance,
+    resolve_license_expression,
+    verify_license_candidate_text,
+)
 from .lineage import (
     lineage_record_from_artifact_binding,
     lineage_record_from_dict,
@@ -278,6 +282,16 @@ def cmd_license_resolve(args: argparse.Namespace) -> int:
     _emit(report, human=args.human)
     # Unresolved terms are a useful structured result, not a command failure.
     return 0
+
+
+def cmd_license_candidate_verify_text(args: argparse.Namespace) -> int:
+    try:
+        report = verify_license_candidate_text(args.identifier, args.repository_root)
+    except (OSError, TypeError, ValueError) as exc:
+        _emit({"ok": False, "error": str(exc)[:256], "legal_conclusion": "NOT_MADE"})
+        return 2
+    _emit(report, human=args.human)
+    return 0 if report["status"] == "digest-match" else 1
 
 
 def cmd_evidence_verify(args: argparse.Namespace) -> int:
@@ -649,6 +663,24 @@ def build_parser() -> argparse.ArgumentParser:
     )
     license_resolve_parser.add_argument("--human", action="store_true")
     license_resolve_parser.set_defaults(func=cmd_license_resolve)
+
+    candidate_parser = subparsers.add_parser(
+        "license-candidate",
+        help="inspect versioned local license-candidate text",
+    )
+    candidate_sub = candidate_parser.add_subparsers(
+        dest="license_candidate_command", required=True
+    )
+    candidate_verify = candidate_sub.add_parser(
+        "verify-text",
+        help="compare a candidate text file with its registry-declared SHA-256",
+    )
+    candidate_verify.add_argument("identifier", help="local LicenseRef candidate identifier")
+    candidate_verify.add_argument(
+        "--repository-root", default=".", help="project root containing the declared text_ref"
+    )
+    candidate_verify.add_argument("--human", action="store_true")
+    candidate_verify.set_defaults(func=cmd_license_candidate_verify_text)
 
     evidence_parser = subparsers.add_parser("evidence", help="evidence-record operations")
     evidence_sub = evidence_parser.add_subparsers(dest="evidence_command", required=True)
