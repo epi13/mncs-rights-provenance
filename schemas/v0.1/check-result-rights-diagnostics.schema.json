@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/v0.1/check-result-rights-diagnostics.schema.json",
+  "title": "MNCS Rights Check Result Diagnostics Extension v1",
+  "description": "Bounded Rights policy diagnostics carried by the optional rights_diagnostics field in mncs.check-result/1.",
+  "type": "array",
+  "maxItems": 8,
+  "items": {
+    "$ref": "https://mncs.dev/schemas/v0.1/policy-diagnostic.schema.json"
+  }
+}

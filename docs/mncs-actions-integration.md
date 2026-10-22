@@ -72,6 +72,9 @@ the bounded diagnostics for unverified source-license declarations and
 contradictory declarations. Each record remains marked
 `declared-unverified` with `legal_conclusion: NOT_MADE`; a declared status is
 not promoted to a verified fact or a legal compatibility conclusion.
+The array contract is published at
+`schemas/v0.1/check-result-rights-diagnostics.schema.json`, which references
+the individual diagnostic schema.
 
 The projection accepts at most eight records and 64 KiB total. Unsupported or
 malformed records are omitted with an explicit `unresolved` note. This

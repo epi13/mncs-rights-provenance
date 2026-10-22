@@ -19,6 +19,8 @@ import sys
 from pathlib import Path
 
 import pytest
+from jsonschema import Draft202012Validator
+from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -31,6 +33,7 @@ from mncs_rights_provenance.check_projection import (
 
 WORKFLOW = ROOT / ".github" / "workflows" / "mncs-family.yml"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
+RIGHTS_DIAGNOSTICS_SCHEMA = ROOT / "schemas" / "v0.1" / "check-result-rights-diagnostics.schema.json"
 
 MNCS_RP = shutil.which("mncs-rp")
 
@@ -61,6 +64,18 @@ def check_shape_valid(check: dict) -> list[str]:
         if path is not None and (".." in str(path) or str(path).startswith("/")):
             errors.append("references.path")
     return errors
+
+
+def rights_diagnostics_schema_errors(diagnostics: list[dict]) -> list[str]:
+    schema = json.loads(RIGHTS_DIAGNOSTICS_SCHEMA.read_text(encoding="utf-8"))
+    diagnostic_schema_path = ROOT / "schemas" / "v0.1" / "policy-diagnostic.schema.json"
+    diagnostic_schema = json.loads(diagnostic_schema_path.read_text(encoding="utf-8"))
+    registry = Registry().with_resource(
+        diagnostic_schema["$id"],
+        Resource.from_contents(diagnostic_schema),
+    )
+    validator = Draft202012Validator(schema, registry=registry)
+    return [error.message for error in validator.iter_errors(diagnostics)]
 
 
 def _source_license_diagnostic() -> dict:
@@ -204,6 +219,7 @@ def test_projection_carries_actionable_rights_diagnostic_without_changing_verdic
     assert error is None and check is not None
     assert check["verdict"] == "UNKNOWN"
     assert check["rights_diagnostics"] == [diagnostic]
+    assert rights_diagnostics_schema_errors(check["rights_diagnostics"]) == []
     assert any(
         "unknown_source_license" in note
         and "declared but unverified" in note
@@ -223,6 +239,7 @@ def test_projection_carries_conflicting_declarations_without_legal_conclusion():
     assert error is None and check is not None
     assert check["verdict"] == "UNKNOWN"
     assert check["rights_diagnostics"] == [diagnostic]
+    assert rights_diagnostics_schema_errors(check["rights_diagnostics"]) == []
     assert any("does not establish legal incompatibility" in note for note in check["unresolved"])
 
 
@@ -273,6 +290,7 @@ def test_projection_bounds_diagnostic_count_and_reports_omissions():
     assert error is None and check is not None
     assert check["verdict"] == "PASS"
     assert len(check["rights_diagnostics"]) == 8
+    assert rights_diagnostics_schema_errors([_source_license_diagnostic() for _ in range(9)])
     assert any("2 additional rights diagnostics omitted" in note for note in check["unresolved"])
 
 
