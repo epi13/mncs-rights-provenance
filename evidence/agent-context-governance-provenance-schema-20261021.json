@@ -1,0 +1,78 @@
+{
+  "coordination": {
+    "active_other_agent_claim": {
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "scope_overlap": false,
+      "session_id": "ses_a6a27331d7d348b9"
+    },
+    "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "environment_session_id": "ses_973d1b67eb66857e",
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:8ef27b8a3ee6"
+  },
+  "identity": "ev_rights_agent_context_governance_provenance_schema_20261021",
+  "implementation": {
+    "base_commit": "3e0c6c33582466ab029c56a0d7858821b5e9c142",
+    "branch": "campaign/luna-max-context-governance-provenance-schema-20261021",
+    "compaction_repair": "Repeated context fitting preserves an existing governance rules_ref rather than replacing it with null.",
+    "digest_handling": "Only canonical sha256:<64 lowercase hex> input digests are attached. Missing or malformed digests remain null and their context lineage edges remain referenced/unavailable.",
+    "files_sha256": {
+      "docs/rights-provenance-agent-context.md": "sha256:2ab410fe67680bfbd1876217be88b7ed95521c687520b8fd99e7cb6b9120bdb7",
+      "schemas/v0.1/agent-context.schema.json": "sha256:5d39786111a7a41fbc163821a65646bc6b6b188de3076486e1102acba030db33",
+      "src/mncs_rights_provenance/agent_context.py": "sha256:ae03932ed5bd66902b052b2f2926cf186e08465366787dddb38e657c5f2458ee",
+      "tests/test_agent_context_projection.py": "sha256:7c58b4ef1e0d4133b197758e96b9370172da026404e835f4376b28c124e4ebcb"
+    },
+    "projection_contract": {
+      "diagnostics": "types review code, evidence reference, summary, and remedy",
+      "governance": "types authority identity, allow-listed rights/provenance/agent rules, and compact rules_ref fallback",
+      "provenance": "types origin and declaration state, counts, bounded relationship kinds, and referenced/observed/unavailable lineage edges",
+      "rights": "types declared source summaries, unknown compatibility, license and truncation states"
+    },
+    "reference_compaction": {
+      "action_guidance": "Compact projection may omit redundant per-action status entries when they equal the shared status; query_ref and expression_ref remain.",
+      "authoritative_references": "Long manifest and governance references stay once in sources; repeated locations resolve through source:<key> and its source record.",
+      "lineage": "Compact edges may omit repeated output targets and reference the source digest already held in sources."
+    }
+  },
+  "limits": [
+    "The context projection remains evidence-oriented and makes no legal compatibility, ownership, authorship, or contributor-authority conclusion.",
+    "This change types the Rights provider output; Environment admission and cache invalidation remain a separate integration scope.",
+    "No operative license text or candidate terms were changed."
+  ],
+  "recorded_at": "2026-10-21T23:58:05Z",
+  "repository": "mncs-rights-provenance",
+  "schema_version": "mncs.rights-provenance.agent-context-governance-provenance-evidence/1",
+  "verification": {
+    "context_budget_probe": {
+      "configured_budget_bytes": 4096,
+      "diagnostics_retained": [
+        "copyright-status-unresolved"
+      ],
+      "external_source_count": 4,
+      "external_source_summaries_retained": 0,
+      "governance_reference_bytes": 255,
+      "manifest_reference_bytes": 255,
+      "observed_context_bytes": 4024,
+      "result": "within budget; compact aliases preserve authoritative references and lineage digest references",
+      "source_count_preserved": true
+    },
+    "focused_command": "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_agent_context_projection.py tests/test_license_resolution_cli.py tests/test_license_action_guidance.py tests/test_manifest.py tests/test_agent_contract.py",
+    "focused_exit_code": 0,
+    "focused_result": "77 passed",
+    "ruff": "passed",
+    "schema_json_parse": "passed",
+    "schema_validation_cases": [
+      "authorized governance with bounded native rules",
+      "compact lineage uses source digest pointers and shared output reference",
+      "compact review diagnostic remains actionable under long-reference pressure",
+      "existing full and compact license-term variants",
+      "governance rules compacted to an on-demand reference",
+      "long source references and four external inputs fit the 4096-byte context budget",
+      "missing/malformed digest lineage remains unavailable",
+      "omitted source summaries retain source count and truncation state",
+      "source summaries and actionable diagnostics",
+      "unavailable authority and null source digests"
+    ],
+    "working_tree_diff_check": "passed"
+  }
+}

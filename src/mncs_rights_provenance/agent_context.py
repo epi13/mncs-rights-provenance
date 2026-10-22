@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from collections import Counter
 from collections.abc import Mapping
 from typing import Any
@@ -37,6 +38,16 @@ _AGENT_RULES = {
     "rights_conflict": {"explain-and-escalate", "investigate"},
     "provenance_loss": {"diagnose-and-recover", "record-unknown"},
 }
+_SHA256_DIGEST = re.compile(r"^sha256:[a-f0-9]{64}$")
+_REFERENCE_FIELDS = {
+    "detail_ref",
+    "expression_ref",
+    "expression_tree_ref",
+    "license_terms_ref",
+    "rules_ref",
+    "unresolved_identifiers_ref",
+    "evidence_ref",
+}
 
 
 def _bounded_label(value: Any, fallback: str, *, limit: int = 128) -> str:
@@ -45,9 +56,53 @@ def _bounded_label(value: Any, fallback: str, *, limit: int = 128) -> str:
     return fallback
 
 
+def _compact_authoritative_references(context: dict[str, Any]) -> None:
+    """Replace repeated long manifest/profile refs with resolvable source aliases."""
+    source_references = {
+        key: source.get("reference")
+        for key, source in context["sources"].items()
+        if key in {"rights_manifest", "governance_profile"}
+        and isinstance(source, Mapping)
+        and isinstance(source.get("reference"), str)
+    }
+    def compact(value: Any) -> Any:
+        if not isinstance(value, str):
+            return value
+        for key, source_ref in source_references.items():
+            alias = f"source:{key}"
+            if len(source_ref) <= len(alias):
+                continue
+            if value == source_ref or value.startswith(source_ref + "#"):
+                return alias + value[len(source_ref):]
+        return value
+
+    def compact_fields(record: dict[str, Any]) -> None:
+        for field in _REFERENCE_FIELDS:
+            if field in record:
+                record[field] = compact(record[field])
+
+    rights = context["rights"]
+    compact_fields(rights["license_terms"])
+    compact_fields(rights["action_guidance"])
+    for source in rights["sources"]:
+        compact_fields(source)
+        if isinstance(source.get("evidence_refs"), list):
+            source["evidence_refs"] = [compact(item) for item in source["evidence_refs"]]
+
+    provenance = context["provenance"]
+    compact_fields(provenance)
+    for relationship in provenance["projection"]["relationships"]:
+        if "from" in relationship:
+            relationship["from"] = compact(relationship["from"])
+
+    compact_fields(context["governance"])
+    for diagnostic in context["diagnostics"]:
+        compact_fields(diagnostic)
+
 def _fit_context(context: dict[str, Any], budget: int) -> None:
     """Drop on-demand detail before the admission projection exceeds its budget."""
-    target = budget - 128  # leave room for the final content identity
+    target = budget - 96  # leave room for the final content identity
+    original_diagnostics = list(context["diagnostics"])
     rights = context["rights"]
     terms = rights["license_terms"]
     if len(json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")) <= target:
@@ -58,6 +113,30 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
     if len(json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")) <= target:
         return
     provenance = context["provenance"]
+    # Deduplicate long references and lineage digests before discarding useful
+    # diagnostics; these references remain resolvable through the source map.
+    _compact_authoritative_references(context)
+    for relationship in provenance["projection"]["relationships"]:
+        relationship.pop("to", None)
+        source_key = next(
+            (
+                key for key, source in context["sources"].items()
+                if isinstance(source, Mapping)
+                and (
+                    relationship.get("from") == source.get("reference")
+                    or relationship.get("from") == f"source:{key}"
+                )
+            ),
+            None,
+        )
+        digest = relationship.pop("content_digest", None)
+        if source_key is not None and isinstance(digest, str):
+            relationship["content_digest_ref"] = f"#/sources/{source_key}/sha256"
+        else:
+            relationship["content_digest"] = digest
+    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    if len(encoded) <= target:
+        return
     provenance["relationship_kinds"] = dict(list(provenance["relationship_kinds"].items())[:8])
     for limit in (8, 4, 2, 0):
         context["diagnostics"] = context["diagnostics"][:limit]
@@ -73,7 +152,9 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
         # Preserve the legal declaration, authority, evidence references, and
         # lineage edges. Long rule detail remains reachable through detail_ref.
         governance = context["governance"]
-        governance["rules_ref"] = governance.pop("detail_ref", None)
+        governance["rules_ref"] = governance.pop(
+            "detail_ref", governance.get("rules_ref")
+        )
         governance.pop("rules", None)
     action_guidance = rights.get("action_guidance")
     encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
@@ -83,7 +164,6 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
         and action_guidance.get("expression_tree") is not None
     ):
         action_guidance.pop("expression_tree")
-        action_guidance["expression_tree_ref"] = action_guidance.get("expression_ref")
     encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     if len(encoded) > target and isinstance(action_guidance, dict):
         action_guidance.pop("not_assessed", None)
@@ -92,10 +172,20 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
         action_guidance.pop("decision_notes_truncated", None)
         ruleset = action_guidance.get("ruleset")
         if isinstance(ruleset, Mapping):
-            action_guidance["ruleset"] = {
-                "version": ruleset.get("version"),
-                "source": "#/sources/license_action_ruleset",
-            }
+            # The exact ruleset version and identity remain in `sources`.
+            action_guidance.pop("ruleset", None)
+        actions = action_guidance.get("actions")
+        if (
+            isinstance(actions, Mapping)
+            and actions
+            and all(
+                isinstance(result, Mapping)
+                and result.get("status") == action_guidance.get("status")
+                for result in actions.values()
+            )
+        ):
+            # The shared status already summarizes every action in this case.
+            action_guidance.pop("actions", None)
     encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     if len(encoded) > target:
         expression = terms.get("expression")
@@ -136,6 +226,39 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
         # The declaration is already projected on rights.distribution_license;
         # drop its duplicate resolver copy once the authoritative reference is present.
         terms.pop("expression", None)
+    if original_diagnostics:
+        action_guidance = rights.get("action_guidance")
+        if (
+            isinstance(terms.get("expression"), str)
+            and terms.get("expression") == rights.get("distribution_license")
+        ):
+            terms.pop("expression", None)
+        compatibility = rights.get("compatibility")
+        if isinstance(compatibility, dict):
+            compatibility.pop("reason", None)
+        license_compatibility = terms.get("compatibility")
+        if isinstance(license_compatibility, dict):
+            license_compatibility.pop("reason", None)
+        if (
+            isinstance(action_guidance, Mapping)
+            and terms.get("detail_ref") == action_guidance.get("expression_ref")
+        ):
+            # The action-guidance expression reference points at this same
+            # declaration and remains available with its query contract.
+            terms.pop("detail_ref", None)
+        context["diagnostics"] = original_diagnostics
+        _compact_authoritative_references(context)
+        retained: list[dict[str, Any]] = []
+        for diagnostic in original_diagnostics:
+            retained.append(diagnostic)
+            context["diagnostics"] = retained
+            encoded = json.dumps(
+                context, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+            ).encode("utf-8")
+            if len(encoded) > target:
+                retained.pop()
+                context["diagnostics"] = retained
+                break
 
 
 def _validate_governance(value: Any) -> tuple[dict[str, Any] | None, list[str]]:
@@ -375,12 +498,14 @@ def build_agent_context(
         governance_ref, "governance/agent-governance.json", limit=256
     )
     manifest_digest = (
-        manifest_digest[:71]
-        if isinstance(manifest_digest, str) and len(manifest_digest) <= 71 else None
+        manifest_digest
+        if isinstance(manifest_digest, str) and _SHA256_DIGEST.fullmatch(manifest_digest)
+        else None
     )
     governance_digest = (
-        governance_digest[:71]
-        if isinstance(governance_digest, str) and len(governance_digest) <= 71 else None
+        governance_digest
+        if isinstance(governance_digest, str) and _SHA256_DIGEST.fullmatch(governance_digest)
+        else None
     )
     diagnostics: list[dict[str, str]] = []
     manifest_issues = validate_manifest_structure(manifest)

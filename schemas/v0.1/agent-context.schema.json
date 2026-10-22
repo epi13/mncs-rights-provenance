@@ -12,7 +12,29 @@
     "status": {"enum": ["declared", "review"]},
     "sources": {
       "type": "object",
+      "additionalProperties": false,
+      "required": ["rights_manifest", "governance_profile", "license_resolver", "license_action_ruleset"],
       "properties": {
+        "rights_manifest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reference", "sha256", "manifest_identity", "identity_state"],
+          "properties": {
+            "reference": {"type": "string", "minLength": 1, "maxLength": 256},
+            "sha256": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"},
+            "manifest_identity": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+            "identity_state": {"enum": ["verified-content-digest", "computed-from-observed-content"]}
+          }
+        },
+        "governance_profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reference", "sha256"],
+          "properties": {
+            "reference": {"type": "string", "minLength": 1, "maxLength": 256},
+            "sha256": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"}
+          }
+        },
         "license_candidate_registry": {
           "type": "object",
           "additionalProperties": false,
@@ -44,7 +66,21 @@
     },
     "rights": {
       "type": "object",
+      "additionalProperties": false,
+      "required": ["distribution_license", "declaration_state", "copyright_status", "rights_basis", "third_party_material", "sources", "source_count", "sources_truncated", "license_terms", "license_terms_access", "action_guidance", "compatibility"],
       "properties": {
+        "distribution_license": {"type": ["string", "null"], "maxLength": 256},
+        "declaration_state": {"enum": ["declared", "unknown"]},
+        "copyright_status": {"type": "string", "minLength": 1, "maxLength": 128},
+        "rights_basis": {"type": "string", "minLength": 1, "maxLength": 128},
+        "third_party_material": {"type": "string", "minLength": 1, "maxLength": 128},
+        "sources": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/rights_source_summary"},
+          "maxItems": 4
+        },
+        "source_count": {"type": "integer", "minimum": 0},
+        "sources_truncated": {"type": "boolean"},
         "license_terms": {"$ref": "#/$defs/license_terms_projection"},
         "distribution_license_truncated": {"type": "boolean"},
         "license_terms_access": {
@@ -58,11 +94,7 @@
         "action_guidance": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["schema_version", "status", "expression_ref", "expression_evidence", "query_ref", "ruleset", "actions", "legal_conclusion"],
-          "anyOf": [
-            {"required": ["expression_tree"]},
-            {"required": ["expression_tree_ref"]}
-          ],
+          "required": ["schema_version", "status", "expression_ref", "expression_evidence", "query_ref", "legal_conclusion"],
           "properties": {
             "schema_version": {"const": "mncs.rights.license-action-context/1"},
             "status": {"enum": ["reference-summary", "partial", "unresolved"]},
@@ -112,28 +144,55 @@
             "not_assessed": {"type": "array", "items": {"type": "string", "maxLength": 128}, "maxItems": 4},
             "legal_conclusion": {"const": "NOT_MADE"}
           }
+        },
+        "compatibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status"],
+          "properties": {
+            "status": {"const": "unknown"},
+            "reason": {"type": "string", "minLength": 1, "maxLength": 256}
+          }
         }
       }
     },
     "provenance": {
       "type": "object",
+      "additionalProperties": false,
+      "required": ["origin_classification", "evidence_state", "participant_count", "relationship_count", "relationship_kinds", "detail_ref", "projection"],
       "properties": {
+        "origin_classification": {"type": "string", "minLength": 1, "maxLength": 128},
+        "evidence_state": {"const": "declared-unverified"},
+        "participant_count": {"type": "integer", "minimum": 0},
+        "relationship_count": {"type": "integer", "minimum": 0},
+        "relationship_kinds": {
+          "type": "object",
+          "maxProperties": 16,
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "detail_ref": {"type": "string", "minLength": 1, "maxLength": 320},
         "projection": {
           "type": "object",
+          "additionalProperties": false,
           "required": ["schema_version", "output_ref", "relationships"],
           "properties": {
             "schema_version": {"const": "mncs.rights-provenance.context-lineage/1"},
-            "output_ref": {"type": "string"},
+            "output_ref": {"type": "string", "minLength": 1, "maxLength": 64},
             "relationships": {
               "type": "array", "maxItems": 6,
               "items": {
                 "type": "object", "additionalProperties": false,
-                "required": ["from", "to", "relation", "content_digest", "evidence_state"],
+                "required": ["from", "relation", "evidence_state"],
+                "anyOf": [
+                  {"required": ["content_digest"]},
+                  {"required": ["content_digest_ref"]}
+                ],
                 "properties": {
-                  "from": {"type": "string"},
-                  "to": {"type": "string"},
+                  "from": {"type": "string", "minLength": 1, "maxLength": 320},
+                  "to": {"type": "string", "minLength": 1, "maxLength": 128},
                   "relation": {"enum": ["generated-from", "transformed-by", "referenced"]},
                   "content_digest": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"},
+                  "content_digest_ref": {"type": "string", "pattern": "^#/sources/[a-z_]+/sha256$"},
                   "evidence_state": {"enum": ["observed-input", "observed-execution", "unavailable"]}
                 }
               }
@@ -142,10 +201,157 @@
         }
       }
     },
-    "governance": {"type": "object"},
-    "diagnostics": {"type": "array", "maxItems": 12, "items": {"type": "object"}}
+    "governance": {"$ref": "#/$defs/governance_projection"},
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/context_diagnostic"}
+    }
   },
   "$defs": {
+    "rights_source_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reference", "license", "license_status_declared", "verification_state", "license_terms_status", "license_terms_ref", "evidence_refs"],
+      "properties": {
+        "kind": {"type": "string", "minLength": 1, "maxLength": 64},
+        "reference": {"type": "string", "minLength": 1, "maxLength": 160},
+        "license": {"type": ["string", "null"], "maxLength": 128},
+        "license_status_declared": {"type": "string", "minLength": 1, "maxLength": 64},
+        "verification_state": {"const": "unverified"},
+        "license_terms_status": {"enum": ["reference-summary", "partial", "unresolved"]},
+        "license_terms_ref": {"type": "string", "minLength": 1, "maxLength": 400},
+        "evidence_refs": {
+          "type": "array",
+          "items": {"type": "string", "maxLength": 160},
+          "maxItems": 2
+        }
+      }
+    },
+    "governance_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rights", "provenance", "agent_governance"],
+      "properties": {
+        "rights": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["external_material", "incompatible_rights", "unknown_rights"],
+          "properties": {
+            "external_material": {"enum": ["verify", "record-source"]},
+            "incompatible_rights": {"enum": ["resolve-before-inclusion", "explain-and-escalate"]},
+            "unknown_rights": {"enum": ["investigate", "preserve-unknown"]}
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lineage", "transformations", "external_inputs", "unverifiable_claims"],
+          "properties": {
+            "lineage": {"enum": ["preserve", "best-effort"]},
+            "transformations": {"enum": ["record", "best-effort"]},
+            "external_inputs": {"enum": ["identify", "best-effort"]},
+            "unverifiable_claims": {"enum": ["distinguish", "record"]}
+          }
+        },
+        "agent_governance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["copying_external_implementations", "independent_implementation", "rights_conflict", "provenance_loss"],
+          "properties": {
+            "copying_external_implementations": {"enum": ["authorization-required", "verify-rights"]},
+            "independent_implementation": {"enum": ["permitted-when-lawful", "investigate"]},
+            "rights_conflict": {"enum": ["explain-and-escalate", "investigate"]},
+            "provenance_loss": {"enum": ["diagnose-and-recover", "record-unknown"]}
+          }
+        }
+      }
+    },
+    "governance_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issuer", "basis", "source_ref", "scope"],
+      "properties": {
+        "issuer": {"type": "string", "minLength": 1, "maxLength": 120},
+        "basis": {"type": "string", "minLength": 1, "maxLength": 120},
+        "source_ref": {"type": "string", "minLength": 1, "maxLength": 256},
+        "scope": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1, "maxLength": 120},
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true
+        }
+      }
+    },
+    "governance_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "profile_id", "profile_version", "authority"],
+      "properties": {
+        "status": {"enum": ["authorized", "unavailable"]},
+        "profile_id": {"type": ["string", "null"], "maxLength": 160},
+        "profile_version": {"type": ["integer", "null"], "minimum": 1, "maximum": 65535},
+        "authority": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/governance_authority"}
+          ]
+        },
+        "rules": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/governance_rules"}
+          ]
+        },
+        "detail_ref": {"type": "string", "minLength": 1, "maxLength": 256},
+        "rules_ref": {"type": "string", "minLength": 1, "maxLength": 256}
+      },
+      "oneOf": [
+        {"required": ["detail_ref"]},
+        {"required": ["rules_ref"]}
+      ],
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "authorized"}}, "required": ["status"]},
+          "then": {
+            "properties": {
+              "profile_id": {"type": "string", "minLength": 1},
+              "profile_version": {"type": "integer", "minimum": 1},
+              "authority": {"$ref": "#/$defs/governance_authority"}
+            },
+            "anyOf": [
+              {"properties": {"rules": {"$ref": "#/$defs/governance_rules"}}, "required": ["rules"]},
+              {"required": ["rules_ref"]}
+            ]
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "unavailable"}}, "required": ["status"]},
+          "then": {
+            "properties": {
+              "profile_id": {"type": "null"},
+              "profile_version": {"type": "null"},
+              "authority": {"type": "null"},
+              "rules": {"type": "null"}
+            },
+            "required": ["profile_id", "profile_version", "authority", "rules"]
+          }
+        }
+      ]
+    },
+    "context_diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "summary", "evidence_ref", "remedy"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1, "maxLength": 128},
+        "severity": {"const": "review"},
+        "summary": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "evidence_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+        "remedy": {"type": "string", "minLength": 1, "maxLength": 128}
+      }
+    },
     "license_terms_projection": {
       "type": "object",
       "required": ["schema_version", "expression_evidence", "status", "compatibility"],
@@ -203,19 +409,9 @@
           },
           "then": {
             "required": ["candidate_references"],
-            "allOf": [
-              {
-                "anyOf": [
-                  {"required": ["unresolved_identifiers"]},
-                  {"required": ["unresolved_identifier_count", "unresolved_identifiers_ref"]}
-                ]
-              },
-              {
-                "anyOf": [
-                  {"required": ["expression_tree"]},
-                  {"required": ["detail_ref"]}
-                ]
-              }
+            "anyOf": [
+              {"required": ["unresolved_identifiers"]},
+              {"required": ["unresolved_identifier_count", "unresolved_identifiers_ref"]}
             ],
             "not": {"required": ["reason"]}
           }

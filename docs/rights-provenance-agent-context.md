@@ -19,6 +19,25 @@ The agent-context schema describes both full and budget-compacted term records.
 Unknown and malformed expressions return structured results without a process
 error; compatibility remains `unknown` for all branches.
 
+The agent-context schema also types the authorized governance issuer, basis,
+scope, allow-listed rules, compact rule references, source-rights summaries,
+provenance evidence states, and actionable diagnostics. Missing or malformed
+input digests remain null; their lineage edges are labeled `referenced` with
+`evidence_state: unavailable` instead of being presented as observed inputs.
+When long authoritative source references would exceed the configured budget,
+the full references remain once in `sources`. Repeated references use
+`source:rights_manifest` or `source:governance_profile`, optionally followed by
+the original JSON-pointer fragment. The versioned context contract expands
+`source:<key>` through `sources.<key>.reference`, so consumers can resolve
+details without losing the authoritative location.
+If source summaries are omitted to stay within budget, `source_count` and
+`sources_truncated` retain the scope of the omitted material and the manifest
+reference keeps the full source list available on demand.
+In the most compact form, a lineage edge may omit `to` because its destination
+is the projection's `output_ref`, and may use `content_digest_ref` to point at
+the digest already stored in `sources`. The normal full projection continues
+to carry the destination and digest inline.
+
 The `rights.action_guidance` projection applies the native-backed, versioned
 `mncs.rights.license_actions.v01` rules to source and binary redistribution.
 It keeps one SPDX `AND`/`OR` expression tree, the original trigger text, and
@@ -29,8 +48,12 @@ remain unresolved, declarations remain unverified, and the projection makes
 no ownership, compatibility, or legal conclusion. The context carries the
 ruleset identity and a manifest reference. If the action tree exceeds the
 configured context budget, it becomes an on-demand reference through
-`mncs-rp action-guidance`; the action statuses and bounded unresolved counts
-remain in the compact context.
+`mncs-rp action-guidance`; the shared action status and bounded unresolved
+counts remain in the compact context.
+When both operations share the same compact status, the repeated per-action
+status objects may be omitted. `expression_ref` and `query_ref` still identify
+the declaration and the action-guidance query. If the term projection omits a
+duplicate `detail_ref`, that same expression reference identifies the source.
 
 When a source records a usable license expression but leaves `license_status`
 unknown, its diagnostic names the unresolved compatibility and source

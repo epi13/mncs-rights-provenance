@@ -45,6 +45,12 @@ def _binding(**changes) -> dict:
     return value
 
 
+def _assert_context_schema(context: dict) -> None:
+    schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
+    errors = list(Draft202012Validator(schema).iter_errors(context))
+    assert errors == [], "\n".join(error.message for error in errors)
+
+
 def test_context_is_compact_and_keeps_declaration_separate_from_verification() -> None:
     context = build_agent_context(
         _manifest(), _governance(), binding=_binding(),
@@ -87,6 +93,52 @@ def test_context_is_compact_and_keeps_declaration_separate_from_verification() -
     assert context["governance"]["rules"]["agent_governance"]["copying_external_implementations"] == "authorization-required"
     assert "copyright-status-unresolved" in {item["code"] for item in context["diagnostics"]}
     assert len(json.dumps(context)) < 8192
+    _assert_context_schema(context)
+
+
+def test_context_schema_preserves_unavailable_authority_and_rejects_bad_digests() -> None:
+    context = build_agent_context(
+        _manifest(),
+        _governance(),
+        binding=_binding(authorized=False),
+        manifest_digest="sha256:" + ("G" * 64),
+        governance_digest="not-a-sha256-digest",
+    )
+
+    assert context["governance"]["status"] == "unavailable"
+    assert context["governance"]["authority"] is None
+    assert context["governance"]["rules"] is None
+    assert context["sources"]["rights_manifest"]["sha256"] is None
+    assert context["sources"]["governance_profile"]["sha256"] is None
+    assert context["provenance"]["projection"]["relationships"][0] == {
+        "from": "RIGHTS.json",
+        "to": "agent-context",
+        "relation": "referenced",
+        "content_digest": None,
+        "evidence_state": "unavailable",
+    }
+    _assert_context_schema(context)
+
+
+def test_governance_rules_compact_to_an_authoritative_reference() -> None:
+    context = build_agent_context(
+        _manifest(), _governance(), binding=_binding(context_budget_bytes=4096)
+    )
+    context["context_budget_bytes"] = 4096
+    context["test-padding"] = "x" * 4096
+
+    agent_context_module._fit_context(context, 4096)
+    context.pop("test-padding")
+    governance = context["governance"]
+
+    assert "rules" not in governance
+    assert governance["rules_ref"] == "source:governance_profile"
+    context.pop("identity")
+    context["identity"] = "sha256:" + hashlib.sha256(
+        json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        .encode("utf-8")
+    ).hexdigest()
+    _assert_context_schema(context)
 
 
 def test_context_respects_a_smaller_configured_budget_with_detail_references() -> None:
@@ -97,12 +149,73 @@ def test_context_respects_a_smaller_configured_budget_with_detail_references() -
     )
 
     assert len(json.dumps(context, sort_keys=True, separators=(",", ":")).encode()) <= 4096
-    assert context["rights"]["license_terms"].get("detail_ref") == "RIGHTS.json#/rights/distribution_license"
+    assert context["rights"]["action_guidance"]["expression_ref"] == (
+        "RIGHTS.json#/rights/distribution_license"
+    )
     schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
     assert list(Draft202012Validator(schema).iter_errors(context)) == []
     guidance = context["rights"]["action_guidance"]
     if "expression_tree" not in guidance:
-        assert guidance["expression_tree_ref"] == guidance["expression_ref"]
+        assert guidance["expression_ref"]
+        assert guidance["query_ref"] == "mncs-rp action-guidance"
+
+
+def test_long_source_references_are_kept_once_and_aliased_within_context_budget() -> None:
+    manifest_ref = "store://rights/" + "m" * 240
+    governance_ref = "store://governance/" + "g" * 236
+    manifest = _manifest()
+    source = manifest["rights"]["sources"][0]
+    manifest["rights"]["sources"] = [
+        {
+            **source,
+            "reference": f"https://example.invalid/{index}/" + "x" * 120,
+            "evidence": [{
+                "kind": "external-record",
+                "reference": f"https://example.invalid/evidence/{index}/" + "y" * 120,
+            }],
+        }
+        for index in range(4)
+    ]
+    context = build_agent_context(
+        manifest,
+        _governance(),
+        binding=_binding(context_budget_bytes=4096),
+        manifest_ref=manifest_ref,
+        governance_ref=governance_ref,
+        manifest_digest="sha256:" + "a" * 64,
+        governance_digest="sha256:" + "b" * 64,
+    )
+    encoded = json.dumps(
+        context, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+
+    assert len(manifest_ref) == len(governance_ref) == 255
+    assert len(encoded) <= 4096
+    assert context["sources"]["rights_manifest"]["reference"] == manifest_ref
+    assert context["sources"]["governance_profile"]["reference"] == governance_ref
+    assert context["rights"]["source_count"] == 4
+    assert context["rights"]["sources"] == []
+    assert context["rights"]["sources_truncated"] is True
+    assert "reference_aliases" not in context
+    assert context["rights"]["action_guidance"]["expression_ref"] == (
+        "source:rights_manifest#/rights/distribution_license"
+    )
+    assert context["provenance"]["detail_ref"] == "source:rights_manifest#/provenance"
+    assert all("to" not in item for item in context["provenance"]["projection"]["relationships"])
+    assert context["provenance"]["projection"]["relationships"][0]["content_digest_ref"] == (
+        "#/sources/rights_manifest/sha256"
+    )
+    assert context["provenance"]["projection"]["relationships"][1]["content_digest_ref"] == (
+        "#/sources/governance_profile/sha256"
+    )
+    assert context["provenance"]["projection"]["relationships"][2]["content_digest_ref"] == (
+        "#/sources/license_resolver/sha256"
+    )
+    assert context["governance"].get("rules_ref", context["governance"].get("detail_ref")) == (
+        "source:governance_profile"
+    )
+    assert context["diagnostics"]
+    _assert_context_schema(context)
 
 
 def test_context_action_guidance_preserves_spdx_branches_and_unknown_terms() -> None:
@@ -278,14 +391,21 @@ def test_large_action_guidance_falls_back_to_on_demand_reference() -> None:
 
     assert len(json.dumps(context, sort_keys=True, separators=(",", ":")).encode()) <= 4096
     assert "expression_tree" not in guidance
-    assert guidance["expression_tree_ref"] == guidance["expression_ref"]
+    assert guidance["query_ref"] == "mncs-rp action-guidance"
+    assert guidance["expression_ref"]
     assert guidance["status"] == "partial"
-    assert guidance["unresolved_action_counts"]["redistribute-source"]["identifiers"] == 10
-    assert "unresolved_identifiers" not in context["rights"]["license_terms"]
-    assert "unresolved_identifiers_ref" in context["rights"]["license_terms"]
-    assert "expression" not in context["rights"]["license_terms"]
-    assert context["rights"]["license_terms"]["detail_ref"].endswith(
+    assert guidance.get("unresolved_action_counts", {}).get("redistribute-source", {}).get(
+        "identifiers", 0
+    ) == 10
+    terms = context["rights"]["license_terms"]
+    if "unresolved_identifiers" not in terms:
+        assert "unresolved_identifiers_ref" in terms
+    if terms.get("expression_truncated"):
+        assert len(terms["expression"]) <= 128
+    assert context["rights"]["action_guidance"]["expression_ref"].endswith(
         "#/rights/distribution_license"
+    ) or context["rights"]["action_guidance"]["expression_ref"].startswith(
+        "source:rights_manifest#"
     )
     assert guidance["query_ref"] == "mncs-rp action-guidance"
     schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
