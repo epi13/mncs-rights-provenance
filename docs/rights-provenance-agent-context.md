@@ -48,6 +48,13 @@ that an authorized Environment profile may communicate that operational
 guidance. It does not grant legal rights or make an external declaration
 authoritative. Unrecognized profile values leave governance unavailable.
 
+The Rights project also publishes the bounded Environment test capability
+`mncs-rights-provenance:test/rights-agent-context-provenance`. It runs the
+focused agent-context, governance, v0.4 lineage, and artifact-diagnostic test
+files with a 180-second ceiling. Agents can use Environment `verify` for these
+contracts without launching the full repository suite; the existing full-suite
+capability remains available for broader verification.
+
 The `rights.action_guidance` projection applies the native-backed, versioned
 `mncs.rights.license_actions.v01` rules to source and binary redistribution.
 It keeps one SPDX `AND`/`OR` expression tree, the original trigger text, and
