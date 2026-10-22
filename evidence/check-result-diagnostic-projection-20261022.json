@@ -1,0 +1,62 @@
+{
+  "schema_version": "mncs.rights-provenance.check-result-diagnostic-projection-evidence/1",
+  "identity": "ev_rights_check_result_diagnostic_projection_20261022",
+  "recorded_at": "2026-10-22T07:34:26Z",
+  "campaign_identity": "cmp_ff3f91cb1a6badbf",
+  "environment_session_id": "ses_dff1822e90820cf4",
+  "implementation": {
+    "repository": "mncs-rights-provenance",
+    "feature_branch": "campaign/luna-max-check-result-diagnostics-20261022",
+    "feature_commit": "f52294f6521445c205407cb0d75604b05a92d4a8",
+    "integrated_branch": "main",
+    "integrated_head": "f52294f6521445c205407cb0d75604b05a92d4a8",
+    "changed_files": [
+      "src/mncs_rights_provenance/check_projection.py",
+      "src/mncs_rights_provenance/policy_diagnostics.py",
+      "tests/test_check_projection.py",
+      "tests/test_policy_diagnostics.py",
+      "docs/mncs-actions-integration.md",
+      ".mncs/project.json"
+    ]
+  },
+  "behavior": {
+    "source_diagnostic_schema": "mncs.rights.policy-diagnostic/1",
+    "check_result_schema": "mncs.check-result/1",
+    "recognized_codes": [
+      "source-license-status-unverified",
+      "source-license-declarations-conflict"
+    ],
+    "diagnostics_preserved_in": "rights_diagnostics",
+    "actionable_summary_in": "unresolved",
+    "maximum_diagnostics": 8,
+    "maximum_diagnostic_bytes": 65536,
+    "malformed_or_unsupported_records": "omitted with an explicit unresolved note",
+    "verdict_semantics_changed": false,
+    "legal_conclusion_made": false
+  },
+  "verification": {
+    "focused_command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python -m pytest -q tests/test_check_projection.py tests/test_policy_diagnostics.py tests/test_agent_contract.py",
+    "focused_result": "passed",
+    "ruff": "passed for changed Python modules and tests",
+    "manifest_json": "parsed successfully",
+    "git_diff_check": "passed",
+    "environment_capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "environment_binding": "cap_5cd2fb6d7550f075",
+    "environment_result": "ok",
+    "environment_returncode": 0
+  },
+  "coordination": {
+    "feature_worktree": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-check-result-diagnostics-20261022",
+    "feature_worktree_claim": "claim:mncs-rights-provenance:worktree:11159a221a79",
+    "main_worktree_claim": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "peer_worktree_claim": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "peer_branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+    "peer_worktree_modified": false,
+    "scope_conflict": false
+  },
+  "limits": {
+    "mncs_actions_adapter": "The separate adapters/rights_adapter.py was not changed; it mirrors verdict mapping but does not emit rights_diagnostics. This repository's CI path uses scripts/rp_to_check.py. Extra-field acceptance is defined by the shared schema, while downstream preservation across every transformation remains unverified.",
+    "validator_and_doctor": "No changes made; their repositories remain outside this session's writable authority.",
+    "license_candidate": "MNCS-Permissive-0.3 remains an unapproved draft candidate; no operative LICENSE file was changed."
+  }
+}
