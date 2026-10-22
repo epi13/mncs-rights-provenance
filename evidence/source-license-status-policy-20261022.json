@@ -1,0 +1,56 @@
+{
+  "schema_version": "mncs.rights-provenance.source-status-policy-evidence/1",
+  "recorded_at": "2026-10-22T06:25:30Z",
+  "campaign_id": "cmp_ff3f91cb1a6badbf",
+  "environment_session": "ses_dff1822e90820cf4",
+  "scope": {
+    "repository": "mncs-rights-provenance",
+    "feature_branch": "campaign/luna-max-policy-source-status-20261022",
+    "feature_commit": "0cb9e5858f114e4e532d016bfd644672ea12190f",
+    "merge_commit": "e559874252830edb1f696404ee42268531d338aa",
+    "main_remote": "origin/main",
+    "pushed_head": "e559874252830edb1f696404ee42268531d338aa",
+    "main_claim": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "feature_worktree_claim": "claim:mncs-rights-provenance:worktree:c30298c4a563"
+  },
+  "coordination": {
+    "peer_worktree_claim_at_feature_claim": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "peer_branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+    "peer_session": "ses_a6a27331d7d348b9",
+    "conflict_observed": false,
+    "resolution": "A separate Rights worktree claim was acquired for this change. The peer artifact-handoff worktree remained intact. A main-branch claim was later acquired for Environment verification after the first verify request correctly declined to run without owned-main scope."
+  },
+  "implementation": {
+    "native_module": "mncs.rights.source_license_status.v01",
+    "native_cases": 8,
+    "manifest_adapter_version": "0.3.0",
+    "manifest_assessment_state": "unverified",
+    "verified_incompatible_gate": "blocking",
+    "unknown_or_unverified_gate": "review",
+    "raw_manifest_status_can_block": false,
+    "confidence_or_evidence_reference_promotes_verification": false,
+    "legal_conclusion_made": false,
+    "existing_license_files_modified": false
+  },
+  "verification": {
+    "local_command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python3 -m pytest -q tests/test_source_license_status.py tests/test_policy_golden.py tests/test_agent_contract.py",
+    "local_result": "53 passed",
+    "native_backends": {
+      "research_bytecode": "8/8 cases passed",
+      "portable_wasm": "8/8 cases passed"
+    },
+    "lint": "Ruff passed for the changed Python source, test, and corpus generator.",
+    "shell_syntax": "bash -n language/run_backend_tests.sh passed.",
+    "environment_capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "environment_binding": "cap_09da484c2cba9818",
+    "environment_result": "ok",
+    "environment_returncode": 0
+  },
+  "scope_limits": {
+    "validator_repository": "mncs-validator-rs",
+    "validator_adapter_status": "Read-only under the available Environment session; its manifest adapter still counts a raw incompatible label as blocking and requires a separately authorized mirror update.",
+    "ordinary_environment_admission": "Still requires the Environment owner integration for rights_context admission and incremental invalidation.",
+    "doctor_integration": "Not changed; the Doctor repository remains outside this session's writable authority.",
+    "license_candidate": "MNCS-Permissive-0.3 remains a draft candidate and existing LICENSE files are unchanged."
+  }
+}
