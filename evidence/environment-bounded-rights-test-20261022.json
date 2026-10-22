@@ -1,0 +1,49 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-bounded-verification/1",
+  "identity": "ev_rights_environment_bounded_context_provenance_20261022",
+  "recorded_at": "2026-10-22T00:27:07Z",
+  "repository": "mncs-rights-provenance",
+  "published_main": {
+    "commit": "573c5843629c054f130a7d93adcf0562be7d63ec",
+    "remote_ref": "origin/main",
+    "remote_head": "573c5843629c054f130a7d93adcf0562be7d63ec",
+    "manifest_sha256": "96e19fd382dd69c2544e2fcc04ae0264d76ad407fb85baae86153f4e6923febb",
+    "integration_doc_sha256": "10236af23a0968f325608cf4872ff276efc214b8f076c14ca346624948d7a0af"
+  },
+  "environment_verification": {
+    "operation": "verify",
+    "capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "binding_id": "cap_c51ae4f417dcbfc8",
+    "status": "ok",
+    "exit_code": 0,
+    "returncode": 0,
+    "timeout_seconds": 180,
+    "command": [
+      "python3", "-m", "pytest", "-q",
+      "tests/test_agent_context_projection.py",
+      "tests/test_agent_governance.py",
+      "tests/test_lineage_v04.py",
+      "tests/test_artifact_binding_diagnostics.py"
+    ],
+    "pytest_cases": 63,
+    "local_result": "63 passed in 0.62s"
+  },
+  "admission_observation": {
+    "session_id": "ses_973d1b67eb66857e",
+    "resume_revalidated": true,
+    "context_operation_included_rights_context": false,
+    "interpretation": "This session-level observation does not establish a fresh-admission failure. The active Environment integration worktree owns the pending live MCP admission and cache-invalidation check."
+  },
+  "coordination": {
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:e2bee449842f",
+    "main_worktree_claim_id": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "main_paths_claim_id": "claim:mncs-rights-provenance:paths:efe1292eab53",
+    "other_live_agent_claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "other_agent_scope_overlap": false,
+    "other_worktree_modified": false
+  },
+  "limits": [
+    "This verifies the bounded context, governance, lineage, and artifact-diagnostic tests through Environment; it does not establish legal compliance or compatibility.",
+    "The connected session context still omitted rights_context after resume; fresh admission transport and selected-checkout invalidation remain with the active Environment integration scope."
+  ]
+}
