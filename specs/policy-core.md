@@ -78,6 +78,9 @@ Only a verified incompatible assessment contributes to the fatal
 `incompatible_source_count`. Explicitly unknown and unverified assessments
 contribute to `unknown_source_count` and remain reviewable; verified compatible
 and verified not-applicable assessments add neither source-status finding.
+Different determinate status declarations for one source reference are a
+contradiction and produce review. An `unknown` declaration alone is not a
+contradiction; it remains represented by the unresolved-status gate.
 
 The v0.3 rights manifest has declared status, confidence, and evidence
 reference fields, but no authenticated assessment state. Its adapter therefore

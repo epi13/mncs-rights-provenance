@@ -155,27 +155,38 @@ def policy_input_from_manifest(
 def count_license_contradictions(rights: Mapping[str, Any]) -> int:
     """Detect direct contradictions between declared license evidence fields.
 
-    A contradiction exists when the distribution license asserts a permissive
-    known basis while a source simultaneously declares an incompatible status,
-    or when two sources for the same reference disagree on license status.
-    Missing evidence is NOT a contradiction; it has its own gates.
+    One contradiction is counted for a source reference when distinct
+    nonempty license expressions or distinct determinate status declarations
+    conflict. ``unknown`` is not a conflicting assertion and is handled by
+    the unresolved-status gate. This reports inconsistent evidence; it does
+    not determine legal compatibility.
     """
 
     contradictions = 0
     sources = [s for s in rights.get("sources") or () if isinstance(s, Mapping)]
-    seen: dict[str, set[str]] = {}
+    seen_licenses: dict[str, set[str]] = {}
+    seen_statuses: dict[str, set[str]] = {}
     for source in sources:
-        reference = str(source.get("reference", ""))
+        reference = source.get("reference")
+        if not isinstance(reference, str) or not reference:
+            continue
         license_value = source.get("license")
         if isinstance(license_value, str) and license_value:
-            seen.setdefault(reference, set()).add(license_value)
-    for licenses in seen.values():
-        if len(licenses) > 1:
+            seen_licenses.setdefault(reference, set()).add(license_value)
+        status = source.get("license_status")
+        if isinstance(status, str) and status in {"compatible", "incompatible", "not-applicable"}:
+            seen_statuses.setdefault(reference, set()).add(status)
+    references = set(seen_licenses) | set(seen_statuses)
+    for reference in references:
+        if (
+            len(seen_licenses.get(reference, ())) > 1
+            or len(seen_statuses.get(reference, ())) > 1
+        ):
             contradictions += 1
     return contradictions
 
 
-POLICY_INPUT_VERSION = "0.3.0"
+POLICY_INPUT_VERSION = "0.3.1"
 
 
 def _classify_source_license_status(
