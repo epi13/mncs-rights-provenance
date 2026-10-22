@@ -1,0 +1,110 @@
+{
+  "schema_version": "mncs.rights-provenance.license-candidate-condition-review/1",
+  "identity": "ev_rights_candidate_v04_condition_clarity_20261022",
+  "observed_at": "2026-10-22T08:48:01+00:00",
+  "repository": "mncs-rights-provenance",
+  "branch": "campaign/luna-max-license-condition-clarity-20261022",
+  "base_commit": "b087eed5fe9cf837f081191c4158dcde1cb95450",
+  "candidate": {
+    "identifier": "LicenseRef-MNCS-Permissive-0.4",
+    "version": "0.4",
+    "status": "draft-for-legal-review",
+    "adoption_status": "not-adopted",
+    "effective_grant": false,
+    "retroactive_application": false,
+    "adoption_authority": null,
+    "declared_rights_prove_authority": false,
+    "text_ref": "legal-candidates/MNCS-Permissive-0.4.md"
+  },
+  "draft_change": {
+    "previous_version": "LicenseRef-MNCS-Permissive-0.3",
+    "previous_version_preserved": true,
+    "copyright_grant_leadin": "Subject to the terms and conditions of this License",
+    "purpose": "Make the relationship between the copyright grant and stated redistribution conditions explicit in the candidate text.",
+    "patent_grant_unchanged_from_previous_candidate": true,
+    "legal_review_decisions": [
+      "whether all license conditions limit every grant",
+      "which notice conditions qualify and how they apply",
+      "breach consequences and any cure period",
+      "patent grant scope and authority remain open as already listed in candidate registry"
+    ]
+  },
+  "repository_rights": {
+    "observed_license": "Apache-2.0",
+    "license_file_modified": false,
+    "existing_contributions_relicensed": false,
+    "candidate_changes_effective_repository_rights": false
+  },
+  "primary_source_observations": [
+    {
+      "identifier": "MIT",
+      "authority": "Open Source Initiative",
+      "url": "https://opensource.org/license/mit",
+      "observation": "The short permission grant states notice-preservation conditions and includes warranty and liability language; the text contains no express patent grant."
+    },
+    {
+      "identifier": "BSD-2-Clause",
+      "authority": "SPDX License List",
+      "url": "https://spdx.org/licenses/BSD-2-Clause.html",
+      "observation": "Source and binary redistribution are stated with separate notice-preservation conditions."
+    },
+    {
+      "identifier": "BSD-2-Clause-Patent",
+      "authority": "SPDX License List",
+      "url": "https://spdx.org/licenses/BSD-2-Clause-Patent.html",
+      "observation": "The text provides a scoped patent grant and makes it irrevocable except for failure to satisfy license conditions; the draft uses it as a comparison only."
+    },
+    {
+      "identifier": "Apache-2.0",
+      "authority": "Apache Software Foundation",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+      "observation": "The copyright grant is introduced as subject to the license terms and conditions; Apache-2.0 remains the operative repository license."
+    }
+  ],
+  "verification": {
+    "test_command": "python3 -m pytest -o addopts= -q tests/test_agent_context_projection.py tests/test_license_resolution_cli.py tests/test_agent_contract.py",
+    "test_result": "52 passed in 0.35s",
+    "checks": [
+      {
+        "command": "python3 -m json.tool src/mncs_rights_provenance/resources/license-candidates.json",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool .mncs/project.json",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m ruff check tests/test_agent_context_projection.py",
+        "result": "passed"
+      },
+      {
+        "command": "git diff --check",
+        "result": "passed"
+      }
+    ],
+    "resolver_behavior": {
+      "status": "partial",
+      "compatibility": "unknown",
+      "leaf_status": "candidate-unapproved",
+      "effective_grant": false,
+      "permissions_summary_present": false,
+      "context_diagnostic": "license-candidate-not-effective"
+    }
+  },
+  "legal_conclusion": "NOT_MADE",
+  "limitations": [
+    "This is a bounded textual and software behavior record, not legal advice or an opinion on enforceability.",
+    "The new lead-in does not decide which obligations condition every grant or what follows from breach.",
+    "Declared rights do not establish copyright or patent ownership or authority to grant.",
+    "Compatibility remains unknown and the candidate is not effective."
+  ],
+  "source_sha256": {
+    "legal-candidates/MNCS-Permissive-0.3.md": "284a63b57fd05badac131fed3f31ff30c1f8accc7e0d0bbb740d8df143f09e92",
+    "legal-candidates/MNCS-Permissive-0.4.md": "bc3db39a524b9b14f135535e99fe51a1d0d3a3adb20f2db47c0e88ab52f81c29",
+    "src/mncs_rights_provenance/resources/license-candidates.json": "de116a8bebeadb000316766f9c98a6a79619fdb52e1f4f7f112be05aae0b3096",
+    "docs/license-candidate-review.md": "66b5a4cc0f33e2419df6d8b1751482fdeb4992a741d0ada936330f3049911217",
+    "docs/rights-provenance-agent-context.md": "eef3b79bd58d6be3a1508e2867f80cec4d609cde8d9e0ccbfc004a07401bced7",
+    "tests/test_agent_context_projection.py": "2e54573ebbed042183710f627e57ebee9f1ccce3587cdad414237f9e43ff575f",
+    ".mncs/project.json": "a08bccaaf74eece8d387ffd6fd43ff0764123c17d0acfe9721fdad660c30739d"
+  }
+}

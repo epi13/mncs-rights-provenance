@@ -733,6 +733,67 @@ def test_license_candidate_v03_names_initial_licensor_without_claiming_authority
     }
 
 
+def test_license_candidate_v04_links_copyright_grant_to_notice_conditions() -> None:
+    registry = json.loads(
+        (ROOT / "src/mncs_rights_provenance/resources/license-candidates.json").read_text()
+    )
+    candidate = next(
+        item for item in registry["candidates"]
+        if item["identifier"] == "LicenseRef-MNCS-Permissive-0.4"
+    )
+    draft = (ROOT / candidate["text_ref"]).read_text()
+    prior_draft = (ROOT / "legal-candidates/MNCS-Permissive-0.3.md").read_text()
+    grant_start = draft.index("Subject to the terms and conditions of this License")
+    redistribution_start = draft.index("Redistribution of source form")
+    copyright_grant = draft[grant_start:redistribution_start]
+    patent_grant = next(
+        line for line in draft.splitlines()
+        if line.startswith("Each Contributor grants every recipient")
+    )
+    prior_patent_grant = next(
+        line for line in prior_draft.splitlines()
+        if line.startswith("Each Contributor grants every recipient")
+    )
+
+    assert candidate["version"] == "0.4"
+    assert candidate["status"] == "draft-for-legal-review"
+    assert candidate["adoption_status"] == "not-adopted"
+    assert candidate["effective_grant"] is False
+    assert candidate["retroactive_application"] is False
+    assert candidate["adoption_authority"] is None
+    assert candidate["declared_rights_prove_authority"] is False
+    assert "copyright-grant-condition-and-notice-obligations" in candidate[
+        "legal_review_decisions"
+    ]
+    assert grant_start < redistribution_start
+    assert "each copyright holder grants every recipient" in copyright_grant
+    assert "irrevocable permission" in copyright_grant
+    assert patent_grant == prior_patent_grant
+    assert "no patent-litigation retaliation term" in draft
+
+    result = resolve_license_expression(candidate["identifier"])
+    leaf = result["expression_tree"]
+    assert result["status"] == "partial"
+    assert result["compatibility"]["status"] == "unknown"
+    assert result["expression_evidence"] == "caller-supplied-declaration-unverified"
+    assert leaf["status"] == "candidate-unapproved"
+    assert leaf["candidate_version"] == "0.4"
+    assert leaf["effective_grant"] is False
+    assert leaf["declared_rights_prove_authority"] is False
+    assert "permissions" not in leaf
+    assert result["candidate_review_details"][0]["decisions_ref"].endswith(
+        "#/candidates/3/legal_review_decisions"
+    )
+
+    manifest = _manifest()
+    manifest["rights"]["distribution_license"] = candidate["identifier"]
+    context = build_agent_context(manifest, _governance(), binding=_binding())
+    assert context["rights"]["compatibility"]["status"] == "unknown"
+    assert "license-candidate-not-effective" in {
+        item["code"] for item in context["diagnostics"]
+    }
+
+
 def test_candidate_license_reference_never_becomes_an_effective_term_summary() -> None:
     identifier = "LicenseRef-MNCS-Permissive-0.1"
     result = resolve_license_expression(identifier)
