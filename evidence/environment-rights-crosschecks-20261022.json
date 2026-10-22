@@ -1,0 +1,78 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-cross-layer-verification/1",
+  "identity": "ev_rights_environment_cross_layer_tests_20261022",
+  "recorded_at": "2026-10-22T00:38:51Z",
+  "repository": "mncs-rights-provenance",
+  "published_main": {
+    "commit": "1ae08b449efac3ce60f642141b77266191365b03",
+    "remote_ref": "origin/main",
+    "remote_head": "1ae08b449efac3ce60f642141b77266191365b03",
+    "manifest_sha256": "808a0861bcf6d8ef1fb96bfa52660f9021b07bc7cffe36f3da0f0c52a5b9185c",
+    "integration_doc_sha256": "97a082f78aa4c2987460b9add8388274c4acab357ad616f48f5cd9b95206302f"
+  },
+  "environment_verification": {
+    "operation": "verify",
+    "capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "binding_id": "cap_cbe3e18a01d80575",
+    "status": "ok",
+    "exit_code": 0,
+    "returncode": 0,
+    "timeout_seconds": 300,
+    "command": [
+      "python3", "-m", "pytest", "-q",
+      "tests/test_agent_context_projection.py",
+      "tests/test_agent_governance.py",
+      "tests/test_license_action_core.py",
+      "tests/test_license_action_guidance.py",
+      "tests/test_license_resolution_cli.py",
+      "tests/test_manifest.py",
+      "tests/test_lineage_v04.py",
+      "tests/test_artifact_binding_diagnostics.py",
+      "tests/test_check_projection.py"
+    ],
+    "local_result": "121 passed in 2.51s",
+    "toolchain": {
+      "repository": "mncs-language",
+      "branch": "main",
+      "commit": "4315a5a8b973db95aa77a7936e84296328d901a2",
+      "checkout_identity": "checkout:5963b0a68e915817",
+      "path": "/home/epi13/Documents/Projects/mncs-language/target/release/mncs",
+      "environment_variable": "MNCS_BIN",
+      "read_only": true
+    }
+  },
+  "environment_observations": {
+    "rights_context": {
+      "session_id": "ses_973d1b67eb66857e",
+      "resumed_before_read": true,
+      "present_in_context": false,
+      "scope": "existing session context; fresh admission remains unverified"
+    },
+    "checkout_identity": {
+      "source_ref": "current-working-checkout",
+      "reported_head": "1ae08b449efac3ce60f642141b77266191365b03",
+      "reported_authoritative_head": "1d176ddf346641057a7be5cfa3b5935986804df1",
+      "reported_branch": "main",
+      "clean": true,
+      "note": "The Environment descriptor names a different authoritative head while resolving the clean published main checkout. The test ran at the reported current-working-checkout head."
+    },
+    "nested_worktree_selection": {
+      "result": "ENVIRONMENT_SESSION_SELECTION_REQUIRED",
+      "details_status": "not-found",
+      "scope": "the current campaign could not select its newly claimed nested worktree by project-relative cwd"
+    }
+  },
+  "coordination": {
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:619939e2e1d3",
+    "main_paths_claim_id": "claim:mncs-rights-provenance:paths:80dd7e84041a",
+    "main_worktree_claim_id": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "active_rights_handoff_claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "active_environment_cache_claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+    "overlapping_scopes": false,
+    "other_agents_worktrees_modified": false
+  },
+  "limits": [
+    "The selected tests cover context projection, governance, license resolution and obligations, native license-action semantics, SPDX manifest handling, typed lineage, artifact diagnostics, and check-result projection; they do not prove broad legal compliance.",
+    "The current session still lacks a projected rights_context. The active Environment integration scope remains responsible for fresh admission, checkout selection, and cache invalidation."
+  ]
+}
