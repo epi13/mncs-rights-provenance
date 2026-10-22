@@ -1,0 +1,47 @@
+{
+  "schema_version": "mncs.rights-provenance.source-status-conflict-evidence/1",
+  "recorded_at": "2026-10-22T06:35:47Z",
+  "campaign_id": "cmp_ff3f91cb1a6badbf",
+  "environment_session": "ses_dff1822e90820cf4",
+  "scope": {
+    "repository": "mncs-rights-provenance",
+    "feature_branch": "campaign/luna-max-source-status-conflict-20261022",
+    "feature_commit": "e08ba6766c2fd92895b8c74b599161162475efc1",
+    "merge_commit": "bed3bf1002c6f3ad747f208139daf08e07f4c1b5",
+    "main_remote": "origin/main",
+    "pushed_head": "bed3bf1002c6f3ad747f208139daf08e07f4c1b5",
+    "main_claim": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "feature_worktree_claim": "claim:mncs-rights-provenance:worktree:44a629949ae1"
+  },
+  "coordination": {
+    "peer_claim": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "peer_branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+    "peer_session": "ses_a6a27331d7d348b9",
+    "conflict_observed": false,
+    "resolution": "The status-conflict work used a separate Rights worktree. The active peer artifact-handoff worktree remained unchanged. Main was claimed through Environment before merging and verification."
+  },
+  "change": {
+    "policy_input_version": "0.3.1",
+    "same_reference_status_conflict": "Distinct determinate status declarations count as one contradiction per source reference and produce review.",
+    "unknown_status": "Unknown does not contradict one determinate status; it remains subject to unresolved-status review.",
+    "license_expression_conflict": "Different nonempty license expressions for the same reference continue to produce review.",
+    "raw_status_blocker": false,
+    "legal_compatibility_conclusion": false
+  },
+  "verification": {
+    "focused_suite": "tests/test_source_license_status.py, tests/test_policy_golden.py, and tests/test_agent_contract.py passed with the MNCS binary configured.",
+    "native_backends": "The source-license classifier corpus passed on research-bytecode and portable-wasm.",
+    "lint_and_contracts": "Ruff, shell syntax, JSON validation, and git diff checks passed.",
+    "environment_capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "environment_binding": "cap_ddae79cf3319b167",
+    "environment_result": "ok",
+    "environment_returncode": 0,
+    "transient_bridge_event": "The first verify request returned a closed-socket error before any test process remained active. The live health probe then returned ready; a single retry completed successfully."
+  },
+  "scope_limits": {
+    "validator_repository": "mncs-validator-rs",
+    "validator_adapter_status": "Still outside this session's writable authority; it needs the same Rights source-status mirror through an owner-authorized scope.",
+    "doctor_integration": "Not changed; Doctor remains outside this session's writable authority.",
+    "license_candidate": "MNCS-Permissive-0.3 remains a draft candidate; no operative LICENSE file was changed."
+  }
+}
