@@ -1,0 +1,116 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-context-transport-observation/1",
+  "identity": "ev_rights_environment_context_cli_mcp_parity_20261022",
+  "observed_at": "2026-10-22T02:03:28Z",
+  "purpose": "Locate the Rights context loss boundary with a fresh admission and same-session reads.",
+  "sources": {
+    "rights_repository": {
+      "repository": "mncs-rights-provenance",
+      "revision": "7039a1c502e48aa86b2209649bea24967d90cc71",
+      "branch": "main"
+    },
+    "environment_repository": {
+      "repository": "mncs-environment",
+      "revision": "d2b3d94e44586fe3778866207ccd5389d24e8c15",
+      "branch": "campaign/scoped-merge-publish-authority-20261020",
+      "working_tree_clean": true
+    },
+    "environment_definition": ".mncs/environment.json#/rights_context"
+  },
+  "admission": {
+    "operation": "mncs_environment.enter",
+    "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45df3f01644",
+    "session_id": "ses_25250a6c41def5b4",
+    "environment_id": "renv_4e819dce980bd478",
+    "readiness": "ready",
+    "writable_repositories": ["mncs-rights-provenance"],
+    "rights_context_in_entry_response": false
+  },
+  "same_session_observations": {
+    "environment_cli_inspect": {
+      "command": "mncs-env inspect ses_25250a6c41def5b4",
+      "rights_context_present": true,
+      "context_schema": "mncs.rights-provenance.agent-context/1",
+      "context_identity": "sha256:b2fab9bcafc6c3940bc35c9f6620e75cfc12195fb842204cb491c3641491239c",
+      "status": "review",
+      "binding": {
+        "profile_id": "mncs-rights-provenance/native-open@0.1.0",
+        "manifest": "mncs-rights-provenance/RIGHTS.json",
+        "governance_profile": "mncs-rights-provenance/governance/agent-governance.json",
+        "external_metadata_authoritative": false,
+        "context_budget_bytes": 8192
+      },
+      "resolved_sources": {
+        "rights_manifest": {
+          "reference": "mncs-rights-provenance/RIGHTS.json",
+          "sha256": "sha256:8f2870edba5f7d026d993115bf83b9136e6462c84e67269d9ad404a7f9e8a7a7"
+        },
+        "governance_profile": {
+          "reference": "mncs-rights-provenance/governance/agent-governance.json",
+          "sha256": "sha256:bf7a1444d17f31e74edc204fa11c9a17917697cb93633ab92a1e68059d6e1666"
+        }
+      },
+      "diagnostic_codes": [
+        "copyright-status-unresolved",
+        "rights-basis-unknown",
+        "third-party-material-unknown",
+        "provenance-origin-uncertain",
+        "source-license-unknown",
+        "lineage-reference-missing"
+      ]
+    },
+    "environment_mcp_context": {
+      "operation": "context",
+      "session_id": "ses_25250a6c41def5b4",
+      "rights_context_present": false,
+      "returned_keys": [
+        "schema_version",
+        "session_id",
+        "lifecycle",
+        "environment_id",
+        "work_intent",
+        "workspace_root",
+        "persistence",
+        "toolchain",
+        "writable_repositories",
+        "protected_repositories",
+        "authority",
+        "readiness",
+        "doctor",
+        "projects",
+        "capabilities"
+      ]
+    }
+  },
+  "coordination": {
+    "own_scope": {
+      "claim_id": "claim:mncs-rights-provenance:paths:c5b19a833932",
+      "session_id": "ses_25250a6c41def5b4",
+      "branch": "campaign/luna-max-rights-context-mcp-parity-20261022",
+      "paths": ["evidence/environment-rights-context-cli-mcp-parity-20261022.json"]
+    },
+    "peer_scope_left_untouched": {
+      "campaign_id": "cmp_luna_max_rights_artifact_handoff_20261021",
+      "session_id": "ses_a6a27331d7d348b9",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+      "checkout": ".worktrees/luna-max-rights-artifact-handoff-20261021",
+      "status_before_observation": "clean"
+    },
+    "claim_acquisition": {
+      "environment_mcp_claims_operation": "rejected acquire argument as unsupported",
+      "native_environment_cli": "acquired and verified the scoped Rights path claim"
+    }
+  },
+  "assessment": {
+    "confirmed": "A fresh Environment admission can resolve the bound Rights and governance sources, and Environment CLI inspection returns the compact context with content digests and explicit review diagnostics.",
+    "confirmed_mcp_gap": "The connected Environment MCP context response omits rights_context for the same session.",
+    "loss_boundary": "The divergence is between the local session projection and the connected MCP response; this observation does not identify which live serving component drops the field.",
+    "legal_conclusion": "NOT_MADE"
+  },
+  "limits": [
+    "The context status is review and does not establish ownership, contributor authority, compatibility, or legal compliance.",
+    "The local CLI inspection and MCP read were performed on one fresh session; this is not a broader transport conformance test.",
+    "No Environment or Control source files were modified in this observation."
+  ]
+}
