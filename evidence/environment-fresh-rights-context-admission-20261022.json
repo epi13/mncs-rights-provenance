@@ -1,0 +1,142 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-fresh-admission/1",
+  "identity": "ev_rights_environment_fresh_admission_20261022",
+  "recorded_at": "2026-10-22T00:57:27Z",
+  "repository": "mncs-rights-provenance",
+  "published_main": {
+    "branch": "main",
+    "head": "142c933f5b141bc8969228b319a26c137ed6bd3b",
+    "remote_ref": "origin/main",
+    "remote_head": "142c933f5b141bc8969228b319a26c137ed6bd3b"
+  },
+  "fresh_admission": {
+    "operation": "enter",
+    "task_identity": "mncs-rights-provenance-fresh-admission-20261022",
+    "campaign_id": "cmp_task_f016c0de8abbc97dd5a2a1cc4b9ba91fab0345a97874fcff4eb975df6247908b",
+    "session_id": "ses_f6c2278a14074514",
+    "environment_id": "renv_7d8a29246271bc68",
+    "session_lifecycle": "active",
+    "environment_readiness": {
+      "status": "ready",
+      "blocking": [],
+      "required_unavailable": [],
+      "required_unknown": []
+    },
+    "doctor": {
+      "readiness": "ready",
+      "blockers": 0,
+      "degraded": 0,
+      "remaining": []
+    }
+  },
+  "rights_context_projection": {
+    "operation": "context",
+    "queried_session_id": "ses_f6c2278a14074514",
+    "context_schema": "mncs.environment.entry-context/1",
+    "rights_context_key_present": false,
+    "returned_context_keys": [
+      "schema_version",
+      "session_id",
+      "lifecycle",
+      "environment_id",
+      "work_intent",
+      "workspace_root",
+      "persistence",
+      "toolchain",
+      "writable_repositories",
+      "protected_repositories",
+      "authority",
+      "readiness",
+      "doctor",
+      "projects",
+      "capabilities"
+    ],
+    "interpretation": "Fresh admission currently returns no rights_context field. This is an Environment projection gap; it does not establish that the project has no rights data."
+  },
+  "bounded_rights_verification": {
+    "evidence_identity": "ev_rights_environment_cross_layer_tests_20261022",
+    "evidence_path": "evidence/environment-rights-crosschecks-20261022.json",
+    "environment_capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "binding_id": "cap_cbe3e18a01d80575",
+    "status": "ok",
+    "exit_code": 0,
+    "focused_tests_passed": 121,
+    "test_commit": "1ae08b449efac3ce60f642141b77266191365b03",
+    "test_toolchain": {
+      "repository": "mncs-language",
+      "commit": "4315a5a8b973db95aa77a7936e84296328d901a2",
+      "read_only": true
+    },
+    "scope_limit": "These focused tests validate the listed Rights capabilities and their contracts, not broad legal compliance or fresh Environment admission."
+  },
+  "coordination": {
+    "rights_campaign": {
+      "campaign_id": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+      "session_id": "ses_973d1b67eb66857e",
+      "current_consumer": "local-agent",
+      "authorized_consumers": [
+        "local-agent"
+      ],
+      "lifecycle": "active"
+    },
+    "peer_environment_campaign": {
+      "campaign_id": "cmp_luna_max_rights_provenance_context_20261020",
+      "session_id": "ses_7c6fc883b31968fd",
+      "current_consumer": "luna-max-rights-provenance",
+      "authorized_consumers": [
+        "luna-max-rights-provenance"
+      ],
+      "lifecycle": "active",
+      "writable_repositories": [
+        "mncs-environment",
+        "mncs-rights-provenance"
+      ],
+      "readiness": "ready"
+    },
+    "live_peer_scopes_observed": [
+      {
+        "repository": "mncs-rights-provenance",
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "session_id": "ses_a6a27331d7d348b9",
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+        "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-artifact-handoff-20261021",
+        "status": "held",
+        "live": true,
+        "modified": false
+      },
+      {
+        "repository": "mncs-environment",
+        "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+        "session_id": "ses_f13d176c86a23e69",
+        "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+        "checkout": "/home/epi13/Documents/Projects/mncs-environment/.worktrees/luna-max-rights-cache-invalidation-20261021",
+        "status": "held",
+        "live": true,
+        "modified": false
+      }
+    ],
+    "own_scopes": {
+      "path_claim_id": "claim:mncs-rights-provenance:paths:43594240e3cd",
+      "worktree_claim_id": "claim:mncs-rights-provenance:worktree:8e0db61796b4",
+      "branch": "campaign/luna-max-rights-fresh-context-admission-20261022",
+      "checkout": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-max-rights-fresh-context-admission-20261022",
+      "overlaps_live_peer_scopes": false
+    },
+    "handoff": {
+      "issued": true,
+      "identity": "hff_443db070caeb16b5",
+      "checkpoint_id": "chk_1dd5e35a9b301fdd",
+      "source_session_id": "ses_f6c2278a14074514",
+      "recipient_consumer": "luna-max-rights-provenance",
+      "status": "created; acceptance not yet observed",
+      "principal_binding": "Environment bound the recipient to the authenticated principal on this handoff request."
+    },
+    "coordination_result": "Environment handoff created from the isolated fresh-admission probe to the registered Luna consumer. Peer worktrees and claims were read-only inspected and left untouched. The Rights evidence will be published on main and added to the root campaign checkpoint."
+  },
+  "limits": [
+    "The Environment capability tests ran on the published Rights code at 1ae08b4; 142c933 adds only the prior verification evidence record.",
+    "A passing focused suite and ready Doctor state do not imply rights resolution or legal compatibility for unspecified material.",
+    "Fresh Environment admission still needs to project a compact rights context with stable references and uncertainty preserved.",
+    "Environment cross-campaign handoff does not expose enough recipient identity for a safe ownership transfer in this observation."
+  ]
+}
