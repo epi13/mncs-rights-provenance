@@ -24,6 +24,8 @@
 # - implementation-lineage corpus pins evidence-aware representation/origin
 #   and aggregate status on both supported backends; it does not infer legal
 #   independence, ownership, or completeness.
+# - source-license status corpus distinguishes unverified declarations from
+#   verified assessments on both supported backends.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -59,10 +61,27 @@ for backend in research-bytecode portable-wasm; do
   if ! run "$ROOT/language/rights_license_actions.mncs" "$backend" "$ROOT/language/corpora/license-action-guidance-corpus.json" "$OUT/$backend-license-actions"; then STATUS=1; fi
   if ! run "$ROOT/language/rights_agent_governance.mncs" "$backend" "$ROOT/language/corpora/agent-governance-corpus.json" "$OUT/$backend-agent-governance"; then STATUS=1; fi
   if ! run "$ROOT/language/implementation_lineage.mncs" "$backend" "$ROOT/language/corpora/implementation-lineage-corpus.json" "$OUT/$backend-implementation-lineage"; then STATUS=1; fi
+  if ! run "$ROOT/language/source_license_status.mncs" "$backend" "$ROOT/language/corpora/source-license-status-corpus.json" "$OUT/$backend-source-license-status"; then STATUS=1; fi
   if [ "$backend" = "research-bytecode" ]; then
     if ! run "$ROOT/language/rights_policy.mncs" "$backend" "$ROOT/language/corpora/gate-severities-corpus.json" "$OUT/$backend"; then STATUS=1; fi
   fi
 done
+
+echo "== cross-backend compare (source-license status evidence)"
+python3 - <<PY || STATUS=1
+import json
+OUT = "$OUT"
+rb = json.load(open(f"{OUT}/research-bytecode-source-license-status/result.json"))
+pw = json.load(open(f"{OUT}/portable-wasm-source-license-status/result.json"))
+def outcomes(result):
+    return {c["case_id"]: json.dumps(c.get("returned"), sort_keys=True) for c in result["cases"]}
+left, right = outcomes(rb), outcomes(pw)
+mismatch = [k for k in left if left[k] != right.get(k)]
+print("   source-status agreement:", f"{len(left)-len(mismatch)}/{len(left)}")
+if mismatch:
+    print("   MISMATCH:", mismatch)
+    raise SystemExit(1)
+PY
 
 echo "== cross-backend compare (evaluation corpus)"
 "$MNCS" experiment compare \

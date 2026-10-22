@@ -1,9 +1,9 @@
 """Policy input normalization: manifest vocabulary -> integer gate codes.
 
-The integer encoding is the cross-implementation contract shared with the
-MNCS-language core (``language/rights_policy.mncs``) and the Rust validator.
-Codes are fixed by ``specs/policy-core.md``; changing them is a breaking
-specification change.
+The integer encoding is shared with the MNCS-language policy core and the Rust
+validator's GateInput. Source status evidence is classified separately by the
+normative ``language/source_license_status.mncs`` core before it contributes
+to those aggregate counts. Codes are fixed by ``specs/policy-core.md``.
 """
 
 from __future__ import annotations
@@ -89,8 +89,9 @@ def policy_input_from_manifest(
     """Extract normalized codes from a manifest document.
 
     Structural facts (hash mismatches, broken references, graph integrity) are
-    supplied by the caller because they require artifact/environment access;
-    everything else derives from the manifest itself.
+    supplied by the caller because they require artifact/environment access.
+    Source status labels are always declarations here; this adapter has no
+    authenticated evidence input that can mark one verified.
     """
 
     provenance = document.get("provenance") or {}
@@ -98,12 +99,21 @@ def policy_input_from_manifest(
     review = document.get("review") or {}
     sources = rights.get("sources") or []
 
-    incompatible = sum(
-        1 for s in sources if isinstance(s, Mapping) and s.get("license_status") == "incompatible"
-    )
-    unknown_sources = sum(
-        1 for s in sources if isinstance(s, Mapping) and s.get("license_status") == "unknown"
-    )
+    incompatible = 0
+    unknown_sources = 0
+    for source in sources:
+        if not isinstance(source, Mapping):
+            continue
+        # The v0.3 manifest carries declared labels, confidence vocabulary,
+        # and evidence references, but no authenticated assessment boundary.
+        # Do not turn any of those declarations into a release blocker.
+        assessment = _classify_source_license_status(
+            str(source.get("license_status", "unknown")), evidence_verified=False
+        )
+        if assessment == "verified-incompatible":
+            incompatible += 1
+        elif assessment in {"unverified", "verified-unknown"}:
+            unknown_sources += 1
 
     if contradiction_count is None:
         contradiction_count = count_license_contradictions(rights)
@@ -165,6 +175,29 @@ def count_license_contradictions(rights: Mapping[str, Any]) -> int:
     return contradictions
 
 
+POLICY_INPUT_VERSION = "0.3.0"
+
+
+def _classify_source_license_status(
+    status: str, *, evidence_verified: bool
+) -> str:
+    """Mirror the normative MNCS source-license evidence classifier.
+
+    ``evidence_verified`` must come from a trusted verifier outside the
+    manifest. The manifest adapter intentionally always passes ``False``:
+    confidence labels and evidence references are declarations, not proof.
+    """
+
+    if not evidence_verified:
+        return "unverified"
+    return {
+        "compatible": "verified-compatible",
+        "incompatible": "verified-incompatible",
+        "unknown": "verified-unknown",
+        "not-applicable": "verified-not-applicable",
+    }.get(status, "verified-unknown")
+
+
 __all__ = [
     "BLOCKING",
     "COPYRIGHT_CODES",
@@ -181,5 +214,3 @@ __all__ = [
     "count_license_contradictions",
     "policy_input_from_manifest",
 ]
-
-POLICY_INPUT_VERSION = "0.2.0"

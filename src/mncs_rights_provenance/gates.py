@@ -146,7 +146,7 @@ GATE_FINDINGS = {
     "provenance_validation_passed": "provenance validation failed",
     "provenance_complete": "provenance validation is incomplete or has not run",
     "human_review_state_acceptable": "human review state is unacceptable for release",
-    "unknown_source_license": "one or more source licenses have unknown status",
+    "unknown_source_license": "one or more source license statuses are unknown or unverified",
     "attestation_integrity": "contribution attestations conflict or supersede unsoundly",
     "no_falsified_or_impossible_evidence": "evidence appears falsified or internally impossible",
 }

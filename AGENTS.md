@@ -13,6 +13,14 @@ Release-policy decisions, pressure verdicts, and check projections are
 defined once in MNCS-language and mirrored in host code, never the reverse:
 
 - `language/rights_policy.mncs` — release-policy decision engine.
+- `language/source_license_status.mncs` — typed source-license assessment
+  classification that keeps unverified declarations separate from verified
+  compatible, incompatible, unknown, and not-applicable assessments; mirrored
+  by `src/mncs_rights_provenance/policy_input.py` and pinned by
+  `language/tools/gen_source_license_status_corpus.py`,
+  `language/corpora/source-license-status-corpus.json`,
+  `conformance/source-license-status-golden-vectors.json`, and
+  `tests/test_source_license_status.py`.
 - `language/pressure_provenance.mncs` — tri-state distributed-pressure
   verdicts (`combine_verdict`, `promotion_combined`, `authority_verdict`,
   `lineage_verdict`).

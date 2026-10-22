@@ -1,0 +1,55 @@
+{
+ "schema_version": "0.1",
+ "source_module": "mncs.rights.source_license_status.v01",
+ "description": "Evidence-state classifications generated from the normative MNCS source-license status core.",
+ "cases": [
+  {
+   "case_id": "unverified-compatible",
+   "status": "compatible",
+   "evidence_state": "unverified",
+   "assessment": "unverified"
+  },
+  {
+   "case_id": "unverified-incompatible",
+   "status": "incompatible",
+   "evidence_state": "unverified",
+   "assessment": "unverified"
+  },
+  {
+   "case_id": "unverified-unknown",
+   "status": "unknown",
+   "evidence_state": "unverified",
+   "assessment": "unverified"
+  },
+  {
+   "case_id": "unverified-notapplicable",
+   "status": "not-applicable",
+   "evidence_state": "unverified",
+   "assessment": "unverified"
+  },
+  {
+   "case_id": "verified-compatible",
+   "status": "compatible",
+   "evidence_state": "verified",
+   "assessment": "verified-compatible"
+  },
+  {
+   "case_id": "verified-incompatible",
+   "status": "incompatible",
+   "evidence_state": "verified",
+   "assessment": "verified-incompatible"
+  },
+  {
+   "case_id": "verified-unknown",
+   "status": "unknown",
+   "evidence_state": "verified",
+   "assessment": "verified-unknown"
+  },
+  {
+   "case_id": "verified-notapplicable",
+   "status": "not-applicable",
+   "evidence_state": "verified",
+   "assessment": "verified-not-applicable"
+  }
+ ]
+}

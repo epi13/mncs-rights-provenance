@@ -7,6 +7,11 @@ CONTRACT = REPO / "AGENTS.md"
 
 CORES = (
     "language/rights_policy.mncs",
+    "language/source_license_status.mncs",
+    "language/tools/gen_source_license_status_corpus.py",
+    "language/corpora/source-license-status-corpus.json",
+    "conformance/source-license-status-golden-vectors.json",
+    "tests/test_source_license_status.py",
     "language/pressure_provenance.mncs",
     "language/check_projection.mncs",
     "language/rights_license_actions.mncs",
