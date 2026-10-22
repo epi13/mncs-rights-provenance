@@ -105,3 +105,19 @@ def test_context_identity_binds_non_file_projection_dependencies(monkeypatch) ->
         if item["from"] == ruleset_context["sources"]["license_action_ruleset"]["reference"]
     )
     assert ruleset_edge["content_digest"] == changed_ruleset_identity
+
+
+def test_context_identity_binds_context_schema_version(monkeypatch) -> None:
+    manifest = json.loads((ROOT / "RIGHTS.json").read_text())
+    governance = json.loads((ROOT / "governance/agent-governance.json").read_text())
+    binding = {"authorized": True, "profile_id": "test-profile"}
+    baseline = build_agent_context(manifest, governance, binding=binding)
+
+    changed_schema = "mncs.rights-provenance.agent-context/2"
+    monkeypatch.setattr(agent_context_module, "CONTEXT_SCHEMA", changed_schema)
+    monkeypatch.setattr(context_identity_module, "CONTEXT_SCHEMA", changed_schema)
+    revised = build_agent_context(manifest, governance, binding=binding)
+
+    assert revised["schema_version"] == changed_schema
+    assert revised["identity"] != baseline["identity"]
+    assert agent_context_source_identities()["context_schema"] == changed_schema
