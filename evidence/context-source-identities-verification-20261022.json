@@ -1,0 +1,38 @@
+{
+  "schema_version": "mncs.rights-provenance.verification-evidence/1",
+  "observed_at": "2026-10-22T03:42:11Z",
+  "repository": "mncs-rights-provenance",
+  "branch": "main",
+  "commit": "1e98bbbb9a0e09a744ada408d66d6962526bf3f3",
+  "verification": {
+    "tests": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -o addopts='' -q -p no:cacheprovider tests/test_agent_context_projection.py tests/test_license_resolution_cli.py tests/test_context_source_identity_contract.py",
+      "result": "passed",
+      "passed": 49,
+      "failed": 0,
+      "elapsed_seconds": 0.35
+    },
+    "lint": {
+      "command": "python3 -m ruff check src/mncs_rights_provenance/context_identity.py src/mncs_rights_provenance/__init__.py tests/test_context_source_identity_contract.py",
+      "result": "passed"
+    },
+    "format": {
+      "command": "python3 -m ruff format --check src/mncs_rights_provenance/context_identity.py src/mncs_rights_provenance/__init__.py tests/test_context_source_identity_contract.py",
+      "result": "passed"
+    },
+    "schema_json": {
+      "command": "python3 -m json.tool schemas/v0.1/context-source-identities.schema.json",
+      "result": "passed"
+    }
+  },
+  "coverage_summary": [
+    "The versioned source identity object validates against its JSON Schema.",
+    "The exported helper identities match the generated Rights context sources.",
+    "Resolver and native action-ruleset changes alter their corresponding contract fields.",
+    "Existing candidate, resolver, and agent-context projection tests pass with the new contract."
+  ],
+  "evidence_limits": [
+    "These tests verify the Rights provider contract and do not prove that Environment consumes it.",
+    "Live Environment cache invalidation and connected MCP context projection remain pending downstream integration."
+  ]
+}
