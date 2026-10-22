@@ -54,13 +54,21 @@
     "context_operation_returned_rights_context": false,
     "inspect_context_identity": "sha256:b2fab9bcafc6c3940bc35c9f6620e75cfc12195fb842204cb491c3641491239c",
     "resolution_reused": true,
+    "resolver_identity_in_persisted_context": "sha256:d8fa9c2df6172d2854fcd3f235cecd3c9f6527c031a53f9d45dbc115d7eb12d4",
+    "resolver_identity_from_current_rights_provider": "sha256:8d779615d077b2117a1169e24faf574d9a28cc302c5baba1a0773e5bd184bb2e",
+    "context_identity_recomputed_from_current_rights_inputs": "sha256:8228315aeca15f574df81bb8ed12f006bfb3c3e39388c43cfa0b62853cab83bb",
     "bound_inputs": [
       "mncs-rights-provenance/RIGHTS.json",
       "mncs-rights-provenance/governance/agent-governance.json"
     ],
+    "bound_manifest_digest": "sha256:8f2870edba5f7d026d993115bf83b9136e6462c84e67269d9ad404a7f9e8a7a7",
+    "bound_governance_digest": "sha256:bf7a1444d17f31e74edc204fa11c9a17917697cb93633ab92a1e68059d6e1666",
+    "selected_rights_checkout_head": "3fb46feeab48eaa43208cf69efe8c124e51a825a",
+    "environment_authoritative_rights_head": "a63f718bfab2b91daef6d4c487c4316bcbe132b9",
+    "candidate_registry_digest_before_rights_commit": "sha256:2c9f3b5810a60bc100e15ee09c17858dcf94cbb3df14be9eec611129986154ff",
     "candidate_registry_digest_after_rights_commit": "sha256:db52a40960697b6bf45442320d7cee7fb242ec74243017019f1ff65214d4115c",
     "candidate_references_in_bound_context": [],
-    "interpretation": "The v0.3 candidate registry change is not referenced by this session's bound manifest or governance profile; unchanged context identity and reuse for this candidate-only change are not evidence of stale policy. The Environment branch's resolver-identity check addresses implementation or registry changes that affect resolved context."
+    "interpretation": "The manifest has no explicit candidate reference, but the Rights provider's resolver identity includes the full candidate registry digest and is itself part of the context source identity. The registry digest and resolver identity changed while both bound file digests remained unchanged; Environment still reported resolution_reused=true with the old context identity. A fresh projection from the current provider yields a different context identity, so this is stale context caused by omitting resolver identity from Environment's reuse key. The active Environment branch adds that identity comparison and a focused invalidation test."
   },
   "evidence_limits": [
     "The Environment branch and focused test were inspected at the recorded commit and were not executed by this observer.",
