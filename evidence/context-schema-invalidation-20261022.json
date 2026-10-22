@@ -1,0 +1,34 @@
+{
+  "schema_version": "mncs.rights-provenance.verification-evidence/1",
+  "identity": "ev_rights_context_schema_invalidation_20261022",
+  "recorded_at": "2026-10-22T04:58:03Z",
+  "repository": "mncs-rights-provenance",
+  "commit_under_test": "65a09aa807349f03cca637427d6acc269cd8ab16",
+  "verification": {
+    "focused_provider_tests": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -o addopts='' -q -p no:cacheprovider tests/test_context_source_identity_contract.py tests/test_agent_context_projection.py",
+      "result": "passed",
+      "passed": 46,
+      "failed": 0,
+      "elapsed_seconds": 0.46
+    },
+    "environment_capability": {
+      "operation": "mncs.environment.verify",
+      "capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+      "binding_id": "cap_26b68c0990cbd4ad",
+      "session_id": "ses_dff1822e90820cf4",
+      "result": "passed",
+      "returncode": 0,
+      "includes_context_schema_invalidation_regression": true
+    },
+    "regression_invariants": [
+      "Changing the projected context schema version changes the context identity.",
+      "The projected context and source-identity contract expose the updated schema version."
+    ]
+  },
+  "evidence_limits": [
+    "The test verifies context identity invalidation for a schema dependency; it does not prove Environment consumes every Rights dependency identity in its cache key.",
+    "The ordinary Environment entry context still omits rights_context in the latest live observation.",
+    "Passing tests do not establish legal ownership, compatibility, or broader legal compliance."
+  ]
+}
