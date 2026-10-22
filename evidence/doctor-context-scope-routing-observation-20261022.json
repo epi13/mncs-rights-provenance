@@ -1,0 +1,96 @@
+{
+  "schema_version": "mncs.rights-provenance.doctor-integration-scope-observation/1",
+  "identity": "ev_rights_doctor_context_scope_20261022",
+  "observed_at": "2026-10-22T02:51:05Z",
+  "purpose": "Determine whether Rights diagnostics can be integrated with MNCS Doctor through an authorized project context.",
+  "doctor_repository": {
+    "repository": "mncs-doctor",
+    "branch": "main",
+    "revision": "aacbcbb025cae47ea3e74e0a895e18b838cb1848",
+    "working_tree_clean": true,
+    "worktree_count": 1,
+    "environment_definition_present": false,
+    "project_manifest": {
+      "path": ".mncs/project.json",
+      "schema_version": "mncs-family.repository-manifest/v0alpha1",
+      "revision": 7,
+      "contracts_provided": [
+        "repository-diagnostics",
+        "repository-remediation",
+        "repository-validation",
+        "mncs-doctor.provider-artifact-remediation",
+        "family-remediation-plan",
+        "projection-health",
+        "compiler-vm-health",
+        "compiler-vm-reconcile"
+      ],
+      "contracts_consumed": [
+        "mncs-language.capability-index",
+        "mncs-commons.family-architecture",
+        "mncs-commons.family-change",
+        "canonical-vm-artifact",
+        "vm-runtime"
+      ],
+      "rights_contract_declared": false
+    },
+    "agent_contract": "Doctor owns repository health, drift, migration, and validation; it may validate sibling facts without becoming their semantic authority."
+  },
+  "rights_repository": {
+    "repository": "mncs-rights-provenance",
+    "revision": "e149dd40d4514c9664a67fda09723776678df67b",
+    "existing_projection": "mncs.check-result/1",
+    "currently_documented_consumer": "mncs-actions",
+    "doctor_consumer_contract_found": false,
+    "bounded_search": ["mncs-doctor/src", "mncs-doctor/tests", "mncs-doctor/docs"]
+  },
+  "environment_selection": {
+    "interface": "mcp__mncs_environment__mncs_environment",
+    "operation": "context",
+    "requested_project": "mncs-doctor",
+    "cwd": ".",
+    "returned_session_id": "ses_b4b2d283542220b0",
+    "returned_lifecycle": "active",
+    "returned_environment": "mncs-environment-development",
+    "returned_definition": "/home/epi13/Documents/Projects/mncs-environment/.mncs/environment.json",
+    "returned_intent": "improve mncs-environment through a persistent, discoverable MNCS work context",
+    "writable_repositories": ["mncs-environment"],
+    "readiness": "blocked",
+    "blocking": [
+      "mncs-doctor:compiler-vm-coherence",
+      "mncs-language-service:resident-workspace"
+    ],
+    "doctor_write_authority_present": false,
+    "interpretation": "The request did not produce a Doctor-owned environment. This active Environment session was inspected read-only and was not resumed, claimed, or modified."
+  },
+  "ownership": {
+    "doctor_claim_query": {
+      "repository": "mncs-doctor",
+      "live_claims": [],
+      "main_checkout_status": "clean"
+    },
+    "rights_evidence_scope": {
+      "claim_id": "claim:mncs-rights-provenance:paths:a08590cb353b",
+      "session_id": "ses_973d1b67eb66857e",
+      "branch": "campaign/luna-max-rights-doctor-scope-20261022",
+      "paths": ["evidence/doctor-context-scope-routing-observation-20261022.json"],
+      "status_at_observation": "held"
+    },
+    "active_environment_worktree_left_untouched": {
+      "session_id": "ses_f13d176c86a23e69",
+      "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+      "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+      "head": "9f68b0f3efd14288ebcbf6de8371cc2bf69e47cc"
+    }
+  },
+  "assessment": {
+    "confirmed": "Rights already projects native review outcomes into check-result/1 for Actions, while Doctor has no declared Rights/check-result contract in the inspected project manifest and source surfaces.",
+    "safe_next_integration": "Use an owner-authorized Doctor project context to define a read-only consumer of Rights diagnostics that preserves UNKNOWN and source references. Doctor should not reinterpret license law.",
+    "legal_conclusion": "NOT_MADE"
+  },
+  "limits": [
+    "Absence of a Rights contract in the inspected Doctor manifest does not prove that no external runtime consumer exists.",
+    "No Doctor files were modified and no Doctor verification command was run.",
+    "No Environment or Control source files were modified.",
+    "No legal compatibility or ownership conclusion was made."
+  ]
+}
