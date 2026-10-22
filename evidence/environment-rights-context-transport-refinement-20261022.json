@@ -1,0 +1,87 @@
+{
+  "schema_version": "mncs.rights-provenance.environment-context-transport-refinement/1",
+  "identity": "ev_rights_env_context_transport_refinement_20261022",
+  "observed_at": "2026-10-22T01:39:35Z",
+  "prior_evidence": {
+    "identity": "ev_rights_environment_context_transport_contrast_20261022",
+    "path": "evidence/environment-rights-context-transport-contrast-20261022.json",
+    "qualification": "The prior same-session comparison established that the Environment MCP response omitted rights_context, but its broader attribution to Control projection was not demonstrated."
+  },
+  "observations": {
+    "environment_mcp": {
+      "operation": "context",
+      "session_id": "ses_973d1b67eb66857e",
+      "rights_context_key_present": false,
+      "result_keys": [
+        "schema_version",
+        "session_id",
+        "lifecycle",
+        "environment_id",
+        "work_intent",
+        "workspace_root",
+        "persistence",
+        "toolchain",
+        "writable_repositories",
+        "protected_repositories",
+        "authority",
+        "readiness",
+        "doctor",
+        "projects",
+        "capabilities"
+      ],
+      "revalidated_before_read": true
+    },
+    "canonical_cli_context": {
+      "interface": "mncs-env context",
+      "session_id": "ses_973d1b67eb66857e",
+      "environment_checkout_revision": "d2b3d94e44586fe3778866207ccd5389d24e8c15",
+      "rights_context_key_present": true,
+      "rights_context_status": "review",
+      "source_diagnostics": [
+        "rights-manifest-unavailable",
+        "agent-governance-unavailable"
+      ],
+      "limits": "The context object existed, but its persisted source references resolved to missing workspace-root paths; this read does not demonstrate a usable current profile."
+    },
+    "control_bridge_source": {
+      "repository": "mncs-control-mcp",
+      "branch": "main",
+      "commit": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
+      "path": "src/mncs_control_mcp/local_environment_mcp.py",
+      "behavior": "_compact_context copies rights_context when the Environment payload contains a dictionary at that key.",
+      "test": {
+        "path": "tests/test_local_environment_mcp.py",
+        "name": "test_compact_context_preserves_the_environment_rights_projection",
+        "result": "passed"
+      }
+    },
+    "control_runtime": {
+      "server": "mncs-control-mcp",
+      "version": "0.4.10",
+      "runtime_revision": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
+      "source_revision": "8f4c9eae9b201eedf59fc4b1ae0a6213896eed1c",
+      "restart_required": false,
+      "environment_persistence": "ready"
+    }
+  },
+  "interpretation": {
+    "confirmed": "The connected Environment MCP context response for this session omits rights_context.",
+    "inference": "The tested Control compaction path can preserve rights_context and its live runtime matches that source revision. The omission may occur before that compaction path or through a separate Environment adapter; this evidence does not identify the exact loss boundary.",
+    "next_action": "Recheck the Environment-owned provider and context transport with the active owner after their scoped integration is reconciled.",
+    "legal_conclusion": "NOT_MADE"
+  },
+  "coordination": {
+    "active_environment_campaigns": [
+      "cmp_luna_max_rights_provenance_context_20261020",
+      "cmp_luna_max_rights_provenance_native_20261020"
+    ],
+    "environment_main_worktree_claim_remains_held_by_other_session": true,
+    "modified_repositories": ["mncs-rights-provenance"],
+    "control_and_environment_source_changes": false
+  },
+  "limits": [
+    "The Control unit test proves local projection behavior only; it is not an end-to-end Environment admission test.",
+    "The runtime status does not reveal the exact payload received by the Control bridge during the separate Environment MCP call.",
+    "A present rights_context field with unavailable source references is not a valid rights or governance determination."
+  ]
+}
