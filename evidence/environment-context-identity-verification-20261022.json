@@ -1,0 +1,114 @@
+{
+  "schema_version": "mncs.rights-provenance.verification-evidence/1",
+  "identity": "ev_rights_environment_context_identity_verification_20261022",
+  "observed_at": "2026-10-22T04:10:48Z",
+  "repository": "mncs-rights-provenance",
+  "commit_under_test": "b582f847093c9356f5d5a9bbdf1fc886495f2b8e",
+  "verification": {
+    "environment_capability": {
+      "operation": "mncs.environment.verify",
+      "capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+      "binding_id": "cap_26b68c0990cbd4ad",
+      "session_id": "ses_dff1822e90820cf4",
+      "result": "passed",
+      "returncode": 0,
+      "toolchain": {
+        "repository": "mncs-language",
+        "revision": "2ffc662087bfb91a331a73b5efefebf67b056a4d",
+        "path": "target/release/mncs"
+      },
+      "includes_context_source_identity_test": true
+    },
+    "focused_provider_tests": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -o addopts='' -q -p no:cacheprovider tests/test_context_source_identity_contract.py tests/test_agent_context_projection.py",
+      "result": "passed",
+      "passed": 44,
+      "failed": 0,
+      "elapsed_seconds": 0.35
+    },
+    "project_verification_contract": {
+      "file": ".mncs/project.json",
+      "change_commit": "b582f847093c9356f5d5a9bbdf1fc886495f2b8e",
+      "added_test": "tests/test_context_source_identity_contract.py",
+      "fingerprint_inputs": [
+        "schemas/v0.1/context-source-identities.schema.json",
+        "tests/test_context_source_identity_contract.py"
+      ],
+      "json_validation": "passed"
+    }
+  },
+  "live_context_observation": {
+    "session_id": "ses_dff1822e90820cf4",
+    "ordinary_context_operation": {
+      "schema_version": "mncs.environment.entry-context/1",
+      "rights_context_present": false,
+      "keys": [
+        "schema_version",
+        "session_id",
+        "lifecycle",
+        "environment_id",
+        "work_intent",
+        "workspace_root",
+        "persistence",
+        "toolchain",
+        "writable_repositories",
+        "protected_repositories",
+        "authority",
+        "readiness",
+        "doctor",
+        "projects",
+        "capabilities"
+      ]
+    },
+    "canonical_session_inspect": {
+      "rights_context_status": "review",
+      "rights_context_identity": "sha256:b2fab9bcafc6c3940bc35c9f6620e75cfc12195fb842204cb491c3641491239c",
+      "inputs_status": "available",
+      "resolution_reused": true,
+      "cached_resolver_identity": "sha256:d8fa9c2df6172d2854fcd3f235cecd3c9f6527c031a53f9d45dbc115d7eb12d4",
+      "cached_action_ruleset_identity": "sha256:d350e873870264b07d45cc854242a8d43ed4ec68a056f0228ab6d330fc9c4463"
+    },
+    "current_rights_source_identities": {
+      "schema_version": "mncs.rights-provenance.context-source-identities/1",
+      "context_schema": "mncs.rights-provenance.agent-context/1",
+      "license_resolver": "sha256:8d779615d077b2117a1169e24faf574d9a28cc302c5baba1a0773e5bd184bb2e",
+      "license_action_ruleset": "sha256:d350e873870264b07d45cc854242a8d43ed4ec68a056f0228ab6d330fc9c4463"
+    },
+    "resolver_identity_mismatch": true
+  },
+  "coordination": {
+    "rights_main_claim": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+      "branch": "main",
+      "status_at_observation": "held"
+    },
+    "evidence_worktree_claim": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:f4e6a9b2449a",
+      "branch": "campaign/luna-max-environment-verification-evidence-20261022",
+      "status_at_observation": "held"
+    },
+    "active_peer_claims_observed": [
+      {
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "session_id": "ses_a6a27331d7d348b9",
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021"
+      },
+      {
+        "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+        "session_id": "ses_f13d176c86a23e69",
+        "branch": "campaign/luna-max-rights-cache-invalidation-20261021"
+      },
+      {
+        "claim_id": "claim:mncs-environment:worktree:5053f3907a1c",
+        "session_id": "ses_c5e448bcaa06efbf",
+        "branch": "main"
+      }
+    ],
+    "peer_scopes_modified": false
+  },
+  "evidence_limits": [
+    "The Environment verification result proves the declared focused test capability completed; it does not prove broader legal compliance.",
+    "The Rights context is present in the canonical session inspection but absent from the ordinary entry-context projection.",
+    "Environment reused a Rights context whose cached resolver identity differs from the current provider identity; cache-key integration remains open."
+  ]
+}
