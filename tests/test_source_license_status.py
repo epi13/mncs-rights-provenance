@@ -11,6 +11,8 @@ from pathlib import Path
 
 import pytest
 
+from mncs_rights_provenance.cli import main as cli_main
+from mncs_rights_provenance.manifest import compute_manifest_identity
 from mncs_rights_provenance.policy import evaluate_policy
 from mncs_rights_provenance.policy_input import (
     _classify_source_license_status,
@@ -198,3 +200,56 @@ def test_different_license_expressions_for_one_source_are_still_reviewed() -> No
             "license": "BSD-3-Clause",
         },
     ]}) == 1
+
+
+def test_validate_cli_reviews_unverified_incompatible_metadata(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    manifest = {
+        "schema_version": "0.3.0",
+        "artifact": {"id": "test:source-status", "class": "source-code"},
+        "provenance": {
+            "origin_classification": "human-authored",
+            "participants": [{"type": "human", "role": "author"}],
+            "process_evidence": [],
+        },
+        "rights": {
+            "distribution_license": "Apache-2.0",
+            "copyright_status": "third-party-licensed",
+            "rights_basis": "third-party-license",
+            "third_party_material": "present",
+            "sources": [{
+                "kind": "package",
+                "reference": "external:package/1",
+                "license_status": "incompatible",
+                "license": "MIT",
+                "confidence": "heuristic",
+                "evidence": [{
+                    "kind": "external-record",
+                    "reference": "catalog:package/1",
+                }],
+            }],
+        },
+        "review": {
+            "technical_validation": "passed",
+            "provenance_validation": "passed",
+            "human_acceptance": "accepted",
+        },
+    }
+    manifest["manifest_identity"] = compute_manifest_identity(manifest)
+    path = tmp_path / "rights-manifest.json"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    with pytest.raises(SystemExit) as result:
+        cli_main(["validate", str(path), "--findings-are-not-failures"])
+
+    report = json.loads(capsys.readouterr().out)
+    gates = {gate["gate"]: gate["severity"] for gate in report["gate_results"]}
+    assert result.value.code == 0
+    assert report["structural_valid"] is True
+    assert report["manifest_identity_matches"] is True
+    assert report["outcome"] == "review-required"
+    assert report["legal_conclusion"] == "NOT_MADE"
+    assert gates["no_incompatible_third_party_license"] == "none"
+    assert gates["unknown_source_license"] == "review"
+    assert "one or more source license statuses are unknown or unverified" in report["findings"]
