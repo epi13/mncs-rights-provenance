@@ -629,9 +629,13 @@ def test_license_candidate_registry_is_valid_and_points_to_the_unadopted_draft()
     registry = json.loads(
         (ROOT / "src/mncs_rights_provenance/resources/license-candidates.json").read_text()
     )
-    schema = json.loads((ROOT / "schemas/v0.1/license-candidate-registry.schema.json").read_text())
+    schema = json.loads((ROOT / "schemas/v0.2/license-candidate-registry.schema.json").read_text())
     Draft202012Validator.check_schema(schema)
+    assert registry["schema_version"] == "mncs.rights.license-candidates/2"
     assert list(Draft202012Validator(schema).iter_errors(registry)) == []
+    for item in registry["candidates"]:
+        content = (ROOT / item["text_ref"]).read_bytes()
+        assert item["text_sha256"] == "sha256:" + hashlib.sha256(content).hexdigest()
 
     candidate = registry["candidates"][0]
     assert candidate["identifier"] == "LicenseRef-MNCS-Permissive-0.1"
@@ -781,9 +785,9 @@ def test_license_candidate_v04_links_copyright_grant_to_notice_conditions() -> N
     assert leaf["effective_grant"] is False
     assert leaf["declared_rights_prove_authority"] is False
     assert "permissions" not in leaf
-    assert result["candidate_review_details"][0]["decisions_ref"].endswith(
-        "#/candidates/3/legal_review_decisions"
-    )
+    detail = result["candidate_review_details"][0]
+    assert detail["decisions_ref"].endswith("#/candidates/3/legal_review_decisions")
+    assert result["candidate_registry"]["sha256"].startswith("sha256:")
 
     manifest = _manifest()
     manifest["rights"]["distribution_license"] = candidate["identifier"]
@@ -885,9 +889,9 @@ def test_candidate_review_reference_survives_expression_detail_compaction(monkey
 
     assert "expression_tree" not in license_terms
     assert license_terms["detail_ref"].endswith("#/rights/distribution_license")
-    assert license_terms["candidate_review_details"][0]["decisions_ref"].endswith(
-        "#/candidates/1/legal_review_decisions"
-    )
+    detail = license_terms["candidate_review_details"][0]
+    assert detail["decisions_ref"].endswith("#/candidates/1/legal_review_decisions")
+    assert license_terms["candidate_registry"]["sha256"].startswith("sha256:")
     schema = json.loads((ROOT / "schemas/v0.1/agent-context.schema.json").read_text())
     assert list(Draft202012Validator(schema).iter_errors(context)) == []
 

@@ -1,0 +1,114 @@
+{
+  "schema_version": "mncs.rights-provenance.license-candidate-text-digests/1",
+  "identity": "ev_rights_candidate_text_digests_20261022",
+  "observed_at": "2026-10-22T09:02:23+00:00",
+  "repository": "mncs-rights-provenance",
+  "branch": "campaign/luna-max-license-text-digest-20261022",
+  "base_commit": "c5690780c434939a71b4d35b9b35998420fa9b32",
+  "registry": {
+    "schema_version": "mncs.rights.license-candidates/2",
+    "schema_ref": "schemas/v0.2/license-candidate-registry.schema.json",
+    "previous_schema_ref": "schemas/v0.1/license-candidate-registry.schema.json",
+    "previous_schema_preserved": true,
+    "candidate_count": 4,
+    "candidate_texts": [
+      {
+        "identifier": "LicenseRef-MNCS-Permissive-0.1",
+        "version": "0.1",
+        "text_ref": "legal-candidates/MNCS-Permissive-0.1.md",
+        "declared_sha256": "sha256:23a3418c82cdd1b6516c50165d0a8a306189503bdc376f29e77950cbfa0613e3",
+        "observed_sha256": "sha256:23a3418c82cdd1b6516c50165d0a8a306189503bdc376f29e77950cbfa0613e3",
+        "digest_matches_local_text": true,
+        "comparison_scope": "exact UTF-8 file bytes, including final newline"
+      },
+      {
+        "identifier": "LicenseRef-MNCS-Permissive-0.2",
+        "version": "0.2",
+        "text_ref": "legal-candidates/MNCS-Permissive-0.2.md",
+        "declared_sha256": "sha256:3017e97ebd28fc9da0c37965dcdf542db2c99b2860eaf7ee2f1f836de23add47",
+        "observed_sha256": "sha256:3017e97ebd28fc9da0c37965dcdf542db2c99b2860eaf7ee2f1f836de23add47",
+        "digest_matches_local_text": true,
+        "comparison_scope": "exact UTF-8 file bytes, including final newline"
+      },
+      {
+        "identifier": "LicenseRef-MNCS-Permissive-0.3",
+        "version": "0.3",
+        "text_ref": "legal-candidates/MNCS-Permissive-0.3.md",
+        "declared_sha256": "sha256:284a63b57fd05badac131fed3f31ff30c1f8accc7e0d0bbb740d8df143f09e92",
+        "observed_sha256": "sha256:284a63b57fd05badac131fed3f31ff30c1f8accc7e0d0bbb740d8df143f09e92",
+        "digest_matches_local_text": true,
+        "comparison_scope": "exact UTF-8 file bytes, including final newline"
+      },
+      {
+        "identifier": "LicenseRef-MNCS-Permissive-0.4",
+        "version": "0.4",
+        "text_ref": "legal-candidates/MNCS-Permissive-0.4.md",
+        "declared_sha256": "sha256:bc3db39a524b9b14f135535e99fe51a1d0d3a3adb20f2db47c0e88ab52f81c29",
+        "observed_sha256": "sha256:bc3db39a524b9b14f135535e99fe51a1d0d3a3adb20f2db47c0e88ab52f81c29",
+        "digest_matches_local_text": true,
+        "comparison_scope": "exact UTF-8 file bytes, including final newline"
+      }
+    ],
+    "registry_sha256": "sha256:271c4cd5a131a2a6022954c6138fa05cee1942c8ad2a356deadbb5918a3d23c8"
+  },
+  "resolver_projection": {
+    "candidate_registry_reference": "mncs_rights_provenance/resources/license-candidates.json",
+    "candidate_registry_sha256_in_result": true,
+    "candidate_text_ref_in_expression_tree": true,
+    "candidate_text_sha256_emitted_directly": false,
+    "candidate_text_sha256_available_on_demand_in_registry": true,
+    "resolver_opens_or_hashes_candidate_text": false,
+    "candidate_status": "candidate-unapproved",
+    "effective_grant": false,
+    "permission_summary_added": false,
+    "compatibility": "unknown"
+  },
+  "verification": {
+    "initial_toolchain_attempt": {
+      "command": "python3 -m pytest -o addopts= -q tests/test_agent_context_projection.py tests/test_license_resolution_cli.py tests/test_license_action_core.py tests/test_license_action_guidance.py tests/test_agent_contract.py",
+      "result": "65 passed, 2 failed",
+      "diagnosis": "The host PATH mncs executable (/home/epi13/.local/bin/mncs) lacks the experiment command required by two native action-rule tests; this was a toolchain-selection mismatch, not a failure in candidate digest handling."
+    },
+    "declared_toolchain": {
+      "repository": "mncs-language",
+      "branch": "main",
+      "head": "2ffc662087bfb91a331a73b5efefebf67b056a4d",
+      "path": "/home/epi13/Documents/Projects/mncs-language/target/release/mncs",
+      "read_only": true
+    },
+    "corrected_command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python3 -m pytest -o addopts= -q tests/test_agent_context_projection.py tests/test_license_resolution_cli.py tests/test_license_action_core.py tests/test_license_action_guidance.py tests/test_agent_contract.py",
+    "corrected_result": "67 passed in 0.68s",
+    "checks": {
+      "ruff": "passed",
+      "registry_and_v0_2_schema_json": "passed",
+      "project_manifest_json": "passed",
+      "git_diff_check": "passed"
+    },
+    "coverage": [
+      "all four local legal-candidate text references match their declared digest",
+      "v0.2 registry schema requires a digest while v0.1 schema remains available",
+      "resolver content identity changes with candidate registry content",
+      "compact context retains the registry reference and digest plus on-demand decision pointer",
+      "candidate permissions remain inactive and compatibility remains unknown"
+    ]
+  },
+  "legal_conclusion": "NOT_MADE",
+  "limits": [
+    "A retrieved document matching the declared digest establishes byte identity only; it does not establish license adoption, legal effect, ownership, authority, or compatibility.",
+    "The resolver checks digest syntax but deliberately does not open or verify candidate text at runtime.",
+    "The SHA-256 declaration covers complete local UTF-8 file bytes, including the final newline."
+  ],
+  "source_sha256": {
+    ".mncs/project.json": "5e9ce8acba6460c3ea8da633b8bac362b073a1c1c45ea11265c4045f4272f1cd",
+    "docs/license-candidate-review.md": "7d81ef68d2cd727d78c0ea7bab7ff187cf13da9dc477e8f85f608553bbd1eb37",
+    "docs/rights-provenance-agent-context.md": "dfd37ab296861b0c3105afab0c2914521bdca8df5f38698e9e4ca2346705a96c",
+    "legal-candidates/MNCS-Permissive-0.1.md": "23a3418c82cdd1b6516c50165d0a8a306189503bdc376f29e77950cbfa0613e3",
+    "legal-candidates/MNCS-Permissive-0.2.md": "3017e97ebd28fc9da0c37965dcdf542db2c99b2860eaf7ee2f1f836de23add47",
+    "legal-candidates/MNCS-Permissive-0.3.md": "284a63b57fd05badac131fed3f31ff30c1f8accc7e0d0bbb740d8df143f09e92",
+    "legal-candidates/MNCS-Permissive-0.4.md": "bc3db39a524b9b14f135535e99fe51a1d0d3a3adb20f2db47c0e88ab52f81c29",
+    "schemas/v0.2/license-candidate-registry.schema.json": "89bf63c994e0fe567b5936a6b2050fcc68f23cfc383866683a69363d73b34abc",
+    "src/mncs_rights_provenance/license_resolution.py": "6650f94fa88fa6e74d96f1a332029507ee72f939aa8f79463e623b7f0e2e4f0d",
+    "src/mncs_rights_provenance/resources/license-candidates.json": "271c4cd5a131a2a6022954c6138fa05cee1942c8ad2a356deadbb5918a3d23c8",
+    "tests/test_agent_context_projection.py": "5cf286e0c7409964d308c89cb79e511cfa2671302d4e9007f3419e6d17c2760c"
+  }
+}

@@ -33,10 +33,16 @@ it does not add proposed permissions to the effective license-term index.
 Environment context therefore surfaces an actionable review diagnostic while
 preserving `unknown` compatibility. The versioned license-resolution view
 also exposes the count and JSON Pointer for a candidate's
-`legal_review_decisions`; the registry digest in context binds that on-demand
-reference without repeating the decision list or draft terms. The registry is
-metadata about the candidate, not a replacement for an effective repository
-license.
+`legal_review_decisions`. Registry version 2 binds each exact UTF-8 draft
+text to a SHA-256 digest, and the resolver binds the registry reference to
+its own content digest in context. Resolution does not open the text or
+claim to verify its declared digest; an agent can inspect the candidate
+record and verify retrieved bytes against it on demand. The compact context
+does not repeat the decision list or
+draft terms. The registry is metadata about the candidate, not a replacement
+for an effective repository license. The recorded digests and bounded
+resolver checks are in
+`evidence/license-candidate-text-digests-20261022.json`.
 
 ## Decisions still open
 

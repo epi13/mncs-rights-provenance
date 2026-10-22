@@ -208,7 +208,7 @@ def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
     value = json.loads(registry_bytes)
     if (
         not isinstance(value, dict)
-        or value.get("schema_version") != "mncs.rights.license-candidates/1"
+        or value.get("schema_version") != "mncs.rights.license-candidates/2"
     ):
         raise RuntimeError("packaged license candidate registry has an unsupported schema")
     entries = value.get("candidates")
@@ -230,6 +230,8 @@ def _load_license_candidates() -> tuple[dict[str, dict[str, Any]], str]:
             or entry.get("adoption_authority") is not None
             or not isinstance(entry.get("text_ref"), str)
             or not entry["text_ref"]
+            or not isinstance(entry.get("text_sha256"), str)
+            or not re.fullmatch(r"sha256:[0-9a-f]{64}", entry["text_sha256"])
             or entry.get("declared_rights_prove_authority") is not False
             or not isinstance(entry.get("legal_review_decisions"), list)
             or len(entry["legal_review_decisions"]) > 64

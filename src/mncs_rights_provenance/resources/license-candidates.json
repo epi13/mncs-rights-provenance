@@ -1,5 +1,5 @@
 {
-  "schema_version": "mncs.rights.license-candidates/1",
+  "schema_version": "mncs.rights.license-candidates/2",
   "candidates": [
     {
       "identifier": "LicenseRef-MNCS-Permissive-0.1",
@@ -10,6 +10,7 @@
       "retroactive_application": false,
       "adoption_authority": null,
       "text_ref": "legal-candidates/MNCS-Permissive-0.1.md",
+      "text_sha256": "sha256:23a3418c82cdd1b6516c50165d0a8a306189503bdc376f29e77950cbfa0613e3",
       "declared_rights_prove_authority": false,
       "legal_review_decisions": [
         "patent-grant-scope",
@@ -31,6 +32,7 @@
       "retroactive_application": false,
       "adoption_authority": null,
       "text_ref": "legal-candidates/MNCS-Permissive-0.2.md",
+      "text_sha256": "sha256:3017e97ebd28fc9da0c37965dcdf542db2c99b2860eaf7ee2f1f836de23add47",
       "declared_rights_prove_authority": false,
       "legal_review_decisions": [
         "copyright-grant-scope-and-covered-work-definition",
@@ -56,6 +58,7 @@
       "retroactive_application": false,
       "adoption_authority": null,
       "text_ref": "legal-candidates/MNCS-Permissive-0.3.md",
+      "text_sha256": "sha256:284a63b57fd05badac131fed3f31ff30c1f8accc7e0d0bbb740d8df143f09e92",
       "declared_rights_prove_authority": false,
       "legal_review_decisions": [
         "copyright-grant-scope-and-covered-work-definition",
@@ -81,6 +84,7 @@
       "retroactive_application": false,
       "adoption_authority": null,
       "text_ref": "legal-candidates/MNCS-Permissive-0.4.md",
+      "text_sha256": "sha256:bc3db39a524b9b14f135535e99fe51a1d0d3a3adb20f2db47c0e88ab52f81c29",
       "declared_rights_prove_authority": false,
       "legal_review_decisions": [
         "copyright-grant-condition-and-notice-obligations",
