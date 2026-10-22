@@ -1,0 +1,112 @@
+{
+  "schema_version": "mncs.rights-provenance.manifest-action-guidance-evidence/1",
+  "identity": "ev_manifest_action_guidance_multi_input_20261022",
+  "observed_at": "2026-10-22T09:40:08Z",
+  "campaign_id": "cmp_ff3f91cb1a6badbf",
+  "implementation": {
+    "repository": "mncs-rights-provenance",
+    "branch": "campaign/luna-max-license-text-digest-20261022",
+    "source_commit": "1a4de459bdfc6fba42f5816ec6b8af801e1d27be",
+    "contract": "mncs.rights.manifest-action-guidance/1",
+    "schema": "schemas/v0.1/manifest-action-guidance.schema.json",
+    "cli": "mncs-rp manifest-action-guidance"
+  },
+  "functional_observation": {
+    "command": "mncs-rp manifest-action-guidance RIGHTS.json --manifest-ref mncs-rights-provenance/RIGHTS.json --action redistribute-binary",
+    "input": "mncs-rights-provenance/RIGHTS.json",
+    "result": {
+      "status": "reference-summary",
+      "source_count": 1,
+      "shown_sources": 1,
+      "distribution_license": "Apache-2.0",
+      "compatibility": "unknown",
+      "legal_conclusion": "NOT_MADE",
+      "manifest_content_digest_basis": "raw-file-bytes",
+      "manifest_identity_evidence": "recomputed-from-observed-manifest-content"
+    },
+    "scope": "Indexed license conditions for the manifest declarations only; this does not establish input completeness, grant authority, compatibility, or legal compliance."
+  },
+  "behavior_covered": [
+    "Keeps project distribution conditions and every source's conditions in separate records.",
+    "Preserves SPDX AND and OR structure for each source expression.",
+    "Keeps compatible and incompatible source status values as unverified declarations.",
+    "Leaves missing, NOASSERTION, unsupported, malformed, and LicenseRef inputs unresolved or partial.",
+    "Defers expression trees above 16 KiB to a stable source reference and on-demand query.",
+    "Pages at most eight source records per response and makes repeated page queries deterministic.",
+    "Reports canonical manifest identity mismatches separately from rights conclusions."
+  ],
+  "verification": {
+    "targeted_pytest_command": "env MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs python3 -m pytest tests/test_manifest_action_guidance.py tests/test_license_action_guidance.py tests/test_license_action_core.py tests/test_license_resolution_cli.py tests/test_agent_context_projection.py",
+    "pytest": {
+      "outcome": "passed",
+      "tests": 72,
+      "duration_seconds": 0.83
+    },
+    "ruff": "passed",
+    "json_schemas": "passed",
+    "repository_manifest_json": "passed",
+    "git_diff_check": "passed",
+    "repository_wide_suite": "not-run"
+  },
+  "coordination": {
+    "environment_session": "ses_dff1822e90820cf4",
+    "ownership_operation": "mncs_environment claims acquire",
+    "owned_claim": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:6aaa3269ae7e",
+      "branch": "campaign/luna-max-license-text-digest-20261022",
+      "checkout": ".worktrees/luna-max-license-text-digest-20261022",
+      "status": "held"
+    },
+    "rights_claims_observation": {
+      "total_records": 95,
+      "pagination_used": true,
+      "active_peer_scope_left_untouched": {
+        "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+        "session_id": "ses_a6a27331d7d348b9",
+        "branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+        "checkout": ".worktrees/luna-max-rights-artifact-handoff-20261021"
+      }
+    },
+    "other_active_scopes_left_untouched": [
+      {
+        "repository": "mncs-environment",
+        "claim_id": "claim:mncs-environment:worktree:3174feea3a68",
+        "branch": "campaign/luna-max-rights-cache-invalidation-20261021"
+      },
+      {
+        "repository": "mncs-environment",
+        "claim_id": "claim:mncs-environment:worktree:5053f3907a1c",
+        "branch": "main"
+      },
+      {
+        "repository": "mncs-environment",
+        "claim_id": "claim:mncs-environment:worktree:d211c5747211",
+        "branch": "campaign/compiler-environment-scope-20261022"
+      },
+      {
+        "repository": "mncs-environment",
+        "claim_id": "claim:mncs-environment:worktree:f6712552f069",
+        "branch": "campaign/luna-max-continuity-20261021"
+      },
+      {
+        "repository": "mncs-control-mcp",
+        "claim_id": "claim:mncs-control-mcp:worktree:09711c2d8fda",
+        "branch": "campaign/control-cross-repo-scope-routing-20261020"
+      },
+      {
+        "repository": "mncs-control-mcp",
+        "claim_id": "claim:mncs-control-mcp:worktree:b55ae9f1998c",
+        "branch": "campaign/luna-control-workspace-checkout-20261022"
+      }
+    ],
+    "changes_to_peer_worktrees": false
+  },
+  "environment_context_recheck": {
+    "operation": "context",
+    "session_id": "ses_dff1822e90820cf4",
+    "readiness": "ready",
+    "rights_context_present": false,
+    "scope": "Same active session recheck; not a new admission."
+  },
+  "legal_conclusion": "NOT_MADE"
+}
