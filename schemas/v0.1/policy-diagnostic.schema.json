@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/v0.1/policy-diagnostic.schema.json",
+  "title": "MNCS Rights Policy Diagnostic v1",
+  "description": "Bounded, evidence-linked explanation of a rights policy gate; it does not make a legal conclusion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "gate",
+    "severity",
+    "message",
+    "evidence_state",
+    "source_declarations",
+    "omitted_source_declarations",
+    "conflicts",
+    "omitted_conflicts",
+    "remedy",
+    "legal_conclusion"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs.rights.policy-diagnostic/1"},
+    "code": {
+      "enum": [
+        "source-license-status-unverified",
+        "source-license-declarations-conflict"
+      ]
+    },
+    "gate": {
+      "enum": [
+        "unknown_source_license",
+        "no_contradictory_license_evidence"
+      ]
+    },
+    "severity": {"enum": ["finding", "review"]},
+    "message": {"type": "string", "minLength": 1, "maxLength": 512},
+    "evidence_state": {"const": "declared-unverified"},
+    "source_declarations": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {"$ref": "#/$defs/source_declaration"}
+    },
+    "omitted_source_declarations": {"type": "integer", "minimum": 0},
+    "conflicts": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {"$ref": "#/$defs/conflict"}
+    },
+    "omitted_conflicts": {"type": "integer", "minimum": 0},
+    "remedy": {"type": "string", "minLength": 1, "maxLength": 512},
+    "legal_conclusion": {"const": "NOT_MADE"}
+  },
+  "$defs": {
+    "evidence_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reference"],
+      "properties": {
+        "kind": {"type": "string", "minLength": 1, "maxLength": 64},
+        "reference": {"type": "string", "minLength": 1, "maxLength": 256},
+        "sha256": {"type": "string", "maxLength": 72},
+        "sha256_truncated": {"type": "boolean"},
+        "text_truncated": {"type": "boolean"}
+      }
+    },
+    "source_declaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_kind",
+        "source_reference",
+        "source_reference_truncated",
+        "declared_license_status",
+        "evidence_state"
+      ],
+      "properties": {
+        "source_kind": {"type": "string", "minLength": 1, "maxLength": 64},
+        "source_reference": {"type": "string", "minLength": 1, "maxLength": 256},
+        "source_reference_truncated": {"type": "boolean"},
+        "declared_license_status": {"type": "string", "minLength": 1, "maxLength": 64},
+        "evidence_state": {"const": "declared-unverified"},
+        "declared_license_expression": {"type": "string", "maxLength": 256},
+        "declared_confidence": {"type": "string", "maxLength": 64},
+        "text_truncated": {"type": "boolean"},
+        "evidence_references": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {"$ref": "#/$defs/evidence_reference"}
+        },
+        "omitted_evidence_reference_entries": {"type": "integer", "minimum": 0}
+      }
+    },
+    "license_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "text_truncated"],
+      "properties": {
+        "value": {"type": "string", "maxLength": 256},
+        "text_truncated": {"type": "boolean"}
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_reference",
+        "source_reference_truncated",
+        "declaration_count",
+        "declared_statuses",
+        "declared_license_expressions",
+        "omitted_license_expression_variants",
+        "evidence_references",
+        "omitted_evidence_reference_entries",
+        "source_kinds",
+        "omitted_source_kinds"
+      ],
+      "properties": {
+        "source_reference": {"type": "string", "minLength": 1, "maxLength": 256},
+        "source_reference_truncated": {"type": "boolean"},
+        "declaration_count": {"type": "integer", "minimum": 1},
+        "declared_statuses": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"enum": ["compatible", "incompatible", "not-applicable"]}
+        },
+        "declared_license_expressions": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {"$ref": "#/$defs/license_expression"}
+        },
+        "omitted_license_expression_variants": {"type": "integer", "minimum": 0},
+        "evidence_references": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {"$ref": "#/$defs/evidence_reference"}
+        },
+        "omitted_evidence_reference_entries": {"type": "integer", "minimum": 0},
+        "source_kinds": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {"type": "string", "minLength": 1, "maxLength": 64}
+        },
+        "omitted_source_kinds": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

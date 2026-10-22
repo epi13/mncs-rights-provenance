@@ -19,6 +19,7 @@ from .gates import (
     REVIEW,
     apply_enforcement,
 )
+from .policy_diagnostics import project_source_policy_diagnostics
 from .policy_input import PolicyInput
 
 OUTCOME_PASS = "pass"
@@ -47,6 +48,7 @@ class PolicyOutcome:
     severity: int
     gate_results: list[GateResult] = field(default_factory=list)
     findings: list[str] = field(default_factory=list)
+    diagnostics: list[dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -62,6 +64,7 @@ class PolicyOutcome:
                 for result in self.gate_results
             ],
             "findings": list(self.findings),
+            "diagnostics": list(self.diagnostics),
             "note": (
                 "Passing means project evidence requirements were satisfied; "
                 "this is not a legal warranty of title or non-infringement."
@@ -131,11 +134,29 @@ def evaluate_policy(
     else:
         outcome = OUTCOME_PASS
 
+    severity_by_gate = {
+        result.gate: SEVERITY_NAMES[result.effective_severity]
+        for result in gate_results
+    }
+    diagnostics = project_source_policy_diagnostics(
+        source_declarations=policy_input.source_license_declarations,
+        source_count=policy_input.source_license_count,
+        omitted_sources=max(
+            0, policy_input.source_license_count - len(policy_input.source_license_declarations)
+        ),
+        source_conflicts=policy_input.source_license_conflicts,
+        conflict_count=policy_input.source_license_conflict_count,
+        omitted_conflicts=policy_input.omitted_source_license_conflicts,
+        unknown_source_severity=severity_by_gate.get("unknown_source_license", "none"),
+        contradiction_severity=severity_by_gate.get("no_contradictory_license_evidence", "none"),
+    )
+
     return PolicyOutcome(
         outcome=outcome,
         severity=combined,
         gate_results=gate_results,
         findings=sorted(set(findings)),
+        diagnostics=diagnostics,
     )
 
 
