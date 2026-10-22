@@ -32,6 +32,7 @@ from .authority import (
 )
 from .canonical import canonical_bytes, sha256_hex
 from .compiler_adapter import build_compiler_application_artifact_binding
+from .context_identity import agent_context_source_identities
 from .evidence import (
     EvidenceRecord,
     compute_evidence_digest,
@@ -126,6 +127,7 @@ __all__ = [
     "Review",
     "Rights",
     "Source",
+    "agent_context_source_identities",
     "authority_claim_from_dict",
     "authority_verdict",
     "build_agent_context",

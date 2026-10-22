@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/v0.1/context-source-identities.schema.json",
+  "title": "MNCS Rights agent-context source identity contract v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "context_schema",
+    "license_resolver",
+    "license_action_ruleset"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "mncs.rights-provenance.context-source-identities/1"
+    },
+    "context_schema": {
+      "const": "mncs.rights-provenance.agent-context/1"
+    },
+    "license_resolver": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "license_action_ruleset": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  },
+  "additionalProperties": false
+}
