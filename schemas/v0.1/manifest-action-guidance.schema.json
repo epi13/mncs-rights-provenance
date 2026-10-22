@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/v0.1/manifest-action-guidance.schema.json",
+  "title": "MNCS rights manifest redistribution guidance",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "status_scope",
+    "action",
+    "manifest",
+    "license_resolver",
+    "ruleset",
+    "distribution_license",
+    "source_list_state",
+    "source_count",
+    "source_offset",
+    "source_limit",
+    "source_guidance",
+    "next_source_offset",
+    "declaration_coverage",
+    "compatibility",
+    "not_assessed",
+    "diagnostic_codes",
+    "legal_conclusion"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs.rights.manifest-action-guidance/1"},
+    "status": {"enum": ["unresolved", "partial", "reference-summary"]},
+    "status_scope": {"const": "indexed-license-condition-coverage-only"},
+    "action": {"enum": ["redistribute-source", "redistribute-binary"]},
+    "manifest": {
+      "type": "object",
+      "required": [
+        "reference", "content_sha256", "content_digest_basis", "identity_observed",
+        "identity_declared", "identity_matches", "identity_evidence", "identity_scope"
+      ],
+      "properties": {
+        "reference": {"type": "string", "minLength": 1, "maxLength": 512},
+        "content_sha256": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"},
+        "content_digest_basis": {"enum": ["raw-file-bytes", "canonical-json-fallback", "unavailable"]},
+        "identity_observed": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "identity_declared": {"type": ["string", "null"], "maxLength": 128},
+        "identity_matches": {"type": ["boolean", "null"]},
+        "identity_evidence": {"const": "recomputed-from-observed-manifest-content"},
+        "identity_scope": {"const": "canonical-content-consistency-only"}
+      },
+      "additionalProperties": false
+    },
+    "license_resolver": {
+      "type": "object",
+      "required": ["version", "identity"],
+      "properties": {
+        "version": {"const": "mncs.rights.license-resolution/4"},
+        "identity": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "ruleset": {
+      "type": "object",
+      "required": ["version", "module", "module_ref", "identity"],
+      "properties": {
+        "version": {"const": "mncs.rights.license-action-rules/1"},
+        "module": {"const": "mncs.rights.license_actions.v01"},
+        "module_ref": {"const": "language/rights_license_actions.mncs"},
+        "identity": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "distribution_license": {
+      "type": "object",
+      "required": [
+        "license_expression", "license_expression_truncated", "license_expression_ref",
+        "evidence_state", "guidance"
+      ],
+      "properties": {
+        "license_expression": {"type": ["string", "null"], "maxLength": 4096},
+        "license_expression_truncated": {"type": "boolean"},
+        "license_expression_ref": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "evidence_state": {"enum": ["declared-unverified", "unavailable"]},
+        "guidance": {"$ref": "#/$defs/action_guidance"}
+      },
+      "additionalProperties": false
+    },
+    "source_list_state": {"enum": ["declared", "unavailable"]},
+    "source_count": {"type": "integer", "minimum": 0, "maximum": 1000000},
+    "source_offset": {"type": "integer", "minimum": 0, "maximum": 2147483647},
+    "source_limit": {"type": "integer", "minimum": 1, "maximum": 8},
+    "source_guidance": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/source_guidance"}
+    },
+    "next_source_offset": {"type": ["integer", "null"], "minimum": 0, "maximum": 1000000},
+    "declaration_coverage": {"const": "manifest-declarations-only"},
+    "compatibility": {
+      "type": "object",
+      "required": ["status", "reason"],
+      "properties": {
+        "status": {"const": "unknown"},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 512}
+      },
+      "additionalProperties": false
+    },
+    "not_assessed": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 256}
+    },
+    "diagnostic_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "source-list-unavailable",
+          "source-page-truncated",
+          "distribution-license-terms-unresolved",
+          "source-record-malformed",
+          "source-license-terms-unresolved",
+          "manifest-identity-mismatch"
+        ]
+      }
+    },
+    "legal_conclusion": {"const": "NOT_MADE"},
+    "ok": {"type": "boolean"},
+    "error": {"type": "string", "maxLength": 512}
+  },
+  "$defs": {
+    "expression_node": {"$ref": "license-action-guidance.schema.json#/$defs/expression_node"},
+    "action_guidance": {
+      "type": "object",
+      "required": [
+        "status", "tree_state", "expression_tree", "detail_ref", "detail_query_ref",
+        "unresolved_identifiers", "unresolved_identifier_count", "unresolved_identifiers_truncated",
+        "unresolved_conditions", "unresolved_condition_count", "unresolved_conditions_truncated",
+        "decision_notes", "decision_note_count", "decision_notes_truncated"
+      ],
+      "properties": {
+        "status": {"enum": ["unresolved", "partial", "reference-summary"]},
+        "tree_state": {"enum": ["inline", "deferred", "unresolved", "unavailable"]},
+        "expression_tree": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/expression_node"}]},
+        "detail_ref": {"type": ["string", "null"], "maxLength": 1024},
+        "detail_query_ref": {"enum": [null, "mncs-rp action-guidance"]},
+        "unresolved_identifiers": {"type": "array", "maxItems": 32, "items": {"type": "string", "maxLength": 4096}},
+        "unresolved_identifier_count": {"type": "integer", "minimum": 0},
+        "unresolved_identifiers_truncated": {"type": "boolean"},
+        "unresolved_conditions": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "required": ["license", "reason"],
+            "properties": {
+              "license": {"type": "string", "maxLength": 4096},
+              "condition": {"type": "string", "maxLength": 256},
+              "reason": {"type": "string", "maxLength": 512}
+            },
+            "additionalProperties": false
+          }
+        },
+        "unresolved_condition_count": {"type": "integer", "minimum": 0},
+        "unresolved_conditions_truncated": {"type": "boolean"},
+        "decision_notes": {"type": "array", "maxItems": 4, "items": {"type": "string", "maxLength": 512}},
+        "decision_note_count": {"type": "integer", "minimum": 0},
+        "decision_notes_truncated": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "source_guidance": {
+      "type": "object",
+      "required": [
+        "source_index", "record_state", "source_kind", "source_kind_state", "reference",
+        "reference_truncated", "license_expression", "license_expression_truncated",
+        "license_expression_ref", "license_status_declaration", "license_status_state",
+        "confidence_declaration", "evidence_state", "evidence_refs", "guidance"
+      ],
+      "properties": {
+        "source_index": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "record_state": {"enum": ["usable", "malformed"]},
+        "source_kind": {"enum": ["repository", "file", "dataset", "model", "documentation", "conversation", "package", "other", null]},
+        "source_kind_state": {"enum": ["recognized", "unrecognized", "unavailable"]},
+        "reference": {"type": ["string", "null"], "maxLength": 512},
+        "reference_truncated": {"type": "boolean"},
+        "license_expression": {"type": ["string", "null"], "maxLength": 4096},
+        "license_expression_truncated": {"type": "boolean"},
+        "license_expression_ref": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "license_status_declaration": {"enum": ["compatible", "incompatible", "unknown", "not-applicable", null]},
+        "license_status_state": {"enum": ["declared-unverified", "unrecognized", "unavailable"]},
+        "confidence_declaration": {"type": ["string", "null"], "maxLength": 128},
+        "evidence_state": {"enum": ["declared-unverified", "unresolved"]},
+        "evidence_refs": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["reference"],
+            "properties": {
+              "reference": {"type": "string", "minLength": 1, "maxLength": 512},
+              "kind": {"type": "string", "maxLength": 128},
+              "sha256": {"type": "string", "maxLength": 128}
+            },
+            "additionalProperties": false
+          }
+        },
+        "guidance": {"$ref": "#/$defs/action_guidance"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

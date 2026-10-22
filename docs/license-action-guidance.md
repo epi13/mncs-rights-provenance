@@ -16,6 +16,12 @@ requested redistribution action remain visible as review cues.
 redistribution matches the condition's indexed action class. The original
 `when` trigger remains authoritative for whether its additional facts apply.
 
+For a manifest with multiple contributing inputs, use
+[`manifest-action-guidance`](manifest-action-guidance.md). It reports the
+project distribution license and each declared source independently, retaining
+per-source notices and unknown states rather than merging them into one
+permission result.
+
 The action-class mapping is normative in
 `language/rights_license_actions.mncs` (`mncs.rights.license_actions.v01`).
 The executable corpus in `language/corpora/license-action-guidance-corpus.json`

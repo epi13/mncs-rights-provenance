@@ -79,6 +79,11 @@ When both operations share the same compact status, the repeated per-action
 status objects may be omitted. `expression_ref` and `query_ref` still identify
 the declaration and the action-guidance query. If the term projection omits a
 duplicate `detail_ref`, that same expression reference identifies the source.
+When a redistribution operation includes multiple declared source entries,
+`mncs-rp manifest-action-guidance RIGHTS.json --action redistribute-binary`
+pages their indexed conditions independently; use `redistribute-source` for
+source-form distribution. The query preserves each source declaration and
+leaves compatibility unknown.
 
 When a source records a usable license expression but leaves `license_status`
 unknown, its diagnostic names the unresolved compatibility and source

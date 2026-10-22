@@ -47,6 +47,10 @@ from .manifest import (
     compute_manifest_identity,
     load_manifest_file,
 )
+from .manifest_action_guidance import (
+    MAX_MANIFEST_ACTION_GUIDANCE_BYTES,
+    manifest_action_guidance,
+)
 from .policy import evaluate_policy, profile_from_dict
 from .policy_input import policy_input_from_manifest
 from .promotion import promotion_inputs_from_dict, promotion_report
@@ -266,6 +270,35 @@ def cmd_action_guidance(args: argparse.Namespace) -> int:
         return 2
     _emit(report, human=args.human)
     # Unknown terms are a useful diagnostic result, not a command failure.
+    return 0
+
+
+def cmd_manifest_action_guidance(args: argparse.Namespace) -> int:
+    try:
+        with Path(args.manifest).open("rb") as stream:
+            raw = stream.read(MAX_MANIFEST_ACTION_GUIDANCE_BYTES + 1)
+        if len(raw) > MAX_MANIFEST_ACTION_GUIDANCE_BYTES:
+            raise ValueError("rights manifest exceeds the 2 MiB query bound")
+        document = json.loads(raw.decode("utf-8"))
+        if not isinstance(document, dict):
+            raise TypeError("rights manifest must be a JSON object")
+        path = Path(args.manifest)
+        manifest_ref = args.manifest_ref
+        if manifest_ref is None:
+            manifest_ref = path.as_posix() if not path.is_absolute() else path.name
+        report = manifest_action_guidance(
+            document,
+            args.action,
+            manifest_ref=manifest_ref,
+            manifest_content_sha256="sha256:" + hashlib.sha256(raw).hexdigest(),
+            offset=args.offset,
+            limit=args.limit,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError) as exc:
+        _emit({"ok": False, "error": str(exc)[:512], "legal_conclusion": "NOT_MADE"})
+        return 2
+    _emit(report, human=args.human)
+    # Partial or unresolved rights remain structured preflight results.
     return 0
 
 
@@ -653,6 +686,24 @@ def build_parser() -> argparse.ArgumentParser:
     )
     action_parser.add_argument("--human", action="store_true")
     action_parser.set_defaults(func=cmd_action_guidance)
+
+    manifest_action_parser = subparsers.add_parser(
+        "manifest-action-guidance",
+        help="show redistribution conditions per declared manifest input",
+    )
+    manifest_action_parser.add_argument("manifest", help="rights manifest JSON file")
+    manifest_action_parser.add_argument(
+        "--manifest-ref", help="stable reference to use in the report; defaults to the input path"
+    )
+    manifest_action_parser.add_argument(
+        "--action",
+        required=True,
+        choices=("redistribute-source", "redistribute-binary"),
+    )
+    manifest_action_parser.add_argument("--offset", type=int, default=0)
+    manifest_action_parser.add_argument("--limit", type=int, default=4)
+    manifest_action_parser.add_argument("--human", action="store_true")
+    manifest_action_parser.set_defaults(func=cmd_manifest_action_guidance)
 
     license_resolve_parser = subparsers.add_parser(
         "license-resolve",
