@@ -70,6 +70,20 @@
     "candidate_references_in_bound_context": [],
     "interpretation": "The manifest has no explicit candidate reference, but the Rights provider's resolver identity includes the full candidate registry digest and is itself part of the context source identity. The registry digest and resolver identity changed while both bound file digests remained unchanged; Environment still reported resolution_reused=true with the old context identity. A fresh projection from the current provider yields a different context identity, so this is stale context caused by omitting resolver identity from Environment's reuse key. The active Environment branch adds that identity comparison and a focused invalidation test."
   },
+  "latest_connected_context_recheck": {
+    "observed_at": "2026-10-22T03:36:56Z",
+    "operation": "mncs_environment.context",
+    "session_id": "ses_dff1822e90820cf4",
+    "campaign_identity": "cmp_ff3f91cb1a6badbf",
+    "environment_id": "renv_5bbeb5c77975bf3a",
+    "response_schema": "mncs.environment.entry-context/1",
+    "lifecycle": "active",
+    "readiness": "ready",
+    "rights_context_present": false,
+    "rights_repository_writable": true,
+    "observation": "The connected operation returned project, authority, readiness, Doctor, and capability context but no rights_context field. This is a fresh call in the campaign session and reproduces the transport omission independently of the artifact-handoff session observation.",
+    "shared_service_restarted": false
+  },
   "active_branch_cache_key_review": {
     "repository": "mncs-environment",
     "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
