@@ -1,0 +1,47 @@
+{
+  "schema_version": "mncs.rights-provenance.source-status-cli-evidence/1",
+  "recorded_at": "2026-10-22T06:44:40Z",
+  "campaign_id": "cmp_ff3f91cb1a6badbf",
+  "environment_session": "ses_dff1822e90820cf4",
+  "coordination": {
+    "repository": "mncs-rights-provenance",
+    "feature_branch": "campaign/luna-max-source-status-cli-20261022",
+    "feature_claim": "claim:mncs-rights-provenance:worktree:1c9ca95bfc4e",
+    "main_claim": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "peer_claim_observed": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "peer_branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+    "conflict_observed": false
+  },
+  "delivery": {
+    "feature_commit": "fd82e3a4ae657aa56a1cadaeb03ad6ac78b4a708",
+    "merge_commit": "349887eb2deeda6418344c35b84781d3816ff5d1",
+    "main_remote": "origin/main",
+    "pushed_head": "349887eb2deeda6418344c35b84781d3816ff5d1"
+  },
+  "cli_regression": {
+    "command": "mncs_rights_provenance.cli.main validate <sealed-manifest> --findings-are-not-failures",
+    "manifest_status": "incompatible",
+    "manifest_confidence": "heuristic",
+    "evidence_reference_state": "external record reference, not authenticated assessment",
+    "structural_valid": true,
+    "manifest_identity_matches": true,
+    "exit_code": 0,
+    "outcome": "review-required",
+    "incompatible_license_gate": "none",
+    "unknown_source_license_gate": "review",
+    "legal_conclusion": "NOT_MADE"
+  },
+  "environment_verification": {
+    "capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+    "binding_id": "cap_ddae79cf3319b167",
+    "main_head": "349887eb2deeda6418344c35b84781d3816ff5d1",
+    "test_file_in_fixed_command": true,
+    "status": "ok",
+    "returncode": 0
+  },
+  "limits": {
+    "rights_status_claims": "This test does not establish legal compatibility or determine ownership.",
+    "validator_and_doctor": "Their repositories remain outside this campaign session's writable scope.",
+    "license_candidate": "MNCS-Permissive-0.3 remains a draft; no operative LICENSE file changed."
+  }
+}
