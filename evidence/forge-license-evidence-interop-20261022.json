@@ -1,0 +1,219 @@
+{
+  "after_change": {
+    "result": {
+      "exit_code": 0,
+      "stderr_terminal_line": null,
+      "stdout_json": {
+        "content_digest_expected": "sha256:5ecedd9bc60ab81a6d703e0f20666c9f3a72ffbaa27a964dcd03de931832509d",
+        "content_digest_matches": true,
+        "declared_producer": "mncs-forge",
+        "declared_producer_record_kind": "LicenseEvidence",
+        "evidence_id": "mncs-forge://license-evidence/df61682742d6d91d3ee3299c7872e523",
+        "legal_conclusion": "NOT_MADE",
+        "ok": true,
+        "record_interpretation": "uninterpreted-external-record",
+        "record_kind": "forge-analysis",
+        "record_schema_version": "0.3.0",
+        "schema_version": "mncs.rights-provenance.evidence-verification/1",
+        "verification_scope": "canonical-content-digest-only"
+      }
+    },
+    "rights_cli_source": "feature worktree at the recorded base plus this scoped change"
+  },
+  "before_change": {
+    "observed_issue": "The 0.3.0 Forge record passed generic digest computation but Rights CLI attempted to parse it as Rights evidence 0.2.0 and exited with an unsupported schema_version error.",
+    "result": {
+      "exit_code": 1,
+      "stderr_terminal_line": "ValueError: unsupported evidence schema_version: '0.3.0'",
+      "stdout_json": null
+    },
+    "rights_cli_revision": "5413f5e2de1da1674f41611d8e68f3bd2bf3f0db"
+  },
+  "coordination": {
+    "campaign": "cmp_task_33d2858ec950d08cd301bb0794f8f011f599dc73e319dde88e0fe45ed3f01644",
+    "claim_id": "claim:mncs-rights-provenance:paths:a36efb8f332c",
+    "claimed_paths": [
+      "src/mncs_rights_provenance/cli.py",
+      "tests/test_evidence_verification.py",
+      "README.md",
+      "evidence/forge-license-evidence-interop-20261022.json"
+    ],
+    "environment_scope": "Environment main ownership remained with its active owner; Doctor had no admitted writable repository. This implementation is limited to the claimed Rights paths.",
+    "feature_branch": "campaign/luna-max-forge-license-evidence-interop-20261022",
+    "peer_worktree": {
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "observed_status_at_scope_discovery": "clean; left untouched",
+      "path": ".worktrees/luna-max-rights-artifact-handoff-20261021"
+    },
+    "session": "ses_973d1b67eb66857e"
+  },
+  "forge_evidence": {
+    "claims": [
+      {
+        "claim_type": "license-declaration",
+        "confidence": "observed-declaration",
+        "statement": "pyproject.toml declares license metadata ({\"text\":\"Apache-2.0\"}). Forge records the declaration without validating its authority or legal effect.",
+        "supporting_observations": [
+          "pyproject.toml_license_declaration"
+        ],
+        "value": "{\"text\":\"Apache-2.0\"}"
+      },
+      {
+        "claim_type": "license-identification",
+        "confidence": "heuristic",
+        "spdx_expression": "Apache-2.0",
+        "statement": "LICENSE matches Apache-2.0 by keyword heuristic; the exact source hash is recorded for re-inspection.",
+        "supporting_observations": [
+          "notice_file:LICENSE"
+        ]
+      },
+      {
+        "claim_type": "unknown-license-state",
+        "confidence": "insufficient-evidence",
+        "statement": "Notice file NOTICE is present but its terms were not recognized by bounded keyword inspection.",
+        "supporting_observations": [
+          "notice_file:NOTICE"
+        ]
+      }
+    ],
+    "content_digest": "sha256:5ecedd9bc60ab81a6d703e0f20666c9f3a72ffbaa27a964dcd03de931832509d",
+    "context": {
+      "timestamp": "2026-10-22T02:17:45Z"
+    },
+    "evidence_id": "mncs-forge://license-evidence/df61682742d6d91d3ee3299c7872e523",
+    "kind": "forge-analysis",
+    "limitations": [
+      "Keyword heuristics identify candidates, not verified license terms.",
+      "Metadata declarations are evidence supplied to Forge, not independent legal review.",
+      "Forge does not validate SPDX expression syntax or determine copyrightability, ownership, or compatibility."
+    ],
+    "observations": [
+      {
+        "name": "pyproject.toml_license_declaration",
+        "observed_at": "2026-10-22T02:17:45Z",
+        "source_ref": {
+          "byte_length": 1395,
+          "path": "pyproject.toml",
+          "resolved_path": "pyproject.toml",
+          "selector": "/project/license",
+          "sha256": "8e052cdfa2168dba1d55863b71e5d7e350f9134418e2b9762ceef4faa63b39b9"
+        },
+        "value": {
+          "raw": "{\"text\":\"Apache-2.0\"}",
+          "truncated": false,
+          "value_type": "object"
+        }
+      },
+      {
+        "name": "notice_file:LICENSE",
+        "observed_at": "2026-10-22T02:17:45Z",
+        "source_ref": {
+          "byte_length": 11357,
+          "path": "LICENSE",
+          "resolved_path": "LICENSE",
+          "selector": "/content",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        },
+        "value": {
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      },
+      {
+        "name": "notice_file:NOTICE",
+        "observed_at": "2026-10-22T02:17:45Z",
+        "source_ref": {
+          "byte_length": 254,
+          "path": "NOTICE",
+          "resolved_path": "NOTICE",
+          "selector": "/content",
+          "sha256": "5a61fd5a2dd3cd3a0822853baa263b8f8818b51232cf7903387f01597d672b50"
+        },
+        "value": {
+          "sha256": "5a61fd5a2dd3cd3a0822853baa263b8f8818b51232cf7903387f01597d672b50"
+        }
+      }
+    ],
+    "producer": {
+      "producer": "mncs-forge",
+      "recordKind": "LicenseEvidence",
+      "schemaVersion": "0.3.0",
+      "stableId": "mncs-forge://license-evidence/df61682742d6d91d3ee3299c7872e523"
+    },
+    "scan_inputs": [
+      {
+        "byte_length": 1395,
+        "path": "pyproject.toml",
+        "resolved_path": "pyproject.toml",
+        "sha256": "8e052cdfa2168dba1d55863b71e5d7e350f9134418e2b9762ceef4faa63b39b9",
+        "status": "observed"
+      },
+      {
+        "path": "package.json",
+        "status": "absent"
+      },
+      {
+        "byte_length": 11357,
+        "path": "LICENSE",
+        "resolved_path": "LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "status": "observed"
+      },
+      {
+        "path": "LICENSE.md",
+        "status": "absent"
+      },
+      {
+        "path": "LICENSE.txt",
+        "status": "absent"
+      },
+      {
+        "path": "COPYING",
+        "status": "absent"
+      },
+      {
+        "path": "COPYING.txt",
+        "status": "absent"
+      },
+      {
+        "byte_length": 254,
+        "path": "NOTICE",
+        "resolved_path": "NOTICE",
+        "sha256": "5a61fd5a2dd3cd3a0822853baa263b8f8818b51232cf7903387f01597d672b50",
+        "status": "observed"
+      }
+    ],
+    "schema_version": "0.3.0",
+    "subject": {
+      "artifact_refs": [
+        {
+          "id": "project:mncs-rights-provenance",
+          "role": "subject"
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "The scan inspects only bounded project-root metadata and notice-file names; it is not a dependency scan.",
+    "Rights verifies canonical content digest only for external records; it does not validate Forge schema 0.3.0 or interpret its claims.",
+    "No license compatibility, copyright ownership, patent scope, or legal compliance conclusion is made.",
+    "The ForgeConfig instance was constructed for this direct application API call; no project Forge configuration file was created or changed."
+  ],
+  "purpose": "Preserve one bounded MNCS Forge LicenseEvidence scan and the Rights CLI interoperability result.",
+  "scan_method": {
+    "configuration": "Constructed the ForgeConfig data object with the Rights repository as root because it has no mncs-forge.toml; the scan reads only root and project_identity from the config.",
+    "producer_api": "mncs_forge.application.license_evidence.scan_license_evidence",
+    "producer_schema": "0.3.0",
+    "scope": "Forge bounded root declarations and notice filenames only."
+  },
+  "schema_version": "mncs.rights-provenance.integration-evidence/1",
+  "source_repositories": {
+    "mncs_forge": {
+      "revision": "092619bec274a6132b7bfa0e08b1701f1b101c1c",
+      "root": "/home/epi13/Documents/Projects/mncs-forge"
+    },
+    "mncs_rights_provenance": {
+      "root": "/home/epi13/Documents/Projects/mncs-rights-provenance",
+      "scanned_revision": "5413f5e2de1da1674f41611d8e68f3bd2bf3f0db"
+    }
+  }
+}

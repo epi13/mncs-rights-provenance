@@ -22,7 +22,12 @@ from .compiler_adapter import (
     LEGACY_COMPILER_BINDING_REQUEST_SCHEMA,
     build_compiler_application_artifact_binding,
 )
-from .evidence import evidence_record_from_dict, seal_evidence_record, verify_evidence_digest
+from .evidence import SCHEMA_VERSION as EVIDENCE_SCHEMA_VERSION
+from .evidence import (
+    evidence_record_from_dict,
+    seal_evidence_record,
+    verify_evidence_digest,
+)
 from .forge_adapter import BUILD_BINDING_REQUEST_SCHEMA, build_forge_provider_artifact_binding
 from .graph import check_graph_integrity
 from .license_resolution import license_action_guidance, resolve_license_expression
@@ -278,19 +283,80 @@ def cmd_evidence_verify(args: argparse.Namespace) -> int:
     try:
         document = json.loads(Path(args.evidence).read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
-        _emit({"ok": False, "error": str(exc)})
+        _emit({"ok": False, "error": str(exc), "legal_conclusion": "NOT_MADE"})
         return 2
+
+    if not isinstance(document, dict):
+        _emit({
+            "ok": False,
+            "error": "evidence record must be a JSON object",
+            "record_interpretation": "uninterpreted",
+            "legal_conclusion": "NOT_MADE",
+        })
+        return 2
+
+    schema_version = document.get("schema_version")
+    evidence_id = document.get("evidence_id")
+    kind = document.get("kind")
+    producer = document.get("producer")
+    if (
+        not isinstance(schema_version, str) or not schema_version
+        or len(schema_version) > 160
+        or not isinstance(evidence_id, str) or not evidence_id
+        or len(evidence_id) > 512
+        or not isinstance(kind, str) or not kind or len(kind) > 128
+        or not isinstance(producer, dict)
+    ):
+        _emit({
+            "ok": False,
+            "error": "evidence record envelope is missing bounded schema, identity, kind, or producer fields",
+            "record_interpretation": "uninterpreted",
+            "legal_conclusion": "NOT_MADE",
+        })
+        return 2
+
     ok, expected = verify_evidence_digest(document)
-    result: dict[str, Any] = {"ok": ok, "content_digest_expected": expected}
+    producer_identity = producer.get("producer")
+    producer_record_kind = producer.get("recordKind")
+    result: dict[str, Any] = {
+        "schema_version": "mncs.rights-provenance.evidence-verification/1",
+        "ok": ok,
+        "evidence_id": evidence_id,
+        "record_schema_version": schema_version,
+        "record_kind": kind,
+        "declared_producer": (
+            producer_identity[:160] if isinstance(producer_identity, str) else None
+        ),
+        "declared_producer_record_kind": (
+            producer_record_kind[:160] if isinstance(producer_record_kind, str) else None
+        ),
+        "content_digest_expected": expected,
+        "content_digest_matches": ok,
+        "verification_scope": "canonical-content-digest-only",
+        "legal_conclusion": "NOT_MADE",
+    }
     if ok:
-        record = evidence_record_from_dict(document)
-        sealed = seal_evidence_record(record)
-        result["evidence_id"] = sealed.evidence_id
-        result["claims"] = [
-            {"claim_type": claim.get("claim_type", "other"), "confidence": claim.get("confidence")}
-            for claim in sealed.claims
-        ]
+        if schema_version == EVIDENCE_SCHEMA_VERSION:
+            try:
+                record = evidence_record_from_dict(document)
+            except (TypeError, ValueError) as exc:
+                result.update({
+                    "ok": False,
+                    "record_interpretation": "invalid-rights-evidence-record",
+                    "error": str(exc)[:256],
+                })
+                _emit(result, human=args.human)
+                return 2
+            sealed = seal_evidence_record(record)
+            result["record_interpretation"] = "rights-evidence-record/0.2.0"
+            result["claims"] = [
+                {"claim_type": claim.get("claim_type", "other"), "confidence": claim.get("confidence")}
+                for claim in sealed.claims
+            ]
+        else:
+            result["record_interpretation"] = "uninterpreted-external-record"
     else:
+        result["record_interpretation"] = "uninterpreted"
         result["reason"] = "content_digest does not match canonical content"
     _emit(result, human=args.human)
     return 0 if ok else 1
