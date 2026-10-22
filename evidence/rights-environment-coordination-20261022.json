@@ -70,6 +70,34 @@
     "candidate_references_in_bound_context": [],
     "interpretation": "The manifest has no explicit candidate reference, but the Rights provider's resolver identity includes the full candidate registry digest and is itself part of the context source identity. The registry digest and resolver identity changed while both bound file digests remained unchanged; Environment still reported resolution_reused=true with the old context identity. A fresh projection from the current provider yields a different context identity, so this is stale context caused by omitting resolver identity from Environment's reuse key. The active Environment branch adds that identity comparison and a focused invalidation test."
   },
+  "active_branch_cache_key_review": {
+    "repository": "mncs-environment",
+    "branch": "campaign/luna-max-rights-cache-invalidation-20261021",
+    "head": "9f68b0f3efd14288ebcbf6de8371cc2bf69e47cc",
+    "reuse_predicate_includes": [
+      "binding identity",
+      "bound manifest digest",
+      "bound governance digest",
+      "license_resolver identity"
+    ],
+    "reuse_predicate_omits": [
+      "license_action_ruleset identity"
+    ],
+    "rights_context_contract": "docs/rights-provenance-agent-context.md#Incremental-identity",
+    "rights_context_exposes_action_ruleset_identity": true,
+    "current_action_ruleset_identity": "sha256:d350e873870264b07d45cc854242a8d43ed4ec68a056f0228ab6d330fc9c4463",
+    "persisted_action_ruleset_identity": "sha256:d350e873870264b07d45cc854242a8d43ed4ec68a056f0228ab6d330fc9c4463",
+    "current_ruleset_change_observed": false,
+    "rights_builder_test": {
+      "path": "tests/test_agent_context_projection.py",
+      "name": "test_action_ruleset_revision_invalidates_agent_context",
+      "observer_execution": "not-run; source inspected only"
+    },
+    "environment_test_coverage_observed": "The inspected Environment test file covers resolver identity invalidation but has no corresponding action-ruleset identity invalidation case.",
+    "finding": "This is a potential stale-reuse path if the native license action ruleset changes while binding, manifest, governance, and resolver identity remain the same. Rights documentation requires both resolver and action-ruleset identities in the consumer reuse check, and a recomputed Rights context changes identity when the action-ruleset identity changes.",
+    "suggested_follow_up": "Include the action-ruleset identity in Environment's reuse predicate and test that changing it invalidates the cached projection and emits one rights.context.changed event.",
+    "environment_worktree_modified": false
+  },
   "evidence_limits": [
     "The Environment branch and focused test were inspected at the recorded commit and were not executed by this observer.",
     "The Environment owner's lease state is time-bounded and may have changed after observation.",
