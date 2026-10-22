@@ -1,0 +1,102 @@
+{
+  "schema_version": "mncs.rights-provenance.manifest-reference-consistency-evidence/1",
+  "identity": "ev_manifest_reference_consistency_20261022",
+  "observed_at": "2026-10-22T08:19:40Z",
+  "purpose": "Record the implementation, bounded verification, delivery state, and coordination observations for native-backed artifact manifest-reference consistency diagnostics.",
+  "source": {
+    "repository": "mncs-rights-provenance",
+    "branch": "main",
+    "revision": "aac33042eb32a06c2624fad7d564658db5e0066c",
+    "remote_ref": "origin/main",
+    "remote_revision": "aac33042eb32a06c2624fad7d564658db5e0066c",
+    "working_tree_status_before_evidence": "main was clean; an existing untracked .worktrees/ directory contained registered worktrees and was left untouched."
+  },
+  "implementation": {
+    "summary": "Added a native MNCS manifest-reference consistency core, host mirror, generated conformance corpus, golden vectors, and targeted backend tests. Artifact binding diagnoses repeated exact manifest references whose records disagree on digest, identity, evidence state, rights state, license-expression reference, or obligation reference.",
+    "files_and_contracts": [
+      "language/manifest_reference_consistency.mncs defines mncs.rights.manifest_reference_consistency.v01.",
+      "src/mncs_rights_provenance/manifest_reference_consistency.py is the host mirror.",
+      "language/tools/gen_manifest_reference_consistency_corpus.py generates language/corpora/manifest-reference-consistency-corpus.json and conformance/manifest-reference-consistency-golden-vectors.json.",
+      "tests/test_manifest_reference_consistency_core.py exercises the native core on research bytecode and portable WASM.",
+      "schemas/v0.2/native-artifact-binding-diagnostic.schema.json versions the diagnostic shape at 0.2.0; the existing v0.1 schema was retained.",
+      "src/mncs_rights_provenance/artifact_binding.py preserves all input records and reports conflicting JSON pointers, fields, and the inconsistent-reference count."
+    ],
+    "behavior": [
+      "Exact duplicate same-reference metadata rows do not produce a redundant cross-manifest compatibility review diagnostic.",
+      "Conflicting records for one exact manifest reference produce an actionable consistency diagnostic while retaining both records.",
+      "Compatibility remains unknown and legal_conclusion remains NOT_MADE; the diagnostic makes no legal compatibility or compliance determination.",
+      "Multiple distinct contributor records continue to receive the cross-manifest compatibility review diagnostic."
+    ],
+    "legal_conclusion": "NOT_MADE"
+  },
+  "verification": {
+    "local_tests": {
+      "command": "python3 -m pytest -q tests/test_manifest_reference_consistency_core.py tests/test_artifact_binding_diagnostics.py tests/test_agent_contract.py",
+      "result": "passed",
+      "summary": "20 passed; native core exercised with research bytecode and portable WASM.",
+      "mncs_bin": "language/.build/research/mncs"
+    },
+    "static_checks": [
+      {
+        "command": "ruff check on the changed Python files",
+        "result": "passed",
+        "summary": "All checks passed."
+      },
+      {
+        "check": "JSON parsing for .mncs/project.json and schemas/v0.2/native-artifact-binding-diagnostic.schema.json",
+        "result": "passed"
+      },
+      {
+        "command": "bash -n language/run_backend_tests.sh",
+        "result": "passed"
+      },
+      {
+        "command": "git diff --check",
+        "result": "passed"
+      }
+    ],
+    "environment_bound_verification": {
+      "capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+      "attempts": 2,
+      "result": "pending-escalation",
+      "execution": "not-executed",
+      "returncode": null,
+      "stdout": "",
+      "reported_error": "escalation required, nothing executed: mncs-rights-provenance is not owned scope (dirty/foreign/off-branch); claim it first",
+      "interpretation": "The Environment verifier did not run this test suite. Its requested authority scope was not exposed. The exact main path claim was retained; no repository-wide claim was acquired because a peer had a separate active worktree claim. Local results above are the only test execution evidence for this slice."
+    }
+  },
+  "coordination": {
+    "campaign_id": "cmp_ff3f91cb1a6badbf",
+    "session_id": "ses_dff1822e90820cf4",
+    "main_path_claim": "claim:mncs-rights-provenance:paths:eee1a84b8a27",
+    "feature_claim": "claim:mncs-rights-provenance:worktree:b978c332ce7d",
+    "feature_branch": "campaign/luna-max-manifest-consistency-20261022",
+    "feature_revision": "aac33042eb32a06c2624fad7d564658db5e0066c",
+    "feature_claim_status": "released after branch push and fast-forward integration",
+    "active_peer_scope_left_untouched": {
+      "repository": "mncs-rights-provenance",
+      "session_id": "ses_a6a27331d7d348b9",
+      "claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+      "branch": "campaign/luna-max-rights-artifact-handoff-20261021"
+    },
+    "path_namespace_issue": {
+      "observation": "A worktree first registered through the Environment Control Terminal used a /workspace/... absolute path and could not be claimed by the Environment owner, which resolves canonical /home/epi13/Documents/Projects/... paths.",
+      "resolution": "Removed only the abandoned worktree created by this task, created an isolated worktree at the canonical host path, and obtained a generation-fenced Environment worktree claim before editing.",
+      "impact": "The task proceeded without changing the peer worktree, branch, or claim. The path namespace mismatch remains an Environment coordination defect."
+    },
+    "interaction": "Development and integration used a separate claimed worktree and a fast-forward to main. The active peer artifact-handoff worktree remained untouched. The main evidence path remains claimed until this record and the campaign checkpoint are committed and pushed."
+  },
+  "delivery": {
+    "status": "implementation pushed to main; evidence record pending",
+    "implementation_revision": "aac33042eb32a06c2624fad7d564658db5e0066c",
+    "main_matches_origin_at_observation": true,
+    "campaign_delivery": "partial"
+  },
+  "limits": [
+    "Consistency between records does not establish that a declared right is valid, that a contributor had authority to grant it, or that records are complete.",
+    "No license compatibility or legal compliance conclusion is made.",
+    "Environment-bound verification was not executed due to an authority-scope escalation response.",
+    "The worktree path namespace mismatch was observed during this task; no broader Environment path-resolution audit was performed."
+  ]
+}
