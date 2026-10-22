@@ -25,6 +25,11 @@ defined once in MNCS-language and mirrored in host code, never the reverse:
 - `language/rights_license_actions.mncs` — source/binary redistribution
   trigger classification for indexed license conditions, pinned by its
   bounded cross-backend corpus and host-projection checks.
+- `language/rights_agent_governance.mncs` — versioned profile guidance
+  vocabulary and supported field/value pairs; it grants no legal rights and
+  is pinned against the host context mirror by
+  `language/corpora/agent-governance-corpus.json` and
+  `tests/test_agent_governance.py`.
 - `language/corpora/` plus `language/run_backend_tests.sh` — execution
   corpora with cross-backend agreement checks.
 

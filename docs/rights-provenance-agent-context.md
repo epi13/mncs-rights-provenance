@@ -38,6 +38,16 @@ is the projection's `output_ref`, and may use `content_digest_ref` to point at
 the digest already stored in `sources`. The normal full projection continues
 to carry the destination and digest inline.
 
+The supported governance field/value pairs are normative in
+`language/rights_agent_governance.mncs`. Its 33-case execution corpus includes
+each allowed pair and a mismatched known value for every field. The Python
+profile validator remains an Environment adapter and is pinned against the
+corpus by `tests/test_agent_governance.py`; the same finite core is exercised
+on the research-bytecode and portable-WASM backends. `Supported` means only
+that an authorized Environment profile may communicate that operational
+guidance. It does not grant legal rights or make an external declaration
+authoritative. Unrecognized profile values leave governance unavailable.
+
 The `rights.action_guidance` projection applies the native-backed, versioned
 `mncs.rights.license_actions.v01` rules to source and binary redistribution.
 It keeps one SPDX `AND`/`OR` expression tree, the original trigger text, and

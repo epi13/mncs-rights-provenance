@@ -1,0 +1,61 @@
+{
+  "coordination": {
+    "environment_session_id": "ses_973d1b67eb66857e",
+    "other_branch": "campaign/luna-max-rights-artifact-handoff-20261021",
+    "other_live_agent_claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "other_worktree_modified": false,
+    "scope_overlap": false,
+    "worktree_claim_id": "claim:mncs-rights-provenance:worktree:93ec50f4285d"
+  },
+  "identity": "ev_rights_agent_governance_native_20261022",
+  "implementation": {
+    "base_commit": "79778e0603343de1e760c4ea5b2c39620f4fbfd3",
+    "branch": "campaign/luna-max-agent-governance-native-20261022",
+    "contract": "mncs.rights.agent_governance.v01 classifies the exact versioned profile field/value vocabulary as Supported or NeedsReview. Supported is operational guidance validity only; Environment authority remains separate and no legal right is granted.",
+    "files_sha256": {
+      "AGENTS.md": "sha256:f1fa75cff1761fd0b91236a398ce079f9b3f0c25ed957adbb24330d02221ef76",
+      "docs/rights-provenance-agent-context.md": "sha256:acf589935b76c1baccf80c80d6dfd94bf4b9fd1deb5ecf2e6778ce90b56ef4ec",
+      "language/corpora/agent-governance-corpus.json": "sha256:daa87687a62455e09efca3753383dd5ebd4114dba4ba00843332b8abd071cfa0",
+      "language/rights_agent_governance.mncs": "sha256:0f677aca93b798a8362e3176e6f5d54e418d2150ba684c455c9cfb766c9d0ef3",
+      "language/run_backend_tests.sh": "sha256:29014e9f56d8606f20584191c2621fcd8346f2078a2501d0675b4f96ac732336",
+      "tests/test_agent_contract.py": "sha256:a60cb37d418c7b56bdaf850c48bd3fd76a0ab4254092bfa37d036874d00e8aa2",
+      "tests/test_agent_governance.py": "sha256:72ee8b066ecabcf29efed2121a23ba2992c5a9ded5bb30091b8b9e2e7a5e976b"
+    },
+    "host_mirror": "The existing Python profile validator remains the transport adapter and is checked against every corpus case by tests/test_agent_governance.py."
+  },
+  "limits": [
+    "This verifies a finite governance vocabulary and the host mirror, not legal permission, ownership, compatibility, or authority to adopt a profile.",
+    "The Environment admission/cache-invalidation integration and artifact-handoff integration remain separate active scopes.",
+    "The broader Language backend suite was not run; only the new bounded corpus was executed on the two supported backends."
+  ],
+  "recorded_at": "2026-10-22T00:13:50.227831Z",
+  "repository": "mncs-rights-provenance",
+  "schema_version": "mncs.rights-provenance.agent-governance-native-evidence/1",
+  "verification": {
+    "backend_script_syntax": "passed",
+    "corpus_json_parse": "passed",
+    "diff_check": "passed",
+    "native_corpus": {
+      "case_count": 33,
+      "cross_backend_agreement": "33/33",
+      "portable_wasm": {
+        "identity": "mncs:language:experiment:result:8abf5821d2979394706174bc2863ce842c52b3629200afdf814abebeff60a19d",
+        "max_steps": 32368,
+        "passed": 33,
+        "status": "PASS",
+        "unresolved": []
+      },
+      "portable_wasm_step_budget": 65536,
+      "research_bytecode": {
+        "identity": "mncs:language:experiment:result:43838b81548b5aa608a64baeaf127fab231625ae0a8102c1f1f9c6544c2522bb",
+        "max_steps": 56,
+        "passed": 33,
+        "status": "PASS",
+        "unresolved": []
+      }
+    },
+    "pytest_command": "PYTHONPATH=src python -m pytest -o addopts='' -q tests/test_agent_context_projection.py tests/test_agent_contract.py tests/test_agent_governance.py",
+    "pytest_result": "45 passed",
+    "ruff": "passed"
+  }
+}

@@ -1,0 +1,1194 @@
+{
+  "schema_version": "0.1",
+  "name": "rights-agent-governance-v1",
+  "cases": [
+    {
+      "id": "supported:rights:external_material:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ExternalMaterial",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:rights:external_material:record-source",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ExternalMaterial",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::RecordSource",
+              "discriminant": 1
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:rights:external_material:resolve-before-inclusion",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ExternalMaterial",
+              "discriminant": 0
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::ResolveBeforeInclusion",
+              "discriminant": 2
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:rights:incompatible_rights:resolve-before-inclusion",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::IncompatibleRights",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::ResolveBeforeInclusion",
+              "discriminant": 2
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:rights:incompatible_rights:explain-and-escalate",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::IncompatibleRights",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::ExplainAndEscalate",
+              "discriminant": 3
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:rights:incompatible_rights:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::IncompatibleRights",
+              "discriminant": 1
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:rights:unknown_rights:investigate",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::UnknownRights",
+              "discriminant": 2
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Investigate",
+              "discriminant": 4
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:rights:unknown_rights:preserve-unknown",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::UnknownRights",
+              "discriminant": 2
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::PreserveUnknown",
+              "discriminant": 5
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:rights:unknown_rights:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::UnknownRights",
+              "discriminant": 2
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:provenance:lineage:preserve",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::Lineage",
+              "discriminant": 3
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Preserve",
+              "discriminant": 6
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:provenance:lineage:best-effort",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::Lineage",
+              "discriminant": 3
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::BestEffort",
+              "discriminant": 7
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:provenance:lineage:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::Lineage",
+              "discriminant": 3
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:provenance:transformations:record",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::Transformations",
+              "discriminant": 4
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Record",
+              "discriminant": 8
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:provenance:transformations:best-effort",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::Transformations",
+              "discriminant": 4
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::BestEffort",
+              "discriminant": 7
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:provenance:transformations:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::Transformations",
+              "discriminant": 4
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:provenance:external_inputs:identify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ExternalInputs",
+              "discriminant": 5
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Identify",
+              "discriminant": 9
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:provenance:external_inputs:best-effort",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ExternalInputs",
+              "discriminant": 5
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::BestEffort",
+              "discriminant": 7
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:provenance:external_inputs:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ExternalInputs",
+              "discriminant": 5
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:provenance:unverifiable_claims:distinguish",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::UnverifiableClaims",
+              "discriminant": 6
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Distinguish",
+              "discriminant": 10
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:provenance:unverifiable_claims:record",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::UnverifiableClaims",
+              "discriminant": 6
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Record",
+              "discriminant": 8
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:provenance:unverifiable_claims:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::UnverifiableClaims",
+              "discriminant": 6
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:agent_governance:copying_external_implementations:authorization-required",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::CopyingExternalImplementations",
+              "discriminant": 7
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::AuthorizationRequired",
+              "discriminant": 11
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:agent_governance:copying_external_implementations:verify-rights",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::CopyingExternalImplementations",
+              "discriminant": 7
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::VerifyRights",
+              "discriminant": 12
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:agent_governance:copying_external_implementations:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::CopyingExternalImplementations",
+              "discriminant": 7
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:agent_governance:independent_implementation:permitted-when-lawful",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::IndependentImplementation",
+              "discriminant": 8
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::PermittedWhenLawful",
+              "discriminant": 13
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:agent_governance:independent_implementation:investigate",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::IndependentImplementation",
+              "discriminant": 8
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Investigate",
+              "discriminant": 4
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:agent_governance:independent_implementation:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::IndependentImplementation",
+              "discriminant": 8
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:agent_governance:rights_conflict:explain-and-escalate",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::RightsConflict",
+              "discriminant": 9
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::ExplainAndEscalate",
+              "discriminant": 3
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:agent_governance:rights_conflict:investigate",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::RightsConflict",
+              "discriminant": 9
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Investigate",
+              "discriminant": 4
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:agent_governance:rights_conflict:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::RightsConflict",
+              "discriminant": 9
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:agent_governance:provenance_loss:diagnose-and-recover",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ProvenanceLoss",
+              "discriminant": 10
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::DiagnoseAndRecover",
+              "discriminant": 14
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "supported:agent_governance:provenance_loss:record-unknown",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ProvenanceLoss",
+              "discriminant": 10
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::RecordUnknown",
+              "discriminant": 15
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::Supported",
+            "discriminant": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "review:agent_governance:provenance_loss:verify",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.rights.agent_governance.v01",
+          "function": "guidance_decision"
+        },
+        "arguments": [
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceField",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceField::ProvenanceLoss",
+              "discriminant": 10
+            }
+          },
+          {
+            "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceValue",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceValue::Verify",
+              "discriminant": 0
+            }
+          }
+        ],
+        "step_budget": 65536
+      },
+      "expected": [
+        {
+          "finite": {
+            "type_identity": "mncs:0.2:finite-type:mncs.rights.agent_governance.v01::GovernanceDecision",
+            "variant_identity": "mncs:0.2:finite-variant:mncs.rights.agent_governance.v01::GovernanceDecision::NeedsReview",
+            "discriminant": 1
+          }
+        }
+      ]
+    }
+  ]
+}
