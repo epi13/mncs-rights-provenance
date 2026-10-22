@@ -1,0 +1,67 @@
+{
+  "schema_version": "mncs.rights-provenance.verification-evidence/1",
+  "identity": "ev_rights_context_source_invalidation_regression_20261022",
+  "observed_at": "2026-10-22T04:28:33Z",
+  "repository": "mncs-rights-provenance",
+  "commit_under_test": "7684fbf61625aa1c0f4e17f2099b9e6f2c1217cf",
+  "verification": {
+    "focused_provider_tests": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -o addopts='' -q -p no:cacheprovider tests/test_context_source_identity_contract.py tests/test_agent_context_projection.py",
+      "result": "passed",
+      "passed": 45,
+      "failed": 0,
+      "elapsed_seconds": 0.45
+    },
+    "environment_capability": {
+      "operation": "mncs.environment.verify",
+      "capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+      "binding_id": "cap_26b68c0990cbd4ad",
+      "session_id": "ses_dff1822e90820cf4",
+      "result": "passed",
+      "returncode": 0,
+      "includes_source_invalidation_regression": true
+    },
+    "regression_invariants": [
+      "Changing only the resolver identity changes the agent-context identity.",
+      "Changing only the action-ruleset identity changes the agent-context identity.",
+      "Each changed identity is retained as the digest on its context provenance edge."
+    ]
+  },
+  "live_environment_observation": {
+    "session_id": "ses_dff1822e90820cf4",
+    "environment_main_revision": "617b511d89ed22f4d64f2e17db5b7616f97492e7",
+    "ordinary_context_schema": "mncs.environment.entry-context/1",
+    "ordinary_context_rights_context_present": false,
+    "canonical_inspect": {
+      "rights_context_present": true,
+      "status": "review",
+      "inputs_status": "available",
+      "identity": "sha256:b2fab9bcafc6c3940bc35c9f6620e75cfc12195fb842204cb491c3641491239c",
+      "resolver_identity": "sha256:d8fa9c2df6172d2854fcd3f235cecd3c9f6527c031a53f9d45dbc115d7eb12d4",
+      "action_ruleset_identity": "sha256:d350e873870264b07d45cc854242a8d43ed4ec68a056f0228ab6d330fc9c4463"
+    },
+    "current_rights_source_identities": {
+      "schema_version": "mncs.rights-provenance.context-source-identities/1",
+      "context_schema": "mncs.rights-provenance.agent-context/1",
+      "resolver_identity": "sha256:8d779615d077b2117a1169e24faf574d9a28cc302c5baba1a0773e5bd184bb2e",
+      "action_ruleset_identity": "sha256:d350e873870264b07d45cc854242a8d43ed4ec68a056f0228ab6d330fc9c4463"
+    },
+    "resolver_identity_mismatch": true,
+    "action_ruleset_identity_match": true
+  },
+  "coordination": {
+    "rights_feature_claim": "claim:mncs-rights-provenance:worktree:769463d392db",
+    "rights_main_claim": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "environment_peer_claims_observed_at_2026_10_22T04_17Z": [
+      "claim:mncs-environment:worktree:3174feea3a68",
+      "claim:mncs-environment:worktree:a76c547054b5",
+      "claim:mncs-environment:worktree:5053f3907a1c"
+    ],
+    "peer_scopes_modified": false
+  },
+  "evidence_limits": [
+    "The regression proves that the Rights provider changes its context identity when either non-file dependency changes; it does not prove Environment has integrated that identity into its cache key.",
+    "The ordinary Environment entry-context projection still omits rights_context in this observation.",
+    "Passing tests do not establish legal ownership, compatibility, or broader legal compliance."
+  ]
+}
