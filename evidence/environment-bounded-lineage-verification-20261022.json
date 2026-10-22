@@ -1,0 +1,76 @@
+{
+  "schema_version": "mncs.rights-provenance.verification-evidence/1",
+  "identity": "ev_rights_bounded_lineage_verification_20261022",
+  "observed_at": "2026-10-22T05:38:26Z",
+  "repository": "mncs-rights-provenance",
+  "commit_under_test": "6be7bc1d448ca613273cfce64b33ed641e4704d2",
+  "verification": {
+    "environment_capability": {
+      "operation": "mncs.environment.verify",
+      "capability": "mncs-rights-provenance:test/rights-agent-context-provenance",
+      "binding_id": "cap_3824e72decbbca08",
+      "session_id": "ses_dff1822e90820cf4",
+      "result": "passed",
+      "returncode": 0,
+      "timeout_seconds": 300,
+      "command_argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_agent_context_projection.py",
+        "tests/test_context_source_identity_contract.py",
+        "tests/test_agent_governance.py",
+        "tests/test_license_action_core.py",
+        "tests/test_license_action_guidance.py",
+        "tests/test_license_resolution_cli.py",
+        "tests/test_manifest.py",
+        "tests/test_lineage_v04.py",
+        "tests/test_artifact_binding.py",
+        "tests/test_artifact_binding_diagnostics.py",
+        "tests/test_implementation_lineage_core.py",
+        "tests/test_implementation_lineage_extension.py",
+        "tests/test_check_projection.py"
+      ],
+      "toolchain": {
+        "repository": "mncs-language",
+        "revision": "2ffc662087bfb91a331a73b5efefebf67b056a4d",
+        "path": "/home/epi13/Documents/Projects/mncs-language/target/release/mncs",
+        "read_only": true
+      },
+      "provider_output": "Pytest reached 100% and exited successfully; quiet mode did not emit a case-count summary."
+    },
+    "focused_local_tests": {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -o addopts='' -q -p no:cacheprovider tests/test_environment_invocation.py tests/test_implementation_lineage_core.py tests/test_implementation_lineage_extension.py tests/test_artifact_binding.py",
+      "result": "passed",
+      "passed": 14,
+      "failed": 0,
+      "elapsed_seconds": 0.88
+    }
+  },
+  "project_verification_contract": {
+    "file": ".mncs/project.json",
+    "revision": 6,
+    "change_commit": "6be7bc1d448ca613273cfce64b33ed641e4704d2",
+    "added_tests": [
+      "tests/test_artifact_binding.py",
+      "tests/test_implementation_lineage_core.py",
+      "tests/test_implementation_lineage_extension.py"
+    ],
+    "bounded_test_identity": "rights-agent-context-provenance",
+    "timeout_seconds": 300,
+    "manifest_json_validation": "passed"
+  },
+  "coordination": {
+    "feature_worktree_claim_id": "claim:mncs-rights-provenance:worktree:4375e2f16e62",
+    "main_worktree_claim_id": "claim:mncs-rights-provenance:worktree:48f5c4109182",
+    "active_peer_claim_id": "claim:mncs-rights-provenance:worktree:6e82b2764bed",
+    "active_peer_scope": "campaign/luna-max-rights-artifact-handoff-20261021",
+    "peer_scope_modified": false,
+    "delivery": "Fast-forwarded the feature commit into main and pushed origin/main while holding this session's main claim."
+  },
+  "limits": [
+    "This verifies the bounded Rights test contract and the focused lineage/artifact-binding tests; it does not establish legal compliance or rights compatibility.",
+    "The project contract change does not resolve the outstanding ordinary Environment admission rights_context omission or the active Environment integration work."
+  ]
+}
