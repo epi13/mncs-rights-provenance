@@ -7,6 +7,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
+import mncs_rights_provenance.agent_context as agent_context_module
 import mncs_rights_provenance.context_identity as context_identity_module
 from mncs_rights_provenance import (
     agent_context_source_identities as package_source_identities,
@@ -60,3 +61,47 @@ def test_source_identity_contract_changes_with_each_projection_dependency(monkey
     assert original["context_schema"] == revised["context_schema"]
     assert original["license_resolver"] != revised["license_resolver"]
     assert original["license_action_ruleset"] != revised["license_action_ruleset"]
+
+
+def test_context_identity_binds_non_file_projection_dependencies(monkeypatch) -> None:
+    manifest = json.loads((ROOT / "RIGHTS.json").read_text())
+    governance = json.loads((ROOT / "governance/agent-governance.json").read_text())
+    binding = {"authorized": True, "profile_id": "test-profile"}
+    resolver_identity = agent_context_module.license_resolver_identity
+    action_identity = agent_context_module.license_action_ruleset_identity
+    baseline = build_agent_context(manifest, governance, binding=binding)
+
+    changed_resolver = "sha256:" + "c" * 64
+    monkeypatch.setattr(
+        agent_context_module,
+        "license_resolver_identity",
+        lambda: changed_resolver,
+    )
+    resolver_context = build_agent_context(manifest, governance, binding=binding)
+    assert resolver_context["identity"] != baseline["identity"]
+    assert resolver_context["sources"]["license_resolver"]["sha256"] == changed_resolver
+    resolver_edge = next(
+        item for item in resolver_context["provenance"]["projection"]["relationships"]
+        if item["from"] == resolver_context["sources"]["license_resolver"]["reference"]
+    )
+    assert resolver_edge["content_digest"] == changed_resolver
+
+    monkeypatch.setattr(agent_context_module, "license_resolver_identity", resolver_identity)
+    original_ruleset = action_identity()
+    changed_ruleset_identity = "sha256:" + "d" * 64
+    monkeypatch.setattr(
+        agent_context_module,
+        "license_action_ruleset_identity",
+        lambda: {**original_ruleset, "identity": changed_ruleset_identity},
+    )
+    ruleset_context = build_agent_context(manifest, governance, binding=binding)
+    assert ruleset_context["identity"] != baseline["identity"]
+    assert (
+        ruleset_context["sources"]["license_action_ruleset"]["sha256"]
+        == changed_ruleset_identity
+    )
+    ruleset_edge = next(
+        item for item in ruleset_context["provenance"]["projection"]["relationships"]
+        if item["from"] == ruleset_context["sources"]["license_action_ruleset"]["reference"]
+    )
+    assert ruleset_edge["content_digest"] == changed_ruleset_identity
