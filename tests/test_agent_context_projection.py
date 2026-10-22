@@ -637,6 +637,10 @@ def test_license_candidate_v02_remains_non_effective_and_points_to_draft() -> No
     assert candidate["effective_grant"] is False
     assert candidate["retroactive_application"] is False
     assert candidate["declared_rights_prove_authority"] is False
+    assert (
+        "patent-grantor-coverage-for-initial-licensor"
+        in candidate["legal_review_decisions"]
+    )
     assert (ROOT / candidate["text_ref"]).is_file()
 
     result = resolve_license_expression(candidate["identifier"])

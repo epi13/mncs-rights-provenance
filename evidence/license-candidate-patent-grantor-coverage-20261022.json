@@ -1,0 +1,46 @@
+{
+  "schema_version": "mncs.rights-provenance.license-candidate-patent-grantor-review/1",
+  "identity": "ev_rights_candidate_patent_grantor_coverage_20261022",
+  "observed_at": "2026-10-22T01:32:40Z",
+  "candidate": {
+    "identifier": "LicenseRef-MNCS-Permissive-0.2",
+    "version": "0.2",
+    "status": "draft-for-legal-review",
+    "adoption_status": "not-adopted",
+    "effective_grant": false,
+    "retroactive_application": false,
+    "text_ref": "legal-candidates/MNCS-Permissive-0.2.md"
+  },
+  "observed_draft_structure": {
+    "covered_work_may_be_identified_by": "a copyright holder or an authorized person",
+    "contributor_definition_basis": "intentional submission of a contribution for inclusion",
+    "patent_grantor_term": "each Contributor"
+  },
+  "primary_source_observations": [
+    {
+      "identifier": "BSD-2-Clause-Patent",
+      "authority": "SPDX License List",
+      "url": "https://spdx.org/licenses/BSD-2-Clause-Patent.html",
+      "observation": "The published patent grant names each copyright holder and contributor as a grantor."
+    },
+    {
+      "identifier": "Apache-2.0",
+      "authority": "Apache Software Foundation",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "observation": "The published Contributor definition includes the Licensor and contributions received and later incorporated into the Work."
+    }
+  ],
+  "open_review_decision": {
+    "identifier": "patent-grantor-coverage-for-initial-licensor",
+    "question": "If an initial licensor identifies a Covered Work but is not a Contributor under the draft definition, is that licensor intended to grant patent rights, and should the grantor definition say so explicitly?",
+    "status": "unresolved",
+    "evidence_state": "textual-comparison-inference",
+    "legal_conclusion": "NOT_MADE",
+    "remedy": "review-patent-grantor-coverage"
+  },
+  "limits": [
+    "This is a bounded textual comparison and drafting question, not legal advice or a legal conclusion.",
+    "The candidate remains unadopted and grants no effective rights.",
+    "No repository license or existing contribution was changed."
+  ]
+}

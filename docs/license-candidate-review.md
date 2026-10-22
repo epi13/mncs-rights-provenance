@@ -1,6 +1,10 @@
 # MNCS Permissive License candidate review
 
-The Rights repository is currently licensed under Apache-2.0. Its existing `LICENSE` and contribution history remain governed by that license. `legal-candidates/MNCS-Permissive-0.1.md` is a working draft for future legal review only; it is not approved, adopted, or applied retroactively.
+The Rights repository is currently licensed under Apache-2.0. Its existing
+`LICENSE` and contribution history remain governed by that license. Version
+0.1 is a preserved historical draft;
+`legal-candidates/MNCS-Permissive-0.2.md` is the current working candidate for
+legal review only. It is not approved, adopted, or applied retroactively.
 
 Version 0.1 is preserved as an incomplete historical draft. Version 0.2 is a separate unadopted proposal: it makes the copyright grant and notice conditions technology-neutral and adds a contribution-limited patent grant with an enumerated set of acts. BSD-2-Clause-Patent informs the patent scope and combination boundary; the draft has no patent-litigation retaliation clause. These choices need legal review before any adoption.
 
@@ -29,6 +33,7 @@ license.
 
 - Whether MNCS needs its own legal license at all, or should retain Apache-2.0 for new work and invest only in machine-readable rights and provenance.
 - Final patent-grant wording and scope, including how submitted contributions and later work are defined.
+- Whether the initial licensor or copyright holder is a patent grantor when they identify a Covered Work but do not meet version 0.2's definition of `Contributor` by submitting a Contribution.
 - Whether a patent-litigation response clause is desirable and what scope it could safely cover.
 - How to handle works whose copyright ownership is unclear, including machine-generated material.
 - Final notice, trademark, and disclaimer language under applicable jurisdictions.
@@ -82,3 +87,20 @@ The reviewed source observations and their limits are recorded in
 `evidence/license-candidate-patent-drafting-review-20261021.json`.
 The version 0.2 proposal and its unresolved choices are recorded in
 `evidence/license-candidate-v02-review-20261021.json`.
+
+### Initial licensor and patent-grantor coverage
+
+Version 0.2 lets a copyright holder identify a Covered Work, defines a
+`Contributor` by intentional submission of a Contribution, and gives the
+patent grant to each `Contributor`. This leaves a drafting question if an
+initial licensor identifies a Covered Work but is not also a Contributor under
+that definition. The [BSD-2-Clause-Patent text](https://spdx.org/licenses/BSD-2-Clause-Patent.html)
+names both copyright holders and contributors as patent grantors; the
+[Apache-2.0 text](https://www.apache.org/licenses/LICENSE-2.0) defines its
+Contributor to include the Licensor. These comparisons identify a potential
+coverage gap in the draft wording, not a legal conclusion. Counsel should
+decide whether the initial licensor is intended to grant patent rights and,
+if so, how the grantor and contribution definitions express that intent.
+The open decision is exposed in the versioned candidate registry and recorded
+with source observations in
+`evidence/license-candidate-patent-grantor-coverage-20261022.json`.
