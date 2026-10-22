@@ -12,6 +12,10 @@ from heapq import nsmallest
 from typing import Any
 
 POLICY_DIAGNOSTIC_SCHEMA_VERSION = "mncs.rights.policy-diagnostic/1"
+POLICY_DIAGNOSTIC_GATE_BY_CODE = {
+    "source-license-status-unverified": "unknown_source_license",
+    "source-license-declarations-conflict": "no_contradictory_license_evidence",
+}
 MAX_DIAGNOSTIC_SOURCES = 16
 MAX_DIAGNOSTIC_EVIDENCE_REFS = 8
 MAX_DIAGNOSTIC_VARIANTS = 8
@@ -219,7 +223,9 @@ def project_source_policy_diagnostics(
         diagnostics.append({
             "schema_version": POLICY_DIAGNOSTIC_SCHEMA_VERSION,
             "code": "source-license-status-unverified",
-            "gate": "unknown_source_license",
+            "gate": POLICY_DIAGNOSTIC_GATE_BY_CODE[
+                "source-license-status-unverified"
+            ],
             "severity": unknown_source_severity,
             "message": (
                 "Source license status labels are declarations; the available "
@@ -241,7 +247,9 @@ def project_source_policy_diagnostics(
         diagnostics.append({
             "schema_version": POLICY_DIAGNOSTIC_SCHEMA_VERSION,
             "code": "source-license-declarations-conflict",
-            "gate": "no_contradictory_license_evidence",
+            "gate": POLICY_DIAGNOSTIC_GATE_BY_CODE[
+                "source-license-declarations-conflict"
+            ],
             "severity": contradiction_severity,
             "message": (
                 "Declarations for one or more source references disagree; "
@@ -265,6 +273,7 @@ def project_source_policy_diagnostics(
 __all__ = [
     "MAX_DIAGNOSTIC_EVIDENCE_REFS",
     "MAX_DIAGNOSTIC_SOURCES",
+    "POLICY_DIAGNOSTIC_GATE_BY_CODE",
     "POLICY_DIAGNOSTIC_SCHEMA_VERSION",
     "collect_source_license_evidence",
     "project_source_policy_diagnostics",

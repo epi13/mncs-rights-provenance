@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
+from mncs_rights_provenance.check_projection import project_report_to_check
 from mncs_rights_provenance.cli import main as cli_main
 from mncs_rights_provenance.gates import ENFORCEMENT_DISABLED
 from mncs_rights_provenance.manifest import compute_manifest_identity
@@ -208,3 +209,8 @@ def test_validate_cli_emits_the_versioned_actionable_source_diagnostic(
         "catalog:package/1"
     )
     _validate_diagnostics(report)
+    check, check_error = project_report_to_check(report)
+    assert check_error is None and check is not None
+    assert check["verdict"] == "UNKNOWN"
+    assert check["rights_diagnostics"] == report["diagnostics"]
+    assert any("authorized assessment" in item for item in check["unresolved"])

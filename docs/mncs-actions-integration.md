@@ -62,6 +62,31 @@ never silent. The projection is mirrored in MNCS by
 by `mncs-actions` (`adapters/rights_adapter.py` mirrors the same table;
 this repository owns the meaning).
 
+### Source-rights policy diagnostics
+
+When the native report contains recognized
+`mncs.rights.policy-diagnostic/1` records, the projection preserves them in
+the optional `rights_diagnostics` check-result extension and adds a concise
+message and remedy to the standard `unresolved` list. This currently carries
+the bounded diagnostics for unverified source-license declarations and
+contradictory declarations. Each record remains marked
+`declared-unverified` with `legal_conclusion: NOT_MADE`; a declared status is
+not promoted to a verified fact or a legal compatibility conclusion.
+
+The projection accepts at most eight records and 64 KiB total. Unsupported or
+malformed records are omitted with an explicit `unresolved` note. This
+explanation never changes the native outcome mapping above: for example, a
+native `pass` remains `PASS` even when a diagnostic is attached, and any
+release policy that requires review must express that in the native result.
+Consumers should preserve the extension when forwarding the check result;
+`unresolved` still provides a useful summary to consumers that do not inspect
+the extension. This repository's CI path uses `scripts/rp_to_check.py` and
+emits the extension. The separate `mncs-actions/adapters/rights_adapter.py`
+still mirrors the verdict table without emitting `rights_diagnostics`, so
+this payload is not yet available when that alternate adapter is selected.
+The shared check schema accepts extra fields, but preservation through every
+downstream transformation has not been established.
+
 ## How mncs-actions is invoked
 
 `.github/workflows/mncs-family.yml` calls the reusable workflow at an

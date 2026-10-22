@@ -63,6 +63,66 @@ def check_shape_valid(check: dict) -> list[str]:
     return errors
 
 
+def _source_license_diagnostic() -> dict:
+    return {
+        "schema_version": "mncs.rights.policy-diagnostic/1",
+        "code": "source-license-status-unverified",
+        "gate": "unknown_source_license",
+        "severity": "review",
+        "message": "Source license status is declared but unverified.",
+        "evidence_state": "declared-unverified",
+        "source_declarations": [{
+            "source_kind": "package",
+            "source_reference": "external:package/1",
+            "source_reference_truncated": False,
+            "declared_license_status": "unknown",
+            "evidence_state": "declared-unverified",
+            "evidence_references": [{
+                "kind": "external-record",
+                "reference": "catalog:package/1",
+            }],
+        }],
+        "omitted_source_declarations": 0,
+        "conflicts": [],
+        "omitted_conflicts": 0,
+        "remedy": "Inspect the source and record supporting evidence before reevaluation.",
+        "legal_conclusion": "NOT_MADE",
+    }
+
+
+def _conflicting_source_diagnostic() -> dict:
+    diagnostic = _source_license_diagnostic()
+    diagnostic.update({
+        "code": "source-license-declarations-conflict",
+        "gate": "no_contradictory_license_evidence",
+        "message": (
+            "Declarations for one or more source references disagree; the conflict "
+            "does not establish legal incompatibility."
+        ),
+        "source_declarations": [],
+        "conflicts": [{
+            "source_reference": "external:package/1",
+            "source_reference_truncated": False,
+            "declaration_count": 2,
+            "declared_statuses": ["compatible", "incompatible"],
+            "declared_license_expressions": [{
+                "value": "MIT",
+                "text_truncated": False,
+            }],
+            "omitted_license_expression_variants": 0,
+            "evidence_references": [{
+                "kind": "external-record",
+                "reference": "catalog:package/1",
+            }],
+            "omitted_evidence_reference_entries": 0,
+            "source_kinds": ["package"],
+            "omitted_source_kinds": 0,
+        }],
+        "remedy": "Reconcile declarations with evidence and leave the issue unresolved until corrected.",
+    })
+    return diagnostic
+
+
 # ---- authoritative mapping ----
 
 
@@ -128,6 +188,121 @@ def test_projection_preserves_native_result():
     assert any("human review" in item for item in check["unresolved"])
     assert check["references"][0]["kind"] == "rights-manifest"
     assert check["references"][0]["path"] == "dogfood/human-specification.json"
+    assert check_shape_valid(check) == []
+
+
+def test_projection_carries_actionable_rights_diagnostic_without_changing_verdict():
+    diagnostic = _source_license_diagnostic()
+    check, error = project_report_to_check({
+        "outcome": "review-required",
+        "severity": "review",
+        "findings": [],
+        "issues": [],
+        "diagnostics": [diagnostic],
+    })
+
+    assert error is None and check is not None
+    assert check["verdict"] == "UNKNOWN"
+    assert check["rights_diagnostics"] == [diagnostic]
+    assert any(
+        "unknown_source_license" in note
+        and "declared but unverified" in note
+        and "record supporting evidence" in note
+        for note in check["unresolved"]
+    )
+    assert check_shape_valid(check) == []
+
+
+def test_projection_carries_conflicting_declarations_without_legal_conclusion():
+    diagnostic = _conflicting_source_diagnostic()
+    check, error = project_report_to_check({
+        "outcome": "review-required",
+        "diagnostics": [diagnostic],
+    })
+
+    assert error is None and check is not None
+    assert check["verdict"] == "UNKNOWN"
+    assert check["rights_diagnostics"] == [diagnostic]
+    assert any("does not establish legal incompatibility" in note for note in check["unresolved"])
+
+
+def test_projection_enforces_diagnostic_byte_bound():
+    diagnostic = _source_license_diagnostic()
+    source = diagnostic["source_declarations"][0]
+    source["source_reference"] = "r" * 256
+    source["evidence_references"] = [{
+        "kind": "k" * 64,
+        "reference": "r" * 256,
+        "sha256": "a" * 72,
+        "sha256_truncated": False,
+        "text_truncated": False,
+    } for _ in range(8)]
+    diagnostic["source_declarations"] = [dict(source) for _ in range(16)]
+    check, error = project_report_to_check({
+        "outcome": "review-required",
+        "diagnostics": [diagnostic],
+    })
+
+    assert error is None and check is not None
+    assert "rights_diagnostics" not in check
+    assert any("exceeded the projection size bound" in note for note in check["unresolved"])
+
+
+def test_projection_omits_unknown_or_malformed_rights_diagnostics_explicitly():
+    malformed = _source_license_diagnostic()
+    malformed["schema_version"] = "mncs.rights.policy-diagnostic/99"
+    malformed["code"] = []
+    check, error = project_report_to_check({
+        "outcome": "review-required",
+        "diagnostics": [malformed],
+    })
+
+    assert error is None and check is not None
+    assert check["verdict"] == "UNKNOWN"
+    assert "rights_diagnostics" not in check
+    assert any("unsupported or malformed" in note for note in check["unresolved"])
+
+
+def test_projection_bounds_diagnostic_count_and_reports_omissions():
+    check, error = project_report_to_check({
+        "outcome": "pass",
+        "structural_valid": True,
+        "diagnostics": [_source_license_diagnostic() for _ in range(10)],
+    })
+
+    assert error is None and check is not None
+    assert check["verdict"] == "PASS"
+    assert len(check["rights_diagnostics"]) == 8
+    assert any("2 additional rights diagnostics omitted" in note for note in check["unresolved"])
+
+
+def test_cli_preserves_valid_policy_diagnostics(tmp_path):
+    report_path = tmp_path / "report.json"
+    report_path.write_text(json.dumps({
+        "outcome": "review-required",
+        "severity": "review",
+        "diagnostics": [_source_license_diagnostic()],
+    }), encoding="utf-8")
+    out = tmp_path / "check.json"
+    cli = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "rp_to_check.py"),
+            "--input",
+            str(report_path),
+            "--output",
+            str(out),
+        ],
+        capture_output=True,
+        text=True,
+        cwd=str(ROOT),
+        check=False,
+    )
+
+    assert cli.returncode == 0, cli.stderr
+    check = json.loads(out.read_text(encoding="utf-8"))
+    assert check["verdict"] == "UNKNOWN"
+    assert check["rights_diagnostics"] == [_source_license_diagnostic()]
     assert check_shape_valid(check) == []
 
 
