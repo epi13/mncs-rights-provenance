@@ -34,7 +34,7 @@ mncs-rp = "mncs_rights_provenance.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-mncs_rights_provenance = ["resources/*.json"]
+mncs_rights_provenance = ["resources/*.json", "resources/*.mncs"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

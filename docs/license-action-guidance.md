@@ -22,16 +22,24 @@ project distribution license and each declared source independently, retaining
 per-source notices and unknown states rather than merging them into one
 permission result.
 
-The action-class mapping is normative in
-`language/rights_license_actions.mncs` (`mncs.rights.license_actions.v01`).
-The executable corpus in `language/corpora/license-action-guidance-corpus.json`
-pins every action/condition pair across the research-bytecode and portable-WASM
-backends; the host projection has a parity test against those vectors.
+The action-class mapping is implemented in
+`language/rights_license_actions.mncs` (`mncs.rights.license_actions.v01`). The
+production projection executes its packaged copy with the selected MNCS
+runtime from `MNCS_BIN` or `MNCS`, in one bounded portable-WASM run over all 22
+action/condition pairs. That run has no expected outputs: it consumes the
+native returned enum values. The independent golden vectors remain in
+`language/corpora/license-action-guidance-corpus.json` and are checked against
+the production projection and both native backends. If the runtime or native
+execution is unavailable, affected conditions remain visible as
+`unclassified-condition` with a review reason; there is no host classification
+fallback.
 
 The versioned JSON result labels the input expression as an unverified caller
 declaration, gives an identity for the action ruleset, and reports unresolved
-identifiers. A recognized expression only yields an indexed reference summary;
-the output does not establish that the declaration is accurate, that a grantor
+identifiers and conditions. A recognized expression only yields an indexed
+reference summary when native action classification succeeds; otherwise the
+result is partial and carries the runtime review reason. The output does not
+establish that the declaration is accurate, that a grantor
 has authority, that a use is compatible, or that all contributing inputs are
 represented. An unknown term or exception stays unresolved. The command
 returns structured output for unresolved results so agents can continue with

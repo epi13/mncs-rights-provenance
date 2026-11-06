@@ -15,6 +15,11 @@ from importlib.resources import files
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+from .license_action_runtime import (
+    NativeActionRuntimeError,
+    classify_action_relation,
+    native_action_contract_inputs,
+)
 from .spdx import parse_spdx_expression
 
 RESOLUTION_SCHEMA = "mncs.rights.license-resolution/4"
@@ -135,71 +140,66 @@ _TERMS: dict[str, dict[str, Any]] = {
 # turn the trigger into a legal conclusion.
 _ACTION_CONDITION_RULES: dict[str, dict[str, Any]] = {
     "retain-copyright-and-permission-notice": {
-        "actions": ["redistribute-source", "redistribute-binary"],
         "guidance": "Retain the applicable copyright and permission notice.",
     },
     "retain-notice-conditions-and-disclaimer": {
-        "actions": ["redistribute-source"],
         "guidance": "Retain the notice, conditions, and disclaimer in source redistribution.",
     },
     "reproduce-notice-conditions-and-disclaimer": {
-        "actions": ["redistribute-binary"],
         "guidance": "Reproduce the notice, conditions, and disclaimer in binary redistribution.",
     },
     "provide-license-copy": {
-        "actions": ["redistribute-source", "redistribute-binary"],
         "guidance": "Provide a copy of the license with redistribution.",
     },
     "mark-modified-files": {
-        "actions": ["redistribute-source", "redistribute-binary"],
         "guidance": "Mark modified files with prominent notices describing the changes.",
     },
     "preserve-applicable-source-notices": {
-        "actions": ["redistribute-source"],
         "guidance": "Preserve applicable source notices in source-form derivative works.",
     },
     "preserve-notice-attributions": {
-        "actions": ["redistribute-source", "redistribute-binary"],
         "guidance": "Preserve applicable attributions from a supplied NOTICE file.",
     },
     "no-endorsement-without-permission": {
-        "actions": [],
         "guidance": "Do not use contributor names to endorse or promote without permission.",
     },
     "do-not-misrepresent-origin": {
-        "actions": ["redistribute-source", "redistribute-binary"],
         "guidance": "Do not misrepresent the origin of the software or claim you wrote the original.",
     },
     "mark-altered-source": {
-        "actions": ["redistribute-source"],
         "guidance": "Mark altered source versions plainly and do not present them as original.",
     },
     "preserve-zlib-source-notice": {
-        "actions": ["redistribute-source"],
         "guidance": "Do not remove or alter this notice in source distributions.",
     },
 }
-_ACTION_RULESET_IDENTITY = "sha256:" + hashlib.sha256(
-    json.dumps(
-        {
-            "version": ACTION_RULESET_VERSION,
-            "module": ACTION_RULESET_MODULE,
-            "conditions": _ACTION_CONDITION_RULES,
-        },
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-    ).encode("utf-8")
-).hexdigest()
 
 
 def license_action_ruleset_identity() -> dict[str, str]:
-    """Return the identity of the bounded, native-backed action ruleset."""
+    """Return the identity of the native classifier and host presentation text."""
+    try:
+        native_contract = native_action_contract_inputs()
+    except NativeActionRuntimeError as error:
+        native_contract = {"module": ACTION_RULESET_MODULE, "source_state": str(error)}
+    payload = {
+        "version": ACTION_RULESET_VERSION,
+        "module": ACTION_RULESET_MODULE,
+        "native_contract": native_contract,
+        "presentation_guidance": _ACTION_CONDITION_RULES,
+    }
+    identity = "sha256:" + hashlib.sha256(
+        json.dumps(
+            payload,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+        ).encode("utf-8")
+    ).hexdigest()
     return {
         "version": ACTION_RULESET_VERSION,
         "module": ACTION_RULESET_MODULE,
         "module_ref": ACTION_RULESET_REF,
-        "identity": _ACTION_RULESET_IDENTITY,
+        "identity": identity,
     }
 
 
@@ -519,8 +519,10 @@ def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
     unresolved: set[str] = set(resolved.get("unresolved_identifiers", []))
     unresolved_conditions: list[dict[str, str]] = []
     decision_notes: list[str] = []
+    native_runtime_failure: str | None = None
 
     def project(node: dict[str, Any]) -> dict[str, Any]:
+        nonlocal native_runtime_failure
         operator = node.get("operator")
         terms = node.get("terms")
         if operator in {"AND", "OR"} and isinstance(terms, list):
@@ -590,6 +592,22 @@ def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
                     "guidance": "Review this condition in the referenced license text.",
                 })
                 continue
+            try:
+                action_relation = classify_action_relation(action, condition_id)
+            except NativeActionRuntimeError as error:
+                if native_runtime_failure is None:
+                    native_runtime_failure = str(error)
+                    decision_notes.append(
+                        "Native action classification unavailable; affected conditions "
+                        "remain unclassified for review."
+                    )
+                reason = f"native action classification unavailable: {error}"
+                unresolved_conditions.append({
+                    "license": identifier,
+                    "condition": condition_id,
+                    "reason": reason,
+                })
+                action_relation = "unclassified-condition"
             projected_conditions.append({
                 "id": condition_id,
                 "when": (
@@ -597,11 +615,7 @@ def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
                     if isinstance(condition.get("when"), str)
                     else "trigger unavailable from the term index"
                 ),
-                "action_relation": (
-                    "operation-class-matches-trigger"
-                    if action in rule["actions"]
-                    else "other-trigger-preserved-for-review"
-                ),
+                "action_relation": action_relation,
                 "guidance": rule["guidance"],
             })
         return {
@@ -613,7 +627,7 @@ def license_action_guidance(expression: str, action: str) -> dict[str, Any]:
         }
 
     expression_tree = project(source_tree)
-    status = "partial" if unresolved else "reference-summary"
+    status = "partial" if unresolved or unresolved_conditions else "reference-summary"
     return {
         "schema_version": ACTION_GUIDANCE_SCHEMA,
         "status": status,

@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import json
+import os
+import shutil
 from pathlib import Path
 
+import pytest
 from jsonschema import Draft202012Validator
 
 from mncs_rights_provenance.cli import main
@@ -16,12 +19,18 @@ from mncs_rights_provenance.license_resolution import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _native_runtime_configured() -> bool:
+    selected = os.environ.get("MNCS_BIN") or os.environ.get("MNCS")
+    return bool(selected and (Path(selected).is_file() or shutil.which(selected)))
+
+
 def _leaves(node: dict) -> list[dict]:
     if "operator" in node:
         return [leaf for term in node["terms"] for leaf in _leaves(term)]
     return [node]
 
 
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_mit_and_bsd_notice_conditions_are_scoped_to_distribution_form() -> None:
     mit_source = license_action_guidance("MIT", "redistribute-source")
     mit_binary = license_action_guidance("MIT", "redistribute-binary")
@@ -50,6 +59,7 @@ def test_mit_and_bsd_notice_conditions_are_scoped_to_distribution_form() -> None
     assert mit_binary["legal_conclusion"] == "NOT_MADE"
 
 
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_compound_expression_keeps_and_or_structure_and_unknown_rights() -> None:
     result = license_action_guidance(
         "MIT OR (BSD-2-Clause AND LicenseRef-External)",
@@ -79,6 +89,7 @@ def test_compound_expression_keeps_and_or_structure_and_unknown_rights() -> None
     assert "cross-license compatibility" in result["not_assessed"]
 
 
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_apache_conditions_keep_their_triggers_instead_of_becoming_flags() -> None:
     result = license_action_guidance("Apache-2.0", "redistribute-binary")
     conditions = result["expression_tree"]["conditions"]
@@ -94,6 +105,7 @@ def test_apache_conditions_keep_their_triggers_instead_of_becoming_flags() -> No
     assert result["status"] == "reference-summary"
 
 
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_isc_and_zerobsd_preserve_their_distinct_notice_semantics() -> None:
     isc_terms = resolve_license_expression("ISC")["expression_tree"]
     isc_source = license_action_guidance("ISC", "redistribute-source")
@@ -122,6 +134,7 @@ def test_isc_and_zerobsd_preserve_their_distinct_notice_semantics() -> None:
     )
 
 
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_zlib_conditions_keep_origin_source_and_binary_triggers_separate() -> None:
     source = license_action_guidance("Zlib", "redistribute-source")
     binary = license_action_guidance("Zlib", "redistribute-binary")
@@ -171,6 +184,26 @@ def test_unknown_license_and_exception_remain_unresolved() -> None:
     assert exception["expression_tree"].get("conditions") is None
 
 
+def test_missing_native_runtime_fails_closed_without_host_classification(monkeypatch) -> None:
+    monkeypatch.delenv("MNCS_BIN", raising=False)
+    monkeypatch.delenv("MNCS", raising=False)
+
+    result = license_action_guidance("BSD-2-Clause", "redistribute-source")
+    condition = next(
+        item for item in result["expression_tree"]["conditions"]
+        if item["id"] == "retain-notice-conditions-and-disclaimer"
+    )
+
+    assert result["status"] == "partial"
+    assert condition["action_relation"] == "unclassified-condition"
+    assert any(
+        item.get("condition") == condition["id"]
+        and item["reason"].startswith("native action classification unavailable:")
+        for item in result["unresolved_conditions"]
+    )
+
+
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_action_guidance_is_versioned_and_matches_schema() -> None:
     result = license_action_guidance("MIT OR BSD-2-Clause", "redistribute-source")
     schema = json.loads(
@@ -219,8 +252,6 @@ def test_repeated_query_reuses_the_same_ruleset_and_projection_identity() -> Non
 
 
 def test_cli_exposes_action_guidance_as_structured_json(capsys) -> None:
-    import pytest
-
     with pytest.raises(SystemExit) as exit_info:
         main([
             "action-guidance",

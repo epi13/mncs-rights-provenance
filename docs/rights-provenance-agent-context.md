@@ -63,14 +63,15 @@ Environment `verify` for this cross-layer contract set without launching the
 full repository suite; the existing full-suite capability remains available
 for broader verification.
 
-The `rights.action_guidance` projection applies the native-backed, versioned
-`mncs.rights.license_actions.v01` rules to source and binary redistribution.
-It keeps one SPDX `AND`/`OR` expression tree, the original trigger text, and
-both operation-class relations for each indexed condition. This avoids
-duplicating the tree while preserving which branch contains a condition and
-whether the source or binary operation matches its trigger. Unknown terms
-remain unresolved, declarations remain unverified, and the projection makes
-no ownership, compatibility, or legal conclusion. The context carries the
+The `rights.action_guidance` projection executes the packaged
+`mncs.rights.license_actions.v01` module through the selected MNCS runtime
+(`MNCS_BIN` or `MNCS`) for source and binary redistribution. It keeps one SPDX
+`AND`/`OR` expression tree and the original trigger text, while native enum
+results supply each indexed condition's operation-class relation. Unknown
+terms remain unresolved, declarations remain unverified, and the projection
+makes no ownership, compatibility, or legal conclusion. If native execution is
+unavailable, the affected relations stay unclassified with a review reason and
+the projection does not substitute a host rule table. The context carries the
 ruleset identity and a manifest reference. If the action tree exceeds the
 configured context budget, it becomes an on-demand reference through
 `mncs-rp action-guidance`; the shared action status and bounded unresolved

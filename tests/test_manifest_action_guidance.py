@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import os
+import shutil
 from pathlib import Path
 
 import pytest
@@ -11,6 +13,11 @@ from mncs_rights_provenance.cli import main
 from mncs_rights_provenance.manifest_action_guidance import manifest_action_guidance
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _native_runtime_configured() -> bool:
+    selected = os.environ.get("MNCS_BIN") or os.environ.get("MNCS")
+    return bool(selected and (Path(selected).is_file() or shutil.which(selected)))
 
 
 def _manifest(sources: list[object]) -> dict:
@@ -48,6 +55,7 @@ def _assert_schema(result: dict) -> None:
     assert errors == [], "\n".join(error.message for error in errors)
 
 
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_multiple_known_inputs_keep_their_own_redistribution_conditions() -> None:
     manifest = _manifest([
         {
@@ -209,6 +217,7 @@ def test_declared_manifest_identity_mismatch_is_reported_separately_from_rights(
     _assert_schema(result)
 
 
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_large_expression_defers_detail_with_a_stable_source_reference() -> None:
     expression = " OR ".join(["Apache-2.0"] * 16)
     manifest = _manifest([{
@@ -229,6 +238,7 @@ def test_large_expression_defers_detail_with_a_stable_source_reference() -> None
     _assert_schema(result)
 
 
+@pytest.mark.skipif(not _native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_cli_reads_a_manifest_and_emits_structured_guidance(tmp_path, capsys) -> None:
     path = tmp_path / "RIGHTS.json"
     path.write_text(json.dumps(_manifest([{

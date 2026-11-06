@@ -1,0 +1,126 @@
+{
+  "schema_version": "mncs.rights-provenance.native-action-consumer-evidence/1",
+  "identity": "ev_native_license_action_consumer_20261106",
+  "captured_at": "2026-11-06T20:24:54Z",
+  "campaign": {
+    "campaign_id": "cmp_luna_native_rights_actions_20261106_1948z",
+    "session_id": "ses_9f86b5a3136b9c81",
+    "environment_id": "renv_b552aea851874dd9",
+    "work_intent_id": "int_efdeb91070fec5e5",
+    "work_intent_goal": "Establish machine-readable MNCS rights, provenance, and agent-governance context.",
+    "historical_checkpoint": "chk_596b1971add13f10"
+  },
+  "environment_readiness": {
+    "fresh_consumer_entry": "pass",
+    "session_lifecycle": "active-at-capture",
+    "readiness": "ready",
+    "writable_repositories": ["mncs-rights-provenance"],
+    "protected_repositories": ["mncs-language"],
+    "worktree": "/home/epi13/Documents/Projects/mncs-rights-provenance/.worktrees/luna-native-license-action-consumer-20261106",
+    "branch": "campaign/luna-native-license-action-consumer-20261106",
+    "claims": [
+      "claim:mncs-rights-provenance:worktree:417c6988453b",
+      "claim:mncs-rights-provenance:worktree:8591f0d48650",
+      "claim:mncs-rights-provenance:worktree:3468fc000fd5"
+    ]
+  },
+  "repository": {
+    "base_revision": "9f4a625fa9e951b38d646c1e70933e832990ea4f",
+    "protected_language_revision": "f8212ed8b7478196b5293a84152154be5e0bea3f",
+    "working_tree_was_clean_at_work_intent_entry": true
+  },
+  "migration": {
+    "responsibility": "Classify source or binary redistribution against each indexed license-condition trigger.",
+    "production_consumer": "mncs_rights_provenance.license_resolution.license_action_guidance",
+    "downstream_consumers": [
+      "mncs_rights_provenance.manifest_action_guidance.manifest_action_guidance",
+      "mncs_rights_provenance.agent_context._action_guidance_context"
+    ],
+    "displaced_host_behavior": "Removed the Python action-membership lists and action-in-list relation decision. Python retains condition presentation text and finite value encoding only.",
+    "native_module": "mncs.rights.license_actions.v01",
+    "canonical_source": "language/rights_license_actions.mncs",
+    "packaged_source": "src/mncs_rights_provenance/resources/rights_license_actions.mncs",
+    "source_sha256": "sha256:eb56103d80cb160b398a6054a55eabb23d4128531725aa85d22706fd5b82f849",
+    "canonical_and_packaged_sources_match_byte_for_byte": true,
+    "ruleset_identity_binds": [
+      "packaged MNCS source digest",
+      "action and condition finite-value bindings",
+      "relation finite-value bindings",
+      "host-owned presentation guidance"
+    ],
+    "native_execution": {
+      "runtime_path": "/home/epi13/Documents/Projects/mncs-language/target/release/mncs",
+      "runtime_sha256": "cc06a0576e04378131af28a75098895638e322118ab8bb6d3ff7f94c87ca1dcd",
+      "runtime_repository": "mncs-language",
+      "runtime_revision": "f8212ed8b7478196b5293a84152154be5e0bea3f",
+      "backend": "portable-wasm",
+      "production_case_count": 22,
+      "production_requests_include_expected_values": false,
+      "per_process_result_cache_max_entries": 4,
+      "execution_timeout_seconds": 60,
+      "maximum_source_bytes": 65536,
+      "maximum_result_bytes_read": 262144,
+      "temporary_input_and_output_directory": "system temporary directory; automatically removed"
+    },
+    "runtime_unavailable_behavior": "Return partial guidance with unclassified-condition relations and unresolved-condition review reasons. No host relation fallback is present.",
+    "compact_context_budget_change": "When the admission context exceeds its byte budget, defer the action tree and remove redundant action summaries before reducing diagnostics."
+  },
+  "verification": {
+    "status": "pass-with-recorded-tooling-limits",
+    "independent_golden_vectors": {
+      "result": "pass",
+      "production_projection_cases": 22,
+      "matched_expected_relations": 22
+    },
+    "declared_environment_test_set": {
+      "test": "rights-agent-context-provenance",
+      "environment_verify_result": "authority-denied",
+      "environment_verify_detail": "No binding for capability mncs-rights-provenance:test/rights-agent-context-provenance in this session.",
+      "direct_execution_with_selected_mncs_bin": "pass",
+      "passed_tests": 188,
+      "test_files": [
+        "tests/test_agent_context_projection.py",
+        "tests/test_license_candidate_text_verification.py",
+        "tests/test_context_source_identity_contract.py",
+        "tests/test_agent_governance.py",
+        "tests/test_license_action_core.py",
+        "tests/test_license_action_guidance.py",
+        "tests/test_manifest_action_guidance.py",
+        "tests/test_license_resolution_cli.py",
+        "tests/test_manifest.py",
+        "tests/test_lineage_v04.py",
+        "tests/test_artifact_binding.py",
+        "tests/test_artifact_binding_diagnostics.py",
+        "tests/test_manifest_reference_consistency_core.py",
+        "tests/test_implementation_lineage_core.py",
+        "tests/test_source_license_status.py",
+        "tests/test_policy_diagnostics.py",
+        "tests/test_implementation_lineage_extension.py",
+        "tests/test_check_projection.py",
+        "tests/test_agent_contract.py"
+      ]
+    },
+    "runtime_unavailable_contract": {
+      "result": "pass",
+      "passed_tests": 57,
+      "skipped_native_runtime_tests": 12,
+      "verified_relation": "unclassified-condition",
+      "verified_status": "partial"
+    },
+    "wheel_contains_packaged_native_module": "pass",
+    "ruff_on_changed_python_files": "pass",
+    "mypy_on_new_runtime_module": "pass",
+    "git_diff_check": "pass",
+    "repository_mypy": {
+      "result": "fail",
+      "findings": 22,
+      "files": 6,
+      "scope": "Repository-wide mypy reports findings in unchanged type paths as well as existing areas within license_resolution.py and agent_context.py; the new runtime module passes its focused mypy check."
+    }
+  },
+  "limits": [
+    "The runtime observations cover the declared finite action-condition corpus; they do not establish universal semantic equivalence or legal interpretation.",
+    "Caller-supplied license expressions remain unverified. Rights authority, ownership, compatibility, and completeness conclusions are not made.",
+    "Environment could not launch its declared test capability because this session lacked a binding; the exact declared test file set was run directly with the Environment-selected Language binary."
+  ]
+}

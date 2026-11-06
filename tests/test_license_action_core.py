@@ -20,6 +20,7 @@ from mncs_rights_provenance.license_resolution import license_action_guidance
 CORPUS = ROOT / "language" / "corpora" / "license-action-guidance-corpus.json"
 GOLDEN = ROOT / "conformance" / "license-action-guidance-golden-vectors.json"
 PROGRAM = ROOT / "language" / "rights_license_actions.mncs"
+PACKAGED_PROGRAM = ROOT / "src" / "mncs_rights_provenance" / "resources" / "rights_license_actions.mncs"
 
 CONDITION_BINDINGS = {
     "RetainCopyNotice": ("MIT", "retain-copyright-and-permission-notice"),
@@ -56,6 +57,11 @@ def mncs_bin() -> str:
     if found:
         return found
     pytest.skip("no mncs binary (MNCS_BIN or PATH)")
+
+
+def native_runtime_configured() -> bool:
+    override = os.environ.get("MNCS_BIN") or os.environ.get("MNCS")
+    return bool(override and (Path(override).is_file() or shutil.which(override)))
 
 
 def load_corpus() -> dict:
@@ -107,7 +113,12 @@ def test_corpus_and_golden_vectors_are_complete_and_deterministic() -> None:
     assert json.dumps(golden["cases"], indent=1) == json.dumps(regenerated_golden, indent=1)
 
 
-def test_host_action_projection_matches_every_language_vector() -> None:
+def test_packaged_native_program_matches_the_canonical_language_source() -> None:
+    assert PACKAGED_PROGRAM.read_bytes() == PROGRAM.read_bytes()
+
+
+@pytest.mark.skipif(not native_runtime_configured(), reason="selected MNCS runtime is unavailable")
+def test_production_action_projection_executes_native_core_against_golden_vectors() -> None:
     for vector in load_golden()["cases"]:
         action = "redistribute-source" if vector["inputs"]["action"] == "Source" else (
             "redistribute-binary"
@@ -122,6 +133,7 @@ def test_host_action_projection_matches_every_language_vector() -> None:
 
 
 @pytest.mark.parametrize("backend", ["research-bytecode", "portable-wasm"])
+@pytest.mark.skipif(not native_runtime_configured(), reason="selected MNCS runtime is unavailable")
 def test_native_core_executes_every_action_condition_pair(backend: str) -> None:
     results = run_cases(load_corpus()["cases"], backend)
 

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import shutil
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
@@ -19,6 +21,11 @@ from mncs_rights_provenance.validation import validate_manifest_structure
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE_ID = "mncs-rights-provenance/native-open@0.1.0"
+
+
+def _native_runtime_configured() -> bool:
+    selected = os.environ.get("MNCS_BIN") or os.environ.get("MNCS")
+    return bool(selected and (Path(selected).is_file() or shutil.which(selected)))
 
 
 def _manifest() -> dict:
@@ -66,20 +73,30 @@ def test_context_is_compact_and_keeps_declaration_separate_from_verification() -
     assert context["rights"]["compatibility"]["status"] == "unknown"
     action_guidance = context["rights"]["action_guidance"]
     assert action_guidance["schema_version"] == "mncs.rights.license-action-context/1"
-    assert action_guidance["status"] == "reference-summary"
+    native_available = _native_runtime_configured()
+    assert action_guidance["status"] == (
+        "reference-summary" if native_available else "partial"
+    )
     assert action_guidance["expression_evidence"] == "declared-unverified"
     assert action_guidance["legal_conclusion"] == "NOT_MADE"
     conditions = action_guidance["expression_tree"]["conditions"]
-    assert {
-        item["id"] for item in conditions
-        if item["action_relations"]["redistribute-source"] == "operation-class-matches-trigger"
-    } == {
-        "provide-license-copy", "mark-modified-files", "preserve-applicable-source-notices",
-        "preserve-notice-attributions",
-    }
-    assert next(
-        item for item in conditions if item["id"] == "preserve-applicable-source-notices"
-    )["action_relations"]["redistribute-binary"] == "other-trigger-preserved-for-review"
+    if native_available:
+        assert {
+            item["id"] for item in conditions
+            if item["action_relations"]["redistribute-source"] == "operation-class-matches-trigger"
+        } == {
+            "provide-license-copy", "mark-modified-files", "preserve-applicable-source-notices",
+            "preserve-notice-attributions",
+        }
+        assert next(
+            item for item in conditions if item["id"] == "preserve-applicable-source-notices"
+        )["action_relations"]["redistribute-binary"] == "other-trigger-preserved-for-review"
+    else:
+        assert all(
+            relation == "unclassified-condition"
+            for item in conditions
+            for relation in item["action_relations"].values()
+        )
     assert context["sources"]["license_action_ruleset"]["reference"] == (
         license_action_ruleset_identity()["module_ref"]
     )
@@ -92,7 +109,9 @@ def test_context_is_compact_and_keeps_declaration_separate_from_verification() -
     assert context["governance"]["status"] == "authorized"
     assert context["governance"]["rules"]["agent_governance"]["copying_external_implementations"] == "authorization-required"
     assert "copyright-status-unresolved" in {item["code"] for item in context["diagnostics"]}
-    assert len(json.dumps(context)) < 8192
+    assert len(json.dumps(
+        context, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")) < 8192
     _assert_context_schema(context)
 
 
@@ -214,7 +233,12 @@ def test_long_source_references_are_kept_once_and_aliased_within_context_budget(
     assert context["governance"].get("rules_ref", context["governance"].get("detail_ref")) == (
         "source:governance_profile"
     )
-    assert context["diagnostics"]
+    if _native_runtime_configured():
+        assert context["diagnostics"]
+    else:
+        action_guidance = context["rights"]["action_guidance"]
+        assert action_guidance["status"] == "partial"
+        assert action_guidance["unresolved_action_counts"]["redistribute-source"]["conditions"] > 0
     _assert_context_schema(context)
 
 
@@ -258,7 +282,9 @@ def test_context_projects_isc_zerobsd_and_zlib_without_losing_branch_triggers() 
         (ROOT / "schemas/v0.1/agent-context.schema.json").read_text()
     )
 
-    assert guidance["status"] == "reference-summary"
+    native_available = _native_runtime_configured()
+    expected_status = "reference-summary" if native_available else "partial"
+    assert guidance["status"] == expected_status
     assert tree["operator"] == "AND"
     assert tree["terms"][0]["license"] == "ISC"
     assert tree["terms"][0]["conditions"][0]["when"] == "all copies"
@@ -271,11 +297,19 @@ def test_context_projects_isc_zerobsd_and_zlib_without_losing_branch_triggers() 
     assert zerobsd["license"] == "0BSD"
     assert zerobsd["conditions"] == []
     zlib_conditions = {item["id"]: item for item in zlib["conditions"]}
-    assert zlib_conditions["mark-altered-source"]["action_relations"] == {
-        "redistribute-source": "operation-class-matches-trigger",
-        "redistribute-binary": "other-trigger-preserved-for-review",
-    }
-    assert source["status"] == binary["status"] == "reference-summary"
+    if native_available:
+        assert zlib_conditions["mark-altered-source"]["action_relations"] == {
+            "redistribute-source": "operation-class-matches-trigger",
+            "redistribute-binary": "other-trigger-preserved-for-review",
+        }
+    else:
+        assert all(
+            relation == "unclassified-condition"
+            for condition in tree["terms"][0:1] + [zlib]
+            for item in condition["conditions"]
+            for relation in item["action_relations"].values()
+        )
+    assert source["status"] == binary["status"] == expected_status
     assert any("OR branch" in note for note in guidance["decision_notes"])
     assert list(Draft202012Validator(schema).iter_errors(context)) == []
 

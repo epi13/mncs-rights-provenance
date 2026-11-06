@@ -110,6 +110,18 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
     if "expression_tree" in terms:
         terms.pop("expression_tree")
         terms["detail_ref"] = context["sources"]["rights_manifest"]["reference"] + "#/rights/distribution_license"
+    action_guidance = rights.get("action_guidance")
+    encoded = json.dumps(
+        context, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    if (
+        len(encoded) > target
+        and isinstance(action_guidance, dict)
+        and action_guidance.get("expression_tree") is not None
+    ):
+        # Preserve compact review diagnostics; the full action tree remains
+        # available through the existing action-guidance query reference.
+        action_guidance.pop("expression_tree")
     if len(json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")) <= target:
         return
     provenance = context["provenance"]
@@ -138,6 +150,32 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
     if len(encoded) <= target:
         return
     provenance["relationship_kinds"] = dict(list(provenance["relationship_kinds"].items())[:8])
+    encoded = json.dumps(
+        context, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    if len(encoded) > target and isinstance(action_guidance, dict):
+        action_guidance.pop("not_assessed", None)
+        ruleset = action_guidance.get("ruleset")
+        if isinstance(ruleset, Mapping):
+            # The exact ruleset version and identity remain in `sources`.
+            action_guidance.pop("ruleset", None)
+        actions = action_guidance.get("actions")
+        if (
+            isinstance(actions, Mapping)
+            and actions
+            and all(
+                isinstance(result, Mapping)
+                and result.get("status") == action_guidance.get("status")
+                for result in actions.values()
+            )
+        ):
+            # The shared status already summarizes every action in this case.
+            action_guidance.pop("actions", None)
+        encoded = json.dumps(
+            context, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode("utf-8")
+        if len(encoded) <= target:
+            return
     for limit in (8, 4, 2, 0):
         context["diagnostics"] = context["diagnostics"][:limit]
         encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
@@ -156,36 +194,11 @@ def _fit_context(context: dict[str, Any], budget: int) -> None:
             "detail_ref", governance.get("rules_ref")
         )
         governance.pop("rules", None)
-    action_guidance = rights.get("action_guidance")
-    encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
-    if (
-        len(encoded) > target
-        and isinstance(action_guidance, dict)
-        and action_guidance.get("expression_tree") is not None
-    ):
-        action_guidance.pop("expression_tree")
     encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     if len(encoded) > target and isinstance(action_guidance, dict):
-        action_guidance.pop("not_assessed", None)
         action_guidance.pop("decision_notes", None)
         action_guidance.pop("decision_note_count", None)
         action_guidance.pop("decision_notes_truncated", None)
-        ruleset = action_guidance.get("ruleset")
-        if isinstance(ruleset, Mapping):
-            # The exact ruleset version and identity remain in `sources`.
-            action_guidance.pop("ruleset", None)
-        actions = action_guidance.get("actions")
-        if (
-            isinstance(actions, Mapping)
-            and actions
-            and all(
-                isinstance(result, Mapping)
-                and result.get("status") == action_guidance.get("status")
-                for result in actions.values()
-            )
-        ):
-            # The shared status already summarizes every action in this case.
-            action_guidance.pop("actions", None)
     encoded = json.dumps(context, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     if len(encoded) > target:
         expression = terms.get("expression")
